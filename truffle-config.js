@@ -8,9 +8,10 @@ const infuraId = process.env.INFURA_ID;
 module.exports = {
   networks: {
     development: {
-     host: '127.0.0.1',     // Localhost (default: none)
-     port: 8545,            // Standard Ethereum port (default: none)
-     network_id: '*',       // Any network (default: none)
+     host: '127.0.0.1', // Localhost (default: none)
+     port: 9545,        // Truffle
+     // port: 7545,     // Ganache
+     network_id: '*',   // Any network (default: none)
       // gas: 22323,
       // gasPrice: 10,
     },
