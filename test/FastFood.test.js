@@ -13,6 +13,7 @@ contract('FastFood', (accounts) => {
 
     before(async () => {
         this.fastFood = await FastFood.new({ from: owner });
+        await this.fastFood.addController(owner, { from: owner });
         expect(await this.fastFood.totalSupply()).to.be.bignumber.equal(new BN(0));
     });
 

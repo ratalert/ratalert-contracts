@@ -14,8 +14,8 @@ contract FastFood is ERC20, Ownable {
    * @param to the recipient of the $FFOOD
    * @param amount the amount of $FFOOD to mint
    */
-  function mint(address to, uint256 amount) external onlyOwner {
-    // require(controllers[msg.sender], "Only controllers can mint");
+  function mint(address to, uint256 amount) external {
+     require(controllers[msg.sender], "Only controllers can mint");
     _mint(to, amount);
   }
 
@@ -24,8 +24,8 @@ contract FastFood is ERC20, Ownable {
    * @param from the holder of the $FFOOD
    * @param amount the amount of $FFOOD to burn
    */
-  function burn(address from, uint256 amount) external onlyOwner {
-    // require(controllers[msg.sender], "Only controllers can burn");
+  function burn(address from, uint256 amount) external {
+     require(controllers[msg.sender], "Only controllers can burn");
     _burn(from, amount);
   }
 
