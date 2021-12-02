@@ -1,5 +1,10 @@
-AcmeDAO
-=======
+Rat Alert Game
+==============
+
+## Rinkeby Gnosis Safe
+
+- [0xf0B3Ee1FA257E0E7816DA1A6E13A0A0bC0c585fD](https://gnosis-safe.io/app/rin:0xf0B3Ee1FA257E0E7816DA1A6E13A0A0bC0c585fD/)
+
 
 ## Ethereum Testnet Wallet
 
@@ -54,8 +59,14 @@ Addresses
 
 ## Testnet Faucets
 
-- [ChainLink (Ropsten, Rinkeby, Kovan)](https://faucets.chain.link/rinkeby)
 - [Social Rinkeby Faucet](https://faucet.rinkeby.io/)
+- [MyCrypto](https://app.mycrypto.com/faucet)
+- [ChainLink (Ropsten, Rinkeby, Kovan)](https://faucets.chain.link/rinkeby)
+
+## Wolf Game Clones
+
+- [Galaxy Conquest](https://www.galacticconquestgame.net/wp)
+- [Wizards And Dragons](https://wnd.game/game)
 
 ## Good reads
 
