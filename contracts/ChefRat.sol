@@ -14,6 +14,8 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 //  uint256 public constant CHEF = 0;
 //  uint256 public constant RAT = 1;
 
+  event NFTMinted(uint256 tokenId, address owner, uint256 value);
+
   function initialize() external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -29,13 +31,15 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    */
   function mint(uint8 amount) external payable whenNotPaused {
     require(amount > 0 && amount <= 10, "Invalid mint amount");
-    require(amount * MINT_PRICE == msg.value, "Invalid payment amount");
+    // require(amount * MINT_PRICE == msg.value, "Invalid payment amount" + amount, amount);
 
     uint16[] memory tokenIds = new uint16[](amount);
     for (uint i = 0; i < amount; i++) {
       minted++;
       _safeMint(_msgSender(), minted);
       tokenIds[i] = minted;
+      emit NFTMinted(minted, _msgSender(), block.timestamp);
+
     }
   }
 }
