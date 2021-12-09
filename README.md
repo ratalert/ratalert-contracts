@@ -76,3 +76,4 @@ Addresses
 - [Solidity Official Documentation](https://docs.soliditylang.org/en/latest/introduction-to-smart-contracts.html)
 - [Solidity Security Considerations](https://docs.soliditylang.org/en/latest/security-considerations.html)
 - [Consensys Best Practices](https://consensys.github.io/smart-contract-best-practices/)
+- [Wolf Game Randomizer Exploit](https://gist.github.com/alcibiadeseth)
