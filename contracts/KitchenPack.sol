@@ -14,10 +14,10 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   struct Stake { // Store for a stake's token, owner, and earning values
     uint256 tokenId;
     address owner;
-    uint80 value;
+    uint80 timestamp;
   }
 
-  event TokenStaked(uint256 tokenId, address owner, uint256 value);
+  event TokenStaked(uint256 tokenId, address owner, uint256 timestamp);
   event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked);
   event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked);
 
@@ -82,7 +82,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     kitchen[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
-      value: uint80(block.timestamp)
+      timestamp: uint80(block.timestamp)
     });
     totalChefsStaked ++;
     emit TokenStaked(tokenId, account, block.timestamp);
@@ -97,7 +97,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     pack[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
-      value: uint80(block.timestamp)
+      timestamp: uint80(block.timestamp)
     });
     totalRatsStaked ++;
     emit TokenStaked(tokenId, account, block.timestamp);
@@ -131,9 +131,9 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   function _claimChefFromKitchen(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
     Stake memory stake = kitchen[tokenId];
     require(stake.owner == _msgSender(), "Not your token");
-//    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave before EOB");
+//    require(!(unstake && block.timestamp - stake.timestamp < MINIMUM_TO_EXIT), "Cannot leave before EOB");
 
-    owed = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / 1 days;
+    owed = (block.timestamp - stake.timestamp) * DAILY_FFOOD_RATE / 1 days;
     if (totalFastFoodEarned + owed > FFOOD_MAX_SUPPLY) {
       owed = FFOOD_MAX_SUPPLY - totalFastFoodEarned;
     }
@@ -153,7 +153,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
       kitchen[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),
         owner: _msgSender(),
-        value: uint80(block.timestamp)
+        timestamp: uint80(block.timestamp)
       });
     }
     emit ChefClaimed(tokenId, owed, unstake);

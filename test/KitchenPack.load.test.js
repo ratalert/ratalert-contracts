@@ -36,9 +36,10 @@ contract('KitchenPack (proxy)', (accounts) => {
             { users: [{ balance: 420000000 }, { balance: 380000000 }], totalChefsStaked: 120, totalFastFoodEarned: 1000000000, unaccountedRewards: 200000000 }, // uncapped 1050000000
             { users: [{ balance: 420000000 }, { balance: 380000000 }], totalChefsStaked: 140, totalFastFoodEarned: 1000000000, unaccountedRewards: 200000000 }, // uncapped 1400000000
         ];
+        const totalEpochs = 6;
         let epoch = 0;
-        for (let i = 0; i <= 6; i++) {
-            console.log(`      [Epoch ${i}] ${expected[epoch].totalChefsStaked} chefs staked, ${expected[epoch].totalFastFoodEarned} $FFOOD earned`);
+        for (let i = 0; i <= totalEpochs; i++) {
+            console.log(`      [Epoch ${i}/${totalEpochs}] ${expected[epoch].totalChefsStaked} chefs staked, ${expected[epoch].totalFastFoodEarned} $FFOOD earned after ${(i + 1) * days} days`);
             await Promise.all(users.map(async ([from], j) => {
                 const { logs } = await this.chefRat.mint(10, { from, value: toWei(1) });
                 const ids = logs.map(ev => Number(ev.args.tokenId.toString()));

@@ -41,8 +41,8 @@ contract('KitchenPack (proxy)', (accounts) => {
             const staked2 = await this.kitchenPack.kitchen(3);
             await expect(staked1.owner).to.equal(owner);
             await expect(staked2.owner).to.equal(owner);
-            await expect(staked1.value.toString()).to.equal(block.timestamp.toString());
-            await expect(staked2.value.toString()).to.equal(block.timestamp.toString());
+            await expect(staked1.timestamp.toString()).to.equal(block.timestamp.toString());
+            await expect(staked2.timestamp.toString()).to.equal(block.timestamp.toString());
         });
     });
     describe('unstake()', () => {
@@ -72,8 +72,8 @@ contract('KitchenPack (proxy)', (accounts) => {
             const staked2 = await this.kitchenPack.kitchen(3);
             await expect(staked1.owner).to.equal('0x0000000000000000000000000000000000000000');
             await expect(staked2.owner).to.equal('0x0000000000000000000000000000000000000000');
-            await expect(staked1.value.toString()).to.equal('0');
-            await expect(staked2.value.toString()).to.equal('0');
+            await expect(staked1.timestamp.toString()).to.equal('0');
+            await expect(staked2.timestamp.toString()).to.equal('0');
         });
         it('fails to unstake twice', async () => {
             await expect(this.kitchenPack.claimMany([2, 3], true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
