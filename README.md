@@ -56,6 +56,7 @@ Addresses
 ## TODO
 
 - [Setup using Simple Multisig](https://github.com/paxosglobal/simple-multisig/)
+- [Use ChainLink VRF](https://docs.chain.link/docs/get-a-random-number/)
 
 ## Testnet Faucets
 

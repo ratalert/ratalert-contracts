@@ -1,12 +1,13 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei } = require('./helper');
+const { toWei, uploadTraits } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
+const Traits = artifacts.require('Traits');
 const ChefRat = artifacts.require('ChefRat');
 
 contract('ChefRat (proxy)', (accounts) => {
@@ -14,10 +15,28 @@ contract('ChefRat (proxy)', (accounts) => {
     const anon = accounts[1];
 
     before(async () => {
-        this.chefRat = await deployProxy(ChefRat, { from: owner });
+        this.traits = await deployProxy(Traits, { from: owner });
+        this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000], { from: owner });
+        await this.traits.setChefRat(this.chefRat.address);
+        await uploadTraits(this.traits);
         await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('0');
+    });
+
+    describe.skip('random', () => {
+        it('creates the expected population', async () => {
+            const population = {};
+            for (let i = 1; i <= 10000; i++) {
+                const rand = Number((await this.chefRat.testSelectTrait(Math.round(Math.random() * 65535), 4)).toString());
+                if (!population[rand]) {
+                    population[rand] = 1;
+                } else {
+                    population[rand] += 1;
+                }
+            }
+            console.log(population);
+        });
     });
 
     describe('mint()', () => {
@@ -40,6 +59,22 @@ contract('ChefRat (proxy)', (accounts) => {
             await expect(this.chefRat.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals('10');
             await expect(this.chefRat.ownerOf(1)).to.eventually.equal(owner);
             await expect(this.chefRat.ownerOf(10)).to.eventually.equal(owner);
+            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
+            Promise.all(IDs.map(async id => {
+                const traits = await this.chefRat.getTokenTraits(id);
+                const tokenUri = await this.chefRat.tokenURI(id);
+                const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
+                const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
+                expect(json.image.length).to.be.above(2500); // Contains images
+                expect(svg.length).to.be.above(2500); // Contains images
+                for (let i = 0; i <= 8; i++) {
+                    if (i === 0) {
+                        expect(json.attributes[i].value === 'Chef').to.equal(traits[i]);
+                    } else {
+                        expect(json.attributes[i].value.split(' ')[1]).to.equal(traits[i]);
+                    }
+                }
+            }));
         });
 
         it('allows anonymous to mint', async () => {

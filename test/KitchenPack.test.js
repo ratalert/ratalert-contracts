@@ -1,13 +1,14 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, advanceTimeAndBlock } = require('./helper');
+const { toWei, advanceTimeAndBlock, uploadTraits } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
+const Traits = artifacts.require('Traits');
 const ChefRat = artifacts.require('ChefRat');
 const KitchenPack = artifacts.require('KitchenPack');
 
@@ -17,7 +18,10 @@ contract('KitchenPack (proxy)', (accounts) => {
 
     before(async () => {
         this.fastFood = await FastFood.new({ from: owner });
-        this.chefRat = await deployProxy(ChefRat, { from: owner });
+        this.traits = await deployProxy(Traits, { from: owner });
+        this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000], { from: owner });
+        await this.traits.setChefRat(this.chefRat.address);
+        await uploadTraits(this.traits);
         this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address], { from: owner });
         await this.fastFood.addController(this.kitchenPack.address, { from: owner });
     });
