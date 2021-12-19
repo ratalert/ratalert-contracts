@@ -167,7 +167,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
    * @return owed - The amount of $FFOOD earned
    */
   function _claimRatFromPack(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
-    delete kitchen[tokenId];
+    delete pack[tokenId];
     totalRatsStaked --;
     // TODO Implement $FFOOD distribution
     emit RatClaimed(tokenId, owed, unstake);
