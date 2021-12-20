@@ -11,6 +11,8 @@ import "./ITraits.sol";
 
 contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable {
   uint16 public minted;
+  uint16 public numChefs;
+  uint16 public numRats;
   uint256 public constant MINT_PRICE = .1 ether;
   uint256 public MAX_TOKENS; // Max number of tokens that can be minted - 50000 in production
   uint256 public PAID_TOKENS; // Number of tokens that can be claimed for free - 20% of MAX_TOKENS
@@ -29,6 +31,8 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     __ERC721_init("Rat Alert Chefs & Rats", "RATS");
 
     minted = 0;
+    numChefs = 0;
+    numRats = 0;
     traits = ITraits(_traits);
     MAX_TOKENS = _maxTokens;
     PAID_TOKENS = _maxTokens / 5;
@@ -64,12 +68,14 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
     uint16[] memory tokenIds = new uint16[](amount);
     uint256 seed;
+    ChefRatStruct memory s;
     for (uint i = 0; i < amount; i++) {
       minted++;
       seed = random(minted);
-      generate(minted, seed);
+      s = generate(minted, seed);
       _safeMint(_msgSender(), minted);
       tokenIds[i] = minted;
+      s.isChef ? numChefs++ : numRats++;
     }
   }
 

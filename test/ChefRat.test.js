@@ -13,6 +13,7 @@ const ChefRat = artifacts.require('ChefRat');
 contract('ChefRat (proxy)', (accounts) => {
     const owner = accounts[0];
     const anon = accounts[1];
+    const stats = { numChefs : 0, numRats: 0 };
 
     before(async () => {
         this.traits = await deployProxy(Traits, { from: owner });
@@ -20,6 +21,8 @@ contract('ChefRat (proxy)', (accounts) => {
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
         await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals('0');
+        await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals('0');
+        await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('0');
     });
@@ -60,13 +63,14 @@ contract('ChefRat (proxy)', (accounts) => {
             await expect(this.chefRat.ownerOf(1)).to.eventually.equal(owner);
             await expect(this.chefRat.ownerOf(10)).to.eventually.equal(owner);
             const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
-            Promise.all(IDs.map(async id => {
+            await Promise.all(IDs.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
                 const tokenUri = await this.chefRat.tokenURI(id);
                 const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
                 const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
                 expect(json.image.length).to.be.above(2500); // Contains images
                 expect(svg.length).to.be.above(2500); // Contains images
+                traits.isChef ? stats.numChefs += 1 : stats.numRats += 1;
                 for (let i = 0; i <= 8; i++) {
                     if (i === 0) {
                         expect(json.attributes[i].value === 'Chef').to.equal(traits[i]);
@@ -75,6 +79,8 @@ contract('ChefRat (proxy)', (accounts) => {
                     }
                 }
             }));
+            await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals(stats.numChefs.toString());
+            await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals(stats.numRats.toString());
         });
 
         it('allows anonymous to mint', async () => {
@@ -85,6 +91,13 @@ contract('ChefRat (proxy)', (accounts) => {
             await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5');
             await expect(this.chefRat.ownerOf(11)).to.eventually.equal(anon);
             await expect(this.chefRat.ownerOf(15)).to.eventually.equal(anon);
+            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
+            await Promise.all(IDs.map(async id => {
+                const traits = await this.chefRat.getTokenTraits(id);
+                traits.isChef ? stats.numChefs += 1 : stats.numRats += 1;
+            }));
+            await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals(stats.numChefs.toString());
+            await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals(stats.numRats.toString());
         });
     });
 });
