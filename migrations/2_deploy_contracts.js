@@ -15,4 +15,5 @@ module.exports = async (deployer) => {
     await traits.setChefRat(chefRat.address);
     await uploadTraits(traits);
     await fastFood.addController(kitchenPack.address);
+    await chefRat.addController(kitchenPack.address);
 };

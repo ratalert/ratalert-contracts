@@ -63,6 +63,19 @@ contract('ChefRat (proxy)', (accounts) => {
             await expect(this.chefRat.ownerOf(1)).to.eventually.equal(owner);
             await expect(this.chefRat.ownerOf(10)).to.eventually.equal(owner);
             const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
+            const checks = {
+                isChef: { traitType: 'type', name: 'Type' },
+                ears: { traitType: 'trait', name: 'Ears' },
+                eyes: { traitType: 'trait', name: 'Eyes' },
+                nose: { traitType: 'trait', name: 'Nose' },
+                mouth: { traitType: 'trait', name: 'Mouth' },
+                neck: { traitType: 'trait', name: 'Neck' },
+                feet: { traitType: 'trait', name: 'Feet' },
+                insanity: { traitType: 'dynamic', name: 'Insanity', value: 'bored', additional: 'Insanity percentage' },
+                skill: { traitType: 'dynamic', name: 'Skill', value: 'anxious', additional: 'Skill percentage' },
+                intelligence: { traitType: 'dynamic', name: 'Intelligence', value: 'braindead', additional: 'Intelligence quotient' },
+                fatness: { traitType: 'dynamic', name: 'Fatness', value: 'anorexic', additional: 'Fatness percentage' },
+            }
             await Promise.all(IDs.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
                 const tokenUri = await this.chefRat.tokenURI(id);
@@ -71,13 +84,24 @@ contract('ChefRat (proxy)', (accounts) => {
                 expect(json.image.length).to.be.above(2500); // Contains images
                 expect(svg.length).to.be.above(2500); // Contains images
                 traits.isChef ? stats.numChefs += 1 : stats.numRats += 1;
-                for (let i = 0; i <= 8; i++) {
-                    if (i === 0) {
-                        expect(json.attributes[i].value === 'Chef').to.equal(traits[i]);
-                    } else {
-                        expect(json.attributes[i].value.split(' ')[1]).to.equal(traits[i]);
+                Object.entries(checks).forEach(([key, val]) => {
+                    const attr = json.attributes.find(v => v.trait_type === val.name);
+                    if (val.traitType === 'type') {
+                        expect(traits[key]).to.equal(attr.value === 'Chef');
                     }
-                }
+                    if (val.traitType === 'trait') {
+                        expect(val.name).to.equal(attr.trait_type);
+                        expect(traits[key]).to.equal(attr.value.split(' ')[1]);
+                    }
+                    if (val.traitType === 'dynamic' && attr) {
+                        expect(val.name).to.equal(attr.trait_type);
+                        expect(attr.value).to.equal(val.value);
+                        expect(traits[key]).to.equal('0');
+                        const additionalAttr = json.attributes.find(v => v.trait_type === val.additional);
+                        expect(additionalAttr.value).to.equal(0);
+                        expect(additionalAttr.max_value).to.equal(100);
+                    }
+                });
             }));
             await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals(stats.numChefs.toString());
             await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals(stats.numRats.toString());

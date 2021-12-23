@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol";
 import "./IKitchenPack.sol";
+import "./IChefRat.sol";
 import "./ChefRat.sol";
 import "./FastFood.sol";
 
@@ -31,6 +32,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   uint256 public constant MINIMUM_TO_EXIT = 8 hours; // Cannot unstake before EOB
   uint256 public constant FFOOD_MAX_SUPPLY = 1000000000 ether; // There will only ever be x $FFOOD earned through staking
   uint256 public constant DAILY_FFOOD_RATE = 1000 ether; // Chefs earn x $FFOOD per day
+  uint8 public constant DAILY_INSANITY_RATE = 4;
+  uint8 public constant DAILY_SKILL_RATE = 2;
 
   uint256 public totalChefsStaked; // Number of Chefs staked in the Kitchen
   uint256 public totalRatsStaked; // Number of Rats staked in the Pack
@@ -145,6 +148,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
       owed = owed * (100 - FFOOD_CLAIM_TAX_PERCENTAGE) / 100; // Remainder goes to Chef owner
     }
 
+    updateCharacter(tokenId);
+
     if (unstake) {
       chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
       delete kitchen[tokenId];
@@ -157,6 +162,19 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
       });
     }
     emit ChefClaimed(tokenId, owed, unstake);
+  }
+
+  function updateCharacter(uint256 tokenId) internal {
+    Stake memory stake = kitchen[tokenId];
+    uint256 diff = block.timestamp - stake.timestamp;
+    chefRat.updateInsanity(tokenId, getCharacterIncrement(diff, DAILY_INSANITY_RATE));
+    chefRat.updateSkill(tokenId, getCharacterIncrement(diff, DAILY_SKILL_RATE));
+  }
+
+  function getCharacterIncrement(uint256 diff, uint8 factor) internal pure returns(int8) {
+    uint256 owed = diff * factor / 1 days;
+    uint8 increment = owed > 100 ? 100 : uint8(owed);
+    return int8(increment);
   }
 
   /**

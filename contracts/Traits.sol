@@ -17,8 +17,12 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     string png;
   }
 
-  string[9] _traitTypes;
-  mapping(uint8 => mapping(uint8 => Trait)) public traitData; // Storage of each trait's name and base64 PNG data
+  string[14] _traitTypes;
+  string[7] _insanity;
+  string[7] _skill;
+  string[7] _intelligence;
+  string[7] _fatness;
+  mapping(uint8 => mapping(uint8 => Trait)) public traitData; // Storage of each trait's name and base64 SVG data
 
   IChefRat public chefRat;
 
@@ -26,15 +30,25 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     __Ownable_init();
 
     _traitTypes = [ // Mapping from trait type (index) to its name
-      "Body",
-      "Head",
       "Ears",
       "Eyes",
       "Nose",
       "Mouth",
       "Neck",
-      "Feet"
+      "Feet",
+      "Skill",
+      "Insanity",
+      "Intelligence",
+      "Fatness",
+      "Skill percentage",
+      "Insanity percentage",
+      "Intelligence quotient",
+      "Fatness percentage"
     ];
+    _insanity = ["bored", "unconventional", "fancy", "brilliant", "creative genius", "guru", "insane"];
+    _skill = ["anxious", "shy", "restrained", "mainstream", "confident", "proud", "unicorn"];
+    _intelligence = ["braindead", "stupid", "foolish", "average", "bright", "smart", "genius"];
+    _fatness = ["anorexic", "skinny", "lean", "athletic", "chubby", "fat", "obese"];
   }
 
   /**
@@ -50,7 +64,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       '"name":"', s.isChef ? 'Chef #' : 'Rat #', tokenId.toString(), '",',
       '"description":"TODO",', // TODO Add description
       '"image":"data:image/svg+xml;base64,', base64(bytes(drawSVG(tokenId))), '",',
-      '"attributes":', generateAttributes(tokenId),
+      '"attributes":', getAttributes(tokenId),
       '}'
     ));
 
@@ -58,6 +72,11 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       "data:application/json;base64,",
       base64(bytes(metadata))
     ));
+  }
+
+  function getBodyIndex(uint8 value) internal view returns(uint8) {
+    uint256 val = value * _insanity.length / 100;
+    return val > _insanity.length - 1 ? uint8(_insanity.length - 1) : uint8(val);
   }
 
   /**
@@ -68,10 +87,11 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
   function drawSVG(uint256 tokenId) public view returns (string memory) {
     IChefRat.ChefRatStruct memory s = chefRat.getTokenTraits(tokenId);
     uint8 shift = s.isChef ? 0 : 10;
-
+    uint8 head = getBodyIndex(s.isChef ? s.skill : s.intelligence);
+    uint8 body = getBodyIndex(s.isChef ? s.insanity : s.fatness);
     string memory svgString = string(abi.encodePacked(
-      drawTrait(traitData[0 + shift][s.body]),
-      drawTrait(traitData[1 + shift][s.head]),
+      drawTrait(traitData[0 + shift][body]),
+      drawTrait(traitData[1 + shift][head]),
       drawTrait(traitData[2 + shift][s.ears]),
       drawTrait(traitData[3 + shift][s.eyes]),
       drawTrait(traitData[4 + shift][s.nose]),
@@ -106,30 +126,34 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @param tokenId - The ID of the token to compose the metadata for
    * @return A JSON array of all of the attributes for given token ID
    */
-  function generateAttributes(uint256 tokenId) public view returns (string memory) {
+  function getAttributes(uint256 tokenId) public view returns (string memory) {
     IChefRat.ChefRatStruct memory s = chefRat.getTokenTraits(tokenId);
     string memory traits;
     if (s.isChef) {
       traits = string(abi.encodePacked(
-        generateAttribute(_traitTypes[0], traitData[0][s.body].name), ',',
-        generateAttribute(_traitTypes[1], traitData[1][s.head].name), ',',
-        generateAttribute(_traitTypes[2], traitData[2][s.ears].name), ',',
-        generateAttribute(_traitTypes[3], traitData[3][s.eyes].name), ',',
-        generateAttribute(_traitTypes[4], traitData[4][s.nose].name), ',',
-        generateAttribute(_traitTypes[5], traitData[5][s.mouth].name), ',',
-        generateAttribute(_traitTypes[6], traitData[6][s.neck].name), ',',
-        generateAttribute(_traitTypes[7], traitData[7][s.feet].name) ,','
+        getAttribute(_traitTypes[0], traitData[2][s.ears].name, false), ',',
+        getAttribute(_traitTypes[1], traitData[3][s.eyes].name, false), ',',
+        getAttribute(_traitTypes[2], traitData[4][s.nose].name, false), ',',
+        getAttribute(_traitTypes[3], traitData[5][s.mouth].name, false), ',',
+        getAttribute(_traitTypes[4], traitData[6][s.neck].name, false), ',',
+        getAttribute(_traitTypes[5], traitData[7][s.feet].name, false), ',',
+        getAttribute(_traitTypes[7], _insanity[getBodyIndex(s.insanity)], false), ',',
+        getAttribute(_traitTypes[6], _skill[getBodyIndex(s.skill)], false), ',',
+        getAttribute(_traitTypes[11], Strings.toString(s.insanity), true), ',',
+        getAttribute(_traitTypes[10], Strings.toString(s.skill), true), ','
       ));
     } else {
       traits = string(abi.encodePacked(
-        generateAttribute(_traitTypes[0], traitData[10][s.body].name), ',',
-        generateAttribute(_traitTypes[1], traitData[11][s.head].name), ',',
-        generateAttribute(_traitTypes[2], traitData[12][s.ears].name), ',',
-        generateAttribute(_traitTypes[3], traitData[13][s.eyes].name), ',',
-        generateAttribute(_traitTypes[4], traitData[14][s.nose].name), ',',
-        generateAttribute(_traitTypes[5], traitData[15][s.mouth].name), ',',
-        generateAttribute(_traitTypes[6], traitData[16][s.neck].name), ',',
-        generateAttribute(_traitTypes[7], traitData[17][s.feet].name), ','
+        getAttribute(_traitTypes[0], traitData[12][s.ears].name, false), ',',
+        getAttribute(_traitTypes[1], traitData[13][s.eyes].name, false), ',',
+        getAttribute(_traitTypes[2], traitData[14][s.nose].name, false), ',',
+        getAttribute(_traitTypes[3], traitData[15][s.mouth].name, false), ',',
+        getAttribute(_traitTypes[4], traitData[16][s.neck].name, false), ',',
+        getAttribute(_traitTypes[5], traitData[17][s.feet].name, false), ',',
+        getAttribute(_traitTypes[8], _intelligence[getBodyIndex(s.intelligence)], false), ',',
+        getAttribute(_traitTypes[9], _fatness[getBodyIndex(s.fatness)], false), ',',
+        getAttribute(_traitTypes[12], Strings.toString(s.intelligence), true), ',',
+        getAttribute(_traitTypes[13], Strings.toString(s.fatness), true), ','
       ));
     }
     return string(abi.encodePacked(
@@ -147,11 +171,13 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @param value - The token's trait associated with the key
    * @return A JSON dictionary for the single attribute
    */
-  function generateAttribute(string memory traitType, string memory value) internal pure returns (string memory) {
+  function getAttribute(string memory traitType, string memory value, bool isInteger) internal pure returns (string memory) {
+    string memory val = isInteger ? value : string(abi.encodePacked('"', value, '"'));
     return string(abi.encodePacked(
       '{',
         '"trait_type":"', traitType, '",',
-        '"value":"', value, '"',
+        isInteger ? '"max_value":100,' : '',
+        '"value":', val,
       '}'
     ));
   }

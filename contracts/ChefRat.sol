@@ -21,6 +21,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
   mapping(uint256 => ChefRatStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
   mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
+  mapping(address => bool) controllers; // a mapping from an address to whether or not it can mint / burn
   uint8[][18] public rarities; // List of probabilities for each trait type, 0 - 9 are associated with Chefs, 10 - 18 are associated with Rats
 
   ITraits public traits; // Reference to Traits
@@ -38,8 +39,6 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     PAID_TOKENS = _maxTokens / 5;
 
     // Chefs
-    rarities[0] = [255, 150, 50]; // body
-    rarities[1] = [255, 150, 50]; // head
     rarities[2] = [255, 127, 63, 63, 31, 15, 7, 3, 2, 1]; // ears
     rarities[3] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // eyes
     rarities[4] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // nose
@@ -47,8 +46,6 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     rarities[6] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // neck
     rarities[7] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // feet
     // Rats
-    rarities[10] = [255, 150, 50]; // body
-    rarities[11] = [255, 150, 50]; // head
     rarities[12] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // ears
     rarities[13] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // eyes
     rarities[14] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // nose
@@ -104,8 +101,6 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   function selectTraits(uint256 seed) internal view returns (ChefRatStruct memory t) {
     t.isChef = (seed & 0xFFFF) % 10 != 0;
     uint8 shift = t.isChef ? 0 : 10;
-    t.body = selectTrait(seed, 0 + shift);
-    t.head = selectTrait(seed, 1 + shift);
     t.ears = selectTrait(seed, 2 + shift);
     t.eyes = selectTrait(seed, 3 + shift);
     t.nose = selectTrait(seed, 4 + shift);
@@ -144,8 +139,6 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     return uint256(bytes32(
       abi.encodePacked(
         s.isChef,
-        s.body,
-        s.head,
         s.ears,
         s.eyes,
         s.nose,
@@ -154,6 +147,34 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
         s.feet
       )
     ));
+  }
+
+  function getUpdatedValue(uint8 old, int8 increment) internal pure returns(uint8) {
+    if (increment >= 0) {
+      return (uint8(increment) + old > 100) ? 100 : old + uint8(increment);
+    } else {
+      return (uint8(-increment) > old) ? 0 : old - uint8(-increment);
+    }
+  }
+
+  function updateInsanity(uint256 tokenId, int8 increment) public {
+    require(controllers[msg.sender], "Only controllers can update");
+    tokenTraits[tokenId].insanity = getUpdatedValue(tokenTraits[tokenId].insanity, increment);
+  }
+
+  function updateSkill(uint256 tokenId, int8 increment) public {
+    require(controllers[msg.sender], "Only controllers can update");
+    tokenTraits[tokenId].skill = getUpdatedValue(tokenTraits[tokenId].skill, increment);
+  }
+
+  function updateIntelligence(uint256 tokenId, int8 increment) public {
+    require(controllers[msg.sender], "Only controllers can update");
+    tokenTraits[tokenId].intelligence = getUpdatedValue(tokenTraits[tokenId].intelligence, increment);
+  }
+
+  function updateFatness(uint256 tokenId, int8 increment) public {
+    require(controllers[msg.sender], "Only controllers can update");
+    tokenTraits[tokenId].fatness = getUpdatedValue(tokenTraits[tokenId].fatness, increment);
   }
 
   function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -168,6 +189,30 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
   function getPaidTokens() external view override returns (uint256) {
     return PAID_TOKENS;
+  }
+
+  /**
+   * Gets controller status by address
+   * @param controller the address to check
+   */
+  function getController(address controller) external view onlyOwner returns (bool) {
+    return controllers[controller];
+  }
+
+  /**
+   * Enables an address to mint / burn
+   * @param controller the address to enable
+   */
+  function addController(address controller) external onlyOwner {
+    controllers[controller] = true;
+  }
+
+  /**
+   * Disables an address from minting / burning
+   * @param controller the address to disable
+   */
+  function removeController(address controller) external onlyOwner {
+    controllers[controller] = false;
   }
 
   /**

@@ -24,6 +24,7 @@ contract('KitchenPack (proxy) load test', (accounts) => {
         await uploadTraits(this.traits);
         this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address], { from: owner });
         await this.fastFood.addController(this.kitchenPack.address, { from: owner });
+        await this.chefRat.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: owner });
         await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: anon });
     });
