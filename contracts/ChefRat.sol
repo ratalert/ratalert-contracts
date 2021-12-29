@@ -39,19 +39,17 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     PAID_TOKENS = _maxTokens / 5;
 
     // Chefs
-    rarities[2] = [255, 127, 63, 63, 31, 15, 7, 3, 2, 1]; // ears
-    rarities[3] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // eyes
-    rarities[4] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // nose
-    rarities[5] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // mouth
-    rarities[6] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // neck
-    rarities[7] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // feet
+    rarities[2] = [255, 223, 191, 159, 127]; // hat
+    rarities[3] = [255, 207, 159, 111, 63]; // eyes
+    rarities[4] = [255, 223, 191, 159, 127]; // mouth
+    rarities[5] = [255, 207, 159, 111, 63]; // neck
+    rarities[6] = [255, 223, 191, 159, 127]; // hand
     // Rats
-    rarities[12] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // ears
-    rarities[13] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // eyes
-    rarities[14] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // nose
-    rarities[15] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // mouth
-    rarities[16] = [255, 231, 207, 183, 159, 135, 111, 87, 63, 39]; // neck
-    rarities[17] = [255, 239, 223, 207, 191, 175, 159, 143, 127, 111]; // feet
+    rarities[12] = [255, 223, 191, 159, 127]; // hat
+    rarities[13] = [255, 207, 159, 111, 63]; // eyes
+    rarities[14] = [255, 223, 191, 159, 127]; // piercing
+    rarities[15] = [255, 207, 159, 111, 63]; // neck
+    rarities[16] = [255, 223, 191, 159, 127]; // tail
   }
 
   /**
@@ -100,19 +98,21 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    */
   function selectTraits(uint256 seed) internal view returns (ChefRatStruct memory t) {
     t.isChef = (seed & 0xFFFF) % 10 != 0;
-    uint8 shift = t.isChef ? 0 : 10;
-    t.ears = selectTrait(seed, 2 + shift);
-    t.eyes = selectTrait(seed, 3 + shift);
-    t.nose = selectTrait(seed, 4 + shift);
-    t.mouth = selectTrait(seed, 5 + shift);
-    t.neck = selectTrait(seed, 6 + shift);
-    t.feet = selectTrait(seed, 7 + shift);
+    if (t.isChef) {
+      t.hat = selectTrait(seed, 2);
+      t.eyes = selectTrait(seed, 3);
+      t.mouth = selectTrait(seed, 4);
+      t.neck = selectTrait(seed, 5);
+      t.hand = selectTrait(seed, 6);
+    } else {
+      t.hat = selectTrait(seed, 12);
+      t.eyes = selectTrait(seed, 13);
+      t.piercing = selectTrait(seed, 14);
+      t.neck = selectTrait(seed, 15);
+      t.tail = selectTrait(seed, 16);
+    }
     return t;
   }
-
-//  function testSelectTrait(uint256 seed, uint8 traitIndex) external view returns(uint256) {
-//    return selectTrait(random(seed), traitIndex);
-//  }
 
   /**
    * Uses A.J. Walker's Alias algorithm for O(1) rarity table lookup
@@ -139,12 +139,13 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     return uint256(bytes32(
       abi.encodePacked(
         s.isChef,
-        s.ears,
+        s.hat,
         s.eyes,
-        s.nose,
+        s.piercing,
         s.mouth,
         s.neck,
-        s.feet
+        s.hand,
+        s.tail
       )
     ));
   }

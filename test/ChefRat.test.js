@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, uploadTraits } = require('./helper');
+const { toWei, loadTraits, uploadTraits } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -16,6 +16,7 @@ contract('ChefRat (proxy)', (accounts) => {
     const stats = { numChefs : 0, numRats: 0 };
 
     before(async () => {
+        this.traitList = await loadTraits();
         this.traits = await deployProxy(Traits, { from: owner });
         this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
@@ -65,21 +66,27 @@ contract('ChefRat (proxy)', (accounts) => {
             const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
             const checks = {
                 isChef: { traitType: 'type', name: 'Type' },
-                ears: { traitType: 'trait', name: 'Ears' },
+                hat: { traitType: 'trait', name: 'Hat' },
                 eyes: { traitType: 'trait', name: 'Eyes' },
-                nose: { traitType: 'trait', name: 'Nose' },
+                piercing: { traitType: 'trait', name: 'Piercing' },
                 mouth: { traitType: 'trait', name: 'Mouth' },
                 neck: { traitType: 'trait', name: 'Neck' },
-                feet: { traitType: 'trait', name: 'Feet' },
-                insanity: { traitType: 'dynamic', name: 'Insanity', value: 'bored', additional: 'Insanity percentage' },
-                skill: { traitType: 'dynamic', name: 'Skill', value: 'anxious', additional: 'Skill percentage' },
-                intelligence: { traitType: 'dynamic', name: 'Intelligence', value: 'braindead', additional: 'Intelligence quotient' },
-                fatness: { traitType: 'dynamic', name: 'Fatness', value: 'anorexic', additional: 'Fatness percentage' },
+                hand: { traitType: 'trait', name: 'Hand' },
+                tail: { traitType: 'trait', name: 'Tail' },
+                insanity: { traitType: 'dynamic', name: 'Insanity', value: 'Bored', additional: 'Insanity percentage' },
+                skill: { traitType: 'dynamic', name: 'Skill', value: 'Kitchen Scullion', additional: 'Skill percentage' },
+                intelligence: { traitType: 'dynamic', name: 'Intelligence', value: 'Braindead', additional: 'Intelligence quotient' },
+                fatness: { traitType: 'dynamic', name: 'Fatness', value: 'Anorexic', additional: 'Fatness percentage' },
+            }
+            const traitMap = {
+                chef: { Body: 0, Head: 1, Eyes: 2, Hat: 3, Neck: 4, Mouth: 5, Hand: 6 },
+                rat: { Body: 0, Tail: 1, Head: 2, Piercing: 3, Eyes: 4, Hat: 5, Neck: 6 },
             }
             await Promise.all(IDs.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
                 const tokenUri = await this.chefRat.tokenURI(id);
                 const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
+                const type = json.attributes.find(attr => attr.trait_type === 'Type').value.toLowerCase();
                 const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
                 expect(json.image.length).to.be.above(2500); // Contains images
                 expect(svg.length).to.be.above(2500); // Contains images
@@ -89,9 +96,10 @@ contract('ChefRat (proxy)', (accounts) => {
                     if (val.traitType === 'type') {
                         expect(traits[key]).to.equal(attr.value === 'Chef');
                     }
-                    if (val.traitType === 'trait') {
+                    if (val.traitType === 'trait' && attr) {
+                        const traitName = this.traitList[type][traitMap[type][attr.trait_type]][traits[key]].name;
                         expect(val.name).to.equal(attr.trait_type);
-                        expect(traits[key]).to.equal(attr.value.split(' ')[1]);
+                        expect(attr.value).to.equal(traitName);
                     }
                     if (val.traitType === 'dynamic' && attr) {
                         expect(val.name).to.equal(attr.trait_type);

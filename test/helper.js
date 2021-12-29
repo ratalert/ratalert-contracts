@@ -33,23 +33,26 @@ module.exports = {
         await module.exports.advanceBlock();
         return Promise.resolve(web3.eth.getBlock('latest'));
     },
-    uploadTraits: async (traits) => {
+    loadTraits: async () => {
         const data = { chef: {}, rat: {} };
-        const path = `${__dirname}/../images/dummy`;
+        const path = `${__dirname}/../images/final`;
         const files = (await readdir(path)).sort();
-        const abc = ['Body', 'Head', 'A', 'B', 'C', 'D', 'E', 'F'];
         await files.reduce(async (previousPromise, file) => {
             await previousPromise;
             if (!file.includes('.png')) {
                 return;
             }
-            const [type, trait, value] = file.substr(0, file.indexOf('.')).split('_')
+            const [type, trait, , , name] = file.substr(0, file.indexOf('.')).split('_')
             const png = (await readFile(`${path}/${file}`)).toString('base64');
             if (!data[type][trait]) {
                 data[type][trait] = [];
             }
-            data[type][trait].push({ name: `${type}${abc[trait]} ${value}`, png });
+            data[type][trait].push({ name, png });
         }, Promise.resolve());
+        return data;
+    },
+    uploadTraits: async (traits) => {
+        const data = await module.exports.loadTraits();
         const res1 = await Promise.all(Object.values(data.chef).map((trait, i) => traits.uploadTraits(i, trait)));
         const res2 = await Promise.all(Object.values(data.rat).map((trait, i) => traits.uploadTraits(i + 10, trait)));
         return res1.concat(res2);
