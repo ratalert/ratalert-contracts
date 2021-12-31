@@ -1,5 +1,4 @@
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { uploadTraits } = require("../test/helper");
 
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
@@ -13,7 +12,6 @@ module.exports = async (deployer) => {
     const chefRat = await deployProxy(ChefRat, [traits.address, 50000], { deployer });
     const kitchenPack = await deployProxy(KitchenPack, [chefRat.address, fastFood.address], { deployer });
     await traits.setChefRat(chefRat.address);
-    await uploadTraits(traits);
     await fastFood.addController(kitchenPack.address);
     await chefRat.addController(kitchenPack.address);
 };
