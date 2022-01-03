@@ -29,7 +29,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   function initialize(address _traits, uint256 _maxTokens) external initializer {
     __Ownable_init();
     __Pausable_init();
-    __ERC721_init("Rat Alert Chefs & Rats", "RATS");
+    __ERC721_init("RatAlert Chefs & Rats", "CHEFRAT");
 
     minted = 0;
     numChefs = 0;
@@ -40,13 +40,13 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
     // Chefs
     rarities[2] = [255, 223, 191, 159, 127]; // hat
-    rarities[3] = [255, 207, 159, 111, 63]; // eyes
+    rarities[3] = [255, 223, 191, 159, 127, 95, 63]; // eyes
     rarities[4] = [255, 223, 191, 159, 127]; // mouth
     rarities[5] = [255, 207, 159, 111, 63]; // neck
     rarities[6] = [255, 223, 191, 159, 127]; // hand
     // Rats
     rarities[12] = [255, 223, 191, 159, 127]; // hat
-    rarities[13] = [255, 207, 159, 111, 63]; // eyes
+    rarities[13] = [255, 223, 191, 159, 127, 95, 63]; // eyes
     rarities[14] = [255, 223, 191, 159, 127]; // piercing
     rarities[15] = [255, 207, 159, 111, 63]; // neck
     rarities[16] = [255, 223, 191, 159, 127]; // tail

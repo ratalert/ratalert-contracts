@@ -27,9 +27,9 @@ contract('Traits (proxy)', (accounts) => {
     });
 
     describe('uploadTraits()', () => {
-        it('uploads dummy data', async () => {
+        it('uploads data', async () => {
             const res = await uploadTraits(this.traits);
-            expect (res.length).to.equal(16); // 8 chef traits + 8 rat traits
+            expect (res.length).to.equal(14); // 7 chef traits + 7 rat traits
             res.forEach(item => expect (item.receipt.status).to.be.true);
         });
         it('replaces with test data', async () => {

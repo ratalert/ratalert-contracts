@@ -1,4 +1,4 @@
-Rat Alert Game
+RatAlert Game
 ==============
 
 ## Rinkeby Gnosis Safe
