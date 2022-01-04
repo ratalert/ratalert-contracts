@@ -42,10 +42,10 @@ module.exports = {
             if (!file.includes('.png')) {
                 return;
             }
-            const [type, trait, , , name] = file.substr(0, file.indexOf('.')).split('_')
+            const [type, trait, , traitName, name] = file.substr(0, file.indexOf('.')).split('_')
             const png = (await readFile(`${path}/${file}`)).toString('base64');
             if (!data[type][trait]) {
-                data[type][trait] = [];
+                data[type][trait] = ['body', 'head'].includes(traitName) ? [] : [{ name: '', png: '' }];
             }
             data[type][trait].push({ name, png });
         }, Promise.resolve());

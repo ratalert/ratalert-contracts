@@ -39,17 +39,17 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     PAID_TOKENS = _maxTokens / 5;
 
     // Chefs
-    rarities[2] = [255, 223, 191, 159, 127]; // hat
-    rarities[3] = [255, 223, 191, 159, 127, 95, 63]; // eyes
-    rarities[4] = [255, 223, 191, 159, 127]; // mouth
-    rarities[5] = [255, 207, 159, 111, 63]; // neck
-    rarities[6] = [255, 223, 191, 159, 127]; // hand
+    rarities[2] = [255, 223, 191, 159, 127, 95]; // hat
+    rarities[3] = [255, 223, 191, 159, 127, 95, 63, 31]; // eyes
+    rarities[4] = [255, 223, 191, 159, 127, 95]; // mouth
+    rarities[5] = [255, 207, 159, 111, 63, 15]; // neck
+    rarities[6] = [255, 223, 191, 159, 127, 95]; // hand
     // Rats
-    rarities[12] = [255, 223, 191, 159, 127]; // hat
-    rarities[13] = [255, 223, 191, 159, 127, 95, 63]; // eyes
-    rarities[14] = [255, 223, 191, 159, 127]; // piercing
-    rarities[15] = [255, 207, 159, 111, 63]; // neck
-    rarities[16] = [255, 223, 191, 159, 127]; // tail
+    rarities[12] = [255, 223, 191, 159, 127, 95]; // hat
+    rarities[13] = [255, 223, 191, 159, 127, 95, 63, 31]; // eyes
+    rarities[14] = [255, 223, 191, 159, 127, 95]; // piercing
+    rarities[15] = [255, 207, 159, 111, 63, 15]; // neck
+    rarities[16] = [255, 223, 191, 159, 127, 95]; // tail
   }
 
   /**

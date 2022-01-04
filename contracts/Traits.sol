@@ -126,27 +126,27 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     string memory traits;
     if (s.isChef) {
       traits = string(abi.encodePacked(
-        getAttribute(_traitTypes[0], traitData[3][s.hat].name, false), ',',
-        getAttribute(_traitTypes[1], traitData[2][s.eyes].name, false), ',',
-        getAttribute(_traitTypes[3], traitData[5][s.mouth].name, false), ',',
-        getAttribute(_traitTypes[4], traitData[4][s.neck].name, false), ',',
-        getAttribute(_traitTypes[5], traitData[6][s.hand].name, false), ',',
-        getAttribute(_traitTypes[7], traitData[0][getBodyIndex(s.skill)].name, false), ',',
-        getAttribute(_traitTypes[8], traitData[1][getBodyIndex(s.insanity)].name, false), ',',
-        getAttribute(_traitTypes[11], Strings.toString(s.skill), true), ',',
-        getAttribute(_traitTypes[12], Strings.toString(s.insanity), true), ','
+        getAttribute(_traitTypes[0], traitData[3][s.hat].name, false),
+        getAttribute(_traitTypes[1], traitData[2][s.eyes].name, false),
+        getAttribute(_traitTypes[3], traitData[5][s.mouth].name, false),
+        getAttribute(_traitTypes[4], traitData[4][s.neck].name, false),
+        getAttribute(_traitTypes[5], traitData[6][s.hand].name, false),
+        getAttribute(_traitTypes[7], traitData[0][getBodyIndex(s.skill)].name, false),
+        getAttribute(_traitTypes[8], traitData[1][getBodyIndex(s.insanity)].name, false),
+        getAttribute(_traitTypes[11], Strings.toString(s.skill), true),
+        getAttribute(_traitTypes[12], Strings.toString(s.insanity), true)
       ));
     } else {
       traits = string(abi.encodePacked(
-        getAttribute(_traitTypes[0], traitData[15][s.hat].name, false), ',',
-        getAttribute(_traitTypes[1], traitData[14][s.eyes].name, false), ',',
-        getAttribute(_traitTypes[2], traitData[13][s.piercing].name, false), ',',
-        getAttribute(_traitTypes[4], traitData[16][s.neck].name, false), ',',
-        getAttribute(_traitTypes[6], traitData[11][s.tail].name, false), ',',
-        getAttribute(_traitTypes[9], traitData[12][getBodyIndex(s.intelligence)].name, false), ',',
-        getAttribute(_traitTypes[10], traitData[10][getBodyIndex(s.fatness)].name, false), ',',
-        getAttribute(_traitTypes[13], Strings.toString(s.intelligence), true), ',',
-        getAttribute(_traitTypes[14], Strings.toString(s.fatness), true), ','
+        getAttribute(_traitTypes[0], traitData[15][s.hat].name, false),
+        getAttribute(_traitTypes[1], traitData[14][s.eyes].name, false),
+        getAttribute(_traitTypes[2], traitData[13][s.piercing].name, false),
+        getAttribute(_traitTypes[4], traitData[16][s.neck].name, false),
+        getAttribute(_traitTypes[6], traitData[11][s.tail].name, false),
+        getAttribute(_traitTypes[9], traitData[12][getBodyIndex(s.intelligence)].name, false),
+        getAttribute(_traitTypes[10], traitData[10][getBodyIndex(s.fatness)].name, false),
+        getAttribute(_traitTypes[13], Strings.toString(s.intelligence), true),
+        getAttribute(_traitTypes[14], Strings.toString(s.fatness), true)
       ));
     }
     return string(abi.encodePacked(
@@ -165,13 +165,14 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @return A JSON dictionary for the single attribute
    */
   function getAttribute(string memory traitType, string memory value, bool isInteger) internal pure returns (string memory) {
+    if (!isInteger && bytes(value).length == 0) return '';
     string memory val = isInteger ? value : string(abi.encodePacked('"', value, '"'));
     return string(abi.encodePacked(
       '{',
         '"trait_type":"', traitType, '",',
         isInteger ? '"max_value":100,' : '',
         '"value":', val,
-      '}'
+      '},'
     ));
   }
 

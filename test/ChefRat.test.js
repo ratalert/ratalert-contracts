@@ -96,6 +96,9 @@ contract('ChefRat (proxy)', (accounts) => {
                     if (val.traitType === 'type') {
                         expect(traits[key]).to.equal(attr.value === 'Chef');
                     }
+                    if (val.traitType === 'trait' && traits[key] === '0') {
+                        expect(attr).to.be.undefined; // No attribute for missing trait
+                    }
                     if (val.traitType === 'trait' && attr) {
                         const traitName = this.traitList[type][traitMap[type][attr.trait_type]][traits[key]].name;
                         expect(val.name).to.equal(attr.trait_type);
