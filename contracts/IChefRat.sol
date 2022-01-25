@@ -12,10 +12,8 @@ interface IChefRat {
     uint8 neck;
     uint8 hand;
     uint8 tail;
-    uint8 insanity;
-    uint8 skill;
-    uint8 intelligence;
-    uint8 fatness;
+    uint8 efficiency;
+    uint8 tolerance;
   }
   struct Prop {
     string name;

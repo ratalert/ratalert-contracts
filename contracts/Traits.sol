@@ -82,8 +82,8 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
   function drawSVG(uint256 tokenId) public view returns (string memory) {
     IChefRat.ChefRatStruct memory s = chefRat.getTokenTraits(tokenId);
     uint8 shift = s.isChef ? 0 : 10;
-    uint8 head = getBodyIndex(s.isChef ? s.skill : s.intelligence);
-    uint8 body = getBodyIndex(s.isChef ? s.insanity : s.fatness);
+    uint8 head = getBodyIndex(s.efficiency);
+    uint8 body = getBodyIndex(s.tolerance);
     uint8[17] memory order = [body, head, s.eyes, s.hat, s.neck, s.mouth, s.hand, 0, 0, 0, body, s.tail, head, s.piercing, s.eyes, s.hat, s.neck];
     string memory svgString = string(abi.encodePacked(
       drawTrait(traitData[0 + shift][order[0 + shift]]),
@@ -131,10 +131,10 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
         getAttribute(_traitTypes[3], traitData[5][s.mouth].name, false),
         getAttribute(_traitTypes[4], traitData[4][s.neck].name, false),
         getAttribute(_traitTypes[5], traitData[6][s.hand].name, false),
-        getAttribute(_traitTypes[7], traitData[0][getBodyIndex(s.skill)].name, false),
-        getAttribute(_traitTypes[8], traitData[1][getBodyIndex(s.insanity)].name, false),
-        getAttribute(_traitTypes[11], Strings.toString(s.skill), true),
-        getAttribute(_traitTypes[12], Strings.toString(s.insanity), true)
+        getAttribute(_traitTypes[7], traitData[0][getBodyIndex(s.efficiency)].name, false),
+        getAttribute(_traitTypes[8], traitData[1][getBodyIndex(s.tolerance)].name, false),
+        getAttribute(_traitTypes[11], Strings.toString(s.efficiency), true),
+        getAttribute(_traitTypes[12], Strings.toString(s.tolerance), true)
       ));
     } else {
       traits = string(abi.encodePacked(
@@ -143,10 +143,10 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
         getAttribute(_traitTypes[2], traitData[13][s.piercing].name, false),
         getAttribute(_traitTypes[4], traitData[16][s.neck].name, false),
         getAttribute(_traitTypes[6], traitData[11][s.tail].name, false),
-        getAttribute(_traitTypes[9], traitData[12][getBodyIndex(s.intelligence)].name, false),
-        getAttribute(_traitTypes[10], traitData[10][getBodyIndex(s.fatness)].name, false),
-        getAttribute(_traitTypes[13], Strings.toString(s.intelligence), true),
-        getAttribute(_traitTypes[14], Strings.toString(s.fatness), true)
+        getAttribute(_traitTypes[9], traitData[12][getBodyIndex(s.efficiency)].name, false),
+        getAttribute(_traitTypes[10], traitData[10][getBodyIndex(s.tolerance)].name, false),
+        getAttribute(_traitTypes[13], Strings.toString(s.efficiency), true),
+        getAttribute(_traitTypes[14], Strings.toString(s.tolerance), true)
       ));
     }
     return string(abi.encodePacked(

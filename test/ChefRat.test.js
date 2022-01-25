@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, loadTraits, uploadTraits } = require('./helper');
+const { toWei, loadTraits, uploadTraits, mintUntilWeHave } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -14,6 +14,7 @@ contract('ChefRat (proxy)', (accounts) => {
     const owner = accounts[0];
     const anon = accounts[1];
     const stats = { numChefs : 0, numRats: 0 };
+    let lists;
 
     before(async () => {
         this.traitList = await loadTraits();
@@ -56,14 +57,13 @@ contract('ChefRat (proxy)', (accounts) => {
         });
 
         it('allows owner to mint', async () => {
-            const res = await this.chefRat.mint(10, { from: owner, value: toWei(1) });
-            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(1));
-            await expect(res.receipt.status).to.be.true;
-            await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals('10');
-            await expect(this.chefRat.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals('10');
+            lists = await mintUntilWeHave.call(this, 8, 2, { from: owner });
+            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(lists.all.length * 0.1));
+            await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
+            await expect(this.chefRat.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
             await expect(this.chefRat.ownerOf(1)).to.eventually.equal(owner);
-            await expect(this.chefRat.ownerOf(10)).to.eventually.equal(owner);
-            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
+            await expect(this.chefRat.ownerOf(lists.all.length)).to.eventually.equal(owner);
+            const IDs = lists.all.map(item => item.id);
             const checks = {
                 isChef: { traitType: 'type', name: 'Type' },
                 hat: { traitType: 'trait', name: 'Hat' },
@@ -73,10 +73,10 @@ contract('ChefRat (proxy)', (accounts) => {
                 neck: { traitType: 'trait', name: 'Neck' },
                 hand: { traitType: 'trait', name: 'Hand' },
                 tail: { traitType: 'trait', name: 'Tail' },
-                insanity: { traitType: 'dynamic', name: 'Insanity', value: 'Bored', additional: 'Insanity percentage' },
-                skill: { traitType: 'dynamic', name: 'Skill', value: 'Kitchen Scullion', additional: 'Skill percentage' },
-                intelligence: { traitType: 'dynamic', name: 'Intelligence', value: 'Braindead', additional: 'Intelligence quotient' },
-                fatness: { traitType: 'dynamic', name: 'Fatness', value: 'Anorexic', additional: 'Fatness percentage' },
+                skill: { traitType: 'dynamic', name: 'Skill', character: 'chef', category: 'efficiency', value: 'Kitchen Scullion', additional: 'Skill percentage' },
+                insanity: { traitType: 'dynamic', name: 'Insanity', character: 'chef', category: 'tolerance', value: 'Bored', additional: 'Insanity percentage' },
+                intelligence: { traitType: 'dynamic', name: 'Intelligence', character: 'rat', category: 'efficiency', value: 'Braindead', additional: 'Intelligence quotient' },
+                fatness: { traitType: 'dynamic', name: 'Fatness', character: 'rat', category: 'tolerance', value: 'Anorexic', additional: 'Fatness percentage' },
             }
             const traitMap = {
                 chef: { Body: 0, Head: 1, Eyes: 2, Hat: 3, Neck: 4, Mouth: 5, Hand: 6 },
@@ -96,18 +96,19 @@ contract('ChefRat (proxy)', (accounts) => {
                     if (val.traitType === 'type') {
                         expect(traits[key]).to.equal(attr.value === 'Chef');
                     }
-                    if (val.traitType === 'trait' && traits[key] === '0') {
-                        expect(attr).to.be.undefined; // No attribute for missing trait
+                    if (val.traitType === 'trait') {
+                        if (traits[key] === '0') {
+                            expect(attr).to.be.undefined; // No attribute for missing trait
+                        } else {
+                            const traitName = this.traitList[type][traitMap[type][attr.trait_type]][traits[key]].name;
+                            expect(val.name).to.equal(attr.trait_type);
+                            expect(attr.value).to.equal(traitName);
+                        }
                     }
-                    if (val.traitType === 'trait' && attr) {
-                        const traitName = this.traitList[type][traitMap[type][attr.trait_type]][traits[key]].name;
-                        expect(val.name).to.equal(attr.trait_type);
-                        expect(attr.value).to.equal(traitName);
-                    }
-                    if (val.traitType === 'dynamic' && attr) {
+                    if (val.traitType === 'dynamic' && val.character === type) {
+                        expect(traits[val.category]).to.equal('0');
                         expect(val.name).to.equal(attr.trait_type);
                         expect(attr.value).to.equal(val.value);
-                        expect(traits[key]).to.equal('0');
                         const additionalAttr = json.attributes.find(v => v.trait_type === val.additional);
                         expect(additionalAttr.value).to.equal(0);
                         expect(additionalAttr.max_value).to.equal(100);
@@ -119,13 +120,14 @@ contract('ChefRat (proxy)', (accounts) => {
         });
 
         it('allows anonymous to mint', async () => {
+            const totalMints = lists.all.length + 5;
             const res = await this.chefRat.mint(5, { from: anon, value: toWei(0.5) });
-            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(1.5));
+            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(totalMints * 0.1));
             await expect(res.receipt.status).to.be.true;
-            await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals('15');
+            await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5');
-            await expect(this.chefRat.ownerOf(11)).to.eventually.equal(anon);
-            await expect(this.chefRat.ownerOf(15)).to.eventually.equal(anon);
+            await expect(this.chefRat.ownerOf(lists.all.length + 1)).to.eventually.equal(anon);
+            await expect(this.chefRat.ownerOf(lists.all.length + 5)).to.eventually.equal(anon);
             const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
             await Promise.all(IDs.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);

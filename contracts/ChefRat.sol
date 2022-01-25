@@ -158,24 +158,18 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     }
   }
 
-  function updateInsanity(uint256 tokenId, int8 increment) public {
+  function updateEfficiency(uint256 tokenId, int8 increment) public returns(uint8) {
     require(controllers[msg.sender], "Only controllers can update");
-    tokenTraits[tokenId].insanity = getUpdatedValue(tokenTraits[tokenId].insanity, increment);
+    uint8 value = getUpdatedValue(tokenTraits[tokenId].efficiency, increment);
+    tokenTraits[tokenId].efficiency = value;
+    return value;
   }
 
-  function updateSkill(uint256 tokenId, int8 increment) public {
+  function updateTolerance(uint256 tokenId, int8 increment) public returns(uint8) {
     require(controllers[msg.sender], "Only controllers can update");
-    tokenTraits[tokenId].skill = getUpdatedValue(tokenTraits[tokenId].skill, increment);
-  }
-
-  function updateIntelligence(uint256 tokenId, int8 increment) public {
-    require(controllers[msg.sender], "Only controllers can update");
-    tokenTraits[tokenId].intelligence = getUpdatedValue(tokenTraits[tokenId].intelligence, increment);
-  }
-
-  function updateFatness(uint256 tokenId, int8 increment) public {
-    require(controllers[msg.sender], "Only controllers can update");
-    tokenTraits[tokenId].fatness = getUpdatedValue(tokenTraits[tokenId].fatness, increment);
+    uint8 value = getUpdatedValue(tokenTraits[tokenId].tolerance, increment);
+    tokenTraits[tokenId].tolerance = value;
+    return value;
   }
 
   function tokenURI(uint256 tokenId) public view override returns (string memory) {

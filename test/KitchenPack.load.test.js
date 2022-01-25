@@ -49,7 +49,7 @@ contract('KitchenPack (proxy) load test', (accounts) => {
                 const { logs } = await this.chefRat.mint(10, { from, value: toWei(1) });
                 const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
                 users[j][1] = users[j][1].concat(ids);
-                await this.kitchenPack.stakeMany(from, ids, { from });
+                await this.kitchenPack.stakeMany(ids, { from });
             }));
             await advanceTimeAndBlock(days * 86400); // Wait "a few" days
             await Promise.all(users.map(async ([from], j) => {

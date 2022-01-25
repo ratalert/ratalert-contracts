@@ -15,12 +15,13 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   struct Stake { // Store for a stake's token, owner, and earning values
     uint256 tokenId;
     address owner;
+    uint80 value;
     uint80 timestamp;
   }
 
-  event TokenStaked(uint256 tokenId, address owner, uint256 timestamp);
-  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked);
-  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked);
+  event TokenStaked(uint256 tokenId, address owner, uint256 value);
+  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity);
+  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness);
 
   ChefRat chefRat; // Reference to the ChefRat NFT contract
   FastFood fastFood; // Reference to the $FFOOD contract
@@ -32,14 +33,16 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   uint256 public constant MINIMUM_TO_EXIT = 8 hours; // Cannot unstake before EOB
   uint256 public constant FFOOD_MAX_SUPPLY = 1000000000 ether; // There will only ever be x $FFOOD earned through staking
   uint256 public constant DAILY_FFOOD_RATE = 1000 ether; // Chefs earn x $FFOOD per day
-  uint8 public constant DAILY_INSANITY_RATE = 4;
   uint8 public constant DAILY_SKILL_RATE = 2;
+  uint8 public constant DAILY_INSANITY_RATE = 4;
+  uint8 public constant DAILY_INTELLIGENCE_RATE = 2;
+  uint8 public constant DAILY_FATNESS_RATE = 8;
 
   uint256 public totalChefsStaked; // Number of Chefs staked in the Kitchen
   uint256 public totalRatsStaked; // Number of Rats staked in the Pack
+  uint256 public unaccountedRewards; // any rewards distributed when no wolves are staked
+  uint256 public fastFoodPerRat; // amount of $WOOL due for each alpha point staked
   uint256 public totalFastFoodEarned; // Amount of $FFOOD earned so far
-  uint256 public unaccountedRewards; // Any rewards distributed when no Rats are staked
-  uint256 public fastFoodPerRat; // Amount of $FFOOD due for each alpha point staked
   uint256 public lastClaimTimestamp; // The last time $FFOOD was claimed
 
   function initialize(address _chefRat, address _fastFood) external initializer {
@@ -55,11 +58,10 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 
   /**
    * Adds Chefs to Kitchen & Rats to Pack
-   * @param account - The address of the staker
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
-  function stakeMany(address account, uint16[] calldata tokenIds) external {
-    require(account == _msgSender() || _msgSender() == address(chefRat), "Do not lose your tokens");
+  function stakeMany(uint16[] calldata tokenIds) external {
+    address account = _msgSender();
     for (uint i = 0; i < tokenIds.length; i++) {
       if (_msgSender() != address(chefRat)) { // Not necessary if it's a mint & stake
         require(chefRat.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
@@ -85,6 +87,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     kitchen[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
+      value: uint80(block.timestamp),
       timestamp: uint80(block.timestamp)
     });
     totalChefsStaked ++;
@@ -100,10 +103,11 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     pack[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
+      value: uint80(fastFoodPerRat),
       timestamp: uint80(block.timestamp)
     });
     totalRatsStaked ++;
-    emit TokenStaked(tokenId, account, block.timestamp);
+    emit TokenStaked(tokenId, account, fastFoodPerRat);
   }
 
   /**
@@ -134,9 +138,9 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   function _claimChefFromKitchen(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
     Stake memory stake = kitchen[tokenId];
     require(stake.owner == _msgSender(), "Not your token");
-//    require(!(unstake && block.timestamp - stake.timestamp < MINIMUM_TO_EXIT), "Cannot leave before EOB");
+//    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave before EOB");
 
-    owed = (block.timestamp - stake.timestamp) * DAILY_FFOOD_RATE / 1 days;
+    owed = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / 1 days;
     if (totalFastFoodEarned + owed > FFOOD_MAX_SUPPLY) {
       owed = FFOOD_MAX_SUPPLY - totalFastFoodEarned;
     }
@@ -144,11 +148,11 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     if (owed > 0) {
       lastClaimTimestamp = block.timestamp;
       totalFastFoodEarned += owed;
-      _carelesslyLeaveToRats(owed * FFOOD_CLAIM_TAX_PERCENTAGE / 100); // Percentage stolen by staked Rats
+      _carelesslyLeaveToRats(owed * FFOOD_CLAIM_TAX_PERCENTAGE / 100); // percentage tax to staked wolves
       owed = owed * (100 - FFOOD_CLAIM_TAX_PERCENTAGE) / 100; // Remainder goes to Chef owner
     }
 
-    updateCharacter(tokenId);
+    (uint8 efficiency, uint8 tolerance) = updateCharacter(tokenId);
 
     if (unstake) {
       chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
@@ -158,17 +162,19 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
       kitchen[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),
         owner: _msgSender(),
+        value: uint80(block.timestamp),
         timestamp: uint80(block.timestamp)
       });
     }
-    emit ChefClaimed(tokenId, owed, unstake);
+    emit ChefClaimed(tokenId, owed, unstake, efficiency, tolerance);
   }
 
-  function updateCharacter(uint256 tokenId) internal {
-    Stake memory stake = kitchen[tokenId];
-    uint256 diff = block.timestamp - stake.timestamp;
-    chefRat.updateInsanity(tokenId, getCharacterIncrement(diff, DAILY_INSANITY_RATE));
-    chefRat.updateSkill(tokenId, getCharacterIncrement(diff, DAILY_SKILL_RATE));
+  function updateCharacter(uint256 tokenId) internal returns(uint8 efficiency, uint8 tolerance) {
+    Stake memory k = kitchen[tokenId];
+    Stake memory p = pack[tokenId];
+    uint256 diff = block.timestamp - (isChef(tokenId) ? k.timestamp : p.timestamp);
+    efficiency = chefRat.updateEfficiency(tokenId, getCharacterIncrement(diff, isChef(tokenId) ? DAILY_SKILL_RATE : DAILY_INTELLIGENCE_RATE));
+    tolerance = chefRat.updateTolerance(tokenId, getCharacterIncrement(diff, isChef(tokenId) ? DAILY_INSANITY_RATE : DAILY_FATNESS_RATE));
   }
 
   function getCharacterIncrement(uint256 diff, uint8 factor) internal pure returns(int8) {
@@ -179,16 +185,32 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 
   /**
    * Claim $FFOOD earnings for a single Rat and optionally unstake it
-   * Rats steal $FFOOD proportional to their skill level
+   * Rats steal $FFOOD proportional to their efficiency level
    * @param tokenId - The ID of the Rat to claim earnings from
    * @param unstake - Whether or not to unstake the Rat
    * @return owed - The amount of $FFOOD earned
    */
   function _claimRatFromPack(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
-    delete pack[tokenId];
-    totalRatsStaked --;
-    // TODO Implement $FFOOD distribution
-    emit RatClaimed(tokenId, owed, unstake);
+    Stake memory stake = pack[tokenId];
+    require(stake.owner == _msgSender(), "Not your token");
+//    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave your pack starving so early");
+
+    owed = (1) * (fastFoodPerRat - stake.value); // Calculate individual share
+    (uint8 efficiency, uint8 tolerance) = updateCharacter(tokenId);
+
+    if (unstake) {
+      chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
+      delete pack[tokenId];
+      totalRatsStaked --;
+    } else {
+      pack[tokenId] = Stake({ // Reset stake
+        tokenId: uint16(tokenId),
+        owner: _msgSender(),
+        value: uint80(fastFoodPerRat),
+        timestamp: uint80(block.timestamp)
+      });
+    }
+    emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance);
   }
 
   /**
@@ -196,9 +218,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
    * @param tokenId - The ID of the token to check
    * @return chef - Whether or not the token is a Chef
    */
-  function isChef(uint256 tokenId) public pure returns (bool chef) {
-    tokenId;
-    chef = true; // TODO Implement with (chef, , , , , , , , , ) = chefRat.tokenTraits(tokenId);
+  function isChef(uint256 tokenId) public view returns (bool chef) {
+    (chef, , , , , , , , ,) = chefRat.tokenTraits(tokenId);
   }
 
   /**
@@ -206,11 +227,11 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
    * @param amount - $FFOOD to add to the pot
    */
   function _carelesslyLeaveToRats(uint256 amount) internal {
-    if (totalRatsStaked == 0) {
-      unaccountedRewards += amount; // Keep track for Rats staked in the future
+    if (totalRatsStaked == 0) { // if there's no staked wolves
+      unaccountedRewards += amount; // keep track of $WOOL due to wolves
       return;
     }
-    // Makes sure to include any unaccounted $FFOOD
+    // makes sure to include any unaccounted $FFOOD
     fastFoodPerRat += (amount + unaccountedRewards) / totalRatsStaked;
     unaccountedRewards = 0;
   }
