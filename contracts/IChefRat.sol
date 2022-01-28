@@ -20,7 +20,7 @@ interface IChefRat {
     int8 value;
   }
 
-  function mint(uint8 amount) external payable;
+  function mint(uint8 amount, bool stake) external payable;
   function getPaidTokens() external view returns (uint256);
   function getTokenTraits(uint256 tokenId) external view returns (ChefRatStruct memory);
 }

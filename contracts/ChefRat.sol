@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "./IChefRat.sol";
+import "./IKitchenPack.sol";
 import "./ITraits.sol";
 
 contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable {
@@ -25,6 +26,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   uint8[][18] public rarities; // List of probabilities for each trait type, 0 - 9 are associated with Chefs, 10 - 18 are associated with Rats
 
   ITraits public traits; // Reference to Traits
+  IKitchenPack public kitchenPack;
 
   function initialize(address _traits, uint256 _maxTokens) external initializer {
     __Ownable_init();
@@ -57,21 +59,26 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    * The first 20% are free to claim, the remaining cost $FFOOD
    * @param amount Number of tokens to mint
    */
-  function mint(uint8 amount) external payable whenNotPaused {
+  function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(amount > 0 && amount <= 10, "Invalid mint amount");
     require(amount * MINT_PRICE == msg.value, "Invalid payment amount");
 
-    uint16[] memory tokenIds = new uint16[](amount);
+    uint16[] memory tokenIds = stake ? new uint16[](amount) : new uint16[](0);
     uint256 seed;
     ChefRatStruct memory s;
     for (uint i = 0; i < amount; i++) {
       minted++;
       seed = random(minted);
       s = generate(minted, seed);
-      _safeMint(_msgSender(), minted);
-      tokenIds[i] = minted;
+      if (stake) {
+        _safeMint(address(kitchenPack), minted);
+        tokenIds[i] = minted;
+      } else {
+        _safeMint(_msgSender(), minted);
+      }
       s.isChef ? numChefs++ : numRats++;
     }
+    if (stake) kitchenPack.stakeMany(_msgSender(), tokenIds);
   }
 
   /**
@@ -208,6 +215,14 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    */
   function removeController(address controller) external onlyOwner {
     controllers[controller] = false;
+  }
+
+  /**
+   * called after deployment to avoid cyclical dependencies
+   * @param _kitchenPack the address of the KitchenPack
+   */
+  function setKitchenPack(address _kitchenPack) external onlyOwner {
+    kitchenPack = IKitchenPack(_kitchenPack);
   }
 
   /**

@@ -25,6 +25,7 @@ contract('KitchenPack (proxy) load test', (accounts) => {
         this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address], { from: owner });
         await this.fastFood.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.addController(this.kitchenPack.address, { from: owner });
+        await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
         await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: owner });
         await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: anon });
     });
@@ -46,10 +47,10 @@ contract('KitchenPack (proxy) load test', (accounts) => {
         for (let i = 0; i <= totalEpochs; i++) {
             console.log(`      [Epoch ${i}/${totalEpochs}] ${expected[epoch].totalChefsStaked} chefs staked, ${expected[epoch].totalFastFoodEarned} $FFOOD earned after ${(i + 1) * days} days`);
             await Promise.all(users.map(async ([from], j) => {
-                const { logs } = await this.chefRat.mint(10, { from, value: toWei(1) });
+                const { logs } = await this.chefRat.mint(10, false, { from, value: toWei(1) });
                 const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
                 users[j][1] = users[j][1].concat(ids);
-                await this.kitchenPack.stakeMany(ids, { from });
+                await this.kitchenPack.stakeMany(from, ids, { from });
             }));
             await advanceTimeAndBlock(days * 86400); // Wait "a few" days
             await Promise.all(users.map(async ([from], j) => {

@@ -28,20 +28,21 @@ contract('KitchenPack (proxy)', (accounts) => {
         this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address], { from: owner });
         await this.fastFood.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.addController(this.kitchenPack.address, { from: owner });
+        await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
     });
 
     describe('stake()', () => {
         it('fails to stake non-existent tokens', async () => {
-            await expect(this.kitchenPack.stakeMany([99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
+            await expect(this.kitchenPack.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
-            await this.chefRat.mint(1, { from: anon, value: toWei(0.1) });
-            await expect(this.kitchenPack.stakeMany([1], { from: owner })).to.eventually.be.rejectedWith('Not your token');
+            await this.chefRat.mint(1, false, { from: anon, value: toWei(0.1) });
+            await expect(this.kitchenPack.stakeMany(owner, [1], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('stakes many tokens', async () => {
             lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
             await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: owner });
-            await this.kitchenPack.stakeMany(lists.all.map(item => item.id), { from: owner });
+            await this.kitchenPack.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
             const block = await web3.eth.getBlock('latest');
             await expect(this.chefRat.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchenPack.address);
             await expect(this.chefRat.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchenPack.address);

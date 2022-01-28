@@ -58,10 +58,11 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 
   /**
    * Adds Chefs to Kitchen & Rats to Pack
+   * @param account - The address of the staker
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
-  function stakeMany(uint16[] calldata tokenIds) external {
-    address account = _msgSender();
+  function stakeMany(address account, uint16[] calldata tokenIds) external {
+    require(account == _msgSender() || _msgSender() == address(chefRat), "Do not lose your tokens");
     for (uint i = 0; i < tokenIds.length; i++) {
       if (_msgSender() != address(chefRat)) { // Not necessary if it's a mint & stake
         require(chefRat.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");

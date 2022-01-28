@@ -7,8 +7,10 @@ require('@openzeppelin/test-helpers');
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
+const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const ChefRat = artifacts.require('ChefRat');
+const KitchenPack = artifacts.require('KitchenPack');
 
 contract('ChefRat (proxy)', (accounts) => {
     const owner = accounts[0];
@@ -18,10 +20,15 @@ contract('ChefRat (proxy)', (accounts) => {
 
     before(async () => {
         this.traitList = await loadTraits();
+        this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
+        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address], { from: owner });
+        await this.fastFood.addController(this.kitchenPack.address, { from: owner });
+        await this.chefRat.addController(this.kitchenPack.address, { from: owner });
+        await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
         await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals('0');
@@ -46,14 +53,14 @@ contract('ChefRat (proxy)', (accounts) => {
 
     describe('mint()', () => {
         it('only allows to mint 1-10 tokens', async () => {
-            await expect(this.chefRat.mint(0, { from: owner, value: toWei(0) })).to.eventually.be.rejected;
-            await expect(this.chefRat.mint(11, { from: owner, value: toWei(1.1) })).to.eventually.be.rejected;
+            await expect(this.chefRat.mint(0, false, { from: owner, value: toWei(0) })).to.eventually.be.rejected;
+            await expect(this.chefRat.mint(11, false, { from: owner, value: toWei(1.1) })).to.eventually.be.rejected;
         });
 
         it('rejects invalid payments', async () => {
-            await expect(this.chefRat.mint(1, { from: owner })).to.eventually.be.rejected;
-            await expect(this.chefRat.mint(2, { from: owner, value: toWei(0.1) })).to.eventually.be.rejected;
-            await expect(this.chefRat.mint(3, { from: owner, value: toWei(0.4) })).to.eventually.be.rejected;
+            await expect(this.chefRat.mint(1, false, { from: owner })).to.eventually.be.rejected;
+            await expect(this.chefRat.mint(2, false, { from: owner, value: toWei(0.1) })).to.eventually.be.rejected;
+            await expect(this.chefRat.mint(3, false, { from: owner, value: toWei(0.4) })).to.eventually.be.rejected;
         });
 
         it('allows owner to mint', async () => {
@@ -121,20 +128,42 @@ contract('ChefRat (proxy)', (accounts) => {
 
         it('allows anonymous to mint', async () => {
             const totalMints = lists.all.length + 5;
-            const res = await this.chefRat.mint(5, { from: anon, value: toWei(0.5) });
-            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(totalMints * 0.1));
+            const res = await this.chefRat.mint(5, false, { from: anon, value: toWei(0.5) });
+            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
             await expect(res.receipt.status).to.be.true;
+            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(totalMints * 0.1));
             await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5');
-            await expect(this.chefRat.ownerOf(lists.all.length + 1)).to.eventually.equal(anon);
-            await expect(this.chefRat.ownerOf(lists.all.length + 5)).to.eventually.equal(anon);
-            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
             await Promise.all(IDs.map(async id => {
+                await expect(this.chefRat.ownerOf(id)).to.eventually.equal(anon);
                 const traits = await this.chefRat.getTokenTraits(id);
                 traits.isChef ? stats.numChefs += 1 : stats.numRats += 1;
             }));
             await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals(stats.numChefs.toString());
             await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals(stats.numRats.toString());
+        });
+
+        it('mints and stakes', async () => {
+            const totalMints = lists.all.length + 10;
+            const res = await this.chefRat.mint(5, true, { from: anon, value: toWei(0.5) });
+            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
+            await expect(res.receipt.status).to.be.true;
+            await expect(web3.eth.getBalance(this.chefRat.address)).to.eventually.be.a.bignumber.that.equals(toWei(totalMints * 0.1));
+            await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
+            await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5'); // Because they are staked!
+            await Promise.all(IDs.map(async id => {
+                await expect(this.chefRat.ownerOf(id)).to.eventually.equal(this.kitchenPack.address);
+            }));
+
+            const { logs } = await this.kitchenPack.claimMany(IDs, true, { from: anon });
+            logs.forEach((log, i) => {
+                expect(log.args.tokenId).to.be.a.bignumber.eq(IDs[i].toString());
+                expect(log.args.unstaked).to.be.true;
+            });
+            await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('10');
+            await Promise.all(IDs.map(async id => {
+                await expect(this.chefRat.ownerOf(id)).to.eventually.equal(anon);
+            }));
         });
     });
 });
