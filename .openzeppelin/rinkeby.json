@@ -1,30 +1,30 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0x0754F22484b90A1E09850a88CaDde12848775647",
-    "txHash": "0x89d84007f6ab19117b098e728192badb4176a575949fdfbb11592152e73b367d"
+    "address": "0x446F31603275DFfFe0E7a165b52c98d8aAFB5b59",
+    "txHash": "0xc180eb39128858f1fbb260ec3e05cd213c0ae556e76f81be99159673f8761d8c"
   },
   "proxies": [
     {
-      "address": "0xcdA77510f49d1c2f60D5B8e01296353CD5834e8F",
-      "txHash": "0x91a8cd7a0197d23a5bde3faa7fbc15d122c5fdb9bbdbeb240de47d2fc7403fc6",
+      "address": "0x20a79EFDFD21700c27f88fB83aB78E730cD09B1E",
+      "txHash": "0xa5956e504619b36d955990ad9363057335495a530f2f1d137e649bf6db64e944",
       "kind": "transparent"
     },
     {
-      "address": "0x9903D06755a1f5f29Ff1BD06CbE6f9A02f0a1b53",
-      "txHash": "0x89ee01270f06380ed5b69e9b04dbda5922c92e2eb9a10d60566ffff695e54a24",
+      "address": "0xDE76f47f0C032bDce0b901e90810134Cc6f0397C",
+      "txHash": "0xf25b8887e38e86d01cd9c856117ec25a668eafee89da4779778a7dc577fdc136",
       "kind": "transparent"
     },
     {
-      "address": "0x5454651539Ff1C6625B5Ce989ADbeF4b063dD189",
-      "txHash": "0x52ddde5e804a29a8cd7a2c69b108e0681f0d65ec312ff70eb85ddf21531196eb",
+      "address": "0x40c44C0a1c832108377D108d7F8dBe3B651A3225",
+      "txHash": "0x99b4c763919abc4d7ca823c4a70a2cf09030dc41be455913e26c976a8afe3196",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "7c9be94dc9642e78a6fe5fb693782dd0a5d12df111feb1d0ffd74132f7e13662": {
-      "address": "0xbccc64790C1b6Bb755DC7F893BC23C0c7d1df4A2",
-      "txHash": "0x7b2a820ed67de5fe537f7f80f583a778c8f55766a3eec7ff51e11d2c3aa22b7d",
+    "47c6de593dc859e7f49a625cd52a90250f40a9af483b1022e186580a7fc1b20a": {
+      "address": "0xfff83ba118F13f7D7564F69b5f5D96ba6B6Ce6A0",
+      "txHash": "0x258c8f2deb859470c237c810a496eeeb9ede780fe7913c12e3887ae00a9ae54e",
       "layout": {
         "storage": [
           {
@@ -72,13 +72,13 @@
           {
             "contract": "Traits",
             "label": "traitData",
-            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)6296_storage))",
+            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)6624_storage))",
             "src": "../project:/contracts/Traits.sol:22"
           },
           {
             "contract": "Traits",
             "label": "chefRat",
-            "type": "t_contract(IChefRat)4772",
+            "type": "t_contract(IChefRat)4806",
             "src": "../project:/contracts/Traits.sol:24"
           }
         ],
@@ -92,16 +92,16 @@
           "t_uint16": {
             "label": "uint16"
           },
-          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)6296_storage))": {
+          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)6624_storage))": {
             "label": "mapping(uint8 => mapping(uint8 => struct Traits.Trait))"
           },
           "t_uint8": {
             "label": "uint8"
           },
-          "t_mapping(t_uint8,t_struct(Trait)6296_storage)": {
+          "t_mapping(t_uint8,t_struct(Trait)6624_storage)": {
             "label": "mapping(uint8 => struct Traits.Trait)"
           },
-          "t_struct(Trait)6296_storage": {
+          "t_struct(Trait)6624_storage": {
             "label": "struct Traits.Trait",
             "members": [
               {
@@ -114,7 +114,7 @@
               }
             ]
           },
-          "t_contract(IChefRat)4772": {
+          "t_contract(IChefRat)4806": {
             "label": "contract IChefRat"
           },
           "t_address": {
@@ -135,9 +135,9 @@
         }
       }
     },
-    "15ffd335ccc2a0e27e31c75d1a151a6334a7861ce6a9679acce12e6dd3c53cc9": {
-      "address": "0xD82e16FAFCc646147CA838FD63b5252453A9ffbd",
-      "txHash": "0xca5c4d651714cf1920ce8e88c10099de036e59188cab6baac1e4e40759e0b335",
+    "751babae723dd5a4d19eb622ee070a0d29b7e9780e6c815d37fbe4c6f631165b": {
+      "address": "0x9Eada9b88685ab21a08E3DEd2fdc2D344Bf563eD",
+      "txHash": "0x101d43b3776433196af1d1a2c40e26ef52bd5bdfd91d00912a66a2ec8a206c34",
       "layout": {
         "storage": [
           {
@@ -234,61 +234,67 @@
             "contract": "ChefRat",
             "label": "minted",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRat.sol:13"
+            "src": "../project:/contracts/ChefRat.sol:14"
           },
           {
             "contract": "ChefRat",
             "label": "numChefs",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRat.sol:14"
+            "src": "../project:/contracts/ChefRat.sol:15"
           },
           {
             "contract": "ChefRat",
             "label": "numRats",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRat.sol:15"
+            "src": "../project:/contracts/ChefRat.sol:16"
           },
           {
             "contract": "ChefRat",
             "label": "MAX_TOKENS",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRat.sol:17"
+            "src": "../project:/contracts/ChefRat.sol:18"
           },
           {
             "contract": "ChefRat",
             "label": "PAID_TOKENS",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRat.sol:18"
+            "src": "../project:/contracts/ChefRat.sol:19"
           },
           {
             "contract": "ChefRat",
             "label": "tokenTraits",
-            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)4748_storage)",
-            "src": "../project:/contracts/ChefRat.sol:22"
+            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)4780_storage)",
+            "src": "../project:/contracts/ChefRat.sol:23"
           },
           {
             "contract": "ChefRat",
             "label": "existingCombinations",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "../project:/contracts/ChefRat.sol:23"
+            "src": "../project:/contracts/ChefRat.sol:24"
           },
           {
             "contract": "ChefRat",
             "label": "controllers",
             "type": "t_mapping(t_address,t_bool)",
-            "src": "../project:/contracts/ChefRat.sol:24"
+            "src": "../project:/contracts/ChefRat.sol:25"
           },
           {
             "contract": "ChefRat",
             "label": "rarities",
             "type": "t_array(t_array(t_uint8)dyn_storage)18_storage",
-            "src": "../project:/contracts/ChefRat.sol:25"
+            "src": "../project:/contracts/ChefRat.sol:26"
           },
           {
             "contract": "ChefRat",
             "label": "traits",
-            "type": "t_contract(ITraits)4785",
-            "src": "../project:/contracts/ChefRat.sol:27"
+            "type": "t_contract(ITraits)4827",
+            "src": "../project:/contracts/ChefRat.sol:28"
+          },
+          {
+            "contract": "ChefRat",
+            "label": "kitchenPack",
+            "type": "t_contract(IKitchenPack)4817",
+            "src": "../project:/contracts/ChefRat.sol:29"
           }
         ],
         "types": {
@@ -298,10 +304,10 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_mapping(t_uint256,t_struct(ChefRatStruct)4748_storage)": {
+          "t_mapping(t_uint256,t_struct(ChefRatStruct)4780_storage)": {
             "label": "mapping(uint256 => struct IChefRat.ChefRatStruct)"
           },
-          "t_struct(ChefRatStruct)4748_storage": {
+          "t_struct(ChefRatStruct)4780_storage": {
             "label": "struct IChefRat.ChefRatStruct",
             "members": [
               {
@@ -337,19 +343,11 @@
                 "type": "t_uint8"
               },
               {
-                "label": "insanity",
+                "label": "efficiency",
                 "type": "t_uint8"
               },
               {
-                "label": "skill",
-                "type": "t_uint8"
-              },
-              {
-                "label": "intelligence",
-                "type": "t_uint8"
-              },
-              {
-                "label": "fatness",
+                "label": "tolerance",
                 "type": "t_uint8"
               }
             ]
@@ -375,8 +373,11 @@
           "t_array(t_uint8)dyn_storage": {
             "label": "uint8[]"
           },
-          "t_contract(ITraits)4785": {
+          "t_contract(ITraits)4827": {
             "label": "contract ITraits"
+          },
+          "t_contract(IKitchenPack)4817": {
+            "label": "contract IKitchenPack"
           },
           "t_string_storage": {
             "label": "string"
@@ -402,9 +403,9 @@
         }
       }
     },
-    "6400d44c03e944b758dd333b6c711cef232e7eab46a8a7e740038b186cd72ff1": {
-      "address": "0x5e6Bb7f6E8F2E8C736F2761b8EEe62180b8964C8",
-      "txHash": "0x16396b20b96f74de76117647fc93393e6aab09a5d7807b494c83366ffc74cdba",
+    "2698c1e23a73a4793729ac650a24867e184198c7a9dbfce79eb90b46b75508c0": {
+      "address": "0x6f47b0B07B21Fdd9929F923D54281a58060f85fb",
+      "txHash": "0x2d16f4b2a941c85169700b7e6bba455877b60b191d78f1186c54ecb4381800b9",
       "layout": {
         "storage": [
           {
@@ -452,78 +453,78 @@
           {
             "contract": "KitchenPack",
             "label": "chefRat",
-            "type": "t_contract(ChefRat)3737",
-            "src": "../project:/contracts/KitchenPack.sol:25"
-          },
-          {
-            "contract": "KitchenPack",
-            "label": "fastFood",
-            "type": "t_contract(FastFood)4721",
+            "type": "t_contract(ChefRat)3755",
             "src": "../project:/contracts/KitchenPack.sol:26"
           },
           {
             "contract": "KitchenPack",
+            "label": "fastFood",
+            "type": "t_contract(FastFood)4757",
+            "src": "../project:/contracts/KitchenPack.sol:27"
+          },
+          {
+            "contract": "KitchenPack",
             "label": "kitchen",
-            "type": "t_mapping(t_uint256,t_struct(Stake)4812_storage)",
-            "src": "../project:/contracts/KitchenPack.sol:28"
+            "type": "t_mapping(t_uint256,t_struct(Stake)4856_storage)",
+            "src": "../project:/contracts/KitchenPack.sol:29"
           },
           {
             "contract": "KitchenPack",
             "label": "pack",
-            "type": "t_mapping(t_uint256,t_struct(Stake)4812_storage)",
-            "src": "../project:/contracts/KitchenPack.sol:29"
+            "type": "t_mapping(t_uint256,t_struct(Stake)4856_storage)",
+            "src": "../project:/contracts/KitchenPack.sol:30"
           },
           {
             "contract": "KitchenPack",
             "label": "totalChefsStaked",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPack.sol:38"
+            "src": "../project:/contracts/KitchenPack.sol:41"
           },
           {
             "contract": "KitchenPack",
             "label": "totalRatsStaked",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPack.sol:39"
-          },
-          {
-            "contract": "KitchenPack",
-            "label": "totalFastFoodEarned",
-            "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPack.sol:40"
+            "src": "../project:/contracts/KitchenPack.sol:42"
           },
           {
             "contract": "KitchenPack",
             "label": "unaccountedRewards",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPack.sol:41"
+            "src": "../project:/contracts/KitchenPack.sol:43"
           },
           {
             "contract": "KitchenPack",
             "label": "fastFoodPerRat",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPack.sol:42"
+            "src": "../project:/contracts/KitchenPack.sol:44"
+          },
+          {
+            "contract": "KitchenPack",
+            "label": "totalFastFoodEarned",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenPack.sol:45"
           },
           {
             "contract": "KitchenPack",
             "label": "lastClaimTimestamp",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPack.sol:43"
+            "src": "../project:/contracts/KitchenPack.sol:46"
           }
         ],
         "types": {
-          "t_contract(ChefRat)3737": {
+          "t_contract(ChefRat)3755": {
             "label": "contract ChefRat"
           },
-          "t_contract(FastFood)4721": {
+          "t_contract(FastFood)4757": {
             "label": "contract FastFood"
           },
-          "t_mapping(t_uint256,t_struct(Stake)4812_storage)": {
+          "t_mapping(t_uint256,t_struct(Stake)4856_storage)": {
             "label": "mapping(uint256 => struct KitchenPack.Stake)"
           },
           "t_uint256": {
             "label": "uint256"
           },
-          "t_struct(Stake)4812_storage": {
+          "t_struct(Stake)4856_storage": {
             "label": "struct KitchenPack.Stake",
             "members": [
               {
@@ -535,6 +536,10 @@
                 "type": "t_address"
               },
               {
+                "label": "value",
+                "type": "t_uint80"
+              },
+              {
                 "label": "timestamp",
                 "type": "t_uint80"
               }
@@ -558,9 +563,9 @@
         }
       }
     },
-    "26b189c78d2282e69ffda956215e785c819783a0beaf2f0391c479f20d515c31": {
-      "address": "0x7cBeb6c9392377e7F1632bA9566C3b9BF70176c9",
-      "txHash": "0x4ed8570b6fff6a46f2beecae247c6118bf7395be7399d17b2f6425dfe1e1b87f",
+    "9c8c72c7ca521408ee10e66b2bd517876f532ecc086e2b65a15c2a6a3149b435": {
+      "address": "0x02eA69Be5549C7BBB1D3579BF0732CBd18C89EA1",
+      "txHash": "0xb53f0cca8a8d6e69631bc38c0c7907eceef161ebc05fe8705432b63e6a4c0170",
       "layout": {
         "storage": [
           {
@@ -657,61 +662,67 @@
             "contract": "ChefRatTest",
             "label": "minted",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:13"
+            "src": "../project:/contracts/ChefRatTest.sol:14"
           },
           {
             "contract": "ChefRatTest",
             "label": "numChefs",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:14"
+            "src": "../project:/contracts/ChefRatTest.sol:15"
           },
           {
             "contract": "ChefRatTest",
             "label": "numRats",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:15"
+            "src": "../project:/contracts/ChefRatTest.sol:16"
           },
           {
             "contract": "ChefRatTest",
             "label": "MAX_TOKENS",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRatTest.sol:17"
+            "src": "../project:/contracts/ChefRatTest.sol:18"
           },
           {
             "contract": "ChefRatTest",
             "label": "PAID_TOKENS",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRatTest.sol:18"
+            "src": "../project:/contracts/ChefRatTest.sol:19"
           },
           {
             "contract": "ChefRatTest",
             "label": "tokenTraits",
-            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)4748_storage)",
-            "src": "../project:/contracts/ChefRatTest.sol:22"
+            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)4780_storage)",
+            "src": "../project:/contracts/ChefRatTest.sol:23"
           },
           {
             "contract": "ChefRatTest",
             "label": "existingCombinations",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "../project:/contracts/ChefRatTest.sol:23"
+            "src": "../project:/contracts/ChefRatTest.sol:24"
           },
           {
             "contract": "ChefRatTest",
             "label": "controllers",
             "type": "t_mapping(t_address,t_bool)",
-            "src": "../project:/contracts/ChefRatTest.sol:24"
+            "src": "../project:/contracts/ChefRatTest.sol:25"
           },
           {
             "contract": "ChefRatTest",
             "label": "rarities",
             "type": "t_array(t_array(t_uint8)dyn_storage)18_storage",
-            "src": "../project:/contracts/ChefRatTest.sol:25"
+            "src": "../project:/contracts/ChefRatTest.sol:26"
           },
           {
             "contract": "ChefRatTest",
             "label": "traits",
-            "type": "t_contract(ITraits)4785",
-            "src": "../project:/contracts/ChefRatTest.sol:27"
+            "type": "t_contract(ITraits)4827",
+            "src": "../project:/contracts/ChefRatTest.sol:28"
+          },
+          {
+            "contract": "ChefRatTest",
+            "label": "kitchenPack",
+            "type": "t_contract(IKitchenPack)4817",
+            "src": "../project:/contracts/ChefRatTest.sol:29"
           }
         ],
         "types": {
@@ -721,10 +732,10 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_mapping(t_uint256,t_struct(ChefRatStruct)4748_storage)": {
+          "t_mapping(t_uint256,t_struct(ChefRatStruct)4780_storage)": {
             "label": "mapping(uint256 => struct IChefRat.ChefRatStruct)"
           },
-          "t_struct(ChefRatStruct)4748_storage": {
+          "t_struct(ChefRatStruct)4780_storage": {
             "label": "struct IChefRat.ChefRatStruct",
             "members": [
               {
@@ -760,19 +771,11 @@
                 "type": "t_uint8"
               },
               {
-                "label": "insanity",
+                "label": "efficiency",
                 "type": "t_uint8"
               },
               {
-                "label": "skill",
-                "type": "t_uint8"
-              },
-              {
-                "label": "intelligence",
-                "type": "t_uint8"
-              },
-              {
-                "label": "fatness",
+                "label": "tolerance",
                 "type": "t_uint8"
               }
             ]
@@ -798,8 +801,11 @@
           "t_array(t_uint8)dyn_storage": {
             "label": "uint8[]"
           },
-          "t_contract(ITraits)4785": {
+          "t_contract(ITraits)4827": {
             "label": "contract ITraits"
+          },
+          "t_contract(IKitchenPack)4817": {
+            "label": "contract IKitchenPack"
           },
           "t_string_storage": {
             "label": "string"
@@ -825,9 +831,9 @@
         }
       }
     },
-    "db4fb12afcb7189daf9f5ef6b6648745c20b24df42bdb965ace67e4ff3106641": {
-      "address": "0xE455E79d6bF893B7B3216A89C18060FEf2104ec6",
-      "txHash": "0x86cff6a0d1c0063c9a76588939b66bd8e6edc2e13900a36767a66dc18ee4adb0",
+    "8d33e194e123b63faf2473cb0eb688c6a4daa96d51a4001f03957e23c78dae72": {
+      "address": "0xFA719dAEEC513F7d3927d661Dd5764757e31B2a2",
+      "txHash": "0x4e2726f60c547b0c5d198003650b9a4135c7219a8f07cc36f8ac364aa8007002",
       "layout": {
         "storage": [
           {
@@ -875,78 +881,78 @@
           {
             "contract": "KitchenPackTest",
             "label": "chefRat",
-            "type": "t_contract(ChefRat)3747",
-            "src": "../project:/contracts/KitchenPackTest.sol:25"
-          },
-          {
-            "contract": "KitchenPackTest",
-            "label": "fastFood",
-            "type": "t_contract(FastFood)4741",
+            "type": "t_contract(ChefRat)3755",
             "src": "../project:/contracts/KitchenPackTest.sol:26"
           },
           {
             "contract": "KitchenPackTest",
+            "label": "fastFood",
+            "type": "t_contract(FastFood)4757",
+            "src": "../project:/contracts/KitchenPackTest.sol:27"
+          },
+          {
+            "contract": "KitchenPackTest",
             "label": "kitchen",
-            "type": "t_mapping(t_uint256,t_struct(Stake)5560_storage)",
-            "src": "../project:/contracts/KitchenPackTest.sol:28"
+            "type": "t_mapping(t_uint256,t_struct(Stake)5727_storage)",
+            "src": "../project:/contracts/KitchenPackTest.sol:29"
           },
           {
             "contract": "KitchenPackTest",
             "label": "pack",
-            "type": "t_mapping(t_uint256,t_struct(Stake)5560_storage)",
-            "src": "../project:/contracts/KitchenPackTest.sol:29"
+            "type": "t_mapping(t_uint256,t_struct(Stake)5727_storage)",
+            "src": "../project:/contracts/KitchenPackTest.sol:30"
           },
           {
             "contract": "KitchenPackTest",
             "label": "totalChefsStaked",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPackTest.sol:38"
+            "src": "../project:/contracts/KitchenPackTest.sol:41"
           },
           {
             "contract": "KitchenPackTest",
             "label": "totalRatsStaked",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPackTest.sol:39"
-          },
-          {
-            "contract": "KitchenPackTest",
-            "label": "totalFastFoodEarned",
-            "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPackTest.sol:40"
+            "src": "../project:/contracts/KitchenPackTest.sol:42"
           },
           {
             "contract": "KitchenPackTest",
             "label": "unaccountedRewards",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPackTest.sol:41"
+            "src": "../project:/contracts/KitchenPackTest.sol:43"
           },
           {
             "contract": "KitchenPackTest",
             "label": "fastFoodPerRat",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPackTest.sol:42"
+            "src": "../project:/contracts/KitchenPackTest.sol:44"
+          },
+          {
+            "contract": "KitchenPackTest",
+            "label": "totalFastFoodEarned",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenPackTest.sol:45"
           },
           {
             "contract": "KitchenPackTest",
             "label": "lastClaimTimestamp",
             "type": "t_uint256",
-            "src": "../project:/contracts/KitchenPackTest.sol:43"
+            "src": "../project:/contracts/KitchenPackTest.sol:46"
           }
         ],
         "types": {
-          "t_contract(ChefRat)3747": {
+          "t_contract(ChefRat)3755": {
             "label": "contract ChefRat"
           },
-          "t_contract(FastFood)4741": {
+          "t_contract(FastFood)4757": {
             "label": "contract FastFood"
           },
-          "t_mapping(t_uint256,t_struct(Stake)5560_storage)": {
+          "t_mapping(t_uint256,t_struct(Stake)5727_storage)": {
             "label": "mapping(uint256 => struct KitchenPackTest.Stake)"
           },
           "t_uint256": {
             "label": "uint256"
           },
-          "t_struct(Stake)5560_storage": {
+          "t_struct(Stake)5727_storage": {
             "label": "struct KitchenPackTest.Stake",
             "members": [
               {
@@ -956,6 +962,10 @@
               {
                 "label": "owner",
                 "type": "t_address"
+              },
+              {
+                "label": "value",
+                "type": "t_uint80"
               },
               {
                 "label": "timestamp",
@@ -977,540 +987,6 @@
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
-          }
-        }
-      }
-    },
-    "2ad4467df470951082af4a25efcca3206db1d8cad5420713569f6ab8d605cd96": {
-      "address": "0x885f2AF0530A467EF9ACf415989ac9afc4A0DbC4",
-      "txHash": "0x5bd224c9eb8f8bbaa11a2a261ca7c7a0fa667774b7f31ae9cb6c2e025294c552",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "_owner",
-            "type": "t_address",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
-          },
-          {
-            "contract": "PausableUpgradeable",
-            "label": "_paused",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
-          },
-          {
-            "contract": "PausableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
-          },
-          {
-            "contract": "ERC165Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:36"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_name",
-            "type": "t_string_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:25"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_symbol",
-            "type": "t_string_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:28"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_owners",
-            "type": "t_mapping(t_uint256,t_address)",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:31"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_balances",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:34"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_tokenApprovals",
-            "type": "t_mapping(t_uint256,t_address)",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:37"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_operatorApprovals",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:40"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)44_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:431"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "minted",
-            "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:13"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "numChefs",
-            "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:14"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "numRats",
-            "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:15"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "MAX_TOKENS",
-            "type": "t_uint256",
-            "src": "../project:/contracts/ChefRatTest.sol:17"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "PAID_TOKENS",
-            "type": "t_uint256",
-            "src": "../project:/contracts/ChefRatTest.sol:18"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "tokenTraits",
-            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)4748_storage)",
-            "src": "../project:/contracts/ChefRatTest.sol:22"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "existingCombinations",
-            "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "../project:/contracts/ChefRatTest.sol:23"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "controllers",
-            "type": "t_mapping(t_address,t_bool)",
-            "src": "../project:/contracts/ChefRatTest.sol:24"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "rarities",
-            "type": "t_array(t_array(t_uint8)dyn_storage)18_storage",
-            "src": "../project:/contracts/ChefRatTest.sol:25"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "traits",
-            "type": "t_contract(ITraits)4785",
-            "src": "../project:/contracts/ChefRatTest.sol:27"
-          }
-        ],
-        "types": {
-          "t_uint16": {
-            "label": "uint16"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_mapping(t_uint256,t_struct(ChefRatStruct)4748_storage)": {
-            "label": "mapping(uint256 => struct IChefRat.ChefRatStruct)"
-          },
-          "t_struct(ChefRatStruct)4748_storage": {
-            "label": "struct IChefRat.ChefRatStruct",
-            "members": [
-              {
-                "label": "isChef",
-                "type": "t_bool"
-              },
-              {
-                "label": "hat",
-                "type": "t_uint8"
-              },
-              {
-                "label": "eyes",
-                "type": "t_uint8"
-              },
-              {
-                "label": "piercing",
-                "type": "t_uint8"
-              },
-              {
-                "label": "mouth",
-                "type": "t_uint8"
-              },
-              {
-                "label": "neck",
-                "type": "t_uint8"
-              },
-              {
-                "label": "hand",
-                "type": "t_uint8"
-              },
-              {
-                "label": "tail",
-                "type": "t_uint8"
-              },
-              {
-                "label": "insanity",
-                "type": "t_uint8"
-              },
-              {
-                "label": "skill",
-                "type": "t_uint8"
-              },
-              {
-                "label": "intelligence",
-                "type": "t_uint8"
-              },
-              {
-                "label": "fatness",
-                "type": "t_uint8"
-              }
-            ]
-          },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_uint8": {
-            "label": "uint8"
-          },
-          "t_mapping(t_uint256,t_uint256)": {
-            "label": "mapping(uint256 => uint256)"
-          },
-          "t_mapping(t_address,t_bool)": {
-            "label": "mapping(address => bool)"
-          },
-          "t_address": {
-            "label": "address"
-          },
-          "t_array(t_array(t_uint8)dyn_storage)18_storage": {
-            "label": "uint8[][18]"
-          },
-          "t_array(t_uint8)dyn_storage": {
-            "label": "uint8[]"
-          },
-          "t_contract(ITraits)4785": {
-            "label": "contract ITraits"
-          },
-          "t_string_storage": {
-            "label": "string"
-          },
-          "t_mapping(t_uint256,t_address)": {
-            "label": "mapping(uint256 => address)"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)"
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
-            "label": "mapping(address => mapping(address => bool))"
-          },
-          "t_array(t_uint256)44_storage": {
-            "label": "uint256[44]"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          }
-        }
-      }
-    },
-    "bf637ce887c937002fb0805412b5c438065c1cc7cc6a4a13d2a2ebd33ade118b": {
-      "address": "0x8eA05CAe5a006ce608B5dDE95e3d0e5d18D69A12",
-      "txHash": "0x9d21cbee079d91f2099f2caf340a0ea1a66c75ae1a3686446ca6dbc91d02c177",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "_owner",
-            "type": "t_address",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
-          },
-          {
-            "contract": "PausableUpgradeable",
-            "label": "_paused",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
-          },
-          {
-            "contract": "PausableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
-          },
-          {
-            "contract": "ERC165Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:36"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_name",
-            "type": "t_string_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:25"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_symbol",
-            "type": "t_string_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:28"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_owners",
-            "type": "t_mapping(t_uint256,t_address)",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:31"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_balances",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:34"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_tokenApprovals",
-            "type": "t_mapping(t_uint256,t_address)",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:37"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "_operatorApprovals",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:40"
-          },
-          {
-            "contract": "ERC721Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)44_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:431"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "minted",
-            "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:13"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "numChefs",
-            "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:14"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "numRats",
-            "type": "t_uint16",
-            "src": "../project:/contracts/ChefRatTest.sol:15"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "MAX_TOKENS",
-            "type": "t_uint256",
-            "src": "../project:/contracts/ChefRatTest.sol:17"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "PAID_TOKENS",
-            "type": "t_uint256",
-            "src": "../project:/contracts/ChefRatTest.sol:18"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "tokenTraits",
-            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)4768_storage)",
-            "src": "../project:/contracts/ChefRatTest.sol:22"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "existingCombinations",
-            "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "../project:/contracts/ChefRatTest.sol:23"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "controllers",
-            "type": "t_mapping(t_address,t_bool)",
-            "src": "../project:/contracts/ChefRatTest.sol:24"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "rarities",
-            "type": "t_array(t_array(t_uint8)dyn_storage)18_storage",
-            "src": "../project:/contracts/ChefRatTest.sol:25"
-          },
-          {
-            "contract": "ChefRatTest",
-            "label": "traits",
-            "type": "t_contract(ITraits)4805",
-            "src": "../project:/contracts/ChefRatTest.sol:27"
-          }
-        ],
-        "types": {
-          "t_uint16": {
-            "label": "uint16"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_mapping(t_uint256,t_struct(ChefRatStruct)4768_storage)": {
-            "label": "mapping(uint256 => struct IChefRat.ChefRatStruct)"
-          },
-          "t_struct(ChefRatStruct)4768_storage": {
-            "label": "struct IChefRat.ChefRatStruct",
-            "members": [
-              {
-                "label": "isChef",
-                "type": "t_bool"
-              },
-              {
-                "label": "hat",
-                "type": "t_uint8"
-              },
-              {
-                "label": "eyes",
-                "type": "t_uint8"
-              },
-              {
-                "label": "piercing",
-                "type": "t_uint8"
-              },
-              {
-                "label": "mouth",
-                "type": "t_uint8"
-              },
-              {
-                "label": "neck",
-                "type": "t_uint8"
-              },
-              {
-                "label": "hand",
-                "type": "t_uint8"
-              },
-              {
-                "label": "tail",
-                "type": "t_uint8"
-              },
-              {
-                "label": "insanity",
-                "type": "t_uint8"
-              },
-              {
-                "label": "skill",
-                "type": "t_uint8"
-              },
-              {
-                "label": "intelligence",
-                "type": "t_uint8"
-              },
-              {
-                "label": "fatness",
-                "type": "t_uint8"
-              }
-            ]
-          },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_uint8": {
-            "label": "uint8"
-          },
-          "t_mapping(t_uint256,t_uint256)": {
-            "label": "mapping(uint256 => uint256)"
-          },
-          "t_mapping(t_address,t_bool)": {
-            "label": "mapping(address => bool)"
-          },
-          "t_address": {
-            "label": "address"
-          },
-          "t_array(t_array(t_uint8)dyn_storage)18_storage": {
-            "label": "uint8[][18]"
-          },
-          "t_array(t_uint8)dyn_storage": {
-            "label": "uint8[]"
-          },
-          "t_contract(ITraits)4805": {
-            "label": "contract ITraits"
-          },
-          "t_string_storage": {
-            "label": "string"
-          },
-          "t_mapping(t_uint256,t_address)": {
-            "label": "mapping(uint256 => address)"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)"
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
-            "label": "mapping(address => mapping(address => bool))"
-          },
-          "t_array(t_uint256)44_storage": {
-            "label": "uint256[44]"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
           }
         }
       }

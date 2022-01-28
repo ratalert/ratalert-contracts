@@ -1,7 +1,26 @@
 {
   "contractName": "IKitchenPack",
-  "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IKitchenPack.sol\":\"IKitchenPack\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IKitchenPack.sol\":{\"keccak256\":\"0x372e7a4f9c5bc86329a95a091891b9cbb852f811fa529e40ef5baba01743b3a9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://67b51c0ce9d9738402204d197f837c79fb557378e716287f231119fd7b52aff9\",\"dweb:/ipfs/QmSkhUk3tDqZD3YM6SwkHZBcmb7AtHCsW1JDy5sxc8GXpo\"]}},\"version\":1}",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        }
+      ],
+      "name": "stakeMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IKitchenPack.sol\":\"IKitchenPack\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IKitchenPack.sol\":{\"keccak256\":\"0xe4ad037860fc6ebeb1f98bcf1de8ef6ede7d290a9570df723a79920c4f31ea3d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9e9f6cf0df313a06594b45bb0ce4cb5188f905e0b96cb0e3e0e92ccccd36d539\",\"dweb:/ipfs/QmSG1aMcRxcm6JrMk5sf1kZxiaLdBShVh93zdeMRVngucH\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -9,21 +28,21 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\ninterface IKitchenPack {}\n",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\ninterface IKitchenPack {\n  function stakeMany(address account, uint16[] calldata tokenIds) external;\n}\n",
   "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/IKitchenPack.sol",
   "ast": {
     "absolutePath": "project:/contracts/IKitchenPack.sol",
     "exportedSymbols": {
       "IKitchenPack": [
-        3865
+        4817
       ]
     },
-    "id": 3866,
+    "id": 4818,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3864,
+        "id": 4808,
         "literals": [
           "solidity",
           "^",
@@ -31,7 +50,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:21"
+        "src": "33:23:22"
       },
       {
         "abstract": false,
@@ -39,35 +58,128 @@
         "canonicalName": "IKitchenPack",
         "contractDependencies": [],
         "contractKind": "interface",
-        "fullyImplemented": true,
-        "id": 3865,
+        "fullyImplemented": false,
+        "id": 4817,
         "linearizedBaseContracts": [
-          3865
+          4817
         ],
         "name": "IKitchenPack",
-        "nameLocation": "68:12:21",
+        "nameLocation": "68:12:22",
         "nodeType": "ContractDefinition",
-        "nodes": [],
-        "scope": 3866,
-        "src": "58:25:21",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 4816,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "94:9:22",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4814,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4810,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "112:7:22",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4816,
+                  "src": "104:15:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4809,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "104:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4813,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "139:8:22",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4816,
+                  "src": "121:26:22",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 4811,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "121:6:22",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 4812,
+                    "nodeType": "ArrayTypeName",
+                    "src": "121:8:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "103:45:22"
+            },
+            "returnParameters": {
+              "id": 4815,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "157:0:22"
+            },
+            "scope": 4817,
+            "src": "85:73:22",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4818,
+        "src": "58:102:22",
         "usedErrors": []
       }
     ],
-    "src": "33:51:21"
+    "src": "33:128:22"
   },
   "legacyAST": {
     "absolutePath": "project:/contracts/IKitchenPack.sol",
     "exportedSymbols": {
       "IKitchenPack": [
-        3865
+        4817
       ]
     },
-    "id": 3866,
+    "id": 4818,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3864,
+        "id": 4808,
         "literals": [
           "solidity",
           "^",
@@ -75,7 +187,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:21"
+        "src": "33:23:22"
       },
       {
         "abstract": false,
@@ -83,21 +195,114 @@
         "canonicalName": "IKitchenPack",
         "contractDependencies": [],
         "contractKind": "interface",
-        "fullyImplemented": true,
-        "id": 3865,
+        "fullyImplemented": false,
+        "id": 4817,
         "linearizedBaseContracts": [
-          3865
+          4817
         ],
         "name": "IKitchenPack",
-        "nameLocation": "68:12:21",
+        "nameLocation": "68:12:22",
         "nodeType": "ContractDefinition",
-        "nodes": [],
-        "scope": 3866,
-        "src": "58:25:21",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 4816,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "94:9:22",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4814,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4810,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "112:7:22",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4816,
+                  "src": "104:15:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4809,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "104:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4813,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "139:8:22",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4816,
+                  "src": "121:26:22",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 4811,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "121:6:22",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 4812,
+                    "nodeType": "ArrayTypeName",
+                    "src": "121:8:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "103:45:22"
+            },
+            "returnParameters": {
+              "id": 4815,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "157:0:22"
+            },
+            "scope": 4817,
+            "src": "85:73:22",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4818,
+        "src": "58:102:22",
         "usedErrors": []
       }
     ],
-    "src": "33:51:21"
+    "src": "33:128:22"
   },
   "compiler": {
     "name": "solc",
@@ -105,7 +310,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-01-25T18:02:28.324Z",
+  "updatedAt": "2022-01-28T15:50:46.456Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
