@@ -1,0 +1,51 @@
+#!/bin/zsh
+
+if [ -z $3 ]; then
+    echo "Usage:\n$0 <type> <body> <head> [tail] [ears] [eyes] [nose] [mouth] [neck] [feet]";
+fi
+
+ARGS=("$@")
+BASEDIR=$(dirname "$0")
+#TPL=$(cat $BASEDIR/rat_template.svg)
+FILENAME=$1
+
+declare -A traits
+traits[body]=2
+traits[head]=3
+traits[tail]=4
+traits[ears]=5
+traits[eyes]=6
+traits[nose]=7
+traits[mouth]=8
+traits[neck]=9
+traits[feet]=10
+
+read -r -d '' TPL << EOL
+<svg id="rat" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{body}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{head}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{tail}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{ears}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{eyes}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{nose}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{mouth}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{neck}"/>
+  <image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,{feet}"/>
+</svg>
+EOL
+
+for trait in body head tail ears eyes nose mouth neck feet
+do
+    if [[ -v $traits[$trait] ]]; then
+        value=$ARGS[$traits[$trait]]
+        data=$(base64 "$BASEDIR/$1"_"$trait"_"$value.png")
+        if [ -z $data ]; then exit; fi
+        TPL=$(echo "$TPL" | sed "s#{$trait}#$data#g")
+        FILENAME=$FILENAME"_"$trait$value
+    else
+        TPL=$(echo "$TPL" | sed "/{$trait}/d")
+    fi
+done
+
+#echo "$TPL\n>$BASEDIR/$FILENAME.svg"
+echo $TPL > $BASEDIR/$FILENAME.svg
