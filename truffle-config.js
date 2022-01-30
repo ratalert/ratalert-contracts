@@ -6,9 +6,6 @@ const mnemonic = process.env.MNEMONIC;
 const infuraId = process.env.INFURA_ID;
 
 module.exports = {
-  subscribers: {
-    testnetOverride: require('./testnet-override.js'),
-  },
   networks: {
     development: {
      host: '127.0.0.1', // Localhost (default: none)

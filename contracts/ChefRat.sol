@@ -14,11 +14,9 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   uint16 public minted;
   uint16 public numChefs;
   uint16 public numRats;
-  uint256 public constant MINT_PRICE = .1 ether;
+  uint256 public mintPrice;
   uint256 public MAX_TOKENS; // Max number of tokens that can be minted - 50000 in production
   uint256 public PAID_TOKENS; // Number of tokens that can be claimed for free - 20% of MAX_TOKENS
-//  uint256 public constant CHEF = 0;
-//  uint256 public constant RAT = 1;
 
   mapping(uint256 => ChefRatStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
   mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
@@ -28,7 +26,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   ITraits public traits; // Reference to Traits
   IKitchenPack public kitchenPack;
 
-  function initialize(address _traits, uint256 _maxTokens) external initializer {
+  function initialize(address _traits, uint256 _maxTokens, uint256 _mintPrice) external initializer {
     __Ownable_init();
     __Pausable_init();
     __ERC721_init("RatAlert Chefs & Rats", "CHEFRAT");
@@ -39,6 +37,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     traits = ITraits(_traits);
     MAX_TOKENS = _maxTokens;
     PAID_TOKENS = _maxTokens / 5;
+    mintPrice = _mintPrice;
 
     // Chefs
     rarities[2] = [255, 223, 191, 159, 127, 95]; // hat
@@ -61,7 +60,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    */
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(amount > 0 && amount <= 10, "Invalid mint amount");
-    require(amount * MINT_PRICE == msg.value, "Invalid payment amount");
+    require(amount * mintPrice == msg.value, "Invalid payment amount");
 
     uint16[] memory tokenIds = stake ? new uint16[](amount) : new uint16[](0);
     uint256 seed;

@@ -44,8 +44,9 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   uint256 public fastFoodPerRat; // amount of $WOOL due for each alpha point staked
   uint256 public totalFastFoodEarned; // Amount of $FFOOD earned so far
   uint256 public lastClaimTimestamp; // The last time $FFOOD was claimed
+  uint256 public accrualPeriod; // The period over which $FFOOD & levels are accrued
 
-  function initialize(address _chefRat, address _fastFood) external initializer {
+  function initialize(address _chefRat, address _fastFood, uint256 _accrualPeriod) external initializer {
     __Ownable_init();
     __Pausable_init();
 
@@ -54,6 +55,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     unaccountedRewards = 0;
     fastFoodPerRat = 0;
     lastClaimTimestamp = 0;
+    accrualPeriod = _accrualPeriod;
   }
 
   /**
@@ -141,7 +143,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     require(stake.owner == _msgSender(), "Not your token");
 //    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave before EOB");
 
-    owed = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / 1 days;
+    owed = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / accrualPeriod;
     if (totalFastFoodEarned + owed > FFOOD_MAX_SUPPLY) {
       owed = FFOOD_MAX_SUPPLY - totalFastFoodEarned;
     }
@@ -178,8 +180,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     tolerance = chefRat.updateTolerance(tokenId, getCharacterIncrement(diff, isChef(tokenId) ? DAILY_INSANITY_RATE : DAILY_FATNESS_RATE));
   }
 
-  function getCharacterIncrement(uint256 diff, uint8 factor) internal pure returns(int8) {
-    uint256 owed = diff * factor / 1 days;
+  function getCharacterIncrement(uint256 diff, uint8 factor) internal view returns(int8) {
+    uint256 owed = diff * factor / accrualPeriod;
     uint8 increment = owed > 100 ? 100 : uint8(owed);
     return int8(increment);
   }

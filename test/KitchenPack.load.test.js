@@ -19,10 +19,10 @@ contract('KitchenPack (proxy) load test', (accounts) => {
     before(async () => {
         this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
-        this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000], { from: owner });
+        this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
-        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address], { from: owner });
+        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400], { from: owner });
         await this.fastFood.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
