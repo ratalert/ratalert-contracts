@@ -9,6 +9,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "./IChefRat.sol";
 import "./IKitchenPack.sol";
 import "./ITraits.sol";
+import "./IProperties.sol";
 
 contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable {
   uint16 public minted;
@@ -24,9 +25,10 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   uint8[][18] public rarities; // List of probabilities for each trait type, 0 - 9 are associated with Chefs, 10 - 18 are associated with Rats
 
   ITraits public traits; // Reference to Traits
+  IProperties public properties; // Reference to Properties
   IKitchenPack public kitchenPack;
 
-  function initialize(address _traits, uint256 _maxTokens, uint256 _mintPrice) external initializer {
+  function initialize(address _traits, address _properties, uint256 _maxTokens, uint256 _mintPrice) external initializer {
     __Ownable_init();
     __Pausable_init();
     __ERC721_init("RatAlert Chefs & Rats", "CHEFRAT");
@@ -35,6 +37,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     numChefs = 0;
     numRats = 0;
     traits = ITraits(_traits);
+    properties = IProperties(_properties);
     MAX_TOKENS = _maxTokens;
     PAID_TOKENS = _maxTokens / 5;
     mintPrice = _mintPrice;
@@ -156,26 +159,14 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     ));
   }
 
-  function getUpdatedValue(uint8 old, int8 increment) internal pure returns(uint8) {
-    if (increment >= 0) {
-      return (uint8(increment) + old > 100) ? 100 : old + uint8(increment);
-    } else {
-      return (uint8(-increment) > old) ? 0 : old - uint8(-increment);
-    }
-  }
-
-  function updateEfficiency(uint256 tokenId, int8 increment) public returns(uint8) {
+  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement) public returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     require(controllers[msg.sender], "Only controllers can update");
-    uint8 value = getUpdatedValue(tokenTraits[tokenId].efficiency, increment);
-    tokenTraits[tokenId].efficiency = value;
-    return value;
-  }
-
-  function updateTolerance(uint256 tokenId, int8 increment) public returns(uint8) {
-    require(controllers[msg.sender], "Only controllers can update");
-    uint8 value = getUpdatedValue(tokenTraits[tokenId].tolerance, increment);
-    tokenTraits[tokenId].tolerance = value;
-    return value;
+    bool isChef = tokenTraits[tokenId].isChef;
+    uint8 currentEfficiency = tokenTraits[tokenId].efficiency;
+    uint8 currentTolerance = tokenTraits[tokenId].tolerance;
+    (efficiencyValue, toleranceValue, eventName) = properties.getEventUpdates(isChef, currentEfficiency, currentTolerance, efficiencyIncrement, toleranceIncrement);
+    tokenTraits[tokenId].efficiency = efficiencyValue;
+    tokenTraits[tokenId].tolerance = toleranceValue;
   }
 
   function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -226,7 +217,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
   /**
    * Generates a pseudorandom number
-   * @param seed A value ensure different outcomes for different sources in the same block
+   * @param seed - A value to ensure different outcomes for different sources in the same block
    * @return A pseudorandom value
    */
   function random(uint256 seed) internal view returns (uint256) {

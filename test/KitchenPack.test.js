@@ -10,6 +10,7 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
+const Properties = artifacts.require('Properties');
 const ChefRat = artifacts.require('ChefRat');
 const KitchenPack = artifacts.require('KitchenPack');
 
@@ -22,7 +23,8 @@ contract('KitchenPack (proxy)', (accounts) => {
     before(async () => {
         this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
-        this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000, toWei(0.1)], { from: owner });
+        this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
+        this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
         this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400], { from: owner });
@@ -70,6 +72,7 @@ contract('KitchenPack (proxy)', (accounts) => {
                 expect(log.args.unstaked).to.be.false;
                 expect(log.args.skill).to.be.a.bignumber.eq('1');
                 expect(log.args.insanity).to.be.a.bignumber.eq('2');
+                expect(log.args.eventName).to.equal('');
             });
             await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(this.kitchenPack.address);
             await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(this.kitchenPack.address);
@@ -96,6 +99,7 @@ contract('KitchenPack (proxy)', (accounts) => {
                 expect(log.args.unstaked).to.be.false;
                 expect(log.args.intelligence).to.be.a.bignumber.eq('1');
                 expect(log.args.fatness).to.be.a.bignumber.eq('4');
+                expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(log.args.earned);
             });
             await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(this.kitchenPack.address);
@@ -133,6 +137,7 @@ contract('KitchenPack (proxy)', (accounts) => {
                 expect(log.args.unstaked).to.be.true;
                 expect(log.args.skill).to.be.a.bignumber.eq('2');
                 expect(log.args.insanity).to.be.a.bignumber.eq('4');
+                expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(log.args.earned);
             });
             await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(owner);
@@ -175,6 +180,7 @@ contract('KitchenPack (proxy)', (accounts) => {
                 expect(log.args.unstaked).to.be.true;
                 expect(log.args.intelligence).to.be.a.bignumber.eq('2');
                 expect(log.args.fatness).to.be.a.bignumber.eq('8');
+                expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(log.args.earned);
             });
             await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(owner);
@@ -192,6 +198,73 @@ contract('KitchenPack (proxy)', (accounts) => {
         it('fails to unstake rats twice', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
             await expect(this.kitchenPack.claimMany(rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+        });
+        it('handles level upgrades', async () => {
+            const list = { chef: { id: lists.chefs[0].id }, rat: { id: lists.rats[0].id } };
+            await this.kitchenPack.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
+            await Promise.all(Object.values(list).map(async item => {
+                const traits = await this.chefRat.getTokenTraits(item.id);
+                item.efficiency = Number(traits.efficiency.toString());
+                item.tolerance = Number(traits.tolerance.toString());
+            }));
+            process.stdout.write('        Running 100 claims');
+            const events = { foodInspector: 0, burnout: 0, ratTrap: 0, cat: 0 };
+            for (let i = 0; i <= 100; i += 1) {
+                await advanceTimeAndBlock(86400); // Wait a day
+                const { logs } = await this.kitchenPack.claimMany(Object.values(list).map(item => item.id), false, { from: owner });
+                logs.forEach(({ event, args }) => {
+                    const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
+                    const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                    if (event === 'ChefClaimed') {
+                        if (args.eventName === 'foodInspector') {
+                            const newEfficiency = (10 > list.chef.efficiency) ? 0 : list.chef.efficiency - 10;
+                            const newTolerance = (25 > list.chef.tolerance) ? 0 : list.chef.tolerance - 25;
+                            expect(efficiency).to.equal(newEfficiency);
+                            expect(tolerance).to.equal(newTolerance);
+                            list.chef.efficiency = newEfficiency;
+                            list.chef.tolerance = newTolerance;
+                        } else if (args.eventName === 'burnout') {
+                            expect(efficiency).to.equal(0);
+                            expect(tolerance).to.equal(0);
+                            list.chef.efficiency = 0;
+                            list.chef.tolerance = 0;
+                        } else {
+                            const newEfficiency = (list.chef.efficiency + 2 > 100) ? 100 : list.chef.efficiency + 2;
+                            const newTolerance = (list.chef.tolerance + 4 > 100) ? 100 : list.chef.tolerance + 4;
+                            expect(efficiency).to.equal(newEfficiency);
+                            expect(tolerance).to.equal(newTolerance);
+                            list.chef.efficiency = newEfficiency;
+                            list.chef.tolerance = newTolerance;
+                        }
+                    } else {
+                        if (args.eventName === 'ratTrap') {
+                            const newEfficiency = (10 > list.rat.efficiency) ? 0 : list.rat.efficiency - 10;
+                            const newTolerance = (50 > list.rat.tolerance) ? 0 : list.rat.tolerance - 50;
+                            expect(efficiency).to.equal(newEfficiency);
+                            expect(tolerance).to.equal(newTolerance);
+                            list.rat.efficiency = newEfficiency;
+                            list.rat.tolerance = newTolerance;
+                        } else if (args.eventName === 'cat') {
+                            expect(efficiency).to.equal(0);
+                            expect(tolerance).to.equal(0);
+                            list.rat.efficiency = 0;
+                            list.rat.tolerance = 0;
+                        } else {
+                            const newEfficiency = (list.rat.efficiency + 2 > 100) ? 100 : list.rat.efficiency + 2;
+                            const newTolerance = (list.rat.tolerance + 8 > 100) ? 100 : list.rat.tolerance + 8;
+                            expect(efficiency).to.equal(newEfficiency);
+                            expect(tolerance).to.equal(newTolerance);
+                            list.rat.efficiency = newEfficiency;
+                            list.rat.tolerance = newTolerance;
+                        }
+                    }
+                    if (args.eventName) {
+                        events[args.eventName] += 1;
+                    }
+                });
+                process.stdout.write('.');
+            }
+            process.stdout.write(`\n        Events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
         });
     });
 });

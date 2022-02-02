@@ -9,6 +9,7 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
+const Properties = artifacts.require('Properties');
 const ChefRat = artifacts.require('ChefRat');
 const KitchenPack = artifacts.require('KitchenPack');
 
@@ -19,7 +20,8 @@ contract('KitchenPack (proxy) load test', (accounts) => {
     before(async () => {
         this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
-        this.chefRat = await deployProxy(ChefRat, [this.traits.address, 50000, toWei(0.1)], { from: owner });
+        this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
+        this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
         this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400], { from: owner });

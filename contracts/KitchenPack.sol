@@ -20,8 +20,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   }
 
   event TokenStaked(uint256 tokenId, address owner, uint256 value);
-  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity);
-  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness);
+  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity, string eventName);
+  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness, string eventName);
 
   ChefRat chefRat; // Reference to the ChefRat NFT contract
   FastFood fastFood; // Reference to the $FFOOD contract
@@ -155,7 +155,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
       owed = owed * (100 - FFOOD_CLAIM_TAX_PERCENTAGE) / 100; // Remainder goes to Chef owner
     }
 
-    (uint8 efficiency, uint8 tolerance) = updateCharacter(tokenId);
+    (uint8 efficiency, uint8 tolerance, string memory eventName) = updateCharacter(tokenId);
 
     if (unstake) {
       chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
@@ -169,15 +169,19 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
         timestamp: uint80(block.timestamp)
       });
     }
-    emit ChefClaimed(tokenId, owed, unstake, efficiency, tolerance);
+    emit ChefClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
   }
 
-  function updateCharacter(uint256 tokenId) internal returns(uint8 efficiency, uint8 tolerance) {
+  function updateCharacter(uint256 tokenId) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
     Stake memory k = kitchen[tokenId];
     Stake memory p = pack[tokenId];
     uint256 diff = block.timestamp - (isChef(tokenId) ? k.timestamp : p.timestamp);
-    efficiency = chefRat.updateEfficiency(tokenId, getCharacterIncrement(diff, isChef(tokenId) ? DAILY_SKILL_RATE : DAILY_INTELLIGENCE_RATE));
-    tolerance = chefRat.updateTolerance(tokenId, getCharacterIncrement(diff, isChef(tokenId) ? DAILY_INSANITY_RATE : DAILY_FATNESS_RATE));
+
+    (efficiency, tolerance, eventName) = chefRat.updateCharacter(
+      tokenId,
+      getCharacterIncrement(diff, isChef(tokenId) ? DAILY_SKILL_RATE : DAILY_INTELLIGENCE_RATE),
+      getCharacterIncrement(diff, isChef(tokenId) ? DAILY_INSANITY_RATE : DAILY_FATNESS_RATE)
+    );
   }
 
   function getCharacterIncrement(uint256 diff, uint8 factor) internal view returns(int8) {
@@ -199,7 +203,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 //    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave your pack starving so early");
 
     owed = (1) * (fastFoodPerRat - stake.value); // Calculate individual share
-    (uint8 efficiency, uint8 tolerance) = updateCharacter(tokenId);
+    (uint8 efficiency, uint8 tolerance, string memory eventName) = updateCharacter(tokenId);
 
     if (unstake) {
       chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
@@ -213,7 +217,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
         timestamp: uint80(block.timestamp)
       });
     }
-    emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance);
+    emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
   }
 
   /**
