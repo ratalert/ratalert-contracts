@@ -17,7 +17,7 @@ module.exports = async (deployer, network) => {
     const traits = await deployProxy(Traits, { deployer });
     const properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { deployer });
     const chefRat = await deployProxy(ChefRat, [traits.address, properties.address, 50000, mintPrice], { deployer });
-    const kitchenPack = await deployProxy(KitchenPack, [chefRat.address, fastFood.address, accrualPeriod], { deployer });
+    const kitchenPack = await deployProxy(KitchenPack, [chefRat.address, fastFood.address, accrualPeriod, 175], { deployer });
     await traits.setChefRat(chefRat.address);
     await fastFood.addController(kitchenPack.address);
     await chefRat.addController(kitchenPack.address);

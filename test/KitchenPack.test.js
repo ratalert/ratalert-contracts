@@ -2,7 +2,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
 const { BN } = require('@openzeppelin/test-helpers');
-const { toWei, advanceTimeAndBlock, uploadTraits, mintUntilWeHave } = require('./helper');
+const { toWei, fromWei, advanceTimeAndBlock, uploadTraits, mintUntilWeHave } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -13,6 +13,20 @@ const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
 const ChefRat = artifacts.require('ChefRat');
 const KitchenPack = artifacts.require('KitchenPack');
+
+function expectChefEarnings(earned, period, efficiency) {
+    const nominal = period * 1000 / 86400;
+    const factor = 100 + (efficiency * 1.75);
+    const gross = nominal * factor / 100;
+    const net = gross * 0.8;
+    expect(earned).to.be.a.bignumber.gte(toWei(net)).lt(toWei(net * 1.0001));
+}
+
+function expectRatEarnings(earned, pot, numRats, efficiency) {
+    const factor = 1; // 100 + (efficiency * 1.75);
+    const net = pot * factor / numRats;
+    expect(earned).to.be.a.bignumber.gte(toWei(net * 0.9999)).lt(toWei(net * 1.0001));
+}
 
 contract('KitchenPack (proxy)', (accounts) => {
     const owner = accounts[0];
@@ -27,7 +41,7 @@ contract('KitchenPack (proxy)', (accounts) => {
         this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
-        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400], { from: owner });
+        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400, 175], { from: owner });
         await this.fastFood.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.addController(this.kitchenPack.address, { from: owner });
         await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
@@ -68,7 +82,7 @@ contract('KitchenPack (proxy)', (accounts) => {
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
-                expect(log.args.earned).to.be.a.bignumber.gte(toWei(400)).lt(toWei(401));
+                expectChefEarnings(log.args.earned, 86400 / 2, 0);
                 expect(log.args.unstaked).to.be.false;
                 expect(log.args.skill).to.be.a.bignumber.eq('1');
                 expect(log.args.insanity).to.be.a.bignumber.eq('2');
@@ -95,7 +109,7 @@ contract('KitchenPack (proxy)', (accounts) => {
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
-                expect(log.args.earned).to.be.a.bignumber.gte(toWei(199 / lists.rats.length)).lt(toWei(201 / lists.rats.length));
+                expectRatEarnings(log.args.earned, 200, lists.rats.length, 0);
                 expect(log.args.unstaked).to.be.false;
                 expect(log.args.intelligence).to.be.a.bignumber.eq('1');
                 expect(log.args.fatness).to.be.a.bignumber.eq('4');
@@ -133,7 +147,7 @@ contract('KitchenPack (proxy)', (accounts) => {
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
-                expect(log.args.earned).to.be.a.bignumber.gte(toWei(400)).lt(toWei(401));
+                expectChefEarnings(log.args.earned, 86400 / 2, 1);
                 expect(log.args.unstaked).to.be.true;
                 expect(log.args.skill).to.be.a.bignumber.eq('2');
                 expect(log.args.insanity).to.be.a.bignumber.eq('4');
@@ -143,8 +157,8 @@ contract('KitchenPack (proxy)', (accounts) => {
             await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(owner);
             await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(owner);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
-            await expect(this.kitchenPack.totalFastFoodEarned()).to.eventually.be.a.bignumber.gte(toWei(2000)).lt(toWei(2001));
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(399 / lists.rats.length )).lt(toWei(401 / lists.rats.length ));
+            await expect(this.kitchenPack.totalFastFoodEarned()).to.eventually.be.a.bignumber.gte(toWei(2017)).lt(toWei(2018));
+            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
             const ts = (await web3.eth.getBlock('latest')).timestamp;
             await expect(this.kitchenPack.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
@@ -166,16 +180,16 @@ contract('KitchenPack (proxy)', (accounts) => {
             await expect(this.kitchenPack.claimMany(chefs, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('unstakes many rats', async () => {
-            const rats = [lists.rats[0].id, lists.rats[1].id, lists.rats[2].id];
+            const rats = lists.rats.map(item => item.id);
             ownerBalance = BN(await this.fastFood.balanceOf(owner));
             const { logs } = await this.kitchenPack.claimMany(rats, true);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 if (i < 2) {
-                    expect(log.args.earned).to.be.a.bignumber.gte(toWei(199 / lists.rats.length)).lt(toWei(201 / lists.rats.length));
+                    expectRatEarnings(log.args.earned, 203.5, lists.rats.length, 0);
                 } else {
-                    expect(log.args.earned).to.be.a.bignumber.gte(toWei(399 / lists.rats.length)).lt(toWei(401 / lists.rats.length)); // has not claimed yet
+                    expectRatEarnings(log.args.earned, 403.5, lists.rats.length, 0);
                 }
                 expect(log.args.unstaked).to.be.true;
                 expect(log.args.intelligence).to.be.a.bignumber.eq('2');
@@ -187,7 +201,7 @@ contract('KitchenPack (proxy)', (accounts) => {
             await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(owner);
             await expect(this.chefRat.ownerOf(rats[2])).to.eventually.equal(owner);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(399 / lists.rats.length )).lt(toWei(401 / lists.rats.length ));
+            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
 
             await Promise.all(rats.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
@@ -216,6 +230,8 @@ contract('KitchenPack (proxy)', (accounts) => {
                     const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
                     const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
                     if (event === 'ChefClaimed') {
+                        expectChefEarnings(args.earned, 86400, list.chef.efficiency);
+                        list.chef.earned = args.earned;
                         if (args.eventName === 'foodInspector') {
                             const newEfficiency = (10 > list.chef.efficiency) ? 0 : list.chef.efficiency - 10;
                             const newTolerance = (25 > list.chef.tolerance) ? 0 : list.chef.tolerance - 25;
@@ -237,6 +253,7 @@ contract('KitchenPack (proxy)', (accounts) => {
                             list.chef.tolerance = newTolerance;
                         }
                     } else {
+                        expectRatEarnings(args.earned, fromWei(list.chef.earned) / 8 * 2, 1, 0);
                         if (args.eventName === 'ratTrap') {
                             const newEfficiency = (10 > list.rat.efficiency) ? 0 : list.rat.efficiency - 10;
                             const newTolerance = (50 > list.rat.tolerance) ? 0 : list.rat.tolerance - 50;

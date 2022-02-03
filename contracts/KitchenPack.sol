@@ -40,13 +40,14 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 
   uint256 public totalChefsStaked; // Number of Chefs staked in the Kitchen
   uint256 public totalRatsStaked; // Number of Rats staked in the Pack
-  uint256 public unaccountedRewards; // any rewards distributed when no wolves are staked
-  uint256 public fastFoodPerRat; // amount of $WOOL due for each alpha point staked
+  uint256 public unaccountedRewards; // any rewards distributed when no Rats are staked
+  uint256 public fastFoodPerRat; // amount of $FFOOD due for each staked Rat
   uint256 public totalFastFoodEarned; // Amount of $FFOOD earned so far
   uint256 public lastClaimTimestamp; // The last time $FFOOD was claimed
   uint256 public accrualPeriod; // The period over which $FFOOD & levels are accrued
+  uint8 public chefEfficiencyMultiplier;
 
-  function initialize(address _chefRat, address _fastFood, uint256 _accrualPeriod) external initializer {
+  function initialize(address _chefRat, address _fastFood, uint256 _accrualPeriod, uint8 _chefEfficiencyMultiplier) external initializer {
     __Ownable_init();
     __Pausable_init();
 
@@ -56,6 +57,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     fastFoodPerRat = 0;
     lastClaimTimestamp = 0;
     accrualPeriod = _accrualPeriod;
+    chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
   }
 
   /**
@@ -143,7 +145,10 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     require(stake.owner == _msgSender(), "Not your token");
 //    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave before EOB");
 
-    owed = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / accrualPeriod;
+    uint8 efficiency = getEfficiency(tokenId);
+    uint256 nominal = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / accrualPeriod;
+    uint256 multiplier = 100000 + (uint256(efficiency) * chefEfficiencyMultiplier * 10);
+    owed = nominal * multiplier / 100000;
     if (totalFastFoodEarned + owed > FFOOD_MAX_SUPPLY) {
       owed = FFOOD_MAX_SUPPLY - totalFastFoodEarned;
     }
@@ -151,11 +156,11 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     if (owed > 0) {
       lastClaimTimestamp = block.timestamp;
       totalFastFoodEarned += owed;
-      _carelesslyLeaveToRats(owed * FFOOD_CLAIM_TAX_PERCENTAGE / 100); // percentage tax to staked wolves
+      _carelesslyLeaveToRats(owed * FFOOD_CLAIM_TAX_PERCENTAGE / 100); // percentage tax to staked Rats
       owed = owed * (100 - FFOOD_CLAIM_TAX_PERCENTAGE) / 100; // Remainder goes to Chef owner
     }
 
-    (uint8 efficiency, uint8 tolerance, string memory eventName) = updateCharacter(tokenId);
+    (uint8 newEfficiency, uint8 newTolerance, string memory eventName) = updateCharacter(tokenId);
 
     if (unstake) {
       chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
@@ -169,7 +174,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
         timestamp: uint80(block.timestamp)
       });
     }
-    emit ChefClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
+    emit ChefClaimed(tokenId, owed, unstake, newEfficiency, newTolerance, eventName);
   }
 
   function updateCharacter(uint256 tokenId) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
@@ -184,8 +189,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     );
   }
 
-  function getCharacterIncrement(uint256 diff, uint8 factor) internal view returns(int8) {
-    uint256 owed = diff * factor / accrualPeriod;
+  function getCharacterIncrement(uint256 diff, uint8 multiplier) internal view returns(int8) {
+    uint256 owed = diff * multiplier / accrualPeriod;
     uint8 increment = owed > 100 ? 100 : uint8(owed);
     return int8(increment);
   }
@@ -230,12 +235,21 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   }
 
   /**
+   * Get the character's efficiency
+   * @param tokenId - The ID of the token to check
+   * @return efficiency - Efficiency value
+   */
+  function getEfficiency(uint256 tokenId) public view returns (uint8 efficiency) {
+    (, , , , , , , , efficiency,) = chefRat.tokenTraits(tokenId);
+  }
+
+  /**
    * Add $FFOOD to claimable pot for the Pack
    * @param amount - $FFOOD to add to the pot
    */
   function _carelesslyLeaveToRats(uint256 amount) internal {
-    if (totalRatsStaked == 0) { // if there's no staked wolves
-      unaccountedRewards += amount; // keep track of $WOOL due to wolves
+    if (totalRatsStaked == 0) { // if there are no staked Rats
+      unaccountedRewards += amount; // keep track of $FFOOD due to Rats
       return;
     }
     // makes sure to include any unaccounted $FFOOD

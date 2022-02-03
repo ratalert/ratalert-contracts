@@ -1,6 +1,7 @@
 const { readdir, readFile } = require('fs/promises');
 
 exports.toWei = (ether) => web3.utils.toWei(ether.toString(), 'ether');
+exports.fromWei = (wei) => Number(web3.utils.fromWei(wei, 'ether'));
 exports.advanceTime = (time) => {
     return new Promise((resolve, reject) => {
         web3.currentProvider.send({
