@@ -1,30 +1,35 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0xE892A0DA9779b32DDf4006b2ac61375C64f17081",
-    "txHash": "0xc629d27d7969f3a7f39dd4c63a073b510a88e5a35e1f5f070d7781b610df37b3"
+    "address": "0x1fd1Ed0aa3fE7214e663866d05aF7872D3e4fe2f",
+    "txHash": "0x0dfc95ffb3533c091420d62fbe8fe00b0640b57c51907c9de4f69c57247ccf29"
   },
   "proxies": [
     {
-      "address": "0xbb9D5d10C990c74C50448131836B2d378867E7d7",
-      "txHash": "0x7ead98c202693bb66b5457503e7d7ea8750feddcb0c8302616c4f94046461bc4",
+      "address": "0x97AF11571Ae3ADA99c1A038704788f879b2Ca04F",
+      "txHash": "0x82e41c3d71850a9f9d7dd6e371be9523167d25331980d4c0024f0df558579517",
       "kind": "transparent"
     },
     {
-      "address": "0xAF56F85B1d5Bb4Be57F5D1455eAB578857cfE4Ae",
-      "txHash": "0x0cea4e7c00212c0b505c10bbb75d8cf5c00d0986765b2165e00bfbef462181ea",
+      "address": "0x3Cd6c9a027A29c5C7FfFfE9aa5E6DC616fF29248",
+      "txHash": "0x99c9949f99899115d2b2557d2e63436aa0dd925bbf24ef39a50ff918fc6f6ffe",
       "kind": "transparent"
     },
     {
-      "address": "0xD1138BffE3C686A4D34e7fC6780394f33a834fc7",
-      "txHash": "0xbd2cc168ffa5ff4f75d1060d474621af9f5e10fcbba20d4f7161542055e455ad",
+      "address": "0x39A531259318FFBb3d0f8eb82Ccdbd351935F562",
+      "txHash": "0x0bddd22efbe13f3a7ca95f3d483bda60e703cfc224e76e57abd31b4ad1488ced",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xcEad8CE00d49Bd2d6d0DF0dE60D7f706CC3802C8",
+      "txHash": "0x39ea7920bdc8fd85ee5e5568908ba3a42193aebe7c44b9c86839fa1ac0686133",
       "kind": "transparent"
     }
   ],
   "impls": {
     "47c6de593dc859e7f49a625cd52a90250f40a9af483b1022e186580a7fc1b20a": {
-      "address": "0x30faDAe8aEDFCbb3261F54564fb3eaD47Faaa892",
-      "txHash": "0x8fd4b12bcc14267375cce3ee67dc5a2bb2b1aa1845f9e3916ebfbf3ae556126e",
+      "address": "0x294dC23F84E08B5D8Ad712B8223A1068bA37a29a",
+      "txHash": "0x9d4ed226f2868eab7a9dc88418795f7f08d7c048772ed6ea1c33b932343b5f1b",
       "layout": {
         "storage": [
           {
@@ -72,13 +77,13 @@
           {
             "contract": "Traits",
             "label": "traitData",
-            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)4874_storage))",
+            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)5333_storage))",
             "src": "../project:/contracts/Traits.sol:22"
           },
           {
             "contract": "Traits",
             "label": "chefRat",
-            "type": "t_contract(IChefRat)3919",
+            "type": "t_contract(IChefRat)3878",
             "src": "../project:/contracts/Traits.sol:24"
           }
         ],
@@ -92,16 +97,16 @@
           "t_uint16": {
             "label": "uint16"
           },
-          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)4874_storage))": {
+          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)5333_storage))": {
             "label": "mapping(uint8 => mapping(uint8 => struct Traits.Trait))"
           },
           "t_uint8": {
             "label": "uint8"
           },
-          "t_mapping(t_uint8,t_struct(Trait)4874_storage)": {
+          "t_mapping(t_uint8,t_struct(Trait)5333_storage)": {
             "label": "mapping(uint8 => struct Traits.Trait)"
           },
-          "t_struct(Trait)4874_storage": {
+          "t_struct(Trait)5333_storage": {
             "label": "struct Traits.Trait",
             "members": [
               {
@@ -114,7 +119,7 @@
               }
             ]
           },
-          "t_contract(IChefRat)3919": {
+          "t_contract(IChefRat)3878": {
             "label": "contract IChefRat"
           },
           "t_address": {
@@ -135,9 +140,142 @@
         }
       }
     },
-    "21d2d21e39353e873c22075a9b6cca4a2fc08dc7159b1c36ff205276a77a2d50": {
-      "address": "0x30553f1402b3b023D986068204A3Db57A4292d45",
-      "txHash": "0x6752a70acad6582ae21b0001bfd76663cf6c4c76c8210547b3e090e622ab0435",
+    "21ab325b1f65c90805f0757cff1fe5909e02aa8a6049bb9ca5cabea0a5f88ee6": {
+      "address": "0x783B0E70b7AA54eF106f5277BB283683a0b47760",
+      "txHash": "0x5974144ec732b21d1d3f599cce44928ee67c45a983a00ad922a44693a062277e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyMinimumChef",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:10"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyMinimumRat",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:11"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:12"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:13"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterToleranceLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:14"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterToleranceLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:15"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyMinimumChef",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:17"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyMinimumRat",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:18"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:19"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:20"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapToleranceLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:21"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapToleranceLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:22"
+          }
+        ],
+        "types": {
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    },
+    "025ea8b5c93716bde7f5426b4bea0a66ac19729bccb6a432a015400f37f85571": {
+      "address": "0xE332d032aFAC4A63c488F6a30921cb5EBFe37Df5",
+      "txHash": "0xedaeec243dcc2c80fada681048a7c055ab5a6b7c5599e5722e5a52f73e4e3b58",
       "layout": {
         "storage": [
           {
@@ -234,73 +372,79 @@
             "contract": "ChefRat",
             "label": "minted",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRat.sol:14"
+            "src": "../project:/contracts/ChefRat.sol:15"
           },
           {
             "contract": "ChefRat",
             "label": "numChefs",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRat.sol:15"
+            "src": "../project:/contracts/ChefRat.sol:16"
           },
           {
             "contract": "ChefRat",
             "label": "numRats",
             "type": "t_uint16",
-            "src": "../project:/contracts/ChefRat.sol:16"
+            "src": "../project:/contracts/ChefRat.sol:17"
           },
           {
             "contract": "ChefRat",
             "label": "mintPrice",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRat.sol:17"
+            "src": "../project:/contracts/ChefRat.sol:18"
           },
           {
             "contract": "ChefRat",
             "label": "MAX_TOKENS",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRat.sol:18"
+            "src": "../project:/contracts/ChefRat.sol:19"
           },
           {
             "contract": "ChefRat",
             "label": "PAID_TOKENS",
             "type": "t_uint256",
-            "src": "../project:/contracts/ChefRat.sol:19"
+            "src": "../project:/contracts/ChefRat.sol:20"
           },
           {
             "contract": "ChefRat",
             "label": "tokenTraits",
-            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)3893_storage)",
-            "src": "../project:/contracts/ChefRat.sol:21"
+            "type": "t_mapping(t_uint256,t_struct(ChefRatStruct)3852_storage)",
+            "src": "../project:/contracts/ChefRat.sol:22"
           },
           {
             "contract": "ChefRat",
             "label": "existingCombinations",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "../project:/contracts/ChefRat.sol:22"
+            "src": "../project:/contracts/ChefRat.sol:23"
           },
           {
             "contract": "ChefRat",
             "label": "controllers",
             "type": "t_mapping(t_address,t_bool)",
-            "src": "../project:/contracts/ChefRat.sol:23"
+            "src": "../project:/contracts/ChefRat.sol:24"
           },
           {
             "contract": "ChefRat",
             "label": "rarities",
             "type": "t_array(t_array(t_uint8)dyn_storage)18_storage",
-            "src": "../project:/contracts/ChefRat.sol:24"
+            "src": "../project:/contracts/ChefRat.sol:25"
           },
           {
             "contract": "ChefRat",
             "label": "traits",
-            "type": "t_contract(ITraits)3940",
-            "src": "../project:/contracts/ChefRat.sol:26"
+            "type": "t_contract(ITraits)3921",
+            "src": "../project:/contracts/ChefRat.sol:27"
+          },
+          {
+            "contract": "ChefRat",
+            "label": "properties",
+            "type": "t_contract(IProperties)3911",
+            "src": "../project:/contracts/ChefRat.sol:28"
           },
           {
             "contract": "ChefRat",
             "label": "kitchenPack",
-            "type": "t_contract(IKitchenPack)3930",
-            "src": "../project:/contracts/ChefRat.sol:27"
+            "type": "t_contract(IKitchenPack)3889",
+            "src": "../project:/contracts/ChefRat.sol:29"
           }
         ],
         "types": {
@@ -310,10 +454,10 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_mapping(t_uint256,t_struct(ChefRatStruct)3893_storage)": {
+          "t_mapping(t_uint256,t_struct(ChefRatStruct)3852_storage)": {
             "label": "mapping(uint256 => struct IChefRat.ChefRatStruct)"
           },
-          "t_struct(ChefRatStruct)3893_storage": {
+          "t_struct(ChefRatStruct)3852_storage": {
             "label": "struct IChefRat.ChefRatStruct",
             "members": [
               {
@@ -379,10 +523,13 @@
           "t_array(t_uint8)dyn_storage": {
             "label": "uint8[]"
           },
-          "t_contract(ITraits)3940": {
+          "t_contract(ITraits)3921": {
             "label": "contract ITraits"
           },
-          "t_contract(IKitchenPack)3930": {
+          "t_contract(IProperties)3911": {
+            "label": "contract IProperties"
+          },
+          "t_contract(IKitchenPack)3889": {
             "label": "contract IKitchenPack"
           },
           "t_string_storage": {
@@ -409,9 +556,9 @@
         }
       }
     },
-    "b88af64e2dc386f0473aaa2b4994a45e91b541ef96fd549ada751223351ac41c": {
-      "address": "0xaD568418F6eAE57ca7c523233d1290d782eDBf91",
-      "txHash": "0x2d9124e476a3ee1c56b5e16f281f42ca4ace5ee067a7b5023816d4c5196f3cc9",
+    "d3503c4185262297bd2112af3aad3feaa40eee7d759f2bd068775277000121c1": {
+      "address": "0x4b82Ca313A423f31dA4b8B59933ee7aF95d2fF7b",
+      "txHash": "0x0745dd261ec0e67a9586dcc8b529c6531269eb6cebb7911b941305652518faee",
       "layout": {
         "storage": [
           {
@@ -459,25 +606,25 @@
           {
             "contract": "KitchenPack",
             "label": "chefRat",
-            "type": "t_contract(ChefRat)3760",
+            "type": "t_contract(ChefRat)3719",
             "src": "../project:/contracts/KitchenPack.sol:26"
           },
           {
             "contract": "KitchenPack",
             "label": "fastFood",
-            "type": "t_contract(FastFood)3870",
+            "type": "t_contract(FastFood)3829",
             "src": "../project:/contracts/KitchenPack.sol:27"
           },
           {
             "contract": "KitchenPack",
             "label": "kitchen",
-            "type": "t_mapping(t_uint256,t_struct(Stake)3969_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Stake)3950_storage)",
             "src": "../project:/contracts/KitchenPack.sol:29"
           },
           {
             "contract": "KitchenPack",
             "label": "pack",
-            "type": "t_mapping(t_uint256,t_struct(Stake)3969_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Stake)3950_storage)",
             "src": "../project:/contracts/KitchenPack.sol:30"
           },
           {
@@ -524,19 +671,19 @@
           }
         ],
         "types": {
-          "t_contract(ChefRat)3760": {
+          "t_contract(ChefRat)3719": {
             "label": "contract ChefRat"
           },
-          "t_contract(FastFood)3870": {
+          "t_contract(FastFood)3829": {
             "label": "contract FastFood"
           },
-          "t_mapping(t_uint256,t_struct(Stake)3969_storage)": {
+          "t_mapping(t_uint256,t_struct(Stake)3950_storage)": {
             "label": "mapping(uint256 => struct KitchenPack.Stake)"
           },
           "t_uint256": {
             "label": "uint256"
           },
-          "t_struct(Stake)3969_storage": {
+          "t_struct(Stake)3950_storage": {
             "label": "struct KitchenPack.Stake",
             "members": [
               {

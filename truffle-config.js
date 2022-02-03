@@ -16,7 +16,7 @@ module.exports = {
       // gasPrice: 10,
     },
     ropsten: {
-      provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${infuraId}`),
+      provider: () => new HDWalletProvider(mnemonic, `wss://ropsten.infura.io/ws/v3/${infuraId}`),
       network_id: 3,
       // gas: 5500000,
       // confirmations: 0,
@@ -24,9 +24,10 @@ module.exports = {
       // skipDryRun: true,
     },
     rinkeby: {
-      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraId}`),
+      provider: () => new HDWalletProvider(mnemonic, `wss://rinkeby.infura.io/ws/v3/${infuraId}`),
       network_id: 4,
       // gasPrice: 10e9,
+      // timeoutBlocks: 50,
       // skipDryRun: true,
     },
     // Another network with more advanced options...

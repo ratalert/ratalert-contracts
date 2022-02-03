@@ -10,7 +10,7 @@ const KitchenPack = artifacts.require('KitchenPack');
 
 module.exports = async (deployer, network) => {
     const mintPrice = network === 'live' ? toWei('0.1', 'ether') : toWei('0.01', 'ether');
-    const accrualPeriod = network === 'live' ? 3600 : 86400;
+    const accrualPeriod = network === 'live' ? 86400 : 3600;
 
     await deployer.deploy(FastFood);
     const fastFood = await FastFood.deployed();
