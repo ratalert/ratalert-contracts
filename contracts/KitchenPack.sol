@@ -145,7 +145,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     require(stake.owner == _msgSender(), "Not your token");
 //    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave before EOB");
 
-    uint8 efficiency = getEfficiency(tokenId);
+    (uint8 efficiency,) = getProperties(tokenId);
     uint256 nominal = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / accrualPeriod;
     uint256 multiplier = 100000 + (uint256(efficiency) * chefEfficiencyMultiplier * 10);
     owed = nominal * multiplier / 100000;
@@ -155,9 +155,9 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 
     if (owed > 0) {
       lastClaimTimestamp = block.timestamp;
-      totalFastFoodEarned += owed;
       _carelesslyLeaveToRats(owed * FFOOD_CLAIM_TAX_PERCENTAGE / 100); // percentage tax to staked Rats
       owed = owed * (100 - FFOOD_CLAIM_TAX_PERCENTAGE) / 100; // Remainder goes to Chef owner
+      totalFastFoodEarned += owed;
     }
 
     (uint8 newEfficiency, uint8 newTolerance, string memory eventName) = updateCharacter(tokenId);
@@ -207,8 +207,20 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     require(stake.owner == _msgSender(), "Not your token");
 //    require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave your pack starving so early");
 
-    owed = (1) * (fastFoodPerRat - stake.value); // Calculate individual share
-    (uint8 efficiency, uint8 tolerance, string memory eventName) = updateCharacter(tokenId);
+    (, uint8 tolerance) = getProperties(tokenId);
+    uint256 nominal = fastFoodPerRat - stake.value;
+    int256 multiplier = tolerance <= 50 ? (int256(int8(tolerance)) * 90000 / 100) + 55000 : (int256(int8(tolerance)) * -90000 / 100) + 145000;
+    owed = nominal * uint256(multiplier) / 100000; // Calculate individual share
+    if (totalFastFoodEarned + owed > FFOOD_MAX_SUPPLY) {
+      owed = FFOOD_MAX_SUPPLY - totalFastFoodEarned;
+    }
+
+    if (owed > 0) {
+      lastClaimTimestamp = block.timestamp;
+      totalFastFoodEarned += owed;
+    }
+
+    (uint8 newEfficiency, uint8 newTolerance, string memory eventName) = updateCharacter(tokenId);
 
     if (unstake) {
       chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
@@ -222,7 +234,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
         timestamp: uint80(block.timestamp)
       });
     }
-    emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
+    emit RatClaimed(tokenId, owed, unstake, newEfficiency, newTolerance, eventName);
   }
 
   /**
@@ -235,12 +247,12 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   }
 
   /**
-   * Get the character's efficiency
+   * Get the character's properties
    * @param tokenId - The ID of the token to check
-   * @return efficiency - Efficiency value
+   * @return efficiency & tolerance values
    */
-  function getEfficiency(uint256 tokenId) public view returns (uint8 efficiency) {
-    (, , , , , , , , efficiency,) = chefRat.tokenTraits(tokenId);
+  function getProperties(uint256 tokenId) public view returns (uint8 efficiency, uint8 tolerance) {
+    (, , , , , , , , efficiency, tolerance) = chefRat.tokenTraits(tokenId);
   }
 
   /**
