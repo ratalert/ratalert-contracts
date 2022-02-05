@@ -46,8 +46,10 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
   uint256 public lastClaimTimestamp; // The last time $FFOOD was claimed
   uint256 public accrualPeriod; // The period over which $FFOOD & levels are accrued
   uint8 public chefEfficiencyMultiplier;
+  int256 public ratEfficiencyMultiplier;
+  int256 public ratEfficiencyOffset;
 
-  function initialize(address _chefRat, address _fastFood, uint256 _accrualPeriod, uint8 _chefEfficiencyMultiplier) external initializer {
+  function initialize(address _chefRat, address _fastFood, uint256 _accrualPeriod, uint8 _chefEfficiencyMultiplier, int256 _ratEfficiencyMultiplier, int256 _ratEfficiencyOffset) external initializer {
     __Ownable_init();
     __Pausable_init();
 
@@ -58,6 +60,8 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
     lastClaimTimestamp = 0;
     accrualPeriod = _accrualPeriod;
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
+    ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
+    ratEfficiencyOffset = _ratEfficiencyOffset;
   }
 
   /**
@@ -209,7 +213,7 @@ contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, Pausabl
 
     (, uint8 tolerance) = getProperties(tokenId);
     uint256 nominal = fastFoodPerRat - stake.value;
-    int256 multiplier = tolerance <= 50 ? (int256(int8(tolerance)) * 90000 / 100) + 55000 : (int256(int8(tolerance)) * -90000 / 100) + 145000;
+    int256 multiplier = (int256(int8(tolerance <= 50 ? tolerance : 100 - tolerance)) * ratEfficiencyMultiplier * 1000 / 100) + (ratEfficiencyOffset * 1000);
     owed = nominal * uint256(multiplier) / 100000; // Calculate individual share
     if (totalFastFoodEarned + owed > FFOOD_MAX_SUPPLY) {
       owed = FFOOD_MAX_SUPPLY - totalFastFoodEarned;
