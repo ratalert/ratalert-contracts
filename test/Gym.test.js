@@ -12,7 +12,7 @@ const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
 const ChefRat = artifacts.require('ChefRat');
-const KitchenPack = artifacts.require('KitchenPack');
+const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
 
 let totalFastFoodEarned = 0;
@@ -29,12 +29,12 @@ contract('Gym (proxy)', (accounts) => {
         this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
-        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400, 175, 90, 55], { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.chefRat.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
         this.gym = await deployProxy(Gym, [this.chefRat.address, 86400, -12, -8], { from: owner });
-        await this.fastFood.addController(this.kitchenPack.address, { from: owner });
-        await this.chefRat.addController(this.kitchenPack.address, { from: owner });
+        await this.fastFood.addController(this.kitchen.address, { from: owner });
+        await this.chefRat.addController(this.kitchen.address, { from: owner });
         await this.chefRat.addController(this.gym.address, { from: owner });
-        await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
+        await this.chefRat.setKitchen(this.kitchen.address, { from: owner });
 
         lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
@@ -42,16 +42,16 @@ contract('Gym (proxy)', (accounts) => {
         lists.all = lists.chefs.concat(lists.rats);
         const allIds = lists.all.map(item => item.id);
 
-        await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: owner });
-        await this.kitchenPack.stakeMany(owner, allIds, { from: owner });
+        await this.chefRat.setApprovalForAll(this.kitchen.address, true, { from: owner });
+        await this.kitchen.stakeMany(owner, allIds, { from: owner });
         let done;
         while (!done) {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
-            const { logs } = await this.kitchenPack.claimMany(allIds, false);
+            const { logs } = await this.kitchen.claimMany(allIds, false);
             const toleranceValues = logs.map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
             done = toleranceValues.filter(val => val < 20).length === 0;
         }
-        await this.kitchenPack.claimMany(allIds, true);
+        await this.kitchen.claimMany(allIds, true);
         await Promise.all(lists.all.map(async (item) => {
             const traits = await this.chefRat.tokenTraits(item.id);
             item.tolerance = Number(traits.tolerance.toString());

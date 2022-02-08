@@ -26,7 +26,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
-  IVenue public kitchenPack;
+  IVenue public venue;
 
   function initialize(address _traits, address _properties, uint256 _maxTokens, uint256 _mintPrice) external initializer {
     __Ownable_init();
@@ -73,14 +73,14 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
       seed = random(minted);
       s = generate(minted, seed);
       if (stake) {
-        _safeMint(address(kitchenPack), minted);
+        _safeMint(address(venue), minted);
         tokenIds[i] = minted;
       } else {
         _safeMint(_msgSender(), minted);
       }
       s.isChef ? numChefs++ : numRats++;
     }
-    if (stake) kitchenPack.stakeMany(_msgSender(), tokenIds);
+    if (stake) venue.stakeMany(_msgSender(), tokenIds);
   }
 
   /**
@@ -209,10 +209,10 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
   /**
    * called after deployment to avoid cyclical dependencies
-   * @param _kitchenPack the address of the KitchenPack
+   * @param _venue the address of the Venue
    */
-  function setKitchenPack(address _kitchenPack) external onlyOwner {
-    kitchenPack = IVenue(_kitchenPack);
+  function setKitchen(address _venue) external onlyOwner {
+    venue = IVenue(_venue);
   }
 
   /**

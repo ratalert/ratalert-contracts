@@ -12,7 +12,7 @@ const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
 const ChefRat = artifacts.require('ChefRat');
-const KitchenPack = artifacts.require('KitchenPack');
+const McStake = artifacts.require('McStake');
 
 let totalFastFoodEarned = 0;
 
@@ -31,10 +31,10 @@ function expectRatEarnings(earned, pot, numRats, tolerance) {
 }
 
 function expectTotalFastFoodEarnings() {
-    return expect(this.kitchenPack.totalFastFoodEarned()).to.eventually.be.a.bignumber.gte(toWei(totalFastFoodEarned)).lt(toWei(totalFastFoodEarned * 1.0001));
+    return expect(this.kitchen.totalFastFoodEarned()).to.eventually.be.a.bignumber.gte(toWei(totalFastFoodEarned)).lt(toWei(totalFastFoodEarned * 1.0001));
 }
 
-contract('KitchenPack (proxy)', (accounts) => {
+contract('McStake (proxy)', (accounts) => {
     const owner = accounts[0];
     const anon = accounts[1];
     let lists;
@@ -47,32 +47,32 @@ contract('KitchenPack (proxy)', (accounts) => {
         this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
-        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400, 175, 90, 55], { from: owner });
-        await this.fastFood.addController(this.kitchenPack.address, { from: owner });
-        await this.chefRat.addController(this.kitchenPack.address, { from: owner });
-        await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.chefRat.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        await this.fastFood.addController(this.kitchen.address, { from: owner });
+        await this.chefRat.addController(this.kitchen.address, { from: owner });
+        await this.chefRat.setKitchen(this.kitchen.address, { from: owner });
     });
 
     describe('stake()', () => {
         it('fails to stake non-existent tokens', async () => {
-            await expect(this.kitchenPack.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
+            await expect(this.kitchen.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
             await this.chefRat.mint(1, false, { from: anon, value: toWei(0.1) });
-            await expect(this.kitchenPack.stakeMany(owner, [1], { from: owner })).to.eventually.be.rejectedWith('Not your token');
+            await expect(this.kitchen.stakeMany(owner, [1], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('stakes many tokens', async () => {
             lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
             lists.chefs = [lists.chefs[0], lists.chefs[1]];
             lists.rats = [lists.rats[0], lists.rats[1]];
             lists.all = lists.chefs.concat(lists.rats);
-            await this.chefRat.setApprovalForAll(this.kitchenPack.address, true, { from: owner });
-            await this.kitchenPack.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
+            await this.chefRat.setApprovalForAll(this.kitchen.address, true, { from: owner });
+            await this.kitchen.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
             const block = await web3.eth.getBlock('latest');
-            await expect(this.chefRat.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchenPack.address);
-            await expect(this.chefRat.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchenPack.address);
-            const chef0 = await this.kitchenPack.kitchen(lists.chefs[0].id);
-            const rat0 = await this.kitchenPack.pack(lists.rats[0].id);
+            await expect(this.chefRat.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchen.address);
+            await expect(this.chefRat.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchen.address);
+            const chef0 = await this.kitchen.chefs(lists.chefs[0].id);
+            const rat0 = await this.kitchen.rats(lists.rats[0].id);
             await expect(chef0.owner).to.equal(owner);
             await expect(rat0.owner).to.equal(owner);
             await expect(chef0.value.toString()).to.equal(block.timestamp.toString());
@@ -82,12 +82,12 @@ contract('KitchenPack (proxy)', (accounts) => {
     describe('unstake()', () => {
         it('fails to unstake someone else\'s tokens', async () => {
             const ids = [lists.chefs[0].id, lists.rats[0].id];
-            await expect(this.kitchenPack.claimMany(ids, true, { from: anon })).to.eventually.be.rejectedWith('Not your token');
+            await expect(this.kitchen.claimMany(ids, true, { from: anon })).to.eventually.be.rejectedWith('Not your token');
         });
         it('claims from chefs', async () => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
-            const { logs } = await this.kitchenPack.claimMany(chefs, false);
+            const { logs } = await this.kitchen.claimMany(chefs, false);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
@@ -98,13 +98,13 @@ contract('KitchenPack (proxy)', (accounts) => {
                 expect(log.args.eventName).to.equal('');
             });
             totalFastFoodEarned += 2 * 400; // 2 chefs for half a day at skill 0
-            await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(this.kitchenPack.address);
-            await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(this.kitchenPack.address);
+            await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(this.kitchen.address);
+            await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(this.kitchen.address);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.gte(toWei(800)).lt(toWei(801)); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length)).lt(toWei(201 / lists.rats.length));
+            await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length)).lt(toWei(201 / lists.rats.length));
             const ts = (await web3.eth.getBlock('latest')).timestamp;
-            await expect(this.kitchenPack.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
+            await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
             await Promise.all(chefs.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
@@ -115,7 +115,7 @@ contract('KitchenPack (proxy)', (accounts) => {
         it('claims from rats', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
             ownerBalance = BN(await this.fastFood.balanceOf(owner));
-            const { logs } = await this.kitchenPack.claimMany(rats, false);
+            const { logs } = await this.kitchen.claimMany(rats, false);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
@@ -127,13 +127,13 @@ contract('KitchenPack (proxy)', (accounts) => {
                 ownerBalance.iadd(log.args.earned);
             });
             totalFastFoodEarned += 2 * 100 * 0.55; // 2 rats for half a day at fatness 0
-            await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(this.kitchenPack.address);
-            await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(this.kitchenPack.address);
+            await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(this.kitchen.address);
+            await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(this.kitchen.address);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length )).lt(toWei(201 / lists.rats.length ));
+            await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length )).lt(toWei(201 / lists.rats.length ));
             const ts = (await web3.eth.getBlock('latest')).timestamp;
-            await expect(this.kitchenPack.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
+            await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
             await Promise.all(rats.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
@@ -144,20 +144,20 @@ contract('KitchenPack (proxy)', (accounts) => {
         it('distributes nothing when claimed twice', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
             ownerBalance = BN(await this.fastFood.balanceOf(owner));
-            const { logs } = await this.kitchenPack.claimMany(rats, false);
+            const { logs } = await this.kitchen.claimMany(rats, false);
             logs.forEach((log, i) => {
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.intelligence).to.be.a.bignumber.eq('1');
                 expect(log.args.fatness).to.be.a.bignumber.eq('4');
             });
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // Nothing added
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length )).lt(toWei(201 / lists.rats.length ));
+            await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length )).lt(toWei(201 / lists.rats.length ));
         });
         it('unstakes many chefs', async () => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
             ownerBalance = BN(await this.fastFood.balanceOf(owner));
-            const { logs } = await this.kitchenPack.claimMany(chefs, true);
+            const { logs } = await this.kitchen.claimMany(chefs, true);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
@@ -173,12 +173,12 @@ contract('KitchenPack (proxy)', (accounts) => {
             await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(owner);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
+            await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
             const ts = (await web3.eth.getBlock('latest')).timestamp;
-            await expect(this.kitchenPack.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
+            await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
-            const chef0 = await this.kitchenPack.kitchen(chefs[0]);
-            const chef1 = await this.kitchenPack.kitchen(chefs[1]);
+            const chef0 = await this.kitchen.chefs(chefs[0]);
+            const chef1 = await this.kitchen.chefs(chefs[1]);
             await expect(chef0.owner).to.equal('0x0000000000000000000000000000000000000000');
             await expect(chef1.owner).to.equal('0x0000000000000000000000000000000000000000');
             await expect(chef0.value.toString()).to.equal('0');
@@ -192,12 +192,12 @@ contract('KitchenPack (proxy)', (accounts) => {
         });
         it('fails to unstake chefs twice', async () => {
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
-            await expect(this.kitchenPack.claimMany(chefs, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+            await expect(this.kitchen.claimMany(chefs, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('unstakes many rats', async () => {
             const rats = lists.rats.map(item => item.id);
             ownerBalance = BN(await this.fastFood.balanceOf(owner));
-            const { logs } = await this.kitchenPack.claimMany(rats, true);
+            const { logs } = await this.kitchen.claimMany(rats, true);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
@@ -213,10 +213,10 @@ contract('KitchenPack (proxy)', (accounts) => {
             await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(owner);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
-            await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
+            await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
 
-            const rat0 = await this.kitchenPack.pack(rats[0]);
-            const rat1 = await this.kitchenPack.pack(rats[1]);
+            const rat0 = await this.kitchen.rats(rats[0]);
+            const rat1 = await this.kitchen.rats(rats[1]);
             await expect(rat0.owner).to.equal('0x0000000000000000000000000000000000000000');
             await expect(rat1.owner).to.equal('0x0000000000000000000000000000000000000000');
             await expect(rat0.value.toString()).to.equal('0');
@@ -230,11 +230,11 @@ contract('KitchenPack (proxy)', (accounts) => {
         });
         it('fails to unstake rats twice', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
-            await expect(this.kitchenPack.claimMany(rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+            await expect(this.kitchen.claimMany(rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('handles level upgrades', async () => {
             const list = { chef: { id: lists.chefs[0].id }, rat: { id: lists.rats[0].id } };
-            await this.kitchenPack.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
+            await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
             await Promise.all(Object.values(list).map(async item => {
                 const traits = await this.chefRat.getTokenTraits(item.id);
                 item.efficiency = Number(traits.efficiency.toString());
@@ -244,7 +244,7 @@ contract('KitchenPack (proxy)', (accounts) => {
             const events = { foodInspector: 0, burnout: 0, ratTrap: 0, cat: 0 };
             for (let i = 0; i <= 100; i += 1) {
                 await advanceTimeAndBlock(86400); // Wait a day
-                const { logs } = await this.kitchenPack.claimMany(Object.values(list).map(item => item.id), false, { from: owner });
+                const { logs } = await this.kitchen.claimMany(Object.values(list).map(item => item.id), false, { from: owner });
                 logs.forEach(({ event, args }) => {
                     const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
                     const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());

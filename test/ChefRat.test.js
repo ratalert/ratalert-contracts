@@ -11,7 +11,7 @@ const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
 const ChefRat = artifacts.require('ChefRat');
-const KitchenPack = artifacts.require('KitchenPack');
+const McStake = artifacts.require('McStake');
 
 contract('ChefRat (proxy)', (accounts) => {
     const owner = accounts[0];
@@ -27,10 +27,10 @@ contract('ChefRat (proxy)', (accounts) => {
         this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setChefRat(this.chefRat.address);
         await uploadTraits(this.traits);
-        this.kitchenPack = await deployProxy(KitchenPack, [this.chefRat.address, this.fastFood.address, 86400, 175, 90, 55], { from: owner });
-        await this.fastFood.addController(this.kitchenPack.address, { from: owner });
-        await this.chefRat.addController(this.kitchenPack.address, { from: owner });
-        await this.chefRat.setKitchenPack(this.kitchenPack.address, { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.chefRat.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        await this.fastFood.addController(this.kitchen.address, { from: owner });
+        await this.chefRat.addController(this.kitchen.address, { from: owner });
+        await this.chefRat.setKitchen(this.kitchen.address, { from: owner });
         await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.numChefs()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.chefRat.numRats()).to.eventually.be.a.bignumber.that.equals('0');
@@ -154,10 +154,10 @@ contract('ChefRat (proxy)', (accounts) => {
             await expect(this.chefRat.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.chefRat.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5'); // Because they are staked!
             await Promise.all(IDs.map(async id => {
-                await expect(this.chefRat.ownerOf(id)).to.eventually.equal(this.kitchenPack.address);
+                await expect(this.chefRat.ownerOf(id)).to.eventually.equal(this.kitchen.address);
             }));
 
-            const { logs } = await this.kitchenPack.claimMany(IDs, true, { from: anon });
+            const { logs } = await this.kitchen.claimMany(IDs, true, { from: anon });
             logs.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(IDs[i].toString());
                 expect(log.args.unstaked).to.be.true;
