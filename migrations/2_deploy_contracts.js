@@ -5,7 +5,7 @@ const toWei = web3.utils.toWei;
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
-const ChefRat = artifacts.require('ChefRat');
+const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
 module.exports = async (deployer, network) => {
@@ -16,10 +16,10 @@ module.exports = async (deployer, network) => {
     const fastFood = await FastFood.deployed();
     const traits = await deployProxy(Traits, { deployer });
     const properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { deployer });
-    const chefRat = await deployProxy(ChefRat, [traits.address, properties.address, 50000, mintPrice], { deployer });
-    const mcStake = await deployProxy(McStake, [chefRat.address, fastFood.address, accrualPeriod, 2, 4, 2, 8, 175, 90, 55], { deployer });
-    await traits.setChefRat(chefRat.address);
+    const character = await deployProxy(Character, [traits.address, properties.address, 50000, mintPrice], { deployer });
+    const mcStake = await deployProxy(McStake, [character.address, fastFood.address, accrualPeriod, 2, 4, 2, 8, 175, 90, 55], { deployer });
+    await traits.setCharacter(character.address);
     await fastFood.addController(mcStake.address);
-    await chefRat.addController(mcStake.address);
-    await chefRat.setKitchen(mcStake.address);
+    await character.addController(mcStake.address);
+    await character.setKitchen(mcStake.address);
 };

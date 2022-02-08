@@ -10,7 +10,7 @@ const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
-const ChefRat = artifacts.require('ChefRat');
+const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
 contract('McStake (proxy) load test', (accounts) => {
@@ -21,15 +21,15 @@ contract('McStake (proxy) load test', (accounts) => {
         this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
-        this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
-        await this.traits.setChefRat(this.chefRat.address);
+        this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
+        await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.chefRat.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
         await this.fastFood.addController(this.kitchen.address, { from: owner });
-        await this.chefRat.addController(this.kitchen.address, { from: owner });
-        await this.chefRat.setKitchen(this.kitchen.address, { from: owner });
-        await this.chefRat.setApprovalForAll(this.kitchen.address, true, { from: owner });
-        await this.chefRat.setApprovalForAll(this.kitchen.address, true, { from: anon });
+        await this.character.addController(this.kitchen.address, { from: owner });
+        await this.character.setKitchen(this.kitchen.address, { from: owner });
+        await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
+        await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
     });
 
     it.skip('mints $FFOOD correctly', async () => {
@@ -49,7 +49,7 @@ contract('McStake (proxy) load test', (accounts) => {
         for (let i = 0; i <= totalEpochs; i++) {
             console.log(`      [Epoch ${i}/${totalEpochs}] ${expected[epoch].totalChefsStaked} chefs staked, ${expected[epoch].totalFastFoodEarned} $FFOOD earned after ${(i + 1) * days} days`);
             await Promise.all(users.map(async ([from], j) => {
-                const { logs } = await this.chefRat.mint(10, false, { from, value: toWei(1) });
+                const { logs } = await this.character.mint(10, false, { from, value: toWei(1) });
                 const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
                 users[j][1] = users[j][1].concat(ids);
                 await this.kitchen.stakeMany(from, ids, { from });

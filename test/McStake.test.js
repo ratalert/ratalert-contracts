@@ -11,7 +11,7 @@ const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
-const ChefRat = artifacts.require('ChefRat');
+const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
 let totalFastFoodEarned = 0;
@@ -44,13 +44,13 @@ contract('McStake (proxy)', (accounts) => {
         this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
-        this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
-        await this.traits.setChefRat(this.chefRat.address);
+        this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
+        await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.chefRat.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
         await this.fastFood.addController(this.kitchen.address, { from: owner });
-        await this.chefRat.addController(this.kitchen.address, { from: owner });
-        await this.chefRat.setKitchen(this.kitchen.address, { from: owner });
+        await this.character.addController(this.kitchen.address, { from: owner });
+        await this.character.setKitchen(this.kitchen.address, { from: owner });
     });
 
     describe('stake()', () => {
@@ -58,7 +58,7 @@ contract('McStake (proxy)', (accounts) => {
             await expect(this.kitchen.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
-            await this.chefRat.mint(1, false, { from: anon, value: toWei(0.1) });
+            await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
             await expect(this.kitchen.stakeMany(owner, [1], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('stakes many tokens', async () => {
@@ -66,11 +66,11 @@ contract('McStake (proxy)', (accounts) => {
             lists.chefs = [lists.chefs[0], lists.chefs[1]];
             lists.rats = [lists.rats[0], lists.rats[1]];
             lists.all = lists.chefs.concat(lists.rats);
-            await this.chefRat.setApprovalForAll(this.kitchen.address, true, { from: owner });
+            await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
             await this.kitchen.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
             const block = await web3.eth.getBlock('latest');
-            await expect(this.chefRat.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchen.address);
-            await expect(this.chefRat.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchen.address);
+            await expect(this.character.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchen.address);
+            await expect(this.character.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchen.address);
             const chef0 = await this.kitchen.chefs(lists.chefs[0].id);
             const rat0 = await this.kitchen.rats(lists.rats[0].id);
             await expect(chef0.owner).to.equal(owner);
@@ -98,8 +98,8 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.eventName).to.equal('');
             });
             totalFastFoodEarned += 2 * 400; // 2 chefs for half a day at skill 0
-            await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(this.kitchen.address);
-            await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(this.kitchen.address);
+            await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.kitchen.address);
+            await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(this.kitchen.address);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.gte(toWei(800)).lt(toWei(801)); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
             await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length)).lt(toWei(201 / lists.rats.length));
@@ -107,7 +107,7 @@ contract('McStake (proxy)', (accounts) => {
             await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
             await Promise.all(chefs.map(async id => {
-                const traits = await this.chefRat.getTokenTraits(id);
+                const traits = await this.character.getTokenTraits(id);
                 expect(traits.efficiency).to.be.a.bignumber.eq('1');
                 expect(traits.tolerance).to.be.a.bignumber.eq('2');
             }));
@@ -127,8 +127,8 @@ contract('McStake (proxy)', (accounts) => {
                 ownerBalance.iadd(log.args.earned);
             });
             totalFastFoodEarned += 2 * 100 * 0.55; // 2 rats for half a day at fatness 0
-            await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(this.kitchen.address);
-            await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(this.kitchen.address);
+            await expect(this.character.ownerOf(rats[0])).to.eventually.equal(this.kitchen.address);
+            await expect(this.character.ownerOf(rats[1])).to.eventually.equal(this.kitchen.address);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
             await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(200 / lists.rats.length )).lt(toWei(201 / lists.rats.length ));
@@ -136,7 +136,7 @@ contract('McStake (proxy)', (accounts) => {
             await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
             await Promise.all(rats.map(async id => {
-                const traits = await this.chefRat.getTokenTraits(id);
+                const traits = await this.character.getTokenTraits(id);
                 expect(traits.efficiency).to.be.a.bignumber.eq('1');
                 expect(traits.tolerance).to.be.a.bignumber.eq('4');
             }));
@@ -169,8 +169,8 @@ contract('McStake (proxy)', (accounts) => {
                 ownerBalance.iadd(log.args.earned);
             });
             totalFastFoodEarned += 2 * 400 * 1.0175; // 2 chefs for half a day at skill 1
-            await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(owner);
-            await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(owner);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
             await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
@@ -185,7 +185,7 @@ contract('McStake (proxy)', (accounts) => {
             await expect(chef1.value.toString()).to.equal('0');
 
             await Promise.all(chefs.map(async id => {
-                const traits = await this.chefRat.getTokenTraits(id);
+                const traits = await this.character.getTokenTraits(id);
                 expect(traits.efficiency).to.be.a.bignumber.eq('2');
                 expect(traits.tolerance).to.be.a.bignumber.eq('4');
             }));
@@ -209,8 +209,8 @@ contract('McStake (proxy)', (accounts) => {
                 ownerBalance.iadd(log.args.earned);
             });
             totalFastFoodEarned += 2 * 100 * 1.0175 * 0.586; // FFOOD from 2 skill 1 chefs for 2 rats for half a day at fatness 4
-            await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(owner);
-            await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(rats[1])).to.eventually.equal(owner);
             await expect(this.fastFood.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFastFoodEarnings.call(this);
             await expect(this.kitchen.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
@@ -223,7 +223,7 @@ contract('McStake (proxy)', (accounts) => {
             await expect(rat1.value.toString()).to.equal('0');
 
             await Promise.all(rats.map(async id => {
-                const traits = await this.chefRat.getTokenTraits(id);
+                const traits = await this.character.getTokenTraits(id);
                 expect(traits.efficiency).to.be.a.bignumber.eq('2');
                 expect(traits.tolerance).to.be.a.bignumber.eq('8');
             }));
@@ -236,7 +236,7 @@ contract('McStake (proxy)', (accounts) => {
             const list = { chef: { id: lists.chefs[0].id }, rat: { id: lists.rats[0].id } };
             await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
             await Promise.all(Object.values(list).map(async item => {
-                const traits = await this.chefRat.getTokenTraits(item.id);
+                const traits = await this.character.getTokenTraits(item.id);
                 item.efficiency = Number(traits.efficiency.toString());
                 item.tolerance = Number(traits.tolerance.toString());
             }));

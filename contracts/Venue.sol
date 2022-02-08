@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol";
 import "./IVenue.sol";
-import "./ChefRat.sol";
+import "./Character.sol";
 
 contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
   struct Stake { // Store for a stake's token, owner, and earning values
@@ -21,7 +21,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
   event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity, string eventName);
   event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness, string eventName);
 
-  ChefRat chefRat; // Reference to the ChefRat NFT contract
+  Character character; // Reference to the Character NFT contract
 
   mapping(uint256 => Stake) public chefs; // Maps tokenId to stake
   mapping(uint256 => Stake) public rats; // Maps tokenId to stake
@@ -33,11 +33,11 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
   uint256 public totalRatsStaked; // Number of Rats staked
   uint256 public accrualPeriod; // The period over which earnings & levels are accrued
 
-  function initialize(address _chefRat, uint256 _accrualPeriod) external initializer {
+  function initialize(address _character, uint256 _accrualPeriod) external initializer {
     __Ownable_init();
     __Pausable_init();
 
-    chefRat = ChefRat(_chefRat);
+    character = Character(_character);
     accrualPeriod = _accrualPeriod;
 
     dailySkillRate = 0;
@@ -52,11 +52,11 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
   function stakeMany(address account, uint16[] calldata tokenIds) external {
-    require(account == _msgSender() || _msgSender() == address(chefRat), "Do not lose your tokens");
+    require(account == _msgSender() || _msgSender() == address(character), "Do not lose your tokens");
     for (uint i = 0; i < tokenIds.length; i++) {
-      if (_msgSender() != address(chefRat)) { // Not necessary if it's a mint & stake
-        require(chefRat.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
-        chefRat.transferFrom(_msgSender(), address(this), tokenIds[i]);
+      if (_msgSender() != address(character)) { // Not necessary if it's a mint & stake
+        require(character.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
+        character.transferFrom(_msgSender(), address(this), tokenIds[i]);
       } else if (tokenIds[i] == 0) {
         continue; // There may be gaps in the array for stolen tokens
       }
@@ -135,7 +135,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
     (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId);
 
     if (unstake) {
-      chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
+      character.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
       delete chefs[tokenId];
       totalChefsStaked --;
     } else {
@@ -165,7 +165,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
     (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId);
 
     if (unstake) {
-      chefRat.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
+      character.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
       delete rats[tokenId];
       totalRatsStaked --;
     } else {
@@ -220,7 +220,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
     uint256 stakingPeriod = block.timestamp - (isChef(tokenId) ? k.timestamp : p.timestamp);
     bool chef = isChef(tokenId);
 
-    (efficiency, tolerance, eventName) = chefRat.updateCharacter(
+    (efficiency, tolerance, eventName) = character.updateCharacter(
       tokenId,
       _getCharacterIncrement(chef ? dailySkillRate : dailyIntelligenceRate, stakingPeriod),
       _getCharacterIncrement(chef ? dailyInsanityRate : dailyFatnessRate, stakingPeriod)
@@ -249,7 +249,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
    * @return chef - Whether or not the token is a Chef
    */
   function isChef(uint256 tokenId) public view returns (bool chef) {
-    (chef, , , , , , , , ,) = chefRat.tokenTraits(tokenId);
+    (chef, , , , , , , , ,) = character.tokenTraits(tokenId);
   }
 
   /**
@@ -258,7 +258,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
    * @return efficiency & tolerance values
    */
   function getProperties(uint256 tokenId) public view returns (uint8 efficiency, uint8 tolerance) {
-    (, , , , , , , , efficiency, tolerance) = chefRat.tokenTraits(tokenId);
+    (, , , , , , , , efficiency, tolerance) = character.tokenTraits(tokenId);
   }
 
   function onERC721Received(address, address from, uint256, bytes calldata) external pure override returns (bytes4) {

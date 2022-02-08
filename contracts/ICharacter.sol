@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-interface IChefRat {
-  struct ChefRatStruct { // Struct to store each token's traits
+interface ICharacter {
+  struct CharacterStruct { // Struct to store each token's traits
     bool isChef;
     uint8 hat;
     uint8 eyes;
@@ -22,5 +22,5 @@ interface IChefRat {
 
   function mint(uint8 amount, bool stake) external payable;
   function getPaidTokens() external view returns (uint256);
-  function getTokenTraits(uint256 tokenId) external view returns (ChefRatStruct memory);
+  function getTokenTraits(uint256 tokenId) external view returns (CharacterStruct memory);
 }

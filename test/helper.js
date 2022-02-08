@@ -58,10 +58,10 @@ exports.uploadTraits = async (traits) => {
     return res1.concat(res2);
 };
 exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists = { all: [], chefs: [], rats: [] }) {
-    const { logs } = await this.chefRat.mint(10, false, { ...options, value: exports.toWei(1) });
+    const { logs } = await this.character.mint(10, false, { ...options, value: exports.toWei(1) });
     const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
     await Promise.all(ids.map(async id => {
-        const traits = await this.chefRat.getTokenTraits(id);
+        const traits = await this.character.getTokenTraits(id);
         const copy = { id, ...traits }; // traits is frozen!
         lists.all.push(copy);
         copy.isChef ? lists.chefs.push(copy) : lists.rats.push(copy);

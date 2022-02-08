@@ -6,12 +6,12 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "./IChefRat.sol";
+import "./ICharacter.sol";
 import "./IVenue.sol";
 import "./ITraits.sol";
 import "./IProperties.sol";
 
-contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable {
+contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable {
   uint16 public minted;
   uint16 public numChefs;
   uint16 public numRats;
@@ -19,7 +19,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   uint256 public MAX_TOKENS; // Max number of tokens that can be minted - 50000 in production
   uint256 public PAID_TOKENS; // Number of tokens that can be claimed for free - 20% of MAX_TOKENS
 
-  mapping(uint256 => ChefRatStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
+  mapping(uint256 => CharacterStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
   mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
   mapping(address => bool) controllers; // a mapping from an address to whether or not it can mint / burn
   uint8[][18] public rarities; // List of probabilities for each trait type, 0 - 9 are associated with Chefs, 10 - 18 are associated with Rats
@@ -31,7 +31,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
   function initialize(address _traits, address _properties, uint256 _maxTokens, uint256 _mintPrice) external initializer {
     __Ownable_init();
     __Pausable_init();
-    __ERC721_init("RatAlert Chefs & Rats", "CHEFRAT");
+    __ERC721_init("RatAlert Characters", "RATCHAR");
 
     minted = 0;
     numChefs = 0;
@@ -67,7 +67,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
     uint16[] memory tokenIds = stake ? new uint16[](amount) : new uint16[](0);
     uint256 seed;
-    ChefRatStruct memory s;
+    CharacterStruct memory s;
     for (uint i = 0; i < amount; i++) {
       minted++;
       seed = random(minted);
@@ -89,7 +89,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    * @param seed - A pseudorandom 256 bit number to derive traits from
    * @return t - A struct of traits for the given token ID
    */
-  function generate(uint256 tokenId, uint256 seed) internal returns (ChefRatStruct memory t) {
+  function generate(uint256 tokenId, uint256 seed) internal returns (CharacterStruct memory t) {
     t = selectTraits(seed);
     uint256 hash = structToHash(t);
     if (existingCombinations[hash] == 0) {
@@ -105,7 +105,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    * @param seed - A pseudorandom 256 bit number to derive traits from
    * @return t -  A struct of randomly selected traits
    */
-  function selectTraits(uint256 seed) internal view returns (ChefRatStruct memory t) {
+  function selectTraits(uint256 seed) internal view returns (CharacterStruct memory t) {
     t.isChef = (seed & 0xFFFF) % 10 != 0;
     if (t.isChef) {
       t.hat = selectTrait(seed, 2);
@@ -144,7 +144,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    * @param s - The struct to pack into a hash
    * @return The 256 bit hash of the struct
    */
-  function structToHash(ChefRatStruct memory s) internal pure returns (uint256) {
+  function structToHash(CharacterStruct memory s) internal pure returns (uint256) {
     return uint256(bytes32(
       abi.encodePacked(
         s.isChef,
@@ -174,7 +174,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
     return traits.tokenURI(tokenId);
   }
 
-  function getTokenTraits(uint256 tokenId) external view override returns (ChefRatStruct memory) {
+  function getTokenTraits(uint256 tokenId) external view override returns (CharacterStruct memory) {
     require(_exists(tokenId), "ERC721Metadata: URI query for non-existent token");
     return tokenTraits[tokenId];
   }

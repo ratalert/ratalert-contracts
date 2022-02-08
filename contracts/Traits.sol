@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ITraits.sol";
-import "./IChefRat.sol";
+import "./ICharacter.sol";
 
 contract Traits is Initializable, OwnableUpgradeable, ITraits {
   using Strings for uint256;
@@ -21,7 +21,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
   uint16 public numHeadAndBodyTraits;
   mapping(uint8 => mapping(uint8 => Trait)) public traitData; // Storage of each trait's name and base64 SVG data
 
-  IChefRat public chefRat;
+  ICharacter public character;
 
   function initialize() external initializer {
     __Ownable_init();
@@ -52,7 +52,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @return A base64 encoded JSON dictionary of the token's metadata and SVG
    */
   function tokenURI(uint256 tokenId) public view override returns (string memory) {
-    IChefRat.ChefRatStruct memory s = chefRat.getTokenTraits(tokenId);
+    ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
 
     string memory metadata = string(abi.encodePacked(
       '{',
@@ -80,7 +80,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @return A valid SVG of the Chef / Rat
    */
   function drawSVG(uint256 tokenId) public view returns (string memory) {
-    IChefRat.ChefRatStruct memory s = chefRat.getTokenTraits(tokenId);
+    ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
     uint8 shift = s.isChef ? 0 : 10;
     uint8 head = getBodyIndex(s.efficiency);
     uint8 body = getBodyIndex(s.tolerance);
@@ -122,7 +122,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @return A JSON array of all of the attributes for given token ID
    */
   function getAttributes(uint256 tokenId) public view returns (string memory) {
-    IChefRat.ChefRatStruct memory s = chefRat.getTokenTraits(tokenId);
+    ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
     string memory traits;
     if (s.isChef) {
       traits = string(abi.encodePacked(
@@ -153,7 +153,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       '[',
         '{"trait_type":"Type","value":', s.isChef ? '"Chef"' : '"Rat"', '},',
         traits,
-        '{"trait_type":"Generation","value":', tokenId <= chefRat.getPaidTokens() ? '"Gen 0"' : '"Gen 1"', '}',
+        '{"trait_type":"Generation","value":', tokenId <= character.getPaidTokens() ? '"Gen 0"' : '"Gen 1"', '}',
       ']'
     ));
   }
@@ -176,8 +176,8 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     ));
   }
 
-  function setChefRat(address _chefRat) external onlyOwner {
-    chefRat = IChefRat(_chefRat);
+  function setCharacter(address _character) external onlyOwner {
+    character = ICharacter(_character);
   }
 
   /**

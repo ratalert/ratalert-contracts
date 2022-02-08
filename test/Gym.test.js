@@ -11,7 +11,7 @@ const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
-const ChefRat = artifacts.require('ChefRat');
+const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
 
@@ -26,15 +26,15 @@ contract('Gym (proxy)', (accounts) => {
         this.fastFood = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
-        this.chefRat = await deployProxy(ChefRat, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
-        await this.traits.setChefRat(this.chefRat.address);
+        this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
+        await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.chefRat.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
-        this.gym = await deployProxy(Gym, [this.chefRat.address, 86400, -12, -8], { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        this.gym = await deployProxy(Gym, [this.character.address, 86400, -12, -8], { from: owner });
         await this.fastFood.addController(this.kitchen.address, { from: owner });
-        await this.chefRat.addController(this.kitchen.address, { from: owner });
-        await this.chefRat.addController(this.gym.address, { from: owner });
-        await this.chefRat.setKitchen(this.kitchen.address, { from: owner });
+        await this.character.addController(this.kitchen.address, { from: owner });
+        await this.character.addController(this.gym.address, { from: owner });
+        await this.character.setKitchen(this.kitchen.address, { from: owner });
 
         lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
@@ -42,7 +42,7 @@ contract('Gym (proxy)', (accounts) => {
         lists.all = lists.chefs.concat(lists.rats);
         const allIds = lists.all.map(item => item.id);
 
-        await this.chefRat.setApprovalForAll(this.kitchen.address, true, { from: owner });
+        await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
         await this.kitchen.stakeMany(owner, allIds, { from: owner });
         let done;
         while (!done) {
@@ -53,7 +53,7 @@ contract('Gym (proxy)', (accounts) => {
         }
         await this.kitchen.claimMany(allIds, true);
         await Promise.all(lists.all.map(async (item) => {
-            const traits = await this.chefRat.tokenTraits(item.id);
+            const traits = await this.character.tokenTraits(item.id);
             item.tolerance = Number(traits.tolerance.toString());
         }));
         // console.log('---lists', lists.chefs);
@@ -64,16 +64,16 @@ contract('Gym (proxy)', (accounts) => {
             await expect(this.gym.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
-            const { logs } = await this.chefRat.mint(1, false, { from: anon, value: toWei(0.1) });
+            const { logs } = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
             const tokenId = Number(logs[0].args.tokenId.toString());
             await expect(this.gym.stakeMany(owner, [tokenId], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('stakes many tokens', async () => {
-            await this.chefRat.setApprovalForAll(this.gym.address, true, { from: owner });
+            await this.character.setApprovalForAll(this.gym.address, true, { from: owner });
             await this.gym.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
             const block = await web3.eth.getBlock('latest');
-            await expect(this.chefRat.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.gym.address);
-            await expect(this.chefRat.ownerOf(lists.rats[1].id)).to.eventually.equal(this.gym.address);
+            await expect(this.character.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.gym.address);
+            await expect(this.character.ownerOf(lists.rats[1].id)).to.eventually.equal(this.gym.address);
             const chef0 = await this.gym.chefs(lists.chefs[0].id);
             const rat0 = await this.gym.rats(lists.rats[0].id);
             await expect(chef0.owner).to.equal(owner);
@@ -99,11 +99,11 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.insanity).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 6).toString()); // half a day at the gym
                 expect(log.args.eventName).to.equal('');
             });
-            await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(this.gym.address);
-            await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(this.gym.address);
+            await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.gym.address);
+            await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(this.gym.address);
 
             await Promise.all(lists.chefs.map(async chef => {
-                const traits = await this.chefRat.getTokenTraits(chef.id);
+                const traits = await this.character.getTokenTraits(chef.id);
                 expect(traits.tolerance).to.be.a.bignumber.eq((chef.tolerance - 6).toString());
             }));
         });
@@ -118,11 +118,11 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString()); // half a day in the gym
                 expect(log.args.eventName).to.equal('');
             });
-            await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(this.gym.address);
-            await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(this.gym.address);
+            await expect(this.character.ownerOf(rats[0])).to.eventually.equal(this.gym.address);
+            await expect(this.character.ownerOf(rats[1])).to.eventually.equal(this.gym.address);
 
             await Promise.all(lists.rats.map(async rat => {
-                const traits = await this.chefRat.getTokenTraits(rat.id);
+                const traits = await this.character.getTokenTraits(rat.id);
                 expect(traits.tolerance).to.be.a.bignumber.eq((rat.tolerance - 4).toString());
             }));
         });
@@ -146,8 +146,8 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.insanity).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 12).toString()); // full day at the gym
                 expect(log.args.eventName).to.equal('');
             });
-            await expect(this.chefRat.ownerOf(chefs[0])).to.eventually.equal(owner);
-            await expect(this.chefRat.ownerOf(chefs[1])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(owner);
 
             const chef0 = await this.gym.chefs(chefs[0]);
             const chef1 = await this.gym.chefs(chefs[1]);
@@ -157,7 +157,7 @@ contract('Gym (proxy)', (accounts) => {
             await expect(chef1.value.toString()).to.equal('0');
 
             await Promise.all(lists.chefs.map(async chef => {
-                const traits = await this.chefRat.getTokenTraits(chef.id);
+                const traits = await this.character.getTokenTraits(chef.id);
                 expect(traits.tolerance).to.be.a.bignumber.eq((chef.tolerance - 12).toString());
             }));
         });
@@ -176,8 +176,8 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 8).toString()); // half a day in the gym
                 expect(log.args.eventName).to.equal('');
             });
-            await expect(this.chefRat.ownerOf(rats[0])).to.eventually.equal(owner);
-            await expect(this.chefRat.ownerOf(rats[1])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(rats[1])).to.eventually.equal(owner);
 
             const rat0 = await this.gym.rats(rats[0]);
             const rat1 = await this.gym.rats(rats[1]);
@@ -187,7 +187,7 @@ contract('Gym (proxy)', (accounts) => {
             await expect(rat1.value.toString()).to.equal('0');
 
             await Promise.all(lists.rats.map(async rat => {
-                const traits = await this.chefRat.getTokenTraits(rat.id);
+                const traits = await this.character.getTokenTraits(rat.id);
                 expect(traits.tolerance).to.be.a.bignumber.eq((rat.tolerance - 8).toString());
             }));
         });

@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./Venue.sol";
-import "./ChefRat.sol";
+import "./Character.sol";
 import "./FastFood.sol";
 
 contract Kitchen is Venue {
