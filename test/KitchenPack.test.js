@@ -215,6 +215,13 @@ contract('KitchenPack (proxy)', (accounts) => {
             await expectTotalFastFoodEarnings.call(this);
             await expect(this.kitchenPack.fastFoodPerRat()).to.eventually.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
 
+            const rat0 = await this.kitchenPack.pack(rats[0]);
+            const rat1 = await this.kitchenPack.pack(rats[1]);
+            await expect(rat0.owner).to.equal('0x0000000000000000000000000000000000000000');
+            await expect(rat1.owner).to.equal('0x0000000000000000000000000000000000000000');
+            await expect(rat0.value.toString()).to.equal('0');
+            await expect(rat1.value.toString()).to.equal('0');
+
             await Promise.all(rats.map(async id => {
                 const traits = await this.chefRat.getTokenTraits(id);
                 expect(traits.efficiency).to.be.a.bignumber.eq('2');

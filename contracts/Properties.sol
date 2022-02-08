@@ -44,7 +44,7 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @param efficiency - The character's current value
    * @return true if event occurred
    */
-  function doesDisasterOccur(bool isChef, int8 efficiency) internal view returns(bool) {
+  function _doesDisasterOccur(bool isChef, int8 efficiency) internal view returns(bool) {
     if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) {
       return false;
     }
@@ -57,7 +57,7 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @param efficiency - The character's current value
    * @return true if event occurred
    */
-  function doesMishapOccur(bool isChef, int8 efficiency) internal view returns(bool) {
+  function _doesMishapOccur(bool isChef, int8 efficiency) internal view returns(bool) {
     if (efficiency <= (isChef ? mishapEfficiencyMinimumChef : mishapEfficiencyMinimumRat)) {
       return false;
     }
@@ -65,11 +65,11 @@ contract Properties is Initializable, OwnableUpgradeable {
     return random(uint8(efficiency)) % 1000 < likelihood;
   }
 
-  function resolveDisaster() internal pure returns(uint8, uint8) {
+  function _resolveDisaster() internal pure returns(uint8, uint8) {
     return (0, 0);
   }
 
-  function resolveMishap(bool isChef, uint8 efficiencyValue, uint8 toleranceValue) internal view returns(uint8, uint8) {
+  function _resolveMishap(bool isChef, uint8 efficiencyValue, uint8 toleranceValue) internal view returns(uint8, uint8) {
     uint8 efficiencyLoss = isChef ? mishapEfficiencyLossChef : mishapEfficiencyLossRat;
     uint8 toleranceLoss = isChef ? mishapToleranceLossChef : mishapToleranceLossRat;
     efficiencyValue = (efficiencyLoss > efficiencyValue) ? 0 : efficiencyValue - efficiencyLoss;
@@ -77,7 +77,7 @@ contract Properties is Initializable, OwnableUpgradeable {
     return (efficiencyValue, toleranceValue);
   }
 
-  function getUpdatedValue(uint8 old, int8 increment) internal pure returns(uint8) {
+  function _getUpdatedValue(uint8 old, int8 increment) internal pure returns(uint8) {
     if (increment >= 0) {
       return (uint8(increment) + old > 100) ? 100 : old + uint8(increment);
     } else {
@@ -87,15 +87,15 @@ contract Properties is Initializable, OwnableUpgradeable {
 
   function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement) public view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     eventName = "";
-    if (doesDisasterOccur(isChef, int8(currentEfficiency))) {
-      (efficiencyValue, toleranceValue) = resolveDisaster();
+    if (_doesDisasterOccur(isChef, int8(currentEfficiency))) {
+      (efficiencyValue, toleranceValue) = _resolveDisaster();
       eventName = isChef ? "burnout" : "cat";
-    } else if (doesMishapOccur(isChef, int8(currentEfficiency))) {
-      (efficiencyValue, toleranceValue) = resolveMishap(isChef, currentEfficiency, currentTolerance);
+    } else if (_doesMishapOccur(isChef, int8(currentEfficiency))) {
+      (efficiencyValue, toleranceValue) = _resolveMishap(isChef, currentEfficiency, currentTolerance);
       eventName = isChef ? "foodInspector" : "ratTrap";
     } else {
-      efficiencyValue = getUpdatedValue(currentEfficiency, efficiencyIncrement);
-      toleranceValue = getUpdatedValue(currentTolerance, toleranceIncrement);
+      efficiencyValue = _getUpdatedValue(currentEfficiency, efficiencyIncrement);
+      toleranceValue = _getUpdatedValue(currentTolerance, toleranceIncrement);
     }
   }
 

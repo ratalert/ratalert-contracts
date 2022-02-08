@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "./IChefRat.sol";
-import "./IKitchenPack.sol";
+import "./IVenue.sol";
 import "./ITraits.sol";
 import "./IProperties.sol";
 
@@ -26,7 +26,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
 
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
-  IKitchenPack public kitchenPack;
+  IVenue public kitchenPack;
 
   function initialize(address _traits, address _properties, uint256 _maxTokens, uint256 _mintPrice) external initializer {
     __Ownable_init();
@@ -212,7 +212,7 @@ contract ChefRat is IChefRat, Initializable, OwnableUpgradeable, PausableUpgrade
    * @param _kitchenPack the address of the KitchenPack
    */
   function setKitchenPack(address _kitchenPack) external onlyOwner {
-    kitchenPack = IKitchenPack(_kitchenPack);
+    kitchenPack = IVenue(_kitchenPack);
   }
 
   /**

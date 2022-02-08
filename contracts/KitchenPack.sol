@@ -6,12 +6,12 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol";
-import "./IKitchenPack.sol";
+import "./IVenue.sol";
 import "./IChefRat.sol";
 import "./ChefRat.sol";
 import "./FastFood.sol";
 
-contract KitchenPack is IKitchenPack, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
+contract KitchenPack is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
   struct Stake { // Store for a stake's token, owner, and earning values
     uint256 tokenId;
     address owner;
