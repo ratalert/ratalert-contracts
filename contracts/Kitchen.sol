@@ -6,11 +6,9 @@ import "./Venue.sol";
 import "./Character.sol";
 
 abstract contract Kitchen is Venue {
-  uint256 public constant FFOOD_CLAIM_TAX_PERCENTAGE = 20; // Rats steal x% of all food tokens claimed
-  uint256 public constant MINIMUM_TO_EXIT = 8 hours; // Cannot unstake before EOB
-  uint256 public constant FFOOD_MAX_SUPPLY = 1000000000 ether; // There will only ever be x tokens earned through staking
-  uint256 public constant DAILY_FFOOD_RATE = 1000 ether; // Chefs earn x tokens per day
-
+  uint256 public foodTokenMaxSupply; // There will only ever be x tokens earned through staking
+  uint256 public dailyChefEarnings; // Gross food token amount that chefs earn per day
+  uint256 public ratTheftPercentage; // Percentage that Rats steal from all food tokens claimed
   uint256 public unaccountedRewards; // any rewards distributed when no Rats are staked
   uint256 public totalFoodTokensEarned; // Amount of food tokens earned so far
   uint256 public lastClaimTimestamp; // The last time food token was claimed
@@ -38,17 +36,17 @@ abstract contract Kitchen is Venue {
    */
   function _getOwedByChef(Stake memory stake) internal override returns(uint256 owed) {
     (uint8 efficiency,) = getProperties(stake.tokenId);
-    uint256 nominal = (block.timestamp - stake.value) * DAILY_FFOOD_RATE / accrualPeriod;
+    uint256 nominal = (block.timestamp - stake.value) * dailyChefEarnings / accrualPeriod;
     uint256 multiplier = 100000 + (uint256(efficiency) * chefEfficiencyMultiplier * 10);
     owed = nominal * multiplier / 100000;
-    if (totalFoodTokensEarned + owed > FFOOD_MAX_SUPPLY) {
-      owed = FFOOD_MAX_SUPPLY - totalFoodTokensEarned;
+    if (totalFoodTokensEarned + owed > foodTokenMaxSupply) {
+      owed = foodTokenMaxSupply - totalFoodTokensEarned;
     }
 
     if (owed > 0) {
       lastClaimTimestamp = block.timestamp;
-      _carelesslyLeaveToRats(owed * FFOOD_CLAIM_TAX_PERCENTAGE / 100); // percentage tax to staked Rats
-      owed = owed * (100 - FFOOD_CLAIM_TAX_PERCENTAGE) / 100; // Remainder goes to Chef owner
+      _carelesslyLeaveToRats(owed * ratTheftPercentage / 100); // percentage tax to staked Rats
+      owed = owed * (100 - ratTheftPercentage) / 100; // Remainder goes to Chef owner
       totalFoodTokensEarned += owed;
     }
   }
@@ -63,8 +61,8 @@ abstract contract Kitchen is Venue {
     uint256 nominal = foodTokensPerRat - stake.value;
     int256 multiplier = (int256(int8(tolerance <= 50 ? tolerance : 100 - tolerance)) * ratEfficiencyMultiplier * 1000 / 100) + (ratEfficiencyOffset * 1000);
     owed = nominal * uint256(multiplier) / 100000; // Calculate individual share
-    if (totalFoodTokensEarned + owed > FFOOD_MAX_SUPPLY) {
-      owed = FFOOD_MAX_SUPPLY - totalFoodTokensEarned;
+    if (totalFoodTokensEarned + owed > foodTokenMaxSupply) {
+      owed = foodTokenMaxSupply - totalFoodTokensEarned;
     }
 
     if (owed > 0) {

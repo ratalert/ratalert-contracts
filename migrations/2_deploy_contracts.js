@@ -11,9 +11,14 @@ const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const TheStakehouse = artifacts.require('TheStakehouse');
 const LeStake = artifacts.require('LeStake');
+const Gym = artifacts.require('Gym');
 
 module.exports = async (deployer, network) => {
     const mintPrice = network === 'live' ? toWei('0.1', 'ether') : toWei('0.01', 'ether');
+    const foodTokenMaxSupply = 1000000000;
+    const dailyChefEarnings = 1000;
+    const ratTheftPercentage = 20;
+    const vestingPeriod = network === 'live' ? 3600 : 60;
     const accrualPeriod = network === 'live' ? 86400 : 3600;
 
     await deployer.deploy(FastFood);
@@ -25,9 +30,11 @@ module.exports = async (deployer, network) => {
     const traits = await deployProxy(Traits, { deployer });
     const properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { deployer });
     const character = await deployProxy(Character, [traits.address, properties.address, 50000, mintPrice], { deployer });
-    const mcStake = await deployProxy(McStake, [character.address, fastFood.address, accrualPeriod, 2, 4, 2, 8, 175, 90, 55], { deployer });
-    const theStakehouse = await deployProxy(TheStakehouse, [character.address, casualFood.address, accrualPeriod, 2, 4, 2, 8, 175, 90, 55], { deployer });
-    const leStake = await deployProxy(LeStake, [character.address, gourmetFood.address, accrualPeriod, 2, 4, 2, 8, 175, 90, 55], { deployer });
+    const mcStake = await deployProxy(McStake, [character.address, fastFood.address, foodTokenMaxSupply, [dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod], [2, 4, 2, 8], 175, 90, 55], { deployer });
+    const theStakehouse = await deployProxy(TheStakehouse, [character.address, fastFood.address, foodTokenMaxSupply, [dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod], [4, 6, 4, 6], 175, 90, 55], { deployer });
+    const leStake = await deployProxy(LeStake, [character.address, fastFood.address, foodTokenMaxSupply, [dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod], [6, 8, 6, 4], 175, 90, 55], { deployer });
+    await deployProxy(Gym, [character.address, 3600, 86400, -12, -8], { deployer });
+
     await traits.setCharacter(character.address);
     await fastFood.addController(mcStake.address);
     await casualFood.addController(theStakehouse.address);

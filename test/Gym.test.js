@@ -21,15 +21,15 @@ contract('Gym (proxy)', (accounts) => {
     let lists;
 
     before(async () => {
-        this.fastFood = await FastFood.new({ from: owner });
+        this.foodToken = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
         this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.character.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
-        this.gym = await deployProxy(Gym, [this.character.address, 86400, -12, -8], { from: owner });
-        await this.fastFood.addController(this.kitchen.address, { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 1000000000, [1000, 20, 3600, 86400], [2, 4, 2, 8], 175, 90, 55], { from: owner });
+        this.gym = await deployProxy(Gym, [this.character.address, 3600, 86400, -12, -8], { from: owner });
+        await this.foodToken.addController(this.kitchen.address, { from: owner });
         await this.character.addController(this.kitchen.address, { from: owner });
         await this.character.addController(this.gym.address, { from: owner });
         await this.character.setKitchen(this.kitchen.address, { from: owner });
@@ -49,6 +49,7 @@ contract('Gym (proxy)', (accounts) => {
             const toleranceValues = logs.map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
             done = toleranceValues.filter(val => val < 20).length === 0;
         }
+        await advanceTimeAndBlock(3600); // Wait another hour so we can unstake
         await this.kitchen.claimMany(allIds, true);
         await Promise.all(lists.all.map(async (item) => {
             const traits = await this.character.tokenTraits(item.id);

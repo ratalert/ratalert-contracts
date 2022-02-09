@@ -33,6 +33,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   uint256 public totalRatsStaked; // Number of Rats staked
   uint256 public accrualPeriod; // The period over which earnings & levels are accrued
   uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
+  uint256 public vestingPeriod; // Cannot unstake for this many seconds
 
   function initialize(address _character, uint256 _accrualPeriod) external initializer {
     __Ownable_init();
@@ -129,7 +130,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   function _claimChef(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
     Stake memory stake = chefs[tokenId];
     require(stake.owner == _msgSender(), "Not your token");
-    // require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave before EOB");
+    require(!(unstake && block.timestamp - stake.timestamp < vestingPeriod), "Cannot leave before EOB");
 
     owed = _getOwedByChef(stake);
 
@@ -159,7 +160,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   function _claimRat(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
     Stake memory stake = rats[tokenId];
     require(stake.owner == _msgSender(), "Not your token");
-    // require(!(unstake && block.timestamp - stake.value < MINIMUM_TO_EXIT), "Cannot leave your pack starving so early");
+    require(!(unstake && block.timestamp - stake.timestamp < vestingPeriod), "Cannot leave before EOB");
 
     owed = _getOwedByRat(stake);
 

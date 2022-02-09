@@ -8,7 +8,16 @@ import "./CasualFood.sol";
 contract TheStakehouse is Kitchen {
   CasualFood foodToken; // Reference to the $CFOOD contract
 
-  function initialize(address _character, address _foodToken, uint256 _accrualPeriod, int8 _dailySkillRate, int8 _dailyInsanityRate, int8 _dailyIntelligenceRate, int8 _dailyFatnessRate, uint8 _chefEfficiencyMultiplier, int256 _ratEfficiencyMultiplier, int256 _ratEfficiencyOffset) external initializer {
+  function initialize(
+    address _character,
+    address _foodToken,
+    uint256 _foodTokenMaxSupply,
+    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
+    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
+    uint8 _chefEfficiencyMultiplier,
+    int256 _ratEfficiencyMultiplier,
+    int256 _ratEfficiencyOffset
+  ) external initializer {
     __Ownable_init();
     __Pausable_init();
 
@@ -18,11 +27,15 @@ contract TheStakehouse is Kitchen {
 
     character = Character(_character);
     foodToken = CasualFood(_foodToken);
-    accrualPeriod = _accrualPeriod;
-    dailySkillRate = _dailySkillRate;
-    dailyInsanityRate = _dailyInsanityRate;
-    dailyIntelligenceRate = _dailyIntelligenceRate;
-    dailyFatnessRate = _dailyFatnessRate;
+    foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
+    dailyChefEarnings = _earningSettings[0] * 1 ether;
+    ratTheftPercentage = _earningSettings[1];
+    vestingPeriod = _earningSettings[2];
+    accrualPeriod = _earningSettings[3];
+    dailySkillRate = _propertyIncrements[0];
+    dailyInsanityRate = _propertyIncrements[1];
+    dailyIntelligenceRate = _propertyIncrements[2];
+    dailyFatnessRate = _propertyIncrements[3];
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;

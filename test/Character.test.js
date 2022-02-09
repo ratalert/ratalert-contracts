@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, loadTraits, uploadTraits, mintUntilWeHave } = require('./helper');
+const { toWei, loadTraits, uploadTraits, mintUntilWeHave, advanceTimeAndBlock } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -27,7 +27,7 @@ contract('Character (proxy)', (accounts) => {
         this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 1000000000, [1000, 20, 3600, 86400], [2, 4, 2, 8], 175, 90, 55], { from: owner });
         await this.foodToken.addController(this.kitchen.address, { from: owner });
         await this.character.addController(this.kitchen.address, { from: owner });
         await this.character.setKitchen(this.kitchen.address, { from: owner });
@@ -157,6 +157,7 @@ contract('Character (proxy)', (accounts) => {
                 await expect(this.character.ownerOf(id)).to.eventually.equal(this.kitchen.address);
             }));
 
+            await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
             const { logs } = await this.kitchen.claimMany(IDs, true, { from: anon });
             logs.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(IDs[i].toString());
