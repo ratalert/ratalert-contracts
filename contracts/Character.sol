@@ -26,7 +26,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
 
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
-  IVenue public venue;
+  IVenue public kitchen;
 
   function initialize(address _traits, address _properties, uint256 _maxTokens, uint256 _mintPrice) external initializer {
     __Ownable_init();
@@ -73,14 +73,14 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
       seed = random(minted);
       s = generate(minted, seed);
       if (stake) {
-        _safeMint(address(venue), minted);
+        _safeMint(address(kitchen), minted);
         tokenIds[i] = minted;
       } else {
         _safeMint(_msgSender(), minted);
       }
       s.isChef ? numChefs++ : numRats++;
     }
-    if (stake) venue.stakeMany(_msgSender(), tokenIds);
+    if (stake) kitchen.stakeMany(_msgSender(), tokenIds);
   }
 
   /**
@@ -208,11 +208,11 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
   }
 
   /**
-   * called after deployment to avoid cyclical dependencies
-   * @param _venue the address of the Venue
+   * Sets the kitchen address to optionally stake newly minted characters in
+   * @param _kitchen - The address of the Kitchen
    */
-  function setKitchen(address _venue) external onlyOwner {
-    venue = IVenue(_venue);
+  function setKitchen(address _kitchen) external onlyOwner {
+    kitchen = IVenue(_kitchen);
   }
 
   /**

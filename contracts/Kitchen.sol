@@ -4,11 +4,8 @@ pragma solidity ^0.8.0;
 
 import "./Venue.sol";
 import "./Character.sol";
-import "./FastFood.sol";
 
 contract Kitchen is Venue {
-  FastFood fastFood; // Reference to the $FFOOD contract
-
   uint256 public constant FFOOD_CLAIM_TAX_PERCENTAGE = 20; // Rats steal x% of all $FFOOD claimed
   uint256 public constant MINIMUM_TO_EXIT = 8 hours; // Cannot unstake before EOB
   uint256 public constant FFOOD_MAX_SUPPLY = 1000000000 ether; // There will only ever be x $FFOOD earned through staking
@@ -33,14 +30,6 @@ contract Kitchen is Venue {
    */
   function _getRatStakeValue() internal view override returns (uint80) {
     return uint80(fastFoodPerRat);
-  }
-
-  /**
-   * Mints the given amount of food token in the user's account
-   * @param amount - Amount of food token to mint
-   */
-  function _mintFoodToken(uint256 amount) internal override {
-    fastFood.mint(_msgSender(), amount);
   }
 
   /**
