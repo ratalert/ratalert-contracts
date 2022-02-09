@@ -1,0 +1,661 @@
+{
+  "contractName": "IProperties",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "isChef",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint8",
+          "name": "currentEfficiency",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "currentTolerance",
+          "type": "uint8"
+        },
+        {
+          "internalType": "int8",
+          "name": "efficiencyIncrement",
+          "type": "int8"
+        },
+        {
+          "internalType": "int8",
+          "name": "toleranceIncrement",
+          "type": "int8"
+        }
+      ],
+      "name": "getEventUpdates",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "efficiencyValue",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "toleranceValue",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "eventName",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"isChef\",\"type\":\"bool\"},{\"internalType\":\"uint8\",\"name\":\"currentEfficiency\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"currentTolerance\",\"type\":\"uint8\"},{\"internalType\":\"int8\",\"name\":\"efficiencyIncrement\",\"type\":\"int8\"},{\"internalType\":\"int8\",\"name\":\"toleranceIncrement\",\"type\":\"int8\"}],\"name\":\"getEventUpdates\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"efficiencyValue\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"toleranceValue\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IProperties.sol\":\"IProperties\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IProperties.sol\":{\"keccak256\":\"0xa8a69444733551236e27a02ce838c0f366fff21a64f1c0335424c24359ac6580\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://77e262dab795fc463e69007aa3cae897c6491a5c68fbbf03cadf012177b57227\",\"dweb:/ipfs/QmNtiB4cVzPnLNB1TqgJLarKte42tbTB58k3xY5gWpQjt8\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\ninterface IProperties {\n  function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement) external returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName);\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/IProperties.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IProperties.sol",
+    "exportedSymbols": {
+      "IProperties": [
+        3988
+      ]
+    },
+    "id": 3989,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3968,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:25"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IProperties",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 3988,
+        "linearizedBaseContracts": [
+          3988
+        ],
+        "name": "IProperties",
+        "nameLocation": "68:11:25",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "e90bd257",
+            "id": 3987,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getEventUpdates",
+            "nameLocation": "93:15:25",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3979,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3970,
+                  "mutability": "mutable",
+                  "name": "isChef",
+                  "nameLocation": "114:6:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "109:11:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3969,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "109:4:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3972,
+                  "mutability": "mutable",
+                  "name": "currentEfficiency",
+                  "nameLocation": "128:17:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "122:23:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3971,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3974,
+                  "mutability": "mutable",
+                  "name": "currentTolerance",
+                  "nameLocation": "153:16:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "147:22:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3973,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "147:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3976,
+                  "mutability": "mutable",
+                  "name": "efficiencyIncrement",
+                  "nameLocation": "176:19:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "171:24:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int8",
+                    "typeString": "int8"
+                  },
+                  "typeName": {
+                    "id": 3975,
+                    "name": "int8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "171:4:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int8",
+                      "typeString": "int8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3978,
+                  "mutability": "mutable",
+                  "name": "toleranceIncrement",
+                  "nameLocation": "202:18:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "197:23:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int8",
+                    "typeString": "int8"
+                  },
+                  "typeName": {
+                    "id": 3977,
+                    "name": "int8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "197:4:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int8",
+                      "typeString": "int8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "108:113:25"
+            },
+            "returnParameters": {
+              "id": 3986,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3981,
+                  "mutability": "mutable",
+                  "name": "efficiencyValue",
+                  "nameLocation": "245:15:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "239:21:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3980,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "239:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3983,
+                  "mutability": "mutable",
+                  "name": "toleranceValue",
+                  "nameLocation": "268:14:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "262:20:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3982,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "262:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3985,
+                  "mutability": "mutable",
+                  "name": "eventName",
+                  "nameLocation": "298:9:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "284:23:25",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 3984,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "284:6:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "238:70:25"
+            },
+            "scope": 3988,
+            "src": "84:225:25",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3989,
+        "src": "58:253:25",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:279:25"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/IProperties.sol",
+    "exportedSymbols": {
+      "IProperties": [
+        3988
+      ]
+    },
+    "id": 3989,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3968,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:25"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IProperties",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 3988,
+        "linearizedBaseContracts": [
+          3988
+        ],
+        "name": "IProperties",
+        "nameLocation": "68:11:25",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "e90bd257",
+            "id": 3987,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getEventUpdates",
+            "nameLocation": "93:15:25",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3979,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3970,
+                  "mutability": "mutable",
+                  "name": "isChef",
+                  "nameLocation": "114:6:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "109:11:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3969,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "109:4:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3972,
+                  "mutability": "mutable",
+                  "name": "currentEfficiency",
+                  "nameLocation": "128:17:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "122:23:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3971,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3974,
+                  "mutability": "mutable",
+                  "name": "currentTolerance",
+                  "nameLocation": "153:16:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "147:22:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3973,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "147:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3976,
+                  "mutability": "mutable",
+                  "name": "efficiencyIncrement",
+                  "nameLocation": "176:19:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "171:24:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int8",
+                    "typeString": "int8"
+                  },
+                  "typeName": {
+                    "id": 3975,
+                    "name": "int8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "171:4:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int8",
+                      "typeString": "int8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3978,
+                  "mutability": "mutable",
+                  "name": "toleranceIncrement",
+                  "nameLocation": "202:18:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "197:23:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int8",
+                    "typeString": "int8"
+                  },
+                  "typeName": {
+                    "id": 3977,
+                    "name": "int8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "197:4:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int8",
+                      "typeString": "int8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "108:113:25"
+            },
+            "returnParameters": {
+              "id": 3986,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3981,
+                  "mutability": "mutable",
+                  "name": "efficiencyValue",
+                  "nameLocation": "245:15:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "239:21:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3980,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "239:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3983,
+                  "mutability": "mutable",
+                  "name": "toleranceValue",
+                  "nameLocation": "268:14:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "262:20:25",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3982,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "262:5:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3985,
+                  "mutability": "mutable",
+                  "name": "eventName",
+                  "nameLocation": "298:9:25",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3987,
+                  "src": "284:23:25",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 3984,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "284:6:25",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "238:70:25"
+            },
+            "scope": 3988,
+            "src": "84:225:25",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3989,
+        "src": "58:253:25",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:279:25"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2022-02-09T16:20:14.070Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

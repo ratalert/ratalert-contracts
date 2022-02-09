@@ -1,0 +1,324 @@
+{
+  "contractName": "IVenue",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        }
+      ],
+      "name": "stakeMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IVenue.sol\":\"IVenue\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0x061593c34414e02078923118d30faa72408d2ae3e08a229ada7320619bb1e6d7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6584fe656e51acc0747d0263a0eb3e25fb8e5c0e2e50a604bdfce5f44ac20542\",\"dweb:/ipfs/QmV9T3hDa2qDHRAQZT5r2MAptRk6BzKyr6e3PpFDukNcTF\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\ninterface IVenue {\n  function stakeMany(address account, uint16[] calldata tokenIds) external;\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/IVenue.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IVenue.sol",
+    "exportedSymbols": {
+      "IVenue": [
+        4009
+      ]
+    },
+    "id": 4010,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4000,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:27"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IVenue",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 4009,
+        "linearizedBaseContracts": [
+          4009
+        ],
+        "name": "IVenue",
+        "nameLocation": "68:6:27",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 4008,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "88:9:27",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4006,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4002,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "106:7:27",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4008,
+                  "src": "98:15:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4001,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "98:7:27",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4005,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "133:8:27",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4008,
+                  "src": "115:26:27",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 4003,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "115:6:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 4004,
+                    "nodeType": "ArrayTypeName",
+                    "src": "115:8:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "97:45:27"
+            },
+            "returnParameters": {
+              "id": 4007,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "151:0:27"
+            },
+            "scope": 4009,
+            "src": "79:73:27",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4010,
+        "src": "58:96:27",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:122:27"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/IVenue.sol",
+    "exportedSymbols": {
+      "IVenue": [
+        4009
+      ]
+    },
+    "id": 4010,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4000,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:27"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IVenue",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 4009,
+        "linearizedBaseContracts": [
+          4009
+        ],
+        "name": "IVenue",
+        "nameLocation": "68:6:27",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 4008,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "88:9:27",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4006,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4002,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "106:7:27",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4008,
+                  "src": "98:15:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4001,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "98:7:27",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4005,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "133:8:27",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4008,
+                  "src": "115:26:27",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 4003,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "115:6:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 4004,
+                    "nodeType": "ArrayTypeName",
+                    "src": "115:8:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "97:45:27"
+            },
+            "returnParameters": {
+              "id": 4007,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "151:0:27"
+            },
+            "scope": 4009,
+            "src": "79:73:27",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4010,
+        "src": "58:96:27",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:122:27"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2022-02-09T16:20:14.071Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
