@@ -6,18 +6,18 @@ import "./Kitchen.sol";
 import "./CasualFood.sol";
 
 contract TheStakehouse is Kitchen {
-  CasualFood fastFood; // Reference to the $CFOOD contract
+  CasualFood foodToken; // Reference to the $CFOOD contract
 
-  function initialize(address _character, address _fastFood, uint256 _accrualPeriod, int8 _dailySkillRate, int8 _dailyInsanityRate, int8 _dailyIntelligenceRate, int8 _dailyFatnessRate, uint8 _chefEfficiencyMultiplier, int256 _ratEfficiencyMultiplier, int256 _ratEfficiencyOffset) external initializer {
+  function initialize(address _character, address _foodToken, uint256 _accrualPeriod, int8 _dailySkillRate, int8 _dailyInsanityRate, int8 _dailyIntelligenceRate, int8 _dailyFatnessRate, uint8 _chefEfficiencyMultiplier, int256 _ratEfficiencyMultiplier, int256 _ratEfficiencyOffset) external initializer {
     __Ownable_init();
     __Pausable_init();
 
     unaccountedRewards = 0;
-    fastFoodPerRat = 0;
+    foodTokensPerRat = 0;
     lastClaimTimestamp = 0;
 
     character = Character(_character);
-    fastFood = CasualFood(_fastFood);
+    foodToken = CasualFood(_foodToken);
     accrualPeriod = _accrualPeriod;
     dailySkillRate = _dailySkillRate;
     dailyInsanityRate = _dailyInsanityRate;
@@ -33,6 +33,6 @@ contract TheStakehouse is Kitchen {
    * @param amount - Amount of food tokens to mint
    */
   function _mintFoodToken(uint256 amount) internal override {
-    fastFood.mint(_msgSender(), amount);
+    foodToken.mint(_msgSender(), amount);
   }
 }

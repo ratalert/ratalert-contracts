@@ -10,9 +10,9 @@ abstract contract Food is ERC20, Ownable {
   constructor() {}
 
   /**
-   * Mints $FFOOD to a recipient
-   * @param to the recipient of the $FFOOD
-   * @param amount the amount of $FFOOD to mint
+   * Mints the implementation food token to the recipient
+   * @param to - The recipient of the food token
+   * @param amount - The amount of food tokens to mint
    */
   function mint(address to, uint256 amount) external {
      require(controllers[msg.sender], "Only controllers can mint");
@@ -20,9 +20,9 @@ abstract contract Food is ERC20, Ownable {
   }
 
   /**
-   * Burns $FFOOD from a holder
-   * @param from the holder of the $FFOOD
-   * @param amount the amount of $FFOOD to burn
+   * Burns food tokens from a holder
+   * @param from - The holder of the food token
+   * @param amount - The amount of food tokens to burn
    */
   function burn(address from, uint256 amount) external {
      require(controllers[msg.sender], "Only controllers can burn");

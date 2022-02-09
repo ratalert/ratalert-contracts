@@ -21,14 +21,14 @@ contract('Character (proxy)', (accounts) => {
 
     before(async () => {
         this.traitList = await loadTraits();
-        this.fastFood = await FastFood.new({ from: owner });
+        this.foodToken = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
         this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.character.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
-        await this.fastFood.addController(this.kitchen.address, { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        await this.foodToken.addController(this.kitchen.address, { from: owner });
         await this.character.addController(this.kitchen.address, { from: owner });
         await this.character.setKitchen(this.kitchen.address, { from: owner });
         await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals('0');

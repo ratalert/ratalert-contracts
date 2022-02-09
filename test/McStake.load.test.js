@@ -18,36 +18,36 @@ contract('McStake (proxy) load test', (accounts) => {
     const anon = accounts[1];
 
     before(async () => {
-        this.fastFood = await FastFood.new({ from: owner });
+        this.foodToken = await FastFood.new({ from: owner });
         this.traits = await deployProxy(Traits, { from: owner });
         this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
         this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
         await this.traits.setCharacter(this.character.address);
         await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.character.address, this.fastFood.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
-        await this.fastFood.addController(this.kitchen.address, { from: owner });
+        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 86400, 2, 4, 2, 8, 175, 90, 55], { from: owner });
+        await this.foodToken.addController(this.kitchen.address, { from: owner });
         await this.character.addController(this.kitchen.address, { from: owner });
         await this.character.setKitchen(this.kitchen.address, { from: owner });
         await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
         await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
     });
 
-    it.skip('mints $FFOOD correctly', async () => {
+    it.skip('mints food tokens correctly', async () => {
         const days = 2500; // n days
         const users = [[owner, []], [anon, []]];
         const expected = [
-            { users: [{ balance: 20000000 }, { balance: 20000000 }], totalChefsStaked: 20, totalFastFoodEarned: 50000000, unaccountedRewards: 10000000 },
-            { users: [{ balance: 60000000 }, { balance: 60000000 }], totalChefsStaked: 40, totalFastFoodEarned: 150000000, unaccountedRewards: 30000000 },
-            { users: [{ balance: 120000000 }, { balance: 120000000 }], totalChefsStaked: 60, totalFastFoodEarned: 300000000, unaccountedRewards: 60000000 },
-            { users: [{ balance: 200000000 }, { balance: 200000000 }], totalChefsStaked: 80, totalFastFoodEarned: 500000000, unaccountedRewards: 100000000 },
-            { users: [{ balance: 300000000 }, { balance: 300000000 }], totalChefsStaked: 100, totalFastFoodEarned: 750000000, unaccountedRewards: 150000000 },
-            { users: [{ balance: 420000000 }, { balance: 380000000 }], totalChefsStaked: 120, totalFastFoodEarned: 1000000000, unaccountedRewards: 200000000 }, // uncapped 1050000000
-            { users: [{ balance: 420000000 }, { balance: 380000000 }], totalChefsStaked: 140, totalFastFoodEarned: 1000000000, unaccountedRewards: 200000000 }, // uncapped 1400000000
+            { users: [{ balance: 20000000 }, { balance: 20000000 }], totalChefsStaked: 20, totalFoodTokensEarned: 50000000, unaccountedRewards: 10000000 },
+            { users: [{ balance: 60000000 }, { balance: 60000000 }], totalChefsStaked: 40, totalFoodTokensEarned: 150000000, unaccountedRewards: 30000000 },
+            { users: [{ balance: 120000000 }, { balance: 120000000 }], totalChefsStaked: 60, totalFoodTokensEarned: 300000000, unaccountedRewards: 60000000 },
+            { users: [{ balance: 200000000 }, { balance: 200000000 }], totalChefsStaked: 80, totalFoodTokensEarned: 500000000, unaccountedRewards: 100000000 },
+            { users: [{ balance: 300000000 }, { balance: 300000000 }], totalChefsStaked: 100, totalFoodTokensEarned: 750000000, unaccountedRewards: 150000000 },
+            { users: [{ balance: 420000000 }, { balance: 380000000 }], totalChefsStaked: 120, totalFoodTokensEarned: 1000000000, unaccountedRewards: 200000000 }, // uncapped 1050000000
+            { users: [{ balance: 420000000 }, { balance: 380000000 }], totalChefsStaked: 140, totalFoodTokensEarned: 1000000000, unaccountedRewards: 200000000 }, // uncapped 1400000000
         ];
         const totalEpochs = 6;
         let epoch = 0;
         for (let i = 0; i <= totalEpochs; i++) {
-            console.log(`      [Epoch ${i}/${totalEpochs}] ${expected[epoch].totalChefsStaked} chefs staked, ${expected[epoch].totalFastFoodEarned} $FFOOD earned after ${(i + 1) * days} days`);
+            console.log(`      [Epoch ${i}/${totalEpochs}] ${expected[epoch].totalChefsStaked} chefs staked, ${expected[epoch].totalFoodTokensEarned} tokens earned after ${(i + 1) * days} days`);
             await Promise.all(users.map(async ([from], j) => {
                 const { logs } = await this.character.mint(10, false, { from, value: toWei(1) });
                 const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
@@ -57,10 +57,10 @@ contract('McStake (proxy) load test', (accounts) => {
             await advanceTimeAndBlock(days * 86400); // Wait "a few" days
             await Promise.all(users.map(async ([from], j) => {
                 await this.kitchen.claimMany(users[j][1], false, { from });
-                await expect(this.fastFood.balanceOf(from)).to.eventually.be.a.bignumber.gte(toWei(expected[epoch].users[j].balance * 0.0009)).lte(toWei(expected[epoch].users[j].balance * 1.0001));
+                await expect(this.foodToken.balanceOf(from)).to.eventually.be.a.bignumber.gte(toWei(expected[epoch].users[j].balance * 0.0009)).lte(toWei(expected[epoch].users[j].balance * 1.0001));
             }));
             await expect(this.kitchen.totalChefsStaked()).to.eventually.be.a.bignumber.that.equals(expected[epoch].totalChefsStaked.toString());
-            await expect(this.kitchen.totalFastFoodEarned()).to.eventually.be.a.bignumber.gte(toWei(expected[epoch].totalFastFoodEarned)).lte(toWei(expected[epoch].totalFastFoodEarned * 1.0001));
+            await expect(this.kitchen.totalFoodTokensEarned()).to.eventually.be.a.bignumber.gte(toWei(expected[epoch].totalFoodTokensEarned)).lte(toWei(expected[epoch].totalFoodTokensEarned * 1.0001));
             await expect(this.kitchen.unaccountedRewards()).to.eventually.be.a.bignumber.gte(toWei(expected[epoch].unaccountedRewards * 0.0009)).lte(toWei(expected[epoch].unaccountedRewards * 1.0001));
             epoch += 1;
         }

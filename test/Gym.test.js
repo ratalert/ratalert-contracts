@@ -15,8 +15,6 @@ const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
 
-let totalFastFoodEarned = 0;
-
 contract('Gym (proxy)', (accounts) => {
     const owner = accounts[0];
     const anon = accounts[1];
