@@ -5,14 +5,13 @@ pragma solidity ^0.8.0;
 import "./Venue.sol";
 import "./Character.sol";
 
-contract Kitchen is Venue {
+abstract contract Kitchen is Venue {
   uint256 public constant FFOOD_CLAIM_TAX_PERCENTAGE = 20; // Rats steal x% of all food tokens claimed
   uint256 public constant MINIMUM_TO_EXIT = 8 hours; // Cannot unstake before EOB
   uint256 public constant FFOOD_MAX_SUPPLY = 1000000000 ether; // There will only ever be x tokens earned through staking
   uint256 public constant DAILY_FFOOD_RATE = 1000 ether; // Chefs earn x tokens per day
 
   uint256 public unaccountedRewards; // any rewards distributed when no Rats are staked
-  uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
   uint256 public totalFoodTokensEarned; // Amount of food tokens earned so far
   uint256 public lastClaimTimestamp; // The last time food token was claimed
   uint8 public chefEfficiencyMultiplier;

@@ -67,8 +67,19 @@ contract('McStake (proxy)', (accounts) => {
             lists.rats = [lists.rats[0], lists.rats[1]];
             lists.all = lists.chefs.concat(lists.rats);
             await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
-            await this.kitchen.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
+            const { logs } = await this.kitchen.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
             const block = await web3.eth.getBlock('latest');
+            logs.forEach((log, i) => {
+                const tokenId = Number(log.args.tokenId.toString());
+                expect(log.event).to.equal('TokenStaked');
+                expect(tokenId).to.equal(lists.all[i].id);
+                expect(log.args.owner).to.equal(owner);
+                if (lists.chefs.find(item => item.id === tokenId)) {
+                    expect(Number(log.args.value.toString())).to.equal(block.timestamp);
+                } else {
+                    expect(Number(log.args.value.toString())).to.equal(0);
+                }
+            });
             await expect(this.character.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchen.address);
             await expect(this.character.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchen.address);
             const chef0 = await this.kitchen.chefs(lists.chefs[0].id);
@@ -96,6 +107,7 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.skill).to.be.a.bignumber.eq('1');
                 expect(log.args.insanity).to.be.a.bignumber.eq('2');
                 expect(log.args.eventName).to.equal('');
+                expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((i + 1) * 100 / lists.rats.length)).lt(toWei((i + 1) * 100.01 / lists.rats.length));
             });
             totalFoodTokensEarned += 2 * 400; // 2 chefs for half a day at skill 0
             await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.kitchen.address);
@@ -234,7 +246,13 @@ contract('McStake (proxy)', (accounts) => {
         });
         it('handles level upgrades', async () => {
             const list = { chef: { id: lists.chefs[0].id }, rat: { id: lists.rats[0].id } };
-            await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
+            const { logs } = await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
+            logs.forEach((log, i) => {
+                const tokenId = Number(log.args.tokenId.toString());
+                if (tokenId === list.rat.id) {
+                    expect(log.args.value).to.be.a.bignumber.gte(toWei(403.5 / lists.rats.length )).lt(toWei(404 / lists.rats.length ));
+                }
+            });
             await Promise.all(Object.values(list).map(async item => {
                 const traits = await this.character.getTokenTraits(item.id);
                 item.efficiency = Number(traits.efficiency.toString());

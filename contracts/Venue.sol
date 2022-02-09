@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradea
 import "./IVenue.sol";
 import "./Character.sol";
 
-contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
+abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
   struct Stake { // Store for a stake's token, owner, and earning values
     uint256 tokenId;
     address owner;
@@ -18,7 +18,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
   }
 
   event TokenStaked(uint256 tokenId, address owner, uint256 value);
-  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity, string eventName);
+  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity, string eventName, uint256 foodTokensPerRat);
   event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness, string eventName);
 
   Character character; // Reference to the Character NFT contract
@@ -32,6 +32,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
   uint256 public totalChefsStaked; // Number of Chefs staked
   uint256 public totalRatsStaked; // Number of Rats staked
   uint256 public accrualPeriod; // The period over which earnings & levels are accrued
+  uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
 
   function initialize(address _character, uint256 _accrualPeriod) external initializer {
     __Ownable_init();
@@ -98,7 +99,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
       timestamp: uint80(block.timestamp)
     });
     totalRatsStaked ++;
-    emit TokenStaked(tokenId, account, block.timestamp);
+    emit TokenStaked(tokenId, account, foodTokensPerRat);
   }
 
   /**
@@ -146,7 +147,7 @@ contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable
         timestamp: uint80(block.timestamp)
       });
     }
-    emit ChefClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
+    emit ChefClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName, foodTokensPerRat);
   }
 
   /**
