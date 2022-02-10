@@ -4,5 +4,5 @@ pragma solidity ^0.8.0;
 import "./Food.sol";
 
 contract FastFood is Food {
-  constructor() ERC20("FastFood", "FFOOD") {}
+  constructor() Food("FastFood", "FFOOD", 100000000 * 10 ** 18) {}
 }

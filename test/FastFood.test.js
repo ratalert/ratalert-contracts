@@ -1,4 +1,5 @@
 const { BN } = require('@openzeppelin/test-helpers');
+const { toWei } = require('./helper');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 
@@ -14,32 +15,44 @@ contract('FastFood', (accounts) => {
     before(async () => {
         this.foodToken = await FastFood.new({ from: owner });
         await this.foodToken.addController(owner, { from: owner });
-        expect(await this.foodToken.totalSupply()).to.be.bignumber.equal(new BN(0));
+        expect(await this.foodToken.totalSupply()).to.be.a.bignumber.eq(toWei(0));
+    });
+
+    describe('mint()', () => {
+        it('returns the cap', async () => {
+            await expect(this.foodToken.cap()).to.eventually.be.a.bignumber.eq(toWei(100000000));
+        });
     });
 
     describe('mint()', () => {
         it('denies anonymous to mint', async () => {
-            await expect(this.foodToken.mint(anon, new BN(15), { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.mint(anon, toWei(100000000), { from: anon })).to.eventually.be.rejected;
         });
 
         it('allows owner to mint', async () => {
-            const res = await this.foodToken.mint(anon, new BN(15));
+            const res = await this.foodToken.mint(anon, toWei(100000000));
             await expect(res.receipt.status).to.be.true;
-            await expect(this.foodToken.totalSupply()).to.eventually.be.bignumber.equal(new BN(15));
-            await expect(this.foodToken.balanceOf(anon)).to.eventually.be.bignumber.equal(new BN(15));
+            await expect(this.foodToken.totalSupply()).to.eventually.be.a.bignumber.eq(toWei(100000000));
+            await expect(this.foodToken.balanceOf(anon)).to.eventually.be.a.bignumber.eq(toWei(100000000));
+        });
+        it('fails to mint more than the cap', async () => {
+            await expect(this.foodToken.mint(anon, 1)).to.eventually.be.rejectedWith('ERC20Capped: cap exceeded');
         });
     });
 
     describe('burn()', () => {
         it('denies anonymous to burn', async () => {
-            await expect(this.foodToken.burn(anon, new BN(10), { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.burn(anon, toWei(99999999), { from: anon })).to.eventually.be.rejected;
         });
 
         it('allows owner to burn', async () => {
-            const res = await this.foodToken.burn(anon, new BN(10));
+            const res = await this.foodToken.burn(anon, toWei(99999999));
             await expect(res.receipt.status).to.be.true;
-            await expect(this.foodToken.totalSupply()).to.eventually.be.bignumber.equal(new BN(5));
-            await expect(this.foodToken.balanceOf(anon)).to.eventually.be.bignumber.equal(new BN(5));
+            await expect(this.foodToken.totalSupply()).to.eventually.be.bignumber.eq(toWei(1));
+            await expect(this.foodToken.balanceOf(anon)).to.eventually.be.bignumber.eq(toWei(1));
+        });
+        it('fails to burn more than available', async () => {
+            await expect(this.foodToken.burn(anon, toWei(2))).to.eventually.be.rejectedWith('burn amount exceeds balance');
         });
     });
 
