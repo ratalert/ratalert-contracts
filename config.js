@@ -7,8 +7,8 @@ module.exports = (network) => ({
         mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
     }),
     kitchen: {
-        foodTokenMaxSupply: 1000000000, //50000000,
-        dailyChefEarnings: 1000, //250,
+        foodTokenMaxSupply: 50000000,
+        dailyChefEarnings: 250,
         ratTheftPercentage: 20,
         vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
         accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
