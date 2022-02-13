@@ -1,4 +1,3 @@
-const { BN } = require('@openzeppelin/test-helpers');
 const { toWei } = require('./helper');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -13,7 +12,7 @@ contract('FastFood', (accounts) => {
     const anon = accounts[1];
 
     before(async () => {
-        this.foodToken = await FastFood.new({ from: owner });
+        this.foodToken = await FastFood.deployed();
         await this.foodToken.addController(owner, { from: owner });
         expect(await this.foodToken.totalSupply()).to.be.a.bignumber.eq(toWei(0));
     });

@@ -1,16 +1,12 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { deployProxy } = require('@openzeppelin/truffle-upgrades');
 const { BN } = require('@openzeppelin/test-helpers');
-const { toWei, fromWei, advanceTimeAndBlock, uploadTraits, mintUntilWeHave } = require('./helper');
+const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
-
 const expect = chai.expect;
 const FastFood = artifacts.require('FastFood');
-const Traits = artifacts.require('Traits');
-const Properties = artifacts.require('Properties');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
@@ -41,16 +37,9 @@ contract('McStake (proxy)', (accounts) => {
     let ownerBalance;
 
     before(async () => {
-        this.foodToken = await FastFood.new({ from: owner });
-        this.traits = await deployProxy(Traits, { from: owner });
-        this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
-        this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
-        await this.traits.setCharacter(this.character.address);
-        await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 1000000000, [1000, 20, 3600, 86400], [2, 4, 2, 8], 175, 90, 55], { from: owner });
-        await this.foodToken.addController(this.kitchen.address, { from: owner });
-        await this.character.addController(this.kitchen.address, { from: owner });
-        await this.character.setKitchen(this.kitchen.address, { from: owner });
+        this.foodToken = await FastFood.deployed();
+        this.character = await Character.deployed();
+        this.kitchen = await McStake.deployed();
     });
 
     describe('stake()', () => {

@@ -1,16 +1,14 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+const { uploadTraits } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 const Traits = artifacts.require('Traits');
-const { uploadTraits } = require('./helper');
 
-contract('Traits (proxy)', (accounts) => {
-    const owner = accounts[0];
+contract('Traits (proxy)', () => {
     const data = [
         [
             { name: 'Single', png: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUik7wECIkqAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg==' },
@@ -23,7 +21,7 @@ contract('Traits (proxy)', (accounts) => {
     ];
 
     before(async () => {
-        this.traits = await deployProxy(Traits, { from: owner });
+        this.traits = await Traits.deployed();
     });
 
     describe('uploadTraits()', () => {

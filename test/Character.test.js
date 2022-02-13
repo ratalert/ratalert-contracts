@@ -1,15 +1,11 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, loadTraits, uploadTraits, mintUntilWeHave, advanceTimeAndBlock } = require('./helper');
+const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
-const FastFood = artifacts.require('FastFood');
-const Traits = artifacts.require('Traits');
-const Properties = artifacts.require('Properties');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
@@ -21,16 +17,8 @@ contract('Character (proxy)', (accounts) => {
 
     before(async () => {
         this.traitList = await loadTraits();
-        this.foodToken = await FastFood.new({ from: owner });
-        this.traits = await deployProxy(Traits, { from: owner });
-        this.properties = await deployProxy(Properties, [[86, 86, 0, 0, 0, 0], [15, 15, 10, 10, 25, 50]], { from: owner });
-        this.character = await deployProxy(Character, [this.traits.address, this.properties.address, 50000, toWei(0.1)], { from: owner });
-        await this.traits.setCharacter(this.character.address);
-        await uploadTraits(this.traits);
-        this.kitchen = await deployProxy(McStake, [this.character.address, this.foodToken.address, 1000000000, [1000, 20, 3600, 86400], [2, 4, 2, 8], 175, 90, 55], { from: owner });
-        await this.foodToken.addController(this.kitchen.address, { from: owner });
-        await this.character.addController(this.kitchen.address, { from: owner });
-        await this.character.setKitchen(this.kitchen.address, { from: owner });
+        this.character = await Character.deployed();
+        this.kitchen = await McStake.deployed();
         await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.character.numChefs()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.character.numRats()).to.eventually.be.a.bignumber.that.equals('0');
