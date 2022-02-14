@@ -3,7 +3,6 @@
 pragma solidity ^0.8.0;
 
 import "./Venue.sol";
-import "./Character.sol";
 
 abstract contract Kitchen is Venue {
   uint256 public foodTokenMaxSupply; // There will only ever be x tokens earned through staking

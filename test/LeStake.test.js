@@ -6,9 +6,9 @@ require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
-const FastFood = artifacts.require('FastFood');
+const GourmetFood = artifacts.require('GourmetFood');
 const Character = artifacts.require('Character');
-const McStake = artifacts.require('McStake');
+const LeStake = artifacts.require('LeStake');
 
 let totalFoodTokensEarned = 0;
 
@@ -16,16 +16,16 @@ function expectTotalFoodTokenEarnings() {
     return expect(this.kitchen.totalFoodTokensEarned()).to.eventually.be.a.bignumber.gte(toWei(totalFoodTokensEarned)).lt(toWei(totalFoodTokensEarned * 1.0001));
 }
 
-contract('McStake (proxy)', (accounts) => {
+contract('LeStake (proxy)', (accounts) => {
     const owner = accounts[0];
     const anon = accounts[1];
     let lists;
     let ownerBalance;
 
     before(async () => {
-        this.foodToken = await FastFood.deployed();
+        this.foodToken = await GourmetFood.deployed();
         this.character = await Character.deployed();
-        this.kitchen = await McStake.deployed();
+        this.kitchen = await LeStake.deployed();
     });
 
     describe('stake()', () => {
@@ -79,8 +79,8 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expectChefEarnings(log.args.earned, 86400 / 2, 0);
                 expect(log.args.unstaked).to.be.false;
-                expect(log.args.skill).to.be.a.bignumber.eq('1');
-                expect(log.args.insanity).to.be.a.bignumber.eq('2');
+                expect(log.args.skill).to.be.a.bignumber.eq('3');
+                expect(log.args.insanity).to.be.a.bignumber.eq('4');
                 expect(log.args.eventName).to.equal('');
                 expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((i + 1) * 25 / lists.rats.length)).lt(toWei((i + 1) * 25 * 1.0001 / lists.rats.length));
             });
@@ -95,8 +95,8 @@ contract('McStake (proxy)', (accounts) => {
 
             await Promise.all(chefs.map(async id => {
                 const traits = await this.character.getTokenTraits(id);
-                expect(traits.efficiency).to.be.a.bignumber.eq('1');
-                expect(traits.tolerance).to.be.a.bignumber.eq('2');
+                expect(traits.efficiency).to.be.a.bignumber.eq('3');
+                expect(traits.tolerance).to.be.a.bignumber.eq('4');
             }));
         });
         it('claims from rats', async () => {
@@ -108,8 +108,8 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expectRatEarnings(log.args.earned, 50, lists.rats.length, 0);
                 expect(log.args.unstaked).to.be.false;
-                expect(log.args.intelligence).to.be.a.bignumber.eq('1');
-                expect(log.args.fatness).to.be.a.bignumber.eq('4');
+                expect(log.args.intelligence).to.be.a.bignumber.eq('3');
+                expect(log.args.fatness).to.be.a.bignumber.eq('2');
                 expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(log.args.earned);
             });
@@ -124,8 +124,8 @@ contract('McStake (proxy)', (accounts) => {
 
             await Promise.all(rats.map(async id => {
                 const traits = await this.character.getTokenTraits(id);
-                expect(traits.efficiency).to.be.a.bignumber.eq('1');
-                expect(traits.tolerance).to.be.a.bignumber.eq('4');
+                expect(traits.efficiency).to.be.a.bignumber.eq('3');
+                expect(traits.tolerance).to.be.a.bignumber.eq('2');
             }));
         });
         it('distributes nothing when claimed twice', async () => {
@@ -134,8 +134,8 @@ contract('McStake (proxy)', (accounts) => {
             const { logs } = await this.kitchen.claimMany(rats, false);
             logs.forEach((log, i) => {
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
-                expect(log.args.intelligence).to.be.a.bignumber.eq('1');
-                expect(log.args.fatness).to.be.a.bignumber.eq('4');
+                expect(log.args.intelligence).to.be.a.bignumber.eq('3');
+                expect(log.args.fatness).to.be.a.bignumber.eq('2');
             });
             await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // Nothing added
             await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei(50 / lists.rats.length )).lt(toWei(50.01 / lists.rats.length ));
@@ -148,20 +148,20 @@ contract('McStake (proxy)', (accounts) => {
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
-                expectChefEarnings(log.args.earned, 86400 / 2, 1);
+                expectChefEarnings(log.args.earned, 86400 / 2, 3);
                 expect(log.args.unstaked).to.be.true;
-                expect(log.args.skill).to.be.a.bignumber.eq('2');
-                expect(log.args.insanity).to.be.a.bignumber.eq('4');
+                expect(log.args.skill).to.be.a.bignumber.eq('6');
+                expect(log.args.insanity).to.be.a.bignumber.eq('8');
                 expect(log.args.eventName).to.equal('');
-                expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((50 + (i + 1) * 25 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + (i + 1) * 25.4475) / lists.rats.length));
+                expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((50 + (i + 1) * 25 * chefBoost(3)) / lists.rats.length)).lt(toWei((50 + (i + 1) * 25.01 * chefBoost(3)) / lists.rats.length));
                 ownerBalance.iadd(log.args.earned);
             });
-            totalFoodTokensEarned += 2 * 125 * chefBoost(1) * 0.8; // 2 chefs for half a day at skill 1
+            totalFoodTokensEarned += 2 * 125 * chefBoost(3) * 0.8; // 2 chefs for half a day at skill 3
             await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
             await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(owner);
             await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFoodTokenEarnings.call(this);
-            await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length ));
+            await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(3)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(3)) * 1.0001 / lists.rats.length ));
             const ts = (await web3.eth.getBlock('latest')).timestamp;
             await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
@@ -174,8 +174,8 @@ contract('McStake (proxy)', (accounts) => {
 
             await Promise.all(chefs.map(async id => {
                 const traits = await this.character.getTokenTraits(id);
-                expect(traits.efficiency).to.be.a.bignumber.eq('2');
-                expect(traits.tolerance).to.be.a.bignumber.eq('4');
+                expect(traits.efficiency).to.be.a.bignumber.eq('6');
+                expect(traits.tolerance).to.be.a.bignumber.eq('8');
             }));
         });
         it('fails to unstake chefs twice', async () => {
@@ -189,19 +189,19 @@ contract('McStake (proxy)', (accounts) => {
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
-                expectRatEarnings(log.args.earned, 50 * chefBoost(1), lists.rats.length, 4);
+                expectRatEarnings(log.args.earned, 50 * chefBoost(3), lists.rats.length, 2);
                 expect(log.args.unstaked).to.be.true;
-                expect(log.args.intelligence).to.be.a.bignumber.eq('2');
-                expect(log.args.fatness).to.be.a.bignumber.eq('8');
+                expect(log.args.intelligence).to.be.a.bignumber.eq('6');
+                expect(log.args.fatness).to.be.a.bignumber.eq('4');
                 expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(log.args.earned);
             });
-            totalFoodTokensEarned += 2 * 25 * chefBoost(1) * ratBoost(4); // food tokens from 2 skill 1 chefs for 2 rats for half a day at fatness 4
+            totalFoodTokensEarned += 2 * 25 * chefBoost(3) * ratBoost(2); // food tokens from 2 skill 3 chefs for 2 rats for half a day at fatness 2
             await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);
             await expect(this.character.ownerOf(rats[1])).to.eventually.equal(owner);
             await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
             await expectTotalFoodTokenEarnings.call(this);
-            await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length ));
+            await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(3)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(3)) * 1.0001 / lists.rats.length ));
 
             const rat0 = await this.kitchen.rats(rats[0]);
             const rat1 = await this.kitchen.rats(rats[1]);
@@ -212,8 +212,8 @@ contract('McStake (proxy)', (accounts) => {
 
             await Promise.all(rats.map(async id => {
                 const traits = await this.character.getTokenTraits(id);
-                expect(traits.efficiency).to.be.a.bignumber.eq('2');
-                expect(traits.tolerance).to.be.a.bignumber.eq('8');
+                expect(traits.efficiency).to.be.a.bignumber.eq('6');
+                expect(traits.tolerance).to.be.a.bignumber.eq('4');
             }));
         });
         it('fails to unstake rats twice', async () => {
@@ -226,7 +226,7 @@ contract('McStake (proxy)', (accounts) => {
             logs.forEach((log, i) => {
                 const tokenId = Number(log.args.tokenId.toString());
                 if (tokenId === list.rat.id) {
-                    expect(log.args.value).to.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length ));
+                    expect(log.args.value).to.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(3)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(3)) * 1.0001 / lists.rats.length ));
                 }
             });
             await Promise.all(Object.values(list).map(async item => {
@@ -258,8 +258,8 @@ contract('McStake (proxy)', (accounts) => {
                             list.chef.efficiency = 0;
                             list.chef.tolerance = 0;
                         } else {
-                            const newEfficiency = (list.chef.efficiency + 2 > 100) ? 100 : list.chef.efficiency + 2;
-                            const newTolerance = (list.chef.tolerance + 4 > 100) ? 100 : list.chef.tolerance + 4;
+                            const newEfficiency = (list.chef.efficiency + 6 > 100) ? 100 : list.chef.efficiency + 6;
+                            const newTolerance = (list.chef.tolerance + 8 > 100) ? 100 : list.chef.tolerance + 8;
                             expect(efficiency).to.equal(newEfficiency);
                             expect(tolerance).to.equal(newTolerance);
                             list.chef.efficiency = newEfficiency;
@@ -280,8 +280,8 @@ contract('McStake (proxy)', (accounts) => {
                             list.rat.efficiency = 0;
                             list.rat.tolerance = 0;
                         } else {
-                            const newEfficiency = (list.rat.efficiency + 2 > 100) ? 100 : list.rat.efficiency + 2;
-                            const newTolerance = (list.rat.tolerance + 8 > 100) ? 100 : list.rat.tolerance + 8;
+                            const newEfficiency = (list.rat.efficiency + 6 > 100) ? 100 : list.rat.efficiency + 6;
+                            const newTolerance = (list.rat.tolerance + 4 > 100) ? 100 : list.rat.tolerance + 4;
                             expect(efficiency).to.equal(newEfficiency);
                             expect(tolerance).to.equal(newTolerance);
                             list.rat.efficiency = newEfficiency;

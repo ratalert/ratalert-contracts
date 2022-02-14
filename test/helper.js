@@ -1,4 +1,10 @@
 const { readdir, readFile } = require('fs/promises');
+const chai = require('chai');
+require('@openzeppelin/test-helpers');
+const Config = require('../config');
+
+const expect = chai.expect;
+const config = Config('development')
 
 exports.toWei = (ether) => web3.utils.toWei(ether.toString(), 'ether');
 exports.fromWei = (wei) => Number(web3.utils.fromWei(wei, 'ether'));
@@ -70,4 +76,26 @@ exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists
         return exports.mintUntilWeHave.call(this, numChefs, numRats, options, lists);
     }
     return lists;
+};
+exports.expectTotalFoodTokenEarnings = () => {
+    return expect(this.kitchen.totalFoodTokensEarned()).to.eventually.be.a.bignumber.gte(toWei(totalFoodTokensEarned)).lt(toWei(totalFoodTokensEarned * 1.0001));
+};
+exports.chefBoost = (efficiency = 0) => {
+    return (100 + (efficiency * config.kitchen.chefEfficiencyMultiplier / 100)) / 100;
+};
+exports.expectChefEarnings = (earned, period, efficiency) => {
+    const nominal = period * config.kitchen.dailyChefEarnings / config.kitchen.accrualPeriod;
+    const gross = nominal * exports.chefBoost(efficiency);
+    const net = gross * (100 - config.kitchen.ratTheftPercentage) / 100;
+    expect(earned).to.be.a.bignumber.gte(exports.toWei(net * 0.9999)).lt(exports.toWei(net * 1.0001));
+};
+
+exports.ratBoost = (tolerance = 0) => {
+    return (((tolerance <= 50 ? tolerance : 100 - tolerance) * config.kitchen.ratEfficiencyMultiplier * 1000 / 100) + (config.kitchen.ratEfficiencyOffset * 1000)) / 100000;
+};
+
+exports.expectRatEarnings = (earned, pot, numRats, tolerance) => {
+    const factor = exports.ratBoost(tolerance);
+    const net = pot * factor / numRats;
+    expect(earned).to.be.a.bignumber.gte(exports.toWei(net * 0.9999)).lt(exports.toWei(net * 1.0001));
 };
