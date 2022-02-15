@@ -62,6 +62,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
    * @param amount Number of tokens to mint
    */
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
+    require(tx.origin == _msgSender(), "EOA only");
     require(amount > 0 && amount <= 10, "Invalid mint amount");
     require(amount * mintPrice == msg.value, "Invalid payment amount");
 

@@ -40,6 +40,10 @@ module.exports = (network) => ({
         dailyInsanityRate: -12,
         dailyFatnessRate: -8,
     }),
+    kitchenShop: Object.values({
+        maxTokens: [5000, 500],
+        minSkill: [28, 72],
+    }),
     properties: Object.values({
         disaster: Object.values({
             disasterEfficiencyMinimumChef: 86,

@@ -1,0 +1,121 @@
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+const { toWei, mintUntilWeHave, trainUntilWeHave } = require('./helper');
+require('@openzeppelin/test-helpers');
+
+chai.use(chaiAsPromised);
+const expect = chai.expect;
+const FastFood = artifacts.require('FastFood');
+const CasualFood = artifacts.require('CasualFood');
+const Character = artifacts.require('Character');
+const McStake = artifacts.require('McStake');
+const KitchenShop = artifacts.require('KitchenShop');
+
+contract('KitchenShop (proxy)', (accounts) => {
+    const owner = accounts[0];
+    const anon = accounts[1];
+    let lists;
+    let fastFoodBalance;
+    let kitchenShopSandbox;
+
+    before(async () => {
+        this.fastFood = await FastFood.deployed();
+        this.casualFood = await CasualFood.deployed();
+        this.character = await Character.deployed();
+        this.kitchen = await McStake.deployed();
+        this.kitchenShop = await KitchenShop.deployed();
+        kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address, [5, 5], [28, 72]]);
+        await this.fastFood.addController(kitchenShopSandbox.address);
+        await this.fastFood.addController(owner);
+        await this.casualFood.addController(owner);
+
+        lists = await mintUntilWeHave.call(this, 2, 2, { from: owner });
+        lists.chefs = [lists.chefs[0], lists.chefs[1]];
+        lists.rats = [lists.rats[0], lists.rats[1]];
+        lists.all = lists.chefs.concat(lists.rats);
+
+        await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
+        lists.all = await trainUntilWeHave.call(this, this.kitchen, 72, 0, [lists.all[0], lists.all[2]], 10, { from: owner });
+        fastFoodBalance = await this.fastFood.balanceOf(owner);
+    });
+
+    describe('mint()', () => {
+        it('fails to mint invalid kitchens', async () => {
+            await expect(this.kitchenShop.mint(0, 1, lists.chefs[0].id)).to.eventually.be.rejectedWith('Invalid kitchen');
+            await expect(this.kitchenShop.mint(3, 1, lists.chefs[0].id)).to.eventually.be.rejectedWith('Invalid kitchen');
+        });
+
+        it('only allows to mint 1-10 kitchens', async () => {
+            await expect(this.kitchenShop.mint(1, 0, lists.chefs[0].id, { value: toWei(0) })).to.eventually.be.rejectedWith('Invalid mint amount');
+            await expect(this.kitchenShop.mint(1, 11, lists.chefs[0].id, { value: toWei(1.1) })).to.eventually.be.rejectedWith('Invalid mint amount');
+        });
+
+        it('fails if all kitchens have been minted', async () => {
+            await expect(kitchenShopSandbox.mint(1, 6, lists.chefs[0].id)).to.eventually.be.rejectedWith('All tokens minted');
+        });
+
+        it('rejects invalid payments', async () => {
+            await expect(this.kitchenShop.mint(1, 1, lists.chefs[0].id, { value: toWei(0.1) })).to.eventually.be.rejectedWith('Invalid payment type');
+            await expect(this.kitchenShop.mint(1, 2, lists.chefs[0].id, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Invalid payment type');
+        });
+
+        it('requires chef to belong to user', async () => {
+            await expect(this.kitchenShop.mint(1, 1, lists.chefs[0].id, { from: anon })).to.eventually.be.rejectedWith('Chef not yours');
+        });
+
+        it('rejects ineligible chefs', async () => {
+            await expect(this.kitchenShop.mint(1, 1, lists.chefs[1].id)).to.eventually.be.rejectedWith('Chef ineligible');
+        });
+
+        it('mints TheStakehouse with $FFOOD', async () => {
+            const { logs } = await this.kitchenShop.mint(1, 5, lists.chefs[0].id);
+            expect(logs).to.have.length(1);
+            expect(logs[0].args.to).to.equal(owner);
+            expect(logs[0].args.id).to.be.a.bignumber.eq('1');
+            expect(logs[0].args.value).to.be.a.bignumber.eq('5');
+
+            const newBalance = await this.fastFood.balanceOf(owner);
+            expect(fastFoodBalance.sub(newBalance)).to.be.a.bignumber.eq(toWei(5 * 2000));
+            expect(this.kitchenShop.balanceOf(owner, 1)).to.eventually.be.a.bignumber.eq('5');
+            expect(this.kitchenShop.minted(1)).to.eventually.be.a.bignumber.eq('5');
+        });
+
+        it('calculates mint price correctly', async () => {
+            const price = 2000 + 3000 + 4000 + 5000 + 6000; // each kitchen has a new price break
+            await this.fastFood.mint(owner, toWei(price));
+            const balance = await this.fastFood.balanceOf(owner);
+            const res = await kitchenShopSandbox.mint(1, 5, lists.chefs[0].id);
+            await expect(res.receipt.status).to.be.true;
+            const newBalance = await this.fastFood.balanceOf(owner);
+            expect(balance.sub(newBalance)).to.be.a.bignumber.eq(toWei(price));
+        });
+
+        it('fails if out of $FFOOD', async () => {
+            await expect(this.kitchenShop.mint(1, 10, lists.chefs[0].id)).to.eventually.be.rejectedWith('burn amount exceeds balance');
+            expect(this.kitchenShop.balanceOf(owner, 1)).to.eventually.be.a.bignumber.eq('5');
+        });
+
+        it('fails if no $CFOOD', async () => {
+            await expect(this.kitchenShop.mint(2, 1, lists.chefs[0].id)).to.eventually.be.rejectedWith('burn amount exceeds balance');
+            expect(this.kitchenShop.balanceOf(owner, 2)).to.eventually.be.a.bignumber.eq('0');
+        });
+
+        it('mints LeStake with $CFOOD', async () => {
+            const price = 5 * 2000;
+            await this.casualFood.mint(owner, toWei(price));
+            const balance = await this.casualFood.balanceOf(owner);
+
+            const { logs } = await this.kitchenShop.mint(2, 5, lists.chefs[0].id);
+            expect(logs).to.have.length(1);
+            expect(logs[0].args.to).to.equal(owner);
+            expect(logs[0].args.id).to.be.a.bignumber.eq('2');
+            expect(logs[0].args.value).to.be.a.bignumber.eq('5');
+
+            const newBalance = await this.casualFood.balanceOf(owner);
+            expect(balance.sub(newBalance)).to.be.a.bignumber.eq(toWei(price));
+            expect(this.kitchenShop.balanceOf(owner, 2)).to.eventually.be.a.bignumber.eq('5');
+            expect(this.kitchenShop.minted(2)).to.eventually.be.a.bignumber.eq('5');
+        });
+    });
+});
