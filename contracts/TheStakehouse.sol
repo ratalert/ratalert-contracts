@@ -2,18 +2,22 @@
 
 pragma solidity ^0.8.0;
 
-import "./Kitchen.sol";
+import "./EntrepreneurKitchen.sol";
 import "./CasualFood.sol";
+import "./KitchenShop.sol";
 
-contract TheStakehouse is Kitchen {
+contract TheStakehouse is EntrepreneurKitchen {
   CasualFood foodToken; // Reference to the $CFOOD contract
 
   function initialize(
     address _character,
     address _foodToken,
+    address _kitchenShop,
     uint256 _foodTokenMaxSupply,
     uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
     int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
+    uint8 _minEfficiency,
+    uint8 _charactersPerKitchen,
     uint8 _chefEfficiencyMultiplier,
     int256 _ratEfficiencyMultiplier,
     int256 _ratEfficiencyOffset
@@ -24,9 +28,11 @@ contract TheStakehouse is Kitchen {
     unaccountedRewards = 0;
     foodTokensPerRat = 0;
     lastClaimTimestamp = 0;
+    kitchenId = 1;
 
     character = Character(_character);
     foodToken = CasualFood(_foodToken);
+    kitchenShop = KitchenShop(_kitchenShop);
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
     ratTheftPercentage = _earningSettings[1];
@@ -36,6 +42,8 @@ contract TheStakehouse is Kitchen {
     dailyInsanityRate = _propertyIncrements[1];
     dailyIntelligenceRate = _propertyIncrements[2];
     dailyFatnessRate = _propertyIncrements[3];
+    minEfficiency = _minEfficiency;
+    charactersPerKitchen = _charactersPerKitchen;
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;

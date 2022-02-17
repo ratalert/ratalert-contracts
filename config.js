@@ -12,24 +12,33 @@ module.exports = (network) => ({
         ratTheftPercentage: 20,
         vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
         accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
-        mcStake: Object.values({
-            dailySkillRate: 2,
-            dailyInsanityRate: 4,
-            dailyIntelligenceRate: 2,
-            dailyFatnessRate: 8,
-        }),
-        theStakehouse: Object.values({
-            dailySkillRate: 4,
-            dailyInsanityRate: 6,
-            dailyIntelligenceRate: 4,
-            dailyFatnessRate: 6,
-        }),
-        leStake: Object.values({
-            dailySkillRate: 6,
-            dailyInsanityRate: 8,
-            dailyIntelligenceRate: 6,
-            dailyFatnessRate: 4,
-        }),
+        mcStake: {
+            propertyIncrements: Object.values({
+                dailySkillRate: 2,
+                dailyInsanityRate: 4,
+                dailyIntelligenceRate: 2,
+                dailyFatnessRate: 8,
+            }),
+        },
+        theStakehouse: {
+            propertyIncrements: Object.values({
+                dailySkillRate: 4,
+                dailyInsanityRate: 6,
+                dailyIntelligenceRate: 4,
+                dailyFatnessRate: 6,
+            }),
+            minEfficiency: ['live', 'development'].includes(network) ? 28 : 2,
+        },
+        leStake: {
+            propertyIncrements: Object.values({
+                dailySkillRate: 6,
+                dailyInsanityRate: 8,
+                dailyIntelligenceRate: 6,
+                dailyFatnessRate: 4,
+            }),
+            minEfficiency: ['live', 'development'].includes(network) ? 72 : 8,
+        },
+        charactersPerKitchen: 10,
         chefEfficiencyMultiplier: 175,
         ratEfficiencyMultiplier: 90,
         ratEfficiencyOffset: 55,

@@ -25,6 +25,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
 
   mapping(uint256 => Stake) public chefs; // Maps tokenId to stake
   mapping(uint256 => Stake) public rats; // Maps tokenId to stake
+  mapping(address => uint256[]) public stakers; // Maps address to array of character IDs
   int8 public dailySkillRate;
   int8 public dailyInsanityRate;
   int8 public dailyIntelligenceRate;
@@ -55,6 +56,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    */
   function stakeMany(address account, uint16[] calldata tokenIds) external {
     require(account == _msgSender() || _msgSender() == address(character), "Do not lose your tokens");
+    require(_checkSpace(tokenIds.length), "Kitchen space required");
     for (uint i = 0; i < tokenIds.length; i++) {
       if (_msgSender() != address(character)) { // Not necessary if it's a mint & stake
         require(character.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
@@ -63,11 +65,14 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
         continue; // There may be gaps in the array for stolen tokens
       }
 
+      require(_checkEligibility(tokenIds[i]), "Not eligible");
       if (isChef(tokenIds[i])) {
         _stakeChef(account, tokenIds[i]);
       } else {
         _stakeRat(account, tokenIds[i]);
       }
+
+      stakers[account].push(tokenIds[i]);
     }
   }
 
@@ -109,12 +114,20 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    * @param unstake - Whether or not to unstake the given tokens
    */
   function claimMany(uint16[] calldata tokenIds, bool unstake) external virtual whenNotPaused {
+    address account = _msgSender();
     uint256 owed = 0;
     for (uint i = 0; i < tokenIds.length; i++) {
+      bool space = _checkSpace(0);
       if (isChef(tokenIds[i]))
-        owed += _claimChef(tokenIds[i], unstake);
+        owed += _claimChef(tokenIds[i], !space || unstake, !space);
       else
-        owed += _claimRat(tokenIds[i], unstake);
+        owed += _claimRat(tokenIds[i], !space || unstake, !space);
+      for (uint j = 0; j < stakers[account].length; j++) {
+        if (stakers[account][j] == tokenIds[i]) {
+          stakers[account][j] = stakers[account][stakers[account].length - 1];
+          stakers[account].pop();
+        }
+      }
     }
     if (owed > 0) {
       _mintFoodToken(owed);
@@ -125,16 +138,21 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    * Claim food tokens & level-ups for a single Chef and optionally unstake him
    * @param tokenId - The ID of the Chef to level up
    * @param unstake - Whether or not to unstake the Chef
+   * @param noEarnings - Whether or not to cancel earnings
    * @return owed - Food tokens produced during staking
    */
-  function _claimChef(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
+  function _claimChef(uint256 tokenId, bool unstake, bool noEarnings) internal returns (uint256 owed) {
     Stake memory stake = chefs[tokenId];
     require(stake.owner == _msgSender(), "Not your token");
     require(!(unstake && block.timestamp - stake.timestamp < vestingPeriod), "Cannot leave before EOB");
 
-    owed = _getOwedByChef(stake);
+    owed = noEarnings ? 0 : _getOwedByChef(stake);
 
     (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId);
+
+    if (!_checkEligibility(tokenId)) {
+      unstake = true;
+    }
 
     if (unstake) {
       character.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
@@ -155,16 +173,21 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    * Claim food tokens & level-ups for a single Rat and optionally unstake it
    * @param tokenId - The ID of the Rat to level up
    * @param unstake - Whether or not to unstake the Rat
+   * @param noEarnings - Whether or not to cancel earnings
    * @return owed - Food tokens stolen during staking
    */
-  function _claimRat(uint256 tokenId, bool unstake) internal returns (uint256 owed) {
+  function _claimRat(uint256 tokenId, bool unstake, bool noEarnings) internal returns (uint256 owed) {
     Stake memory stake = rats[tokenId];
     require(stake.owner == _msgSender(), "Not your token");
     require(!(unstake && block.timestamp - stake.timestamp < vestingPeriod), "Cannot leave before EOB");
 
-    owed = _getOwedByRat(stake);
+    owed = noEarnings ? 0 : _getOwedByRat(stake);
 
     (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId);
+
+    if (!_checkEligibility(tokenId)) {
+      unstake = true;
+    }
 
     if (unstake) {
       character.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
@@ -179,6 +202,22 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
       });
     }
     emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
+  }
+
+  /**
+   * Unused here, gets overridden in EntrepreneurKitchen
+   * @return true
+   */
+  function _checkSpace(uint256) internal virtual view returns (bool) {
+    return true;
+  }
+
+  /**
+   * Unused here, gets overridden in EntrepreneurKitchen
+   * @return true
+   */
+  function _checkEligibility(uint256) internal virtual view returns (bool) {
+    return true;
   }
 
   /**

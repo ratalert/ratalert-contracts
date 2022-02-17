@@ -78,8 +78,8 @@ exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists
     }
     return lists;
 };
-exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, days, options = {}) {
-    console.log(`        training at ${kitchen.constructor._json.contractName} until efficiency=${efficiency} & tolerance=${tolerance}...`);
+exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, days, unstake, options = {}) {
+    console.log(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}...`);
     const ids = list.map(item => item.id);
     await kitchen.stakeMany(options.from, ids, { ...options });
     let done;
@@ -87,18 +87,22 @@ exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, 
         await exports.advanceTimeAndBlock(86400 * days); // Wait a few days
         const { logs } = await kitchen.claimMany(ids, false);
         const efficiencyValues = logs.map(log => Number((log.args.skill ? log.args.skill : log.args.intelligence).toString()));
+        const efficiencyReached = (efficiency < 0) ? efficiencyValues.filter(val => val > -efficiency).length === 0 : efficiencyValues.filter(val => val < efficiency).length === 0;
         const toleranceValues = logs.map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
-        done = efficiencyValues.filter(val => val < efficiency).length === 0 && toleranceValues.filter(val => val < tolerance).length === 0;
+        const toleranceReached = (tolerance < 0) ? toleranceValues.filter(val => val > -tolerance).length === 0 : toleranceValues.filter(val => val < tolerance).length === 0;
+        done = efficiencyReached && toleranceReached;
     }
-    await exports.advanceTimeAndBlock(3600); // Wait another hour so we can unstake
-    await kitchen.claimMany(ids, true);
-    await Promise.all(list.map(async (item) => {
-        const traits = await this.character.tokenTraits(item.id);
-        item.efficiency = Number(traits.efficiency.toString());
-        item.tolerance = Number(traits.tolerance.toString());
-    }));
-    if (list.find(item => item.efficiency < efficiency) || list.find(item => item.tolerance < tolerance)) {
-        return exports.trainUntilWeHave.call(this, kitchen, efficiency, tolerance, list, days, options);
+    if (unstake) {
+        await exports.advanceTimeAndBlock(3600); // Wait another hour so we can unstake
+        await kitchen.claimMany(ids, true);
+        await Promise.all(list.map(async (item) => {
+            const traits = await this.character.tokenTraits(item.id);
+            item.efficiency = Number(traits.efficiency.toString());
+            item.tolerance = Number(traits.tolerance.toString());
+        }));
+        if (list.find(item => item.efficiency < efficiency) || list.find(item => item.tolerance < tolerance)) {
+            return exports.trainUntilWeHave.call(this, kitchen, efficiency, tolerance, list, days, unstake, options);
+        }
     }
     return list;
 };
