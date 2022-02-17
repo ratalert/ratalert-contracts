@@ -42,34 +42,26 @@ contract('KitchenShop (proxy)', (accounts) => {
 
     describe('mint()', () => {
         it('fails to mint invalid kitchens', async () => {
-            await expect(this.kitchenShop.mint(0, 1, lists.chefs[0].id)).to.eventually.be.rejectedWith('Invalid kitchen');
-            await expect(this.kitchenShop.mint(3, 1, lists.chefs[0].id)).to.eventually.be.rejectedWith('Invalid kitchen');
+            await expect(this.kitchenShop.mint(0, 1)).to.eventually.be.rejectedWith('Invalid kitchen');
+            await expect(this.kitchenShop.mint(3, 1)).to.eventually.be.rejectedWith('Invalid kitchen');
         });
 
         it('only allows to mint 1-10 kitchens', async () => {
-            await expect(this.kitchenShop.mint(1, 0, lists.chefs[0].id, { value: toWei(0) })).to.eventually.be.rejectedWith('Invalid mint amount');
-            await expect(this.kitchenShop.mint(1, 11, lists.chefs[0].id, { value: toWei(1.1) })).to.eventually.be.rejectedWith('Invalid mint amount');
+            await expect(this.kitchenShop.mint(1, 0, { value: toWei(0) })).to.eventually.be.rejectedWith('Invalid mint amount');
+            await expect(this.kitchenShop.mint(1, 11, { value: toWei(1.1) })).to.eventually.be.rejectedWith('Invalid mint amount');
         });
 
         it('fails if all kitchens have been minted', async () => {
-            await expect(kitchenShopSandbox.mint(1, 6, lists.chefs[0].id)).to.eventually.be.rejectedWith('All tokens minted');
+            await expect(kitchenShopSandbox.mint(1, 6)).to.eventually.be.rejectedWith('All tokens minted');
         });
 
         it('rejects invalid payments', async () => {
-            await expect(this.kitchenShop.mint(1, 1, lists.chefs[0].id, { value: toWei(0.1) })).to.eventually.be.rejectedWith('Invalid payment type');
-            await expect(this.kitchenShop.mint(1, 2, lists.chefs[0].id, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Invalid payment type');
-        });
-
-        it('requires chef to belong to user', async () => {
-            await expect(this.kitchenShop.mint(1, 1, lists.chefs[0].id, { from: anon })).to.eventually.be.rejectedWith('Chef not yours');
-        });
-
-        it('rejects ineligible chefs', async () => {
-            await expect(this.kitchenShop.mint(1, 1, lists.chefs[1].id)).to.eventually.be.rejectedWith('Chef ineligible');
+            await expect(this.kitchenShop.mint(1, 1, { value: toWei(0.1) })).to.eventually.be.rejectedWith('Invalid payment type');
+            await expect(this.kitchenShop.mint(1, 2, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Invalid payment type');
         });
 
         it('mints TheStakehouse with $FFOOD', async () => {
-            const { logs } = await this.kitchenShop.mint(1, 5, lists.chefs[0].id);
+            const { logs } = await this.kitchenShop.mint(1, 5);
             expect(logs).to.have.length(1);
             expect(logs[0].args.to).to.equal(owner);
             expect(logs[0].args.id).to.be.a.bignumber.eq('1');
@@ -85,19 +77,19 @@ contract('KitchenShop (proxy)', (accounts) => {
             const price = 2000 + 3000 + 4000 + 5000 + 6000; // each kitchen has a new price break
             await this.fastFood.mint(owner, toWei(price));
             const balance = await this.fastFood.balanceOf(owner);
-            const res = await kitchenShopSandbox.mint(1, 5, lists.chefs[0].id);
+            const res = await kitchenShopSandbox.mint(1, 5);
             await expect(res.receipt.status).to.be.true;
             const newBalance = await this.fastFood.balanceOf(owner);
             expect(balance.sub(newBalance)).to.be.a.bignumber.eq(toWei(price));
         });
 
         it('fails if out of $FFOOD', async () => {
-            await expect(this.kitchenShop.mint(1, 10, lists.chefs[0].id)).to.eventually.be.rejectedWith('burn amount exceeds balance');
+            await expect(this.kitchenShop.mint(1, 10)).to.eventually.be.rejectedWith('burn amount exceeds balance');
             expect(this.kitchenShop.balanceOf(owner, 1)).to.eventually.be.a.bignumber.eq('5');
         });
 
         it('fails if no $CFOOD', async () => {
-            await expect(this.kitchenShop.mint(2, 1, lists.chefs[0].id)).to.eventually.be.rejectedWith('burn amount exceeds balance');
+            await expect(this.kitchenShop.mint(2, 1)).to.eventually.be.rejectedWith('burn amount exceeds balance');
             expect(this.kitchenShop.balanceOf(owner, 2)).to.eventually.be.a.bignumber.eq('0');
         });
 
@@ -106,7 +98,7 @@ contract('KitchenShop (proxy)', (accounts) => {
             await this.casualFood.mint(owner, toWei(price));
             const balance = await this.casualFood.balanceOf(owner);
 
-            const { logs } = await this.kitchenShop.mint(2, 5, lists.chefs[0].id);
+            const { logs } = await this.kitchenShop.mint(2, 5);
             expect(logs).to.have.length(1);
             expect(logs[0].args.to).to.equal(owner);
             expect(logs[0].args.id).to.be.a.bignumber.eq('2');

@@ -39,18 +39,12 @@ contract KitchenShop is Initializable, OwnableUpgradeable, PausableUpgradeable, 
    * Mints new ERC1155 token(s) of a kitchen
    * @param amount Number of tokens to mint
    */
-  function mint(uint8 kitchen, uint8 amount, uint256 chefId) external payable whenNotPaused {
+  function mint(uint8 kitchen, uint8 amount) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
     require(kitchen > 0 && kitchen <= 2, "Invalid kitchen");
     require(amount > 0 && amount <= 10, "Invalid mint amount");
     require(minted[kitchen] + amount <= maxTokens[kitchen], "All tokens minted");
     require(msg.value == 0, "Invalid payment type");
-
-    address owner = character.ownerOf(chefId);
-    require(owner == _msgSender(), "Chef not yours");
-
-    (bool chef, , , , , , , , uint8 efficiency,) = character.tokenTraits(chefId);
-    require(efficiency >= minSkill[kitchen] && chef, "Chef ineligible");
 
     uint256 totalCost = 0;
     for (uint i = 0; i < amount; i++) {
