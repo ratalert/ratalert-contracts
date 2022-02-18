@@ -57,7 +57,8 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     string memory metadata = string(abi.encodePacked(
       '{',
       '"name":"', s.isChef ? 'Chef #' : 'Rat #', tokenId.toString(), '",',
-      '"description":"TODO",', // TODO Add description
+      '"description":"RatAlert, the NFT game that lets you Train2Earn your characters on-chain for higher rewards! https://ratalert.com/",',
+      '"external_url":"https://ratalert.com/characters/', tokenId.toString(), '",',
       '"image":"data:image/svg+xml;base64,', base64(bytes(drawSVG(tokenId))), '",',
       '"attributes":', getAttributes(tokenId),
       '}'

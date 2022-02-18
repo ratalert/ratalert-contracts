@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { uploadTraits } = require('./helper');
+const { uploadCharacters } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -26,7 +26,7 @@ contract('Traits (proxy)', () => {
 
     describe('uploadTraits()', () => {
         it('uploads data', async () => {
-            const res = await uploadTraits(this.traits);
+            const res = await uploadCharacters(this.traits);
             expect (res.length).to.equal(14); // 7 chef traits + 7 rat traits
             res.forEach(item => expect (item.receipt.status).to.be.true);
         });

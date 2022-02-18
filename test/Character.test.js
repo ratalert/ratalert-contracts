@@ -85,6 +85,9 @@ contract('Character (proxy)', (accounts) => {
                 const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
                 const type = json.attributes.find(attr => attr.trait_type === 'Type').value.toLowerCase();
                 const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
+                expect(json.name).to.equal(`${traits.isChef ? 'Chef' : 'Rat'} #${id}`);
+                expect(json.description).to.include('https://ratalert.com');
+                expect(json.external_url).to.equal(`https://ratalert.com/characters/${id}`);
                 expect(json.image.length).to.be.above(2500); // Contains images
                 expect(svg.length).to.be.above(2500); // Contains images
                 traits.isChef ? stats.numChefs += 1 : stats.numRats += 1;

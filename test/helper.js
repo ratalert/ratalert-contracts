@@ -41,7 +41,7 @@ exports.advanceTimeAndBlock = async (time) => {
 };
 exports.loadTraits = async () => {
     const data = { chef: {}, rat: {} };
-    const path = `${__dirname}/../images/final`;
+    const path = `${__dirname}/../images/characters`;
     const files = (await readdir(path)).sort();
     await files.reduce(async (previousPromise, file) => {
         await previousPromise;
@@ -57,11 +57,30 @@ exports.loadTraits = async () => {
     }, Promise.resolve());
     return data;
 };
-exports.uploadTraits = async (traits) => {
+exports.uploadCharacters = async (traits) => {
     const data = await module.exports.loadTraits();
     const res1 = await Promise.all(Object.values(data.chef).map((trait, i) => traits.uploadTraits(i, trait)));
     const res2 = await Promise.all(Object.values(data.rat).map((trait, i) => traits.uploadTraits(i + 10, trait)));
     return res1.concat(res2);
+};
+exports.loadKitchens = async () => {
+    const data = [];
+    const path = `${__dirname}/../images/kitchens`;
+    const files = (await readdir(path)).sort();
+    await files.reduce(async (previousPromise, file) => {
+        await previousPromise;
+        if (!file.includes('.png')) {
+            return;
+        }
+        const [, name] = file.substr(0, file.indexOf('.')).split('_')
+        const png = (await readFile(`${path}/${file}`)).toString('base64');
+        data.push({ name, png });
+    }, Promise.resolve());
+    return data;
+};
+exports.uploadKitchens = async (kitchenShop) => {
+    const data = await module.exports.loadKitchens();
+    return Promise.all(data.map((kitchen, i) => kitchenShop.uploadImage(i, kitchen)));
 };
 exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists = { all: [], chefs: [], rats: [] }) {
     const { logs } = await this.character.mint(10, false, { ...options, value: exports.toWei(1) });

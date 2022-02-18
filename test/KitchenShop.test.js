@@ -40,6 +40,20 @@ contract('KitchenShop (proxy)', (accounts) => {
         fastFoodBalance = await this.fastFood.balanceOf(owner);
     });
 
+    describe('uri()', () => {
+        it('returns something', async () => {
+            const checks = ['TheStakeHouse (CasualFood Kitchen)', 'LeStake (GourmetFood Kitchen)'];
+            await Promise.all(checks.map(async (check, i) => {
+                let res = await this.kitchenShop.uri(i + 1);
+                let json = JSON.parse(Buffer.from(res.split(',')[1], 'base64').toString());
+                expect(json.name).to.equal(check);
+                expect(json.description).to.include('https://ratalert.com');
+                expect(json.external_url).to.equal(`https://ratalert.com/kitchens/${i + 1}`);
+                expect(json.image.length).to.be.above(2000); // Contains image
+            }));
+        });
+    });
+
     describe('mint()', () => {
         it('fails to mint invalid kitchens', async () => {
             await expect(this.kitchenShop.mint(0, 1)).to.eventually.be.rejectedWith('Invalid kitchen');
