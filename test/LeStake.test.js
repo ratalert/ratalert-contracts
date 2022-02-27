@@ -1,10 +1,12 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave } = require('./helper');
+const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, setupVRF } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const Mint = artifacts.require('Mint');
 const CasualFood = artifacts.require('CasualFood');
 const GourmetFood = artifacts.require('GourmetFood');
 const Character = artifacts.require('Character');
@@ -18,6 +20,9 @@ contract('LeStake (proxy)', (accounts) => {
     let lists;
 
     before(async () => {
+        this.vrfCoordinator = await VRFCoordinator.deployed();
+        await setupVRF(this.vrfCoordinator);
+        this.mint = await Mint.deployed();
         this.foodToken = await GourmetFood.deployed();
         this.character = await Character.deployed();
         this.kitchen = await LeStake.deployed();
@@ -26,7 +31,7 @@ contract('LeStake (proxy)', (accounts) => {
         this.casualFood = await CasualFood.deployed();
         await this.casualFood.addController(owner);
 
-        lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
+        lists = await mintUntilWeHave.call(this, 8, 3);
         lists.many = lists.all;
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
@@ -61,7 +66,7 @@ contract('LeStake (proxy)', (accounts) => {
             await this.kitchen.claimMany(lists.ineligible.map(item => item.id), true);
             lists.ineligible = await trainUntilWeHave.call(this, this.kitchen, -71, -71, lists.ineligible, 10, false, { from: owner });
 
-            await Promise.all(lists.ineligible.map(async (item, i) => {
+            await Promise.all(lists.ineligible.map(async (item) => {
                 await expect(this.character.ownerOf(item.id)).to.eventually.equal(owner);
                 await expect(this.kitchen.stakers(owner, item.stakerIndex)).to.eventually.be.rejected;
                 const token = await this.kitchen[item.isChef ? 'chefs' : 'rats'](item.id);

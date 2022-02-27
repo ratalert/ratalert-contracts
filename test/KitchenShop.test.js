@@ -1,11 +1,13 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, mintUntilWeHave, trainUntilWeHave } = require('./helper');
+const { toWei, mintUntilWeHave, trainUntilWeHave, setupVRF } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const Mint = artifacts.require('Mint');
 const FastFood = artifacts.require('FastFood');
 const CasualFood = artifacts.require('CasualFood');
 const Character = artifacts.require('Character');
@@ -14,12 +16,14 @@ const KitchenShop = artifacts.require('KitchenShop');
 
 contract('KitchenShop (proxy)', (accounts) => {
     const owner = accounts[0];
-    const anon = accounts[1];
     let lists;
     let fastFoodBalance;
     let kitchenShopSandbox;
 
     before(async () => {
+        this.vrfCoordinator = await VRFCoordinator.deployed();
+        await setupVRF(this.vrfCoordinator);
+        this.mint = await Mint.deployed();
         this.fastFood = await FastFood.deployed();
         this.casualFood = await CasualFood.deployed();
         this.character = await Character.deployed();
@@ -30,7 +34,7 @@ contract('KitchenShop (proxy)', (accounts) => {
         await this.fastFood.addController(owner);
         await this.casualFood.addController(owner);
 
-        lists = await mintUntilWeHave.call(this, 2, 2, { from: owner });
+        lists = await mintUntilWeHave.call(this, 2, 2);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);

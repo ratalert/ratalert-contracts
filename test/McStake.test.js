@@ -1,11 +1,13 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { BN } = require('@openzeppelin/test-helpers');
-const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings } = require('./helper');
+const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings, mintAndFulfill, setupVRF } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const Mint = artifacts.require('Mint');
 const FastFood = artifacts.require('FastFood');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
@@ -23,11 +25,14 @@ contract('McStake (proxy)', (accounts) => {
     let ownerBalance;
 
     before(async () => {
+        this.vrfCoordinator = await VRFCoordinator.deployed();
+        await setupVRF(this.vrfCoordinator);
+        this.mint = await Mint.deployed();
         this.foodToken = await FastFood.deployed();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
 
-        lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
+        lists = await mintUntilWeHave.call(this, 8, 3);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);
@@ -36,10 +41,10 @@ contract('McStake (proxy)', (accounts) => {
 
     describe('stake()', () => {
         it('fails to stake non-existent tokens', async () => {
-            await expect(this.kitchen.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
+            await expect(this.kitchen.stakeMany(owner, [9999], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
-            const { logs } = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
+            const { logs } = await mintAndFulfill.call(this, 1, false, { args: { from: anon } });
             const tokenId = Number(logs[0].args.tokenId.toString());
             await expect(this.kitchen.stakeMany(owner, [tokenId], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
@@ -140,7 +145,7 @@ contract('McStake (proxy)', (accounts) => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
             ownerBalance = BN(await this.foodToken.balanceOf(owner));
             const { logs } = await this.kitchen.claimMany(rats, false);
-            logs.forEach((log, i) => {
+            logs.forEach((log) => {
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.intelligence).to.be.a.bignumber.eq('1');
                 expect(log.args.fatness).to.be.a.bignumber.eq('4');
@@ -235,7 +240,7 @@ contract('McStake (proxy)', (accounts) => {
         it('handles level upgrades', async () => {
             const list = { chef: { id: lists.chefs[0].id }, rat: { id: lists.rats[0].id } };
             const { logs } = await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
-            logs.forEach((log, i) => {
+            logs.forEach((log) => {
                 const tokenId = Number(log.args.tokenId.toString());
                 if (tokenId === list.rat.id) {
                     expect(log.args.value).to.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length )).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length ));

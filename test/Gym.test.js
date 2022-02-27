@@ -1,10 +1,12 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave } = require('./helper');
+const { advanceTimeAndBlock, mintUntilWeHave, setupVRF, mintAndFulfill} = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const Mint = artifacts.require('Mint');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
@@ -15,11 +17,14 @@ contract('Gym (proxy)', (accounts) => {
     let lists;
 
     before(async () => {
+        this.vrfCoordinator = await VRFCoordinator.deployed();
+        await setupVRF(this.vrfCoordinator);
+        this.mint = await Mint.deployed();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
         this.gym = await Gym.deployed();
 
-        lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
+        lists = await mintUntilWeHave.call(this, 8, 3);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);
@@ -45,10 +50,10 @@ contract('Gym (proxy)', (accounts) => {
 
     describe('stake()', () => {
         it('fails to stake non-existent tokens', async () => {
-            await expect(this.gym.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
+            await expect(this.gym.stakeMany(owner, [9999], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
-            const { logs } = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
+            const { logs } = await mintAndFulfill.call(this, 1, false, { args: { from: anon } });
             const tokenId = Number(logs[0].args.tokenId.toString());
             await expect(this.gym.stakeMany(owner, [tokenId], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });

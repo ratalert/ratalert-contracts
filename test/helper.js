@@ -82,8 +82,32 @@ exports.uploadKitchens = async (kitchenShop) => {
     const data = await module.exports.loadKitchens();
     return Promise.all(data.map((kitchen, i) => kitchenShop.uploadImage(i, kitchen)));
 };
-exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists = { all: [], chefs: [], rats: [] }) {
-    const { logs } = await this.character.mint(10, false, { ...options, value: exports.toWei(1) });
+exports.fulfill = async function (res) {
+    const randomWordsRequestedAbi = this.vrfCoordinator.abi.find(item => item.name === 'RandomWordsRequested');
+    const transferAbi = this.mint.abi.find(item => item.name === 'Transfer');
+    const randomWordsRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomWordsRequestedAbi.signature);
+    const requestId = web3.eth.abi.decodeLog(randomWordsRequestedAbi.inputs, randomWordsRequestedEvent.data, randomWordsRequestedEvent.topics).requestId;
+    const res2 = await this.vrfCoordinator.fulfillRandomWords(requestId, this.mint.address);
+    const transferEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === transferAbi.signature);
+    res2.logs = transferEvents.map(item => {
+        item.args = web3.eth.abi.decodeLog(transferAbi.inputs, item.data, item.topics.slice(1));
+        delete item.data;
+        delete item.topics;
+        return item;
+    });
+    return res2;
+};
+exports.mintAndFulfill = async function (amount, stake, options = {}) {
+    const character = options.character || this.character;
+    const args = options.args || {};
+    args.value === 0 ? delete args.value : args.value = exports.toWei(amount * 0.1);
+    const res1 = await character.mint(amount, stake, args);
+    const res2 = await exports.fulfill.call(this, res1);
+    res1.logs = res2.logs;
+    return res1;
+};
+exports.mintUntilWeHave = async function (numChefs, numRats, options, lists = { all: [], chefs: [], rats: [] }) {
+    const { logs } = await exports.mintAndFulfill.call(this, 10, false, options);
     const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
     await Promise.all(ids.map(async id => {
         const traits = await this.character.getTokenTraits(id);
@@ -144,4 +168,9 @@ exports.expectRatEarnings = (earned, pot, numRats, tolerance) => {
     const factor = exports.ratBoost(tolerance);
     const net = pot * factor / numRats;
     expect(earned).to.be.a.bignumber.gte(exports.toWei(net * 0.9999)).lt(exports.toWei(net * 1.0001));
+};
+exports.setupVRF = async (vrfCoordinator) => {
+    const { logs } = await vrfCoordinator.createSubscription();
+    const subId = logs[0].args.subId.toString();
+    await vrfCoordinator.fundSubscription(subId, '99999999999');
 };

@@ -154,7 +154,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       '[',
         '{"trait_type":"Type","value":', s.isChef ? '"Chef"' : '"Rat"', '},',
         traits,
-        '{"trait_type":"Generation","value":', tokenId <= character.getPaidTokens() ? '"Gen 0"' : '"Gen 1"', '}',
+        '{"trait_type":"Generation","value":', tokenId <= character.getGen0Tokens() ? '"Gen 0"' : '"Gen 1"', '}',
       ']'
     ));
   }

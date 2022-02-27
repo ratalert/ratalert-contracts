@@ -9,7 +9,16 @@ RatAlert Game
 ## Testing
 
     $ truffle develop
-    > 
+
+## Rinkeby Deployment
+
+1. Deploy the contracts
+
+        truffle migrate --network rinkeby --skip-dry-run
+
+2. Create a [Chainlink VRF subscription](https://vrf.chain.link/)
+3. Fund it with LINK
+4. Add the Mint address as consumer (from `truffle network`) 
 
 
 ## TODO
