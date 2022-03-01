@@ -1,0 +1,1552 @@
+{
+  "contractName": "VRFConsumer",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "have",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "want",
+          "type": "address"
+        }
+      ],
+      "name": "OnlyCoordinatorCanFulfill",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "vrfCoordinator",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_vrfCoordinator",
+          "type": "address"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "randomWords",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "rawFulfillRandomWords",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"have\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"want\",\"type\":\"address\"}],\"name\":\"OnlyCoordinatorCanFulfill\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_vrfCoordinator\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"requestId\",\"type\":\"uint256\"},{\"internalType\":\"uint256[]\",\"name\":\"randomWords\",\"type\":\"uint256[]\"}],\"name\":\"rawFulfillRandomWords\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vrfCoordinator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"initialize(address)\":{\"params\":{\"_vrfCoordinator\":\"- Address of VRFCoordinator contract\"}},\"rawFulfillRandomWords(uint256,uint256[])\":{\"params\":{\"randomWords\":\"the VRF output expanded to the requested number of words\",\"requestId\":\"The Id initially returned by requestRandomness\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/VRFConsumer.sol\":\"VRFConsumer\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x68861bcc80cacbd498efde75aab6c74a486cc48262660d326c8d7530d9752097\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5beb2713aca05976562500789329e8c41320d00bd68ea9247856ec73894c3e3f\",\"dweb:/ipfs/QmQKwkpofsZYAzMZs7uNL7Qq58zVBuhoZCGpD6bJdUwyqy\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x3f0f878c796dfc7feba6d3c4e3e526c14c7deae8b7bfc71088e3f38fab0d77b3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://69bf7d357ce97852f4fb71045919b1bb2c0ad0c820e3f06b9dd4451b2dc5a343\",\"dweb:/ipfs/QmWt96ZviufDu2qqS7Ln6UCJjfLyoFKbo6YKn54ao3o94z\"]},\"project:/contracts/VRFConsumer.sol\":{\"keccak256\":\"0xdc376ea5e2fa650fa19cd09fff4a6857688a33946c1b7005848c1f6b86a136e5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bfe4c884596b630f95a4460fda758beeff9f7746fc4eb3702ea25177d5e19e89\",\"dweb:/ipfs/QmYDqEM3jupPq2UNVPuY7iXBFk6EaHNVmxuC7adWdj2aWL\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport \"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\";\n\nabstract contract VRFConsumer is Initializable {\n  error OnlyCoordinatorCanFulfill(address have, address want);\n  address public vrfCoordinator;\n\n  /**\n   * @param _vrfCoordinator - Address of VRFCoordinator contract\n   */\n  function initialize(address _vrfCoordinator) external initializer virtual {\n    vrfCoordinator = _vrfCoordinator;\n  }\n\n  /**\n   * @param requestId The Id initially returned by requestRandomness\n   * @param randomWords the VRF output expanded to the requested number of words\n   */\n  function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal virtual;\n\n  /**\n   * @param requestId The Id initially returned by requestRandomness\n   * @param randomWords the VRF output expanded to the requested number of words\n   */\n  function rawFulfillRandomWords(uint256 requestId, uint256[] memory randomWords) external {\n    if (msg.sender != vrfCoordinator) {\n      revert OnlyCoordinatorCanFulfill(msg.sender, vrfCoordinator);\n    }\n    fulfillRandomWords(requestId, randomWords);\n  }\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/VRFConsumer.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/VRFConsumer.sol",
+    "exportedSymbols": {
+      "AddressUpgradeable": [
+        3701
+      ],
+      "Initializable": [
+        1020
+      ],
+      "VRFConsumer": [
+        9544
+      ]
+    },
+    "id": 9545,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 9483,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:23:48"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "file": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "id": 9484,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 9545,
+        "sourceUnit": 1021,
+        "src": "57:75:48",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 9485,
+              "name": "Initializable",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 1020,
+              "src": "167:13:48"
+            },
+            "id": 9486,
+            "nodeType": "InheritanceSpecifier",
+            "src": "167:13:48"
+          }
+        ],
+        "canonicalName": "VRFConsumer",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "id": 9544,
+        "linearizedBaseContracts": [
+          9544,
+          1020
+        ],
+        "name": "VRFConsumer",
+        "nameLocation": "152:11:48",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 9492,
+            "name": "OnlyCoordinatorCanFulfill",
+            "nameLocation": "191:25:48",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 9491,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9488,
+                  "mutability": "mutable",
+                  "name": "have",
+                  "nameLocation": "225:4:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9492,
+                  "src": "217:12:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 9487,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "217:7:48",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 9490,
+                  "mutability": "mutable",
+                  "name": "want",
+                  "nameLocation": "239:4:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9492,
+                  "src": "231:12:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 9489,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "231:7:48",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "216:28:48"
+            },
+            "src": "185:60:48"
+          },
+          {
+            "constant": false,
+            "functionSelector": "a3e56fa8",
+            "id": 9494,
+            "mutability": "mutable",
+            "name": "vrfCoordinator",
+            "nameLocation": "263:14:48",
+            "nodeType": "VariableDeclaration",
+            "scope": 9544,
+            "src": "248:29:48",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 9493,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "248:7:48",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 9506,
+              "nodeType": "Block",
+              "src": "433:43:48",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 9504,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 9502,
+                      "name": "vrfCoordinator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9494,
+                      "src": "439:14:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 9503,
+                      "name": "_vrfCoordinator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9497,
+                      "src": "456:15:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "439:32:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 9505,
+                  "nodeType": "ExpressionStatement",
+                  "src": "439:32:48"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 9495,
+              "nodeType": "StructuredDocumentation",
+              "src": "282:74:48",
+              "text": " @param _vrfCoordinator - Address of VRFCoordinator contract"
+            },
+            "functionSelector": "c4d66de8",
+            "id": 9507,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "id": 9500,
+                "kind": "modifierInvocation",
+                "modifierName": {
+                  "id": 9499,
+                  "name": "initializer",
+                  "nodeType": "IdentifierPath",
+                  "referencedDeclaration": 994,
+                  "src": "413:11:48"
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "413:11:48"
+              }
+            ],
+            "name": "initialize",
+            "nameLocation": "368:10:48",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 9498,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9497,
+                  "mutability": "mutable",
+                  "name": "_vrfCoordinator",
+                  "nameLocation": "387:15:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9507,
+                  "src": "379:23:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 9496,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "379:7:48",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "378:25:48"
+            },
+            "returnParameters": {
+              "id": 9501,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "433:0:48"
+            },
+            "scope": 9544,
+            "src": "359:117:48",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 9508,
+              "nodeType": "StructuredDocumentation",
+              "src": "480:159:48",
+              "text": " @param requestId The Id initially returned by requestRandomness\n @param randomWords the VRF output expanded to the requested number of words"
+            },
+            "id": 9516,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fulfillRandomWords",
+            "nameLocation": "651:18:48",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 9514,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9510,
+                  "mutability": "mutable",
+                  "name": "requestId",
+                  "nameLocation": "678:9:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9516,
+                  "src": "670:17:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 9509,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "670:7:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 9513,
+                  "mutability": "mutable",
+                  "name": "randomWords",
+                  "nameLocation": "706:11:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9516,
+                  "src": "689:28:48",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 9511,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "689:7:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 9512,
+                    "nodeType": "ArrayTypeName",
+                    "src": "689:9:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "669:49:48"
+            },
+            "returnParameters": {
+              "id": 9515,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "735:0:48"
+            },
+            "scope": 9544,
+            "src": "642:94:48",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 9542,
+              "nodeType": "Block",
+              "src": "991:167:48",
+              "statements": [
+                {
+                  "condition": {
+                    "commonType": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    },
+                    "id": 9528,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "expression": {
+                        "id": 9525,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4294967281,
+                        "src": "1001:3:48",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 9526,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "src": "1001:10:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "!=",
+                    "rightExpression": {
+                      "id": 9527,
+                      "name": "vrfCoordinator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9494,
+                      "src": "1015:14:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1001:28:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 9536,
+                  "nodeType": "IfStatement",
+                  "src": "997:109:48",
+                  "trueBody": {
+                    "id": 9535,
+                    "nodeType": "Block",
+                    "src": "1031:75:48",
+                    "statements": [
+                      {
+                        "errorCall": {
+                          "arguments": [
+                            {
+                              "expression": {
+                                "id": 9530,
+                                "name": "msg",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 4294967281,
+                                "src": "1072:3:48",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_magic_message",
+                                  "typeString": "msg"
+                                }
+                              },
+                              "id": 9531,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "sender",
+                              "nodeType": "MemberAccess",
+                              "src": "1072:10:48",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            {
+                              "id": 9532,
+                              "name": "vrfCoordinator",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 9494,
+                              "src": "1084:14:48",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              },
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 9529,
+                            "name": "OnlyCoordinatorCanFulfill",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 9492,
+                            "src": "1046:25:48",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_error_pure$_t_address_$_t_address_$returns$__$",
+                              "typeString": "function (address,address) pure"
+                            }
+                          },
+                          "id": 9533,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1046:53:48",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 9534,
+                        "nodeType": "RevertStatement",
+                        "src": "1039:60:48"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 9538,
+                        "name": "requestId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9519,
+                        "src": "1130:9:48",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "id": 9539,
+                        "name": "randomWords",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9522,
+                        "src": "1141:11:48",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                          "typeString": "uint256[] memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                          "typeString": "uint256[] memory"
+                        }
+                      ],
+                      "id": 9537,
+                      "name": "fulfillRandomWords",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9516,
+                      "src": "1111:18:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_uint256_$_t_array$_t_uint256_$dyn_memory_ptr_$returns$__$",
+                        "typeString": "function (uint256,uint256[] memory)"
+                      }
+                    },
+                    "id": 9540,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1111:42:48",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 9541,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1111:42:48"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 9517,
+              "nodeType": "StructuredDocumentation",
+              "src": "740:159:48",
+              "text": " @param requestId The Id initially returned by requestRandomness\n @param randomWords the VRF output expanded to the requested number of words"
+            },
+            "functionSelector": "1fe543e3",
+            "id": 9543,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "rawFulfillRandomWords",
+            "nameLocation": "911:21:48",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 9523,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9519,
+                  "mutability": "mutable",
+                  "name": "requestId",
+                  "nameLocation": "941:9:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9543,
+                  "src": "933:17:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 9518,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "933:7:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 9522,
+                  "mutability": "mutable",
+                  "name": "randomWords",
+                  "nameLocation": "969:11:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9543,
+                  "src": "952:28:48",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 9520,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "952:7:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 9521,
+                    "nodeType": "ArrayTypeName",
+                    "src": "952:9:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "932:49:48"
+            },
+            "returnParameters": {
+              "id": 9524,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "991:0:48"
+            },
+            "scope": 9544,
+            "src": "902:256:48",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 9545,
+        "src": "134:1026:48",
+        "usedErrors": [
+          9492
+        ]
+      }
+    ],
+    "src": "32:1129:48"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/VRFConsumer.sol",
+    "exportedSymbols": {
+      "AddressUpgradeable": [
+        3701
+      ],
+      "Initializable": [
+        1020
+      ],
+      "VRFConsumer": [
+        9544
+      ]
+    },
+    "id": 9545,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 9483,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:23:48"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "file": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "id": 9484,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 9545,
+        "sourceUnit": 1021,
+        "src": "57:75:48",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 9485,
+              "name": "Initializable",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 1020,
+              "src": "167:13:48"
+            },
+            "id": 9486,
+            "nodeType": "InheritanceSpecifier",
+            "src": "167:13:48"
+          }
+        ],
+        "canonicalName": "VRFConsumer",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "id": 9544,
+        "linearizedBaseContracts": [
+          9544,
+          1020
+        ],
+        "name": "VRFConsumer",
+        "nameLocation": "152:11:48",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 9492,
+            "name": "OnlyCoordinatorCanFulfill",
+            "nameLocation": "191:25:48",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 9491,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9488,
+                  "mutability": "mutable",
+                  "name": "have",
+                  "nameLocation": "225:4:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9492,
+                  "src": "217:12:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 9487,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "217:7:48",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 9490,
+                  "mutability": "mutable",
+                  "name": "want",
+                  "nameLocation": "239:4:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9492,
+                  "src": "231:12:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 9489,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "231:7:48",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "216:28:48"
+            },
+            "src": "185:60:48"
+          },
+          {
+            "constant": false,
+            "functionSelector": "a3e56fa8",
+            "id": 9494,
+            "mutability": "mutable",
+            "name": "vrfCoordinator",
+            "nameLocation": "263:14:48",
+            "nodeType": "VariableDeclaration",
+            "scope": 9544,
+            "src": "248:29:48",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 9493,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "248:7:48",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 9506,
+              "nodeType": "Block",
+              "src": "433:43:48",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 9504,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 9502,
+                      "name": "vrfCoordinator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9494,
+                      "src": "439:14:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 9503,
+                      "name": "_vrfCoordinator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9497,
+                      "src": "456:15:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "439:32:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 9505,
+                  "nodeType": "ExpressionStatement",
+                  "src": "439:32:48"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 9495,
+              "nodeType": "StructuredDocumentation",
+              "src": "282:74:48",
+              "text": " @param _vrfCoordinator - Address of VRFCoordinator contract"
+            },
+            "functionSelector": "c4d66de8",
+            "id": 9507,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "id": 9500,
+                "kind": "modifierInvocation",
+                "modifierName": {
+                  "id": 9499,
+                  "name": "initializer",
+                  "nodeType": "IdentifierPath",
+                  "referencedDeclaration": 994,
+                  "src": "413:11:48"
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "413:11:48"
+              }
+            ],
+            "name": "initialize",
+            "nameLocation": "368:10:48",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 9498,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9497,
+                  "mutability": "mutable",
+                  "name": "_vrfCoordinator",
+                  "nameLocation": "387:15:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9507,
+                  "src": "379:23:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 9496,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "379:7:48",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "378:25:48"
+            },
+            "returnParameters": {
+              "id": 9501,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "433:0:48"
+            },
+            "scope": 9544,
+            "src": "359:117:48",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 9508,
+              "nodeType": "StructuredDocumentation",
+              "src": "480:159:48",
+              "text": " @param requestId The Id initially returned by requestRandomness\n @param randomWords the VRF output expanded to the requested number of words"
+            },
+            "id": 9516,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fulfillRandomWords",
+            "nameLocation": "651:18:48",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 9514,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9510,
+                  "mutability": "mutable",
+                  "name": "requestId",
+                  "nameLocation": "678:9:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9516,
+                  "src": "670:17:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 9509,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "670:7:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 9513,
+                  "mutability": "mutable",
+                  "name": "randomWords",
+                  "nameLocation": "706:11:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9516,
+                  "src": "689:28:48",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 9511,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "689:7:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 9512,
+                    "nodeType": "ArrayTypeName",
+                    "src": "689:9:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "669:49:48"
+            },
+            "returnParameters": {
+              "id": 9515,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "735:0:48"
+            },
+            "scope": 9544,
+            "src": "642:94:48",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 9542,
+              "nodeType": "Block",
+              "src": "991:167:48",
+              "statements": [
+                {
+                  "condition": {
+                    "commonType": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    },
+                    "id": 9528,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "expression": {
+                        "id": 9525,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4294967281,
+                        "src": "1001:3:48",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 9526,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "src": "1001:10:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "!=",
+                    "rightExpression": {
+                      "id": 9527,
+                      "name": "vrfCoordinator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9494,
+                      "src": "1015:14:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1001:28:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 9536,
+                  "nodeType": "IfStatement",
+                  "src": "997:109:48",
+                  "trueBody": {
+                    "id": 9535,
+                    "nodeType": "Block",
+                    "src": "1031:75:48",
+                    "statements": [
+                      {
+                        "errorCall": {
+                          "arguments": [
+                            {
+                              "expression": {
+                                "id": 9530,
+                                "name": "msg",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 4294967281,
+                                "src": "1072:3:48",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_magic_message",
+                                  "typeString": "msg"
+                                }
+                              },
+                              "id": 9531,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "sender",
+                              "nodeType": "MemberAccess",
+                              "src": "1072:10:48",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            {
+                              "id": 9532,
+                              "name": "vrfCoordinator",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 9494,
+                              "src": "1084:14:48",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              },
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 9529,
+                            "name": "OnlyCoordinatorCanFulfill",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 9492,
+                            "src": "1046:25:48",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_error_pure$_t_address_$_t_address_$returns$__$",
+                              "typeString": "function (address,address) pure"
+                            }
+                          },
+                          "id": 9533,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1046:53:48",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 9534,
+                        "nodeType": "RevertStatement",
+                        "src": "1039:60:48"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 9538,
+                        "name": "requestId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9519,
+                        "src": "1130:9:48",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "id": 9539,
+                        "name": "randomWords",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9522,
+                        "src": "1141:11:48",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                          "typeString": "uint256[] memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                          "typeString": "uint256[] memory"
+                        }
+                      ],
+                      "id": 9537,
+                      "name": "fulfillRandomWords",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 9516,
+                      "src": "1111:18:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_uint256_$_t_array$_t_uint256_$dyn_memory_ptr_$returns$__$",
+                        "typeString": "function (uint256,uint256[] memory)"
+                      }
+                    },
+                    "id": 9540,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1111:42:48",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 9541,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1111:42:48"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 9517,
+              "nodeType": "StructuredDocumentation",
+              "src": "740:159:48",
+              "text": " @param requestId The Id initially returned by requestRandomness\n @param randomWords the VRF output expanded to the requested number of words"
+            },
+            "functionSelector": "1fe543e3",
+            "id": 9543,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "rawFulfillRandomWords",
+            "nameLocation": "911:21:48",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 9523,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 9519,
+                  "mutability": "mutable",
+                  "name": "requestId",
+                  "nameLocation": "941:9:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9543,
+                  "src": "933:17:48",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 9518,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "933:7:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 9522,
+                  "mutability": "mutable",
+                  "name": "randomWords",
+                  "nameLocation": "969:11:48",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 9543,
+                  "src": "952:28:48",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 9520,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "952:7:48",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 9521,
+                    "nodeType": "ArrayTypeName",
+                    "src": "952:9:48",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "932:49:48"
+            },
+            "returnParameters": {
+              "id": 9524,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "991:0:48"
+            },
+            "scope": 9544,
+            "src": "902:256:48",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 9545,
+        "src": "134:1026:48",
+        "usedErrors": [
+          9492
+        ]
+      }
+    ],
+    "src": "32:1129:48"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.5",
+  "updatedAt": "2022-02-28T14:32:27.237Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "initialize(address)": {
+        "params": {
+          "_vrfCoordinator": "- Address of VRFCoordinator contract"
+        }
+      },
+      "rawFulfillRandomWords(uint256,uint256[])": {
+        "params": {
+          "randomWords": "the VRF output expanded to the requested number of words",
+          "requestId": "The Id initially returned by requestRandomness"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
