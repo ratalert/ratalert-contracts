@@ -6,6 +6,7 @@ require('@openzeppelin/test-helpers');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
@@ -18,11 +19,12 @@ contract('Gym (proxy)', (accounts) => {
 
     before(async () => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
-        await setupVRF(this.vrfCoordinator);
+        this.linkToken = await LinkToken.deployed();
         this.mint = await Mint.deployed();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
         this.gym = await Gym.deployed();
+        await setupVRF(this.linkToken, this.mint);
 
         lists = await mintUntilWeHave.call(this, 8, 3);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];

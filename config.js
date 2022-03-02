@@ -2,13 +2,11 @@ const web3 = require('web3');
 const toWei = web3.utils.toWei;
 
 module.exports = (network) => ({
-    mint: ({ vrfCoordinator }) => Object.values({
-        vrfCoordinator: vrfCoordinator || '0x6168499c0cFfCaCD319c818142124B7A15E857ab', // Rinkeby coordinator
-        link: '0x01BE23585060835E02B77ef475b0Cc51aA1e0709', // Rinkeby LINK token contract
-        keyHash: '0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc', // Rinkeby 30 gwei Key Hash gas lane
-        subscriptionId: network === 'development' ? 1 : 714,
-        minConfirmations: 3, // Rinkeby mininum is 3
-        callbackGasLimit: 2000000, // Rinkeby limit is 2500000
+    mint: ({ vrfCoordinator, linkToken }) => Object.values({
+        vrfCoordinator: vrfCoordinator || '0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B', // Rinkeby coordinator
+        linkToken: linkToken || '0x01BE23585060835E02B77ef475b0Cc51aA1e0709', // Rinkeby LINK token contract
+        keyHash: '0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311', // Rinkeby 30 gwei Key Hash gas lane
+        fee: toWei('0.1', 'ether'),
     }),
     character: Object.values({
         maxTokens: 50000,

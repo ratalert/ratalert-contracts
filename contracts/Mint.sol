@@ -4,44 +4,37 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "./VRFConsumer.sol";
 import "./IMint.sol";
 import "./ICharacter.sol";
 
 contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
   uint8[][18] public rarities; // List of probabilities for each trait type, 0 - 9 are associated with Chefs, 10 - 18 are associated with Rats
-  mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
+  mapping(uint256 => bytes32) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
   mapping(address => bool) controllers; // Mapping from an address to whether or not it can mint / burn
 
   ICharacter character; // Reference to the Character
-  bytes32 keyHash; // Key Hash gas lane
-  uint64 subscriptionId; // Your subscription ID
-  uint16 minConfirmations; // The default is 3, but you can set this higher
-  uint32 callbackGasLimit; // A word costs abount 20,000 gas
-  VRFCoordinatorV2Interface coordinator; // Coordinator interface
-  LinkTokenInterface link; // Reference to $LINK Token contract
-  mapping(uint256 => VRFStruct) public vrfRequests; // Mapping from tokenId to a struct containing the token's traits
+  bytes32 internal keyHash;
+  uint256 internal fee;
+  mapping(bytes32 => VRFStruct) public vrfRequests; // Mapping from tokenId to a struct containing the token's traits
+
+  event RandomNumberRequested(
+    bytes32 requestId,
+    address sender
+  );
 
   function initialize(
     address _vrfCoordinator,
     address _link,
     bytes32 _keyHash,
-    uint64 _subscriptionId,
-    uint16 _minConfirmations,
-    uint32 _callbackGasLimit
+    uint256 _fee
   ) external initializer {
     __Ownable_init();
 
     vrfCoordinator = _vrfCoordinator;
-    coordinator = VRFCoordinatorV2Interface(_vrfCoordinator);
     link = LinkTokenInterface(_link);
     keyHash = _keyHash;
-    subscriptionId = _subscriptionId;
-    minConfirmations = _minConfirmations;
-    callbackGasLimit = _callbackGasLimit;
+    fee = _fee;
 
     // Chefs
     rarities[2] = [255, 223, 191, 159, 127, 95]; // hat
@@ -57,18 +50,39 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
     rarities[16] = [255, 223, 191, 159, 127, 95]; // tail
   }
 
-  function requestRandomness(address sender, uint8 amount, bool stake) external returns (uint256 requestId) {
-    require(controllers[_msgSender()], "Only controllers can request randomness");
-    requestId = coordinator.requestRandomWords(keyHash, subscriptionId, minConfirmations, callbackGasLimit, amount);
-    VRFStruct memory v = VRFStruct({ requestId: requestId, sender: sender, amount: amount, stake: stake });
-    vrfRequests[requestId] = v;
+  /**
+   * Set ChainLink VRF params
+   */
+  function setVrfParams(
+    address _vrfCoordinator,
+    address _link,
+    bytes32 _keyHash,
+    uint256 _fee
+  ) external onlyOwner {
+    vrfCoordinator = _vrfCoordinator;
+    link = LinkTokenInterface(_link);
+    keyHash = _keyHash;
+    fee = _fee;
   }
 
-  function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override {
-    ICharacter.CharacterStruct[] memory tokens = new ICharacter.CharacterStruct[](randomWords.length);
+  function requestRandomNumber(address sender, uint8 amount, bool stake) external returns (bytes32 requestId) {
+    require(controllers[_msgSender()], "Only controllers can request randomness");
+    require(link.balanceOf(address(this)) >= fee, "Insufficient LINK");
+    requestId = requestRandomness(keyHash, fee);
+    VRFStruct memory v = VRFStruct({ requestId: requestId, sender: sender, amount: amount, stake: stake });
+    vrfRequests[requestId] = v;
+    emit RandomNumberRequested(
+      requestId,
+      _msgSender()
+    );
+  }
 
-    for (uint i = 0; i < randomWords.length; i++) {
-      tokens[i] = generate(requestId, randomWords[i]);
+  function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+    VRFStruct memory v = vrfRequests[requestId];
+    ICharacter.CharacterStruct[] memory tokens = new ICharacter.CharacterStruct[](v.amount);
+
+    for (uint i = 0; i < v.amount; i++) {
+      tokens[i] = generate(requestId, uint256(keccak256(abi.encode(randomness, i))));
     }
 
     character.fulfillMint(vrfRequests[requestId], tokens);
@@ -80,7 +94,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
    * @param seed - A VRF seed
    * @return t - A struct of traits for the given token ID
    */
-  function generate(uint256 requestId, uint256 seed) internal returns (ICharacter.CharacterStruct memory t) {
+  function generate(bytes32 requestId, uint256 seed) internal returns (ICharacter.CharacterStruct memory t) {
     t = selectTraits(seed);
     uint256 hash = structToHash(t);
     if (existingCombinations[hash] == 0) {
@@ -155,26 +169,6 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
    */
   function setCharacter(address _character) external onlyOwner {
     character = ICharacter(_character);
-  }
-
-  /**
-   * Set ChainLink VRF params
-   */
-  function setVrfParams(
-    address _vrfCoordinator,
-    address _link,
-    bytes32 _keyHash,
-    uint64 _subscriptionId,
-    uint16 _minConfirmations,
-    uint32 _callbackGasLimit
-  ) external onlyOwner {
-    vrfCoordinator = _vrfCoordinator;
-    coordinator = VRFCoordinatorV2Interface(_vrfCoordinator);
-    link = LinkTokenInterface(_link);
-    keyHash = _keyHash;
-    subscriptionId = _subscriptionId;
-    minConfirmations = _minConfirmations;
-    callbackGasLimit = _callbackGasLimit;
   }
 
   /**

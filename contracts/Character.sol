@@ -24,7 +24,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
   mapping(uint256 => CharacterStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
   mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
   mapping(address => bool) controllers; // Mapping from an address to whether or not it can mint / burn
-  mapping(uint256 => uint16[]) public mintRequests;
+  mapping(bytes32 => uint16[]) public mintRequests;
 
   FastFood fastFood; // Reference to the $FFOOD contract
   IMint public theMint; // Reference to Mint
@@ -73,7 +73,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
       }
     }
     if (totalCost > 0) fastFood.burn(_msgSender(), totalCost);
-    uint256 requestId = theMint.requestRandomness(_msgSender(), amount, stake);
+    bytes32 requestId = theMint.requestRandomNumber(_msgSender(), amount, stake);
     mintRequests[requestId] = new uint16[](amount);
     for (uint i = 0; i < amount; i++) {
       minted++;

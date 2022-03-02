@@ -83,12 +83,13 @@ exports.uploadKitchens = async (kitchenShop) => {
     return Promise.all(data.map((kitchen, i) => kitchenShop.uploadImage(i, kitchen)));
 };
 exports.fulfill = async function (res) {
-    const randomWordsRequestedAbi = this.vrfCoordinator.abi.find(item => item.name === 'RandomWordsRequested');
+    const randomNumberRequestedAbi = this.mint.abi.find(item => item.name === 'RandomNumberRequested');
     const transferAbi = this.mint.abi.find(item => item.name === 'Transfer');
-    const randomWordsRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomWordsRequestedAbi.signature);
-    const requestId = web3.eth.abi.decodeLog(randomWordsRequestedAbi.inputs, randomWordsRequestedEvent.data, randomWordsRequestedEvent.topics).requestId;
-    const res2 = await this.vrfCoordinator.fulfillRandomWords(requestId, this.mint.address);
+    const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
+    const requestId = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics).requestId;
+    const res2 = await this.vrfCoordinator.callBackWithRandomness(requestId, 458948534, this.mint.address);
     const transferEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === transferAbi.signature);
+    res2.requestId = requestId;
     res2.logs = transferEvents.map(item => {
         item.args = web3.eth.abi.decodeLog(transferAbi.inputs, item.data, item.topics.slice(1));
         delete item.data;
@@ -103,6 +104,7 @@ exports.mintAndFulfill = async function (amount, stake, options = {}) {
     args.value === 0 ? delete args.value : args.value = exports.toWei(amount * 0.1);
     const res1 = await character.mint(amount, stake, args);
     const res2 = await exports.fulfill.call(this, res1);
+    res1.requestId = res2.requestId;
     res1.logs = res2.logs;
     return res1;
 };
@@ -169,8 +171,6 @@ exports.expectRatEarnings = (earned, pot, numRats, tolerance) => {
     const net = pot * factor / numRats;
     expect(earned).to.be.a.bignumber.gte(exports.toWei(net * 0.9999)).lt(exports.toWei(net * 1.0001));
 };
-exports.setupVRF = async (vrfCoordinator) => {
-    const { logs } = await vrfCoordinator.createSubscription();
-    const subId = logs[0].args.subId.toString();
-    await vrfCoordinator.fundSubscription(subId, '99999999999');
+exports.setupVRF = async (linkToken, mint) => {
+    return linkToken.mint(mint.address, exports.toWei(1000));
 };

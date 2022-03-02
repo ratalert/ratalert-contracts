@@ -18,9 +18,13 @@ module.exports = async (deployer, network) => {
     const config = Config(network);
 
     let vrfCoordinator = {};
+    let linkToken = {};
     if (network === 'development') {
+        const LinkTokenMock = artifacts.require('LinkTokenMock');
+        await deployer.deploy(LinkTokenMock);
+        linkToken = await LinkTokenMock.deployed();
         const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock');
-        await deployer.deploy(VRFCoordinatorMock, 1, 1); // uint96 _baseFee, uint96 _gasPriceLink
+        await deployer.deploy(VRFCoordinatorMock, linkToken.address);
         vrfCoordinator = await VRFCoordinatorMock.deployed();
     }
     await deployer.deploy(FastFood);
@@ -29,7 +33,7 @@ module.exports = async (deployer, network) => {
     const fastFood = await FastFood.deployed();
     const casualFood = await CasualFood.deployed();
     const gourmetFood = await GourmetFood.deployed();
-    const mint = await deployProxy(Mint, config.mint({ vrfCoordinator: vrfCoordinator.address }), { deployer });
+    const mint = await deployProxy(Mint, config.mint({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), { deployer });
     const traits = await deployProxy(Traits, { deployer });
     const properties = await deployProxy(Properties, config.properties, { deployer });
     const character = await deployProxy(Character, [[fastFood.address, mint.address, traits.address, properties.address]].concat(config.character), { deployer });

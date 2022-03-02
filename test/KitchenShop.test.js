@@ -7,6 +7,7 @@ require('@openzeppelin/test-helpers');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
 const FastFood = artifacts.require('FastFood');
 const CasualFood = artifacts.require('CasualFood');
@@ -22,7 +23,7 @@ contract('KitchenShop (proxy)', (accounts) => {
 
     before(async () => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
-        await setupVRF(this.vrfCoordinator);
+        this.linkToken = await LinkToken.deployed();
         this.mint = await Mint.deployed();
         this.fastFood = await FastFood.deployed();
         this.casualFood = await CasualFood.deployed();
@@ -33,6 +34,7 @@ contract('KitchenShop (proxy)', (accounts) => {
         await this.fastFood.addController(kitchenShopSandbox.address);
         await this.fastFood.addController(owner);
         await this.casualFood.addController(owner);
+        await setupVRF(this.linkToken, this.mint);
 
         lists = await mintUntilWeHave.call(this, 2, 2);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];

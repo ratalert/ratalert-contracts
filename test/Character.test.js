@@ -8,6 +8,7 @@ chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const LinkToken = artifacts.require('LinkTokenMock');
 const FastFood = artifacts.require('FastFood');
 const Mint = artifacts.require('Mint');
 const Traits = artifacts.require('Traits');
@@ -24,7 +25,7 @@ contract('Character (proxy)', (accounts) => {
 
     before(async () => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
-        await setupVRF(this.vrfCoordinator);
+        this.linkToken = await LinkToken.deployed();
         this.fastFood = await FastFood.deployed();
         this.mint = await Mint.deployed();
         this.traits = await Traits.deployed();
@@ -32,6 +33,7 @@ contract('Character (proxy)', (accounts) => {
         this.traitList = await loadTraits();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
+        await setupVRF(this.linkToken, this.mint);
         characterSandbox = await deployProxy(Character, [[this.fastFood.address, this.mint.address, this.traits.address, this.properties.address], 5, toWei('0.1', 'ether')]);
         await this.fastFood.addController(characterSandbox.address);
         await this.fastFood.addController(owner);
@@ -71,11 +73,11 @@ contract('Character (proxy)', (accounts) => {
         });
 
         it('denies anyone but the Mint to fulfill', async () => {
-            await expect(this.character.fulfillMint({ requestId: 1, sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
+            await expect(this.character.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
         });
         it('fails with an invalid mint request', async () => {
             const sandbox = await deployProxy(Character, [[this.fastFood.address, owner, this.traits.address, this.properties.address], 5, toWei('0.1', 'ether')]);
-            await expect(sandbox.fulfillMint({ requestId: 99, sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Mint request not found');
+            await expect(sandbox.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Mint request not found');
         });
         it('fails if all characters have been minted', async () => {
             await expect(characterSandbox.mint(6, false)).to.eventually.be.rejectedWith('All tokens minted');
@@ -85,13 +87,14 @@ contract('Character (proxy)', (accounts) => {
         });
         it('rejects ETH for Gen1 payments', async () => {
             await this.mint.setCharacter(characterSandbox.address);
-            await mintAndFulfill.call(this, 1, false, { character: characterSandbox });
+            const res = await mintAndFulfill.call(this, 1, false, { character: characterSandbox });
+            this.mintRequestId = res.requestId;
             await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('1');
             await expect(characterSandbox.mint(2, false, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Invalid payment type, accepting food tokens only');
             await this.mint.setCharacter(this.character.address);
         });
         it('deletes mint requests', async () => {
-            await expect(characterSandbox.mintRequests(1, 0)).to.eventually.be.rejectedWith('VM Exception');
+            await expect(characterSandbox.mintRequests(this.mintRequestId, 0)).to.eventually.be.rejectedWith('VM Exception');
         });
         it('fails if out of $FFOOD', async () => {
             await expect(characterSandbox.mint(4, false)).to.eventually.be.rejectedWith('burn amount exceeds balance');
