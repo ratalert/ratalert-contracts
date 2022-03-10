@@ -78,6 +78,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
   }
 
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+    require(vrfRequests[requestId].requestId != 0, "VRF request ID not found");
     VRFStruct memory v = vrfRequests[requestId];
     ICharacter.CharacterStruct[] memory tokens = new ICharacter.CharacterStruct[](v.amount);
 
@@ -86,6 +87,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
     }
 
     character.fulfillMint(vrfRequests[requestId], tokens);
+    delete vrfRequests[requestId];
   }
 
   /**

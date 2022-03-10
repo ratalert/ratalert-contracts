@@ -54,9 +54,10 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
   }
 
   /**
-   * Mints a new ERC721 token: 90% chefs, 10% rats
+   * ChainLink VRF request: Mints a new ERC721 token: 90% chefs, 10% rats
    * The first 20% are free to claim, the remaining cost $FFOOD
    * @param amount Number of tokens to mint
+   * @param stake Number of tokens to mint
    */
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
@@ -98,6 +99,11 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
     return 3000 ether;
   }
 
+  /**
+   * ChainLink VRF callback for mint()
+   * @param v - VRF struct for the corresponding request
+   * @param tokens - List of characters created by the Mint
+   */
   function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external {
     require(msg.sender == address(theMint), "Only the Mint can fulfill");
     require(mintRequests[v.requestId].length > 0, "Mint request not found");
@@ -111,12 +117,12 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
     if (v.stake) kitchen.stakeMany(v.sender, tokenIds);
   }
 
-  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement) public returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
+  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     require(controllers[msg.sender], "Only controllers can update");
     bool isChef = tokenTraits[tokenId].isChef;
     uint8 currentEfficiency = tokenTraits[tokenId].efficiency;
     uint8 currentTolerance = tokenTraits[tokenId].tolerance;
-    (efficiencyValue, toleranceValue, eventName) = properties.getEventUpdates(isChef, currentEfficiency, currentTolerance, efficiencyIncrement, toleranceIncrement);
+    (efficiencyValue, toleranceValue, eventName) = properties.getEventUpdates(isChef, currentEfficiency, currentTolerance, efficiencyIncrement, toleranceIncrement, randomVal);
     tokenTraits[tokenId].efficiency = efficiencyValue;
     tokenTraits[tokenId].tolerance = toleranceValue;
   }

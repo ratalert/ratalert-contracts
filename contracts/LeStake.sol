@@ -10,9 +10,7 @@ contract LeStake is EntrepreneurKitchen {
   GourmetFood foodToken; // Reference to the $GFOOD contract
 
   function initialize(
-    address _character,
-    address _foodToken,
-    address _kitchenShop,
+    address[] memory _addresses, // character, claim, foodToken, kitchenShop
     uint256 _foodTokenMaxSupply,
     uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
     int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
@@ -30,9 +28,10 @@ contract LeStake is EntrepreneurKitchen {
     lastClaimTimestamp = 0;
     kitchenId = 2;
 
-    character = Character(_character);
-    foodToken = GourmetFood(_foodToken);
-    kitchenShop = KitchenShop(_kitchenShop);
+    character = Character(_addresses[0]);
+    claim = IClaim(_addresses[1]);
+    foodToken = GourmetFood(_addresses[2]);
+    kitchenShop = KitchenShop(_addresses[3]);
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
     ratTheftPercentage = _earningSettings[1];
@@ -51,9 +50,10 @@ contract LeStake is EntrepreneurKitchen {
 
   /**
    * Mints the given amount of food tokens in the user's account
+   * @param sender - User wallet address
    * @param amount - Amount of food tokens to mint
    */
-  function _mintFoodToken(uint256 amount) internal override {
-    foodToken.mint(_msgSender(), amount);
+  function _mintFoodToken(address sender, uint256 amount) internal override {
+    foodToken.mint(sender, amount);
   }
 }

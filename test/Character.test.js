@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock, setupVRF, mintAndFulfill, fulfill } = require('./helper');
+const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock, setupVRF, mintAndFulfill, fulfill, claimManyAndFulfill} = require('./helper');
 require('@openzeppelin/test-helpers');
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
@@ -11,6 +11,7 @@ const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const FastFood = artifacts.require('FastFood');
 const Mint = artifacts.require('Mint');
+const Claim = artifacts.require('Claim');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
 const Character = artifacts.require('Character');
@@ -28,12 +29,14 @@ contract('Character (proxy)', (accounts) => {
         this.linkToken = await LinkToken.deployed();
         this.fastFood = await FastFood.deployed();
         this.mint = await Mint.deployed();
+        this.claim = await Claim.deployed();
         this.traits = await Traits.deployed();
         this.properties = await Properties.deployed();
         this.traitList = await loadTraits();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
         await setupVRF(this.linkToken, this.mint);
+        await setupVRF(this.linkToken, this.claim);
         characterSandbox = await deployProxy(Character, [[this.fastFood.address, this.mint.address, this.traits.address, this.properties.address], 5, toWei('0.1', 'ether')]);
         await this.fastFood.addController(characterSandbox.address);
         await this.fastFood.addController(owner);
@@ -210,7 +213,7 @@ contract('Character (proxy)', (accounts) => {
             }));
 
             await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
-            const { logs } = await this.kitchen.claimMany(IDs, true, { from: anon });
+            const { logs } = await claimManyAndFulfill.call(this, this.kitchen, IDs, true, { args: { from: anon } });
             logs.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(IDs[i].toString());
                 expect(log.args.unstaked).to.be.true;

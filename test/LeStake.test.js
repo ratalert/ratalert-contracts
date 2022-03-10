@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, setupVRF } = require('./helper');
+const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, setupVRF, claimManyAndFulfill } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -8,6 +8,7 @@ const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
+const Claim = artifacts.require('Claim');
 const CasualFood = artifacts.require('CasualFood');
 const GourmetFood = artifacts.require('GourmetFood');
 const Character = artifacts.require('Character');
@@ -24,6 +25,7 @@ contract('LeStake (proxy)', (accounts) => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
         this.linkToken = await LinkToken.deployed();
         this.mint = await Mint.deployed();
+        this.claim = await Claim.deployed();
         this.foodToken = await GourmetFood.deployed();
         this.character = await Character.deployed();
         this.kitchen = await LeStake.deployed();
@@ -32,6 +34,7 @@ contract('LeStake (proxy)', (accounts) => {
         this.casualFood = await CasualFood.deployed();
         await this.casualFood.addController(owner);
         await setupVRF(this.linkToken, this.mint);
+        await setupVRF(this.linkToken, this.claim);
 
         lists = await mintUntilWeHave.call(this, 8, 3);
         lists.many = lists.all;
@@ -43,7 +46,7 @@ contract('LeStake (proxy)', (accounts) => {
         await this.character.setApprovalForAll(this.mcStake.address, true, { from: owner });
     });
 
-    describe('stake()', () => {
+    describe('stakeMany()', () => {
         it('fails if kitchen space is missing', async () => {
             await expect(this.kitchen.stakeMany(owner, [1], { from: owner })).to.eventually.be.rejectedWith('Kitchen space required');
         });
@@ -61,11 +64,11 @@ contract('LeStake (proxy)', (accounts) => {
             await expect(res.receipt.status).to.be.true;
         });
     });
-    describe('unstake()', () => {
+    describe('claimMany()', () => {
         it('force-unstakes ineligible characters', async () => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             lists.ineligible = [lists.chefs[1], lists.rats[1]];
-            await this.kitchen.claimMany(lists.ineligible.map(item => item.id), true);
+            await claimManyAndFulfill.call(this, this.kitchen, lists.ineligible.map(item => item.id), true);
             lists.ineligible = await trainUntilWeHave.call(this, this.kitchen, -71, -71, lists.ineligible, 10, false, { from: owner });
 
             await Promise.all(lists.ineligible.map(async (item) => {
@@ -83,7 +86,7 @@ contract('LeStake (proxy)', (accounts) => {
             await this.kitchenShop.safeTransferFrom(owner, anon, 2, 1, 0x0);
             expect(this.kitchenShop.balanceOf(owner, 2)).to.eventually.be.a.bignumber.eq('0');
             lists.remaining = [lists.chefs[0], lists.rats[0]];
-            const { logs } = await this.kitchen.claimMany(lists.remaining.map(item => item.id), false);
+            const { logs } = await claimManyAndFulfill.call(this, this.kitchen, lists.remaining.map(item => item.id), false);
             logs.forEach((log, i) => {
                 const tokenId = Number(log.args.tokenId.toString());
                 expect(tokenId).to.equal(lists.remaining[i].id);

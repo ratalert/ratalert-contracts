@@ -35,7 +35,7 @@ abstract contract Kitchen is Venue {
    */
   function _getOwedByChef(Stake memory stake) internal override returns(uint256 owed) {
     (uint8 efficiency,) = getProperties(stake.tokenId);
-    uint256 nominal = (block.timestamp - stake.value) * dailyChefEarnings / accrualPeriod;
+    uint256 nominal = dailyChefEarnings * (block.timestamp - stake.value) / accrualPeriod;
     uint256 multiplier = 100000 + (uint256(efficiency) * chefEfficiencyMultiplier * 10);
     owed = nominal * multiplier / 100000;
     if (totalFoodTokensEarned + owed > foodTokenMaxSupply) {

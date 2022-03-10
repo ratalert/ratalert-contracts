@@ -9,8 +9,7 @@ contract McStake is Kitchen {
   FastFood foodToken; // Reference to the $FFOOD contract
 
   function initialize(
-    address _character,
-    address _foodToken,
+    address[] memory _addresses, // character, claim, foodToken
     uint256 _foodTokenMaxSupply,
     uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
     int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
@@ -25,8 +24,9 @@ contract McStake is Kitchen {
     foodTokensPerRat = 0;
     lastClaimTimestamp = 0;
 
-    character = Character(_character);
-    foodToken = FastFood(_foodToken);
+    character = Character(_addresses[0]);
+    claim = IClaim(_addresses[1]);
+    foodToken = FastFood(_addresses[2]);
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
     ratTheftPercentage = _earningSettings[1];
@@ -43,9 +43,10 @@ contract McStake is Kitchen {
 
   /**
    * Mints the given amount of food tokens in the user's account
+   * @param sender - User wallet address
    * @param amount - Amount of food tokens to mint
    */
-  function _mintFoodToken(uint256 amount) internal override {
-    foodToken.mint(_msgSender(), amount);
+  function _mintFoodToken(address sender, uint256 amount) internal override {
+    foodToken.mint(sender, amount);
   }
 }

@@ -9,6 +9,7 @@ const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
+const Claim = artifacts.require('Claim');
 const FastFood = artifacts.require('FastFood');
 const CasualFood = artifacts.require('CasualFood');
 const Character = artifacts.require('Character');
@@ -25,6 +26,7 @@ contract('KitchenShop (proxy)', (accounts) => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
         this.linkToken = await LinkToken.deployed();
         this.mint = await Mint.deployed();
+        this.claim = await Claim.deployed();
         this.fastFood = await FastFood.deployed();
         this.casualFood = await CasualFood.deployed();
         this.character = await Character.deployed();
@@ -35,6 +37,7 @@ contract('KitchenShop (proxy)', (accounts) => {
         await this.fastFood.addController(owner);
         await this.casualFood.addController(owner);
         await setupVRF(this.linkToken, this.mint);
+        await setupVRF(this.linkToken, this.claim);
 
         lists = await mintUntilWeHave.call(this, 2, 2);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
@@ -47,7 +50,7 @@ contract('KitchenShop (proxy)', (accounts) => {
     });
 
     describe('uri()', () => {
-        it('returns something', async () => {
+        it('returns a valid JSON', async () => {
             const checks = ['TheStakeHouse (CasualFood Kitchen)', 'LeStake (GourmetFood Kitchen)'];
             await Promise.all(checks.map(async (check, i) => {
                 let res = await this.kitchenShop.uri(i + 1);
