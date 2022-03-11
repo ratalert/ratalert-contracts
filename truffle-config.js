@@ -8,12 +8,19 @@ const infuraId = process.env.INFURA_ID;
 module.exports = {
   networks: {
     development: {
-     host: '127.0.0.1', // Localhost (default: none)
-     port: 9545,        // Truffle
-     // port: 7545,     // Ganache
-     network_id: '*',   // Any network (default: none)
+      host: '127.0.0.1', // Localhost (default: none)
+      port: 9545,        // Truffle
+      // port: 7545,     // Ganache
+      network_id: '*',   // Any network (default: none)
       // gas: 22323,
       // gasPrice: 10,
+    },
+    mumbai: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
+      network_id: 80001,
+      skipDryRun: true,
+      // confirmations: 1,
+      // timeoutBlocks: 200,
     },
     ropsten: {
       provider: () => new HDWalletProvider(mnemonic, `wss://ropsten.infura.io/ws/v3/${infuraId}`),
@@ -88,13 +95,13 @@ module.exports = {
   // $ truffle migrate --reset --compile-all
   //
   // db: {
-    // enabled: false,
-    // host: '127.0.0.1',
-    // adapter: {
-    //   name: 'sqlite',
-    //   settings: {
-    //     directory: '.db'
-    //   }
-    // }
+  //   enabled: false,
+  //   host: '127.0.0.1',
+  //   adapter: {
+  //     name: 'sqlite',
+  //     settings: {
+  //       directory: '.db'
+  //     }
+  //   }
   // },
 };
