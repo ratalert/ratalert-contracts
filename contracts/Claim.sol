@@ -3,14 +3,12 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "./ControllableUpgradeable.sol";
 import "./VRFConsumer.sol";
 import "./IClaim.sol";
 import "./IVenue.sol";
 
-contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer {
-  mapping(address => bool) controllers; // Mapping from an address to whether or not it can mint / burn
-
+contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer, ControllableUpgradeable {
   mapping(address => IVenue) venues; // Mapping from an address to a reference to the Venue
   bytes32 internal keyHash;
   uint256 internal fee;
@@ -50,8 +48,7 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer {
     fee = _fee;
   }
 
-  function requestRandomNumber(address sender, uint16[] memory tokenIds, bool unstake) external returns (bytes32 requestId) {
-    require(controllers[_msgSender()], "Only controllers can request randomness");
+  function requestRandomNumber(address sender, uint16[] memory tokenIds, bool unstake) external onlyController returns (bytes32 requestId) {
     require(link.balanceOf(address(this)) >= fee, "Insufficient LINK");
     requestId = requestRandomness(keyHash, fee);
     VRFStruct memory v = VRFStruct({ requestId: requestId, venue: _msgSender(), sender: sender, tokenIds: tokenIds, unstake: unstake });
@@ -83,29 +80,5 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer {
    */
   function removeVenue(address _venue) external onlyOwner {
     delete venues[_venue];
-  }
-
-  /**
-   * Gets controller status by address
-   * @param controller the address to check
-   */
-  function getController(address controller) external view onlyOwner returns (bool) {
-    return controllers[controller];
-  }
-
-  /**
-   * Enables an address to mint / burn
-   * @param controller the address to enable
-   */
-  function addController(address controller) external onlyOwner {
-    controllers[controller] = true;
-  }
-
-  /**
-   * Disables an address from minting / burning
-   * @param controller the address to disable
-   */
-  function removeController(address controller) external onlyOwner {
-    controllers[controller] = false;
   }
 }

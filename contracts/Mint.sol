@@ -3,15 +3,14 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "./ControllableUpgradeable.sol";
 import "./VRFConsumer.sol";
 import "./IMint.sol";
 import "./ICharacter.sol";
 
-contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
+contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, ControllableUpgradeable {
   uint8[][18] public rarities; // List of probabilities for each trait type, 0 - 9 are associated with Chefs, 10 - 18 are associated with Rats
   mapping(uint256 => bytes32) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
-  mapping(address => bool) controllers; // Mapping from an address to whether or not it can mint / burn
 
   ICharacter character; // Reference to the Character
   bytes32 internal keyHash;
@@ -65,8 +64,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
     fee = _fee;
   }
 
-  function requestRandomNumber(address sender, uint8 amount, bool stake) external returns (bytes32 requestId) {
-    require(controllers[_msgSender()], "Only controllers can request randomness");
+  function requestRandomNumber(address sender, uint8 amount, bool stake) external onlyController returns (bytes32 requestId) {
     require(link.balanceOf(address(this)) >= fee, "Insufficient LINK");
     requestId = requestRandomness(keyHash, fee);
     VRFStruct memory v = VRFStruct({ requestId: requestId, sender: sender, amount: amount, stake: stake });
@@ -171,29 +169,5 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer {
    */
   function setCharacter(address _character) external onlyOwner {
     character = ICharacter(_character);
-  }
-
-  /**
-   * Gets controller status by address
-   * @param controller the address to check
-   */
-  function getController(address controller) external view onlyOwner returns (bool) {
-    return controllers[controller];
-  }
-
-  /**
-   * Enables an address to mint / burn
-   * @param controller the address to enable
-   */
-  function addController(address controller) external onlyOwner {
-    controllers[controller] = true;
-  }
-
-  /**
-   * Disables an address from minting / burning
-   * @param controller the address to disable
-   */
-  function removeController(address controller) external onlyOwner {
-    controllers[controller] = false;
   }
 }

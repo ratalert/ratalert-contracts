@@ -3,9 +3,9 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "./ControllableUpgradeable.sol";
 import "./ICharacter.sol";
 import "./FastFood.sol";
 import "./IMint.sol";
@@ -13,7 +13,7 @@ import "./ITraits.sol";
 import "./IProperties.sol";
 import "./IVenue.sol";
 
-contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable {
+contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable, ControllableUpgradeable {
   uint16 public minted;
   uint16 public numChefs;
   uint16 public numRats;
@@ -23,7 +23,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
 
   mapping(uint256 => CharacterStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
   mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
-  mapping(address => bool) controllers; // Mapping from an address to whether or not it can mint / burn
   mapping(bytes32 => uint16[]) public mintRequests;
 
   FastFood fastFood; // Reference to the $FFOOD contract
@@ -117,8 +116,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
     if (v.stake) kitchen.stakeMany(v.sender, tokenIds);
   }
 
-  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
-    require(controllers[msg.sender], "Only controllers can update");
+  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public onlyController returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     bool isChef = tokenTraits[tokenId].isChef;
     uint8 currentEfficiency = tokenTraits[tokenId].efficiency;
     uint8 currentTolerance = tokenTraits[tokenId].tolerance;
@@ -139,30 +137,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
 
   function getGen0Tokens() external view override returns (uint256) {
     return gen0Tokens;
-  }
-
-  /**
-   * Gets controller status by address
-   * @param controller the address to check
-   */
-  function getController(address controller) external view onlyOwner returns (bool) {
-    return controllers[controller];
-  }
-
-  /**
-   * Enables an address to mint / burn
-   * @param controller the address to enable
-   */
-  function addController(address controller) external onlyOwner {
-    controllers[controller] = true;
-  }
-
-  /**
-   * Disables an address from minting / burning
-   * @param controller the address to disable
-   */
-  function removeController(address controller) external onlyOwner {
-    controllers[controller] = false;
   }
 
   /**

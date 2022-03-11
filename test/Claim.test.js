@@ -22,8 +22,8 @@ contract('Claim (proxy)', (accounts) => {
     });
 
     describe('requestRandomNumber()', () => {
-        it('only allows controllers to call', async () => {
-            await expect(this.claim.requestRandomNumber(owner, [1, 2, 3], false, { from: anon })).to.eventually.be.rejectedWith('Only controllers can request randomness');
+        it('allows only controllers to execute', async () => {
+            await expect(this.claim.requestRandomNumber(owner, [1, 2, 3], false, { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
         });
         it('fails if LINK balance is insufficient', async () => {
             await expect(this.claim.requestRandomNumber(owner, [1, 2, 3], false)).to.eventually.be.rejectedWith('Insufficient LINK');

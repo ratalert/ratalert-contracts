@@ -25,7 +25,7 @@ contract('FastFood', (accounts) => {
 
     describe('mint()', () => {
         it('denies anonymous to mint', async () => {
-            await expect(this.foodToken.mint(anon, toWei(100000000), { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.mint(anon, toWei(100000000), { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
         });
 
         it('allows owner to mint', async () => {
@@ -41,7 +41,7 @@ contract('FastFood', (accounts) => {
 
     describe('burn()', () => {
         it('denies anonymous to burn', async () => {
-            await expect(this.foodToken.burn(anon, toWei(99999999), { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.burn(anon, toWei(99999999), { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
         });
 
         it('allows owner to burn', async () => {
@@ -66,13 +66,13 @@ contract('FastFood', (accounts) => {
         });
     });
 
-    describe('getController()', () => {
+    describe('controller()', () => {
         it('denies anonymous to get a controller', async () => {
-            await expect(this.foodToken.getController(anon, { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.controller(anon, { from: anon })).to.eventually.be.rejected;
         });
 
         it('allows owner to get a controller', async () => {
-            await expect(this.foodToken.getController(owner)).to.eventually.be.true;
+            await expect(this.foodToken.controller(owner)).to.eventually.be.true;
         });
     });
 
@@ -84,7 +84,7 @@ contract('FastFood', (accounts) => {
         it('allows owner to remove a controller', async () => {
             const res = await this.foodToken.removeController(owner);
             await expect(res.receipt.status).to.be.true;
-            await expect(this.foodToken.getController(owner)).to.eventually.be.false;
+            await expect(this.foodToken.controller(owner)).to.eventually.be.false;
         });
     });
 });

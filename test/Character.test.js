@@ -237,4 +237,14 @@ contract('Character (proxy)', (accounts) => {
             res4b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
         });
     });
+
+    describe('updateCharacter()', () => {
+        it('restricts to controllers only', async () => {
+            await expect(this.character.updateCharacter(1, 2, 4, 123456789)).to.eventually.be.rejectedWith('Only controllers can execute');
+        });
+        it('returns controller status by address', async () => {
+            await expect(this.character.controller(this.kitchen.address)).to.eventually.be.true;
+            await expect(this.character.controller(this.fastFood.address)).to.eventually.be.false;
+        });
+    });
 });

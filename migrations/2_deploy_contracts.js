@@ -65,6 +65,6 @@ module.exports = async (deployer, network) => {
     await character.addController(mcStake.address);
     await character.addController(theStakehouse.address);
     await character.addController(leStake.address);
-    await character.setKitchen(mcStake.address);
     await character.addController(gym.address);
+    await character.setKitchen(mcStake.address);
 };
