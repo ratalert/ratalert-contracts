@@ -10,16 +10,70 @@ import "./FastFood.sol";
 contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, ControllableUpgradeable {
   uint256 public mintPrice;
   mapping(address => uint8) public whitelist; // Mapping from address to a number of remaining whitelist spots
+  mapping(address => uint8) public freeMints; // Mapping from address to a number of remaining free mint spots
   bool public onlyWhitelist; // Whether minting is only open for whitelisted addresses
 
   FastFood fastFood; // Reference to the $FFOOD contract
 
-  function initialize(address _fastFood, uint256 _mintPrice) external initializer {
+  function initialize(address _fastFood, uint256 _mintPrice, bool _onlyWhitelist) external initializer {
     __Ownable_init();
     __Pausable_init();
 
     fastFood = FastFood(_fastFood);
     mintPrice = _mintPrice;
+    onlyWhitelist = _onlyWhitelist;
+  }
+
+  /**
+   * Toggles the whitelist on and off
+   * @param _enable - true enables it
+   */
+  function toggleWhitelist(bool _enable) external onlyOwner {
+    onlyWhitelist = _enable;
+  }
+
+  /**
+   * Adds a list of addresses to the whitelist
+   * @param addresses - An array of addresses to add
+   */
+  function addToWhitelist(address[] memory addresses) external onlyOwner {
+    for (uint i = 0; i < addresses.length; i++) {
+      uint8 amount = whitelist[addresses[i]];
+      whitelist[addresses[i]] = amount < 100 ? amount + 1 : 100;
+    }
+  }
+
+  /**
+   * Remove a list of addresses from the whitelist
+   * @param addresses - An array of addresses to remove
+   */
+  function removeFromWhitelist(address[] memory addresses) external onlyOwner {
+    for (uint i = 0; i < addresses.length; i++) {
+      uint8 amount = whitelist[addresses[i]];
+      whitelist[addresses[i]] = amount > 1 ? amount - 1 : 0;
+    }
+  }
+
+  /**
+   * Adds a list of addresses to the free mints
+   * @param addresses - An array of addresses to add
+   */
+  function addToFreeMints(address[] memory addresses) external onlyOwner {
+    for (uint i = 0; i < addresses.length; i++) {
+      uint8 amount = freeMints[addresses[i]];
+      freeMints[addresses[i]] = amount < 100 ? amount + 1 : 100;
+    }
+  }
+
+  /**
+   * Remove a list of addresses from the free mints
+   * @param addresses - An array of addresses to remove
+   */
+  function removeFromFreeMints(address[] memory addresses) external onlyOwner {
+    for (uint i = 0; i < addresses.length; i++) {
+      uint8 amount = freeMints[addresses[i]];
+      freeMints[addresses[i]] = amount > 1 ? amount - 1 : 0;
+    }
   }
 
   /**
@@ -35,10 +89,21 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
   function handle(address sender, uint8 amount, uint256 msgValue, uint16 minted, uint256 maxTokens, uint256 gen0Tokens) external onlyController {
     require(amount > 0 && amount <= 10, "Invalid mint amount");
     require(minted + amount <= maxTokens, "All tokens minted");
+    uint256 txMintPrice = mintPrice;
+    if (onlyWhitelist) {
+      require(freeMints[sender] >= amount || whitelist[sender] >= amount, "Not whitelisted");
+    }
+    if (freeMints[sender] >= amount) {
+      freeMints[sender] -= amount;
+      txMintPrice = 0;
+    } else if (whitelist[sender] >= amount) {
+      whitelist[sender] -= amount;
+      txMintPrice = mintPrice * 90 / 100;
+    }
     uint256 totalCost = 0;
     if (minted < gen0Tokens) {
       require(minted + amount <= gen0Tokens, "Not enough Gen 0 tokens left, reduce amount");
-      require(amount * mintPrice == msgValue, "Invalid payment amount");
+      require(amount * txMintPrice == msgValue, "Invalid payment amount");
     } else {
       require(msgValue == 0, "Invalid payment type, accepting food tokens only");
       for (uint i = 1; i <= amount; i++) {
@@ -63,27 +128,5 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
     if (tokenId <= maxTokens * 3 / 5) return 1500 ether;
     if (tokenId <= maxTokens * 4 / 5) return 2000 ether;
     return 3000 ether;
-  }
-
-  /**
-   * Adds a list of addresses to the whitelist
-   * @param addresses - An array of addresses to add
-   */
-  function addToWhitelist(address[] memory addresses) external onlyOwner {
-    for (uint i = 0; i < addresses.length; i++) {
-      uint8 amount = whitelist[addresses[i]];
-      whitelist[addresses[i]] = amount + 1 > 250 ? 250 : amount + 1;
-    }
-  }
-
-  /**
-   * Remove a list of addresses from the whitelist
-   * @param addresses - An array of addresses to remove
-   */
-  function removeFromWhitelist(address[] memory addresses) external onlyOwner {
-    for (uint i = 0; i < addresses.length; i++) {
-      uint8 amount = whitelist[addresses[i]];
-      whitelist[addresses[i]] = amount - 1 < 0 ? 0 : amount - 1;
-    }
   }
 }

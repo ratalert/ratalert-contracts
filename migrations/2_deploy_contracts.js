@@ -38,7 +38,7 @@ module.exports = async (deployer, network) => {
     const mint = await deployProxy(Mint, config.mint({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), { deployer });
     const traits = await deployProxy(Traits, { deployer });
     const properties = await deployProxy(Properties, config.properties, { deployer });
-    const paywall = await deployProxy(Paywall, [fastFood.address, config.payWall.mintPrice], { deployer });
+    const paywall = await deployProxy(Paywall, [fastFood.address].concat(config.payWall), { deployer });
     const character = await deployProxy(Character, [[paywall.address, mint.address, traits.address, properties.address]].concat(config.character), { deployer });
     const kitchenShop = await deployProxy(KitchenShop, [fastFood.address, casualFood.address, character.address].concat(config.kitchenShop), { deployer });
     const claim = await deployProxy(Claim, config.claim({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), { deployer });

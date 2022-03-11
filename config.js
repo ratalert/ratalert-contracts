@@ -11,9 +11,10 @@ const vrf = ({ vrfCoordinator, linkToken }) => Object.values({
 module.exports = (network) => ({
     mint: options => vrf(options),
     claim: options => vrf(options),
-    payWall: {
+    payWall: Object.values({
         mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
-    },
+        onlyWhitelist: false,
+    }),
     character: Object.values({
         maxTokens: 50000,
     }),

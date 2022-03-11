@@ -101,8 +101,8 @@ exports.fulfill = async function (res) {
 exports.mintAndFulfill = async function (amount, stake, options = { args: {} }) {
     const character = options.character || this.character;
     const args = options.args || {};
-    args.value === 0 ? delete args.value : args.value = exports.toWei(amount * 0.1);
-    const res1 = await character.mint(amount, stake, args);
+    args.value = typeof args.value !== 'undefined' ? args.value : exports.toWei(amount * 0.1);
+    const res1 = await character.mint(amount, stake, { gasPrice: await web3.eth.getGasPrice(), ...args });
     const res2 = await exports.fulfill.call(this, res1);
     res1.requestId = res2.requestId;
     res1.logs = res2.logs;

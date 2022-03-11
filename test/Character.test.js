@@ -43,6 +43,7 @@ contract('Character (proxy)', (accounts) => {
         await this.fastFood.addController(this.paywall.address);
         await this.fastFood.addController(owner);
         await this.paywall.addController(characterSandbox.address);
+        await this.paywall.addController(owner);
         await this.mint.addController(characterSandbox.address);
         await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals('0');
         await expect(this.character.numChefs()).to.eventually.be.a.bignumber.that.equals('0');
@@ -238,6 +239,18 @@ contract('Character (proxy)', (accounts) => {
             res2b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 1));
             res3b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 3));
             res4b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
+        });
+        it('fails if not whitelisted', async () => {
+            await this.paywall.toggleWhitelist(true);
+            await expect(mintAndFulfill.call(this, 5, true, { args: { from: anon } })).to.eventually.be.rejectedWith('Not whitelisted');
+        });
+        it('succeeds with free mints', async () => {
+            await this.paywall.addToFreeMints([anon]);
+            await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: 0 } })).to.eventually.have.nested.property('receipt.status', true); // free
+        });
+        it('succeeds if whitelisted', async () => {
+            await this.paywall.addToWhitelist([anon]);
+            await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: toWei(0.09) } })).to.eventually.have.nested.property('receipt.status', true); // discounted
         });
     });
 
