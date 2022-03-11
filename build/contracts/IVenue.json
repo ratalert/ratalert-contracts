@@ -1,0 +1,777 @@
+{
+  "contractName": "IVenue",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        }
+      ],
+      "name": "stakeMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "unstake",
+          "type": "bool"
+        }
+      ],
+      "name": "claimMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "requestId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "venue",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "internalType": "uint16[]",
+              "name": "tokenIds",
+              "type": "uint16[]"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstake",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IClaim.VRFStruct",
+          "name": "v",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint256",
+          "name": "randomVal",
+          "type": "uint256"
+        }
+      ],
+      "name": "fulfillClaimMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomVal\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IVenue.sol\":\"IVenue\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0xe2f45abf5f70537a75d4af3799786c2d8b305f041a84ac48120956c328b4965f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b816dc7dcc46f9782299f1ee1ce487a649f864f60c8aa815e56e66a3cc5b404e\",\"dweb:/ipfs/QmagR9DMiFwLdAB1BhG77notw4px1i7dZC1Qq5GaEvzoPD\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"./IClaim.sol\";\n\ninterface IVenue {\n  function stakeMany(address account, uint16[] calldata tokenIds) external;\n  function claimMany(uint16[] calldata tokenIds, bool unstake) external;\n  function fulfillClaimMany(IClaim.VRFStruct memory v, uint256 randomVal) external;\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/IVenue.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IVenue.sol",
+    "exportedSymbols": {
+      "IClaim": [
+        5963
+      ],
+      "IVenue": [
+        6056
+      ]
+    },
+    "id": 6057,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6030,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:40"
+      },
+      {
+        "absolutePath": "project:/contracts/IClaim.sol",
+        "file": "./IClaim.sol",
+        "id": 6031,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 6057,
+        "sourceUnit": 5964,
+        "src": "58:22:40",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IVenue",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 6056,
+        "linearizedBaseContracts": [
+          6056
+        ],
+        "name": "IVenue",
+        "nameLocation": "92:6:40",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 6039,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "112:9:40",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6037,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6033,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "130:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6039,
+                  "src": "122:15:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 6032,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:7:40",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6036,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "157:8:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6039,
+                  "src": "139:26:40",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 6034,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "139:6:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 6035,
+                    "nodeType": "ArrayTypeName",
+                    "src": "139:8:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "121:45:40"
+            },
+            "returnParameters": {
+              "id": 6038,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "175:0:40"
+            },
+            "scope": 6056,
+            "src": "103:73:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "a7a10290",
+            "id": 6047,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "claimMany",
+            "nameLocation": "188:9:40",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6045,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6042,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "216:8:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6047,
+                  "src": "198:26:40",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 6040,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "198:6:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 6041,
+                    "nodeType": "ArrayTypeName",
+                    "src": "198:8:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6044,
+                  "mutability": "mutable",
+                  "name": "unstake",
+                  "nameLocation": "231:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6047,
+                  "src": "226:12:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 6043,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "226:4:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "197:42:40"
+            },
+            "returnParameters": {
+              "id": 6046,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "248:0:40"
+            },
+            "scope": 6056,
+            "src": "179:70:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "922a1802",
+            "id": 6055,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fulfillClaimMany",
+            "nameLocation": "261:16:40",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6053,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6050,
+                  "mutability": "mutable",
+                  "name": "v",
+                  "nameLocation": "302:1:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6055,
+                  "src": "278:25:40",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_VRFStruct_$5950_memory_ptr",
+                    "typeString": "struct IClaim.VRFStruct"
+                  },
+                  "typeName": {
+                    "id": 6049,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 6048,
+                      "name": "IClaim.VRFStruct",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 5950,
+                      "src": "278:16:40"
+                    },
+                    "referencedDeclaration": 5950,
+                    "src": "278:16:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_VRFStruct_$5950_storage_ptr",
+                      "typeString": "struct IClaim.VRFStruct"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6052,
+                  "mutability": "mutable",
+                  "name": "randomVal",
+                  "nameLocation": "313:9:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6055,
+                  "src": "305:17:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6051,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "305:7:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "277:46:40"
+            },
+            "returnParameters": {
+              "id": 6054,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "332:0:40"
+            },
+            "scope": 6056,
+            "src": "252:81:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 6057,
+        "src": "82:253:40",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:303:40"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/IVenue.sol",
+    "exportedSymbols": {
+      "IClaim": [
+        5963
+      ],
+      "IVenue": [
+        6056
+      ]
+    },
+    "id": 6057,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6030,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:40"
+      },
+      {
+        "absolutePath": "project:/contracts/IClaim.sol",
+        "file": "./IClaim.sol",
+        "id": 6031,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 6057,
+        "sourceUnit": 5964,
+        "src": "58:22:40",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IVenue",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 6056,
+        "linearizedBaseContracts": [
+          6056
+        ],
+        "name": "IVenue",
+        "nameLocation": "92:6:40",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 6039,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "112:9:40",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6037,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6033,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "130:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6039,
+                  "src": "122:15:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 6032,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:7:40",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6036,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "157:8:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6039,
+                  "src": "139:26:40",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 6034,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "139:6:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 6035,
+                    "nodeType": "ArrayTypeName",
+                    "src": "139:8:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "121:45:40"
+            },
+            "returnParameters": {
+              "id": 6038,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "175:0:40"
+            },
+            "scope": 6056,
+            "src": "103:73:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "a7a10290",
+            "id": 6047,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "claimMany",
+            "nameLocation": "188:9:40",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6045,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6042,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "216:8:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6047,
+                  "src": "198:26:40",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 6040,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "198:6:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 6041,
+                    "nodeType": "ArrayTypeName",
+                    "src": "198:8:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6044,
+                  "mutability": "mutable",
+                  "name": "unstake",
+                  "nameLocation": "231:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6047,
+                  "src": "226:12:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 6043,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "226:4:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "197:42:40"
+            },
+            "returnParameters": {
+              "id": 6046,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "248:0:40"
+            },
+            "scope": 6056,
+            "src": "179:70:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "922a1802",
+            "id": 6055,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fulfillClaimMany",
+            "nameLocation": "261:16:40",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 6053,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6050,
+                  "mutability": "mutable",
+                  "name": "v",
+                  "nameLocation": "302:1:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6055,
+                  "src": "278:25:40",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_VRFStruct_$5950_memory_ptr",
+                    "typeString": "struct IClaim.VRFStruct"
+                  },
+                  "typeName": {
+                    "id": 6049,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 6048,
+                      "name": "IClaim.VRFStruct",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 5950,
+                      "src": "278:16:40"
+                    },
+                    "referencedDeclaration": 5950,
+                    "src": "278:16:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_VRFStruct_$5950_storage_ptr",
+                      "typeString": "struct IClaim.VRFStruct"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6052,
+                  "mutability": "mutable",
+                  "name": "randomVal",
+                  "nameLocation": "313:9:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6055,
+                  "src": "305:17:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6051,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "305:7:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "277:46:40"
+            },
+            "returnParameters": {
+              "id": 6054,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "332:0:40"
+            },
+            "scope": 6056,
+            "src": "252:81:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 6057,
+        "src": "82:253:40",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:303:40"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.5",
+  "updatedAt": "2022-03-10T22:11:56.641Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
