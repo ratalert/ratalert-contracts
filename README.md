@@ -28,9 +28,17 @@ RatAlert Game
 
 ## Testnet Faucets
 
+### Rinkeby
+
 - [Social Rinkeby Faucet](https://faucet.rinkeby.io/)
 - [MyCrypto](https://app.mycrypto.com/faucet)
 - [ChainLink (Ropsten, Rinkeby, Kovan)](https://faucets.chain.link/rinkeby)
+
+### Mumbai
+
+- [](https://faucet.polygon.technology/)
+- [](https://testmatic.vercel.app/)
+- [ChainLink](https://faucets.chain.link/mumbai)
 
 ## Wolf Game Clones
 

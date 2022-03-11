@@ -7,46 +7,42 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "./ControllableUpgradeable.sol";
 import "./ICharacter.sol";
-import "./FastFood.sol";
 import "./IMint.sol";
 import "./ITraits.sol";
 import "./IProperties.sol";
 import "./IVenue.sol";
+import "./IPaywall.sol";
 
 contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable, ControllableUpgradeable {
   uint16 public minted;
   uint16 public numChefs;
   uint16 public numRats;
-  uint256 public mintPrice;
-  uint256 public maxTokens; // Max number of tokens that can be minted - 50000 in production
-  uint256 public gen0Tokens; // Number of tokens that can be claimed for free - 20% of maxTokens
+  uint256 public maxTokens; // Max number of tokens that can be minted
+  uint256 gen0Tokens; // Number of tokens that are purchased with native token
 
   mapping(uint256 => CharacterStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
-  mapping(uint256 => uint256) public existingCombinations; // Mapping from hashed(tokenTrait) to the tokenId it's associated with, used to ensure there are no duplicates
   mapping(bytes32 => uint16[]) public mintRequests;
 
-  FastFood fastFood; // Reference to the $FFOOD contract
   IMint public theMint; // Reference to Mint
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
   IVenue public kitchen;
+  IPaywall public paywall;
 
   function initialize(
-    address[] memory _addresses, // fastFood, mint, traits, properties
-    uint256 _maxTokens,
-    uint256 _mintPrice
+    address[] memory _addresses, // paywall, mint, traits, properties
+    uint256 _maxTokens
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
     __ERC721_init("RatAlert Characters", "RATCAST");
 
-    fastFood = FastFood(_addresses[0]);
+    paywall = IPaywall(_addresses[0]);
     theMint = IMint(_addresses[1]);
     traits = ITraits(_addresses[2]);
     properties = IProperties(_addresses[3]);
     maxTokens = _maxTokens;
     gen0Tokens = _maxTokens / 5;
-    mintPrice = _mintPrice;
     minted = 0;
     numChefs = 0;
     numRats = 0;
@@ -54,48 +50,19 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
 
   /**
    * ChainLink VRF request: Mints a new ERC721 token: 90% chefs, 10% rats
-   * The first 20% are free to claim, the remaining cost $FFOOD
+   * The first 20% are purchased with native token, the remaining cost $FFOOD
    * @param amount Number of tokens to mint
    * @param stake Number of tokens to mint
    */
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
-    require(amount > 0 && amount <= 10, "Invalid mint amount");
-    require(minted + amount <= maxTokens, "All tokens minted");
-    uint256 totalCost = 0;
-    if (minted < gen0Tokens) {
-      require(minted + amount <= gen0Tokens, "Not enough Gen 0 tokens left, reduce amount");
-      require(amount * mintPrice == msg.value, "Invalid payment amount");
-    } else {
-      require(msg.value == 0, "Invalid payment type, accepting food tokens only");
-      for (uint i = 1; i <= amount; i++) {
-        totalCost += mintCost(minted + i);
-      }
-    }
-    if (totalCost > 0) fastFood.burn(_msgSender(), totalCost);
+    paywall.handle(_msgSender(), amount, msg.value, minted, maxTokens, gen0Tokens);
     bytes32 requestId = theMint.requestRandomNumber(_msgSender(), amount, stake);
     mintRequests[requestId] = new uint16[](amount);
     for (uint i = 0; i < amount; i++) {
       minted++;
       mintRequests[requestId][i] = minted;
     }
-  }
-
-  /**
-   *     1 - 10000: cost ETH
-   * 10001 - 20000: 1000 $FFOOD
-   * 20001 - 30000: 1500 $FFOOD
-   * 30001 - 40000: 2000 $FFOOD
-   * 40001 - 50000: 3000 $FFOOD
-   * @param tokenId - The token ID to check
-   * @return The minting cost of the given ID
-   */
-  function mintCost(uint256 tokenId) public view returns (uint256) {
-    if (tokenId <= gen0Tokens) return 0;
-    if (tokenId <= maxTokens * 2 / 5) return 1000 ether;
-    if (tokenId <= maxTokens * 3 / 5) return 1500 ether;
-    if (tokenId <= maxTokens * 4 / 5) return 2000 ether;
-    return 3000 ether;
   }
 
   /**
