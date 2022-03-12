@@ -1,12 +1,11 @@
 const { admin } = require('@openzeppelin/truffle-upgrades');
+const Config = require('../config');
 
-module.exports = async function (deployer, network) {
-    const gnosisSafe = {
-        rinkeby: '0xf0B3Ee1FA257E0E7816DA1A6E13A0A0bC0c585fD',
-    };
+module.exports = async function (deployer, network, accounts) {
+    const config = Config(network, accounts);
 
-    if (gnosisSafe[network]) {
-        console.log(`Setting Gnosis Safe: ${gnosisSafe[network]}`);
-        await admin.transferProxyAdminOwnership(gnosisSafe[network]);
+    if (network !== 'development') {
+        console.log(`Setting Gnosis Safe: ${config.dao.address}`);
+        await admin.transferProxyAdminOwnership(config.dao.address);
     }
 };

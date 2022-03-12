@@ -7,8 +7,12 @@ const vrf = ({ vrfCoordinator, linkToken }) => Object.values({
     keyHash: '0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311', // Rinkeby 30 gwei Key Hash gas lane
     fee: toWei('0.1', 'ether'),
 });
+const dao = (network, account) => ({
+    address: (network === 'development') ? account : process.env.DAO_ADDRESS,
+});
 
-module.exports = (network) => ({
+module.exports = (network, accounts = []) => ({
+    dao: dao(network, accounts[9]),
     mint: options => vrf(options),
     claim: options => vrf(options),
     payWall: Object.values({

@@ -28,9 +28,10 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
   IProperties public properties; // Reference to Properties
   IVenue public kitchen;
   IPaywall public paywall;
+  address payable dao;
 
   function initialize(
-    address[] memory _addresses, // paywall, mint, traits, properties
+    address[] memory _addresses, // paywall, mint, traits, properties, dao
     uint256 _maxTokens
   ) external initializer {
     __Ownable_init();
@@ -41,6 +42,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
     theMint = IMint(_addresses[1]);
     traits = ITraits(_addresses[2]);
     properties = IProperties(_addresses[3]);
+    dao = payable(_addresses[4]);
     maxTokens = _maxTokens;
     gen0Tokens = _maxTokens / 5;
     minted = 0;
@@ -57,6 +59,9 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
     paywall.handle(_msgSender(), amount, msg.value, minted, maxTokens, gen0Tokens);
+    if (msg.value > 0) {
+      dao.transfer(msg.value); // Transfer to Gnosis Safe
+    }
     bytes32 requestId = theMint.requestRandomNumber(_msgSender(), amount, stake);
     mintRequests[requestId] = new uint16[](amount);
     for (uint i = 0; i < amount; i++) {
@@ -70,7 +75,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpg
    * @param v - VRF struct for the corresponding request
    * @param tokens - List of characters created by the Mint
    */
-  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external {
+  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external whenNotPaused {
     require(msg.sender == address(theMint), "Only the Mint can fulfill");
     require(mintRequests[v.requestId].length > 0, "Mint request not found");
     uint16[] memory tokenIds = mintRequests[v.requestId];

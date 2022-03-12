@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, mintUntilWeHave, trainUntilWeHave, setupVRF } = require('./helper');
+const { toWei, mintUntilWeHave, trainUntilWeHave } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -36,8 +36,6 @@ contract('KitchenShop (proxy)', (accounts) => {
         await this.fastFood.addController(kitchenShopSandbox.address);
         await this.fastFood.addController(owner);
         await this.casualFood.addController(owner);
-        await setupVRF(this.linkToken, this.mint);
-        await setupVRF(this.linkToken, this.claim);
 
         lists = await mintUntilWeHave.call(this, 2, 2);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];

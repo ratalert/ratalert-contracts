@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { advanceTimeAndBlock, mintUntilWeHave, setupVRF, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave } = require('./helper');
+const { advanceTimeAndBlock, mintUntilWeHave, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -26,8 +26,6 @@ contract('Gym (proxy)', (accounts) => {
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
         this.gym = await Gym.deployed();
-        await setupVRF(this.linkToken, this.mint);
-        await setupVRF(this.linkToken, this.claim);
 
         lists = await mintUntilWeHave.call(this, 8, 3);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];

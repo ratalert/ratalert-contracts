@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, setupVRF, claimManyAndFulfill } = require('./helper');
+const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, claimManyAndFulfill } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -33,8 +33,6 @@ contract('LeStake (proxy)', (accounts) => {
         this.kitchenShop = await KitchenShop.deployed();
         this.casualFood = await CasualFood.deployed();
         await this.casualFood.addController(owner);
-        await setupVRF(this.linkToken, this.mint);
-        await setupVRF(this.linkToken, this.claim);
 
         lists = await mintUntilWeHave.call(this, 8, 3);
         lists.many = lists.all;

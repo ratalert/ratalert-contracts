@@ -1,6 +1,8 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock, setupVRF, mintAndFulfill, fulfill, claimManyAndFulfill} = require('./helper');
+const { BN } = require('@openzeppelin/test-helpers');
+const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock, mintAndFulfill, fulfill, claimManyAndFulfill} = require('./helper');
+const Config = require('../config');
 require('@openzeppelin/test-helpers');
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
@@ -19,11 +21,13 @@ const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
 contract('Character (proxy)', (accounts) => {
+    const config = Config('development', accounts)
     const owner = accounts[0];
     const anon = accounts[1];
     const stats = { numChefs : 0, numRats: 0 };
     let lists;
     let characterSandbox;
+    let daoBalance;
 
     before(async () => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
@@ -37,9 +41,7 @@ contract('Character (proxy)', (accounts) => {
         this.traitList = await loadTraits();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
-        await setupVRF(this.linkToken, this.mint);
-        await setupVRF(this.linkToken, this.claim);
-        characterSandbox = await deployProxy(Character, [[this.paywall.address, this.mint.address, this.traits.address, this.properties.address], 5]);
+        characterSandbox = await deployProxy(Character, [[this.paywall.address, this.mint.address, this.traits.address, this.properties.address, config.dao.address], 5]);
         await this.fastFood.addController(this.paywall.address);
         await this.fastFood.addController(owner);
         await this.paywall.addController(characterSandbox.address);
@@ -83,7 +85,7 @@ contract('Character (proxy)', (accounts) => {
             await expect(this.character.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
         });
         it('fails with an invalid mint request', async () => {
-            const sandbox = await deployProxy(Character, [[this.paywall.address, owner, this.traits.address, this.properties.address], 5]);
+            const sandbox = await deployProxy(Character, [[this.paywall.address, owner, this.traits.address, this.properties.address, config.dao.address], 5]);
             await expect(sandbox.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Mint request not found');
         });
         it('fails if all characters have been minted', async () => {
@@ -123,7 +125,9 @@ contract('Character (proxy)', (accounts) => {
 
         it('allows owner to mint', async () => {
             lists = await mintUntilWeHave.call(this, 8, 2);
-            await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(lists.all.length * 0.1));
+            daoBalance = await web3.eth.getBalance(config.dao.address);
+            await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
+            await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
             await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
             await expect(this.character.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
             await expect(this.character.ownerOf(1)).to.eventually.equal(owner);
@@ -192,7 +196,9 @@ contract('Character (proxy)', (accounts) => {
             const res = await mintAndFulfill.call(this, 5, false, { args: { from: anon } });
             const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
             await expect(res.receipt.status).to.be.true;
-            await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(totalMints * 0.1));
+            daoBalance = await web3.eth.getBalance(config.dao.address);
+            await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
+            await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
             await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.character.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5');
             await Promise.all(IDs.map(async id => {
@@ -209,7 +215,9 @@ contract('Character (proxy)', (accounts) => {
             const res = await mintAndFulfill.call(this, 5, true, { args: { from: anon } });
             const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
             await expect(res.receipt.status).to.be.true;
-            await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(totalMints * 0.1));
+            daoBalance = await web3.eth.getBalance(config.dao.address);
+            await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
+            await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
             await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.character.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5'); // Because they are staked!
             await Promise.all(IDs.map(async id => {
