@@ -1,6 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { setupVRF } = require('./helper');
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
+const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -9,6 +10,7 @@ const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Claim = artifacts.require('Claim');
+const config = Config('development')
 
 contract('Claim (proxy)', (accounts) => {
     const owner = accounts[0];
@@ -18,7 +20,9 @@ contract('Claim (proxy)', (accounts) => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
         this.linkToken = await LinkToken.deployed();
         this.claim = await Claim.deployed();
+        this.claimSandbox = await deployProxy(Claim, config.claim({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }));
         await this.claim.addController(owner);
+        await this.claimSandbox.addController(owner);
     });
 
     describe('requestRandomNumber()', () => {
@@ -26,10 +30,9 @@ contract('Claim (proxy)', (accounts) => {
             await expect(this.claim.requestRandomNumber(owner, [1, 2, 3], false, { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
         });
         it('fails if LINK balance is insufficient', async () => {
-            await expect(this.claim.requestRandomNumber(owner, [1, 2, 3], false)).to.eventually.be.rejectedWith('Insufficient LINK');
+            await expect(this.claimSandbox.requestRandomNumber(owner, [1, 2, 3], false)).to.eventually.be.rejectedWith('Insufficient LINK');
         });
         it('creates a mint request', async () => {
-            await setupVRF(this.linkToken, this.claim);
             const { logs } = await this.claim.requestRandomNumber(owner, [1, 2, 3], true);
             const requestId = logs[0].args.requestId;
             expect(logs[0].args.sender).to.equal(owner);

@@ -1,6 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { setupVRF } = require('./helper');
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
+const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -9,6 +10,7 @@ const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
+const config = Config('development')
 
 contract('Mint (proxy)', (accounts) => {
     const owner = accounts[0];
@@ -18,7 +20,9 @@ contract('Mint (proxy)', (accounts) => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
         this.linkToken = await LinkToken.deployed();
         this.mint = await Mint.deployed();
+        this.mintSandbox = await deployProxy(Mint, config.mint({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }))
         await this.mint.addController(owner);
+        await this.mintSandbox.addController(owner);
     });
 
     describe('requestRandomNumber()', () => {
@@ -26,10 +30,9 @@ contract('Mint (proxy)', (accounts) => {
             await expect(this.mint.requestRandomNumber(owner, 5, false, { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
         });
         it('fails if LINK balance is insufficient', async () => {
-            await expect(this.mint.requestRandomNumber(owner, 5, false)).to.eventually.be.rejectedWith('Insufficient LINK');
+            await expect(this.mintSandbox.requestRandomNumber(owner, 5, false)).to.eventually.be.rejectedWith('Insufficient LINK');
         });
         it('creates a mint request', async () => {
-            await setupVRF(this.linkToken, this.mint);
             const { logs } = await this.mint.requestRandomNumber(owner, 5, true);
             const requestId = logs[0].args.requestId;
             expect(requestId).to.have.length(66);

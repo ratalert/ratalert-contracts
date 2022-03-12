@@ -1,7 +1,8 @@
 const dotenv = require('dotenv');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 
-dotenv.config();
+const network = process.argv.includes('--network') ? process.argv[process.argv.indexOf('--network') + 1] || 'develop' : 'develop';
+dotenv.config({ path: `${__dirname}/.env${network === 'develop' ? '' : '.' + network}` });
 const mnemonic = process.env.MNEMONIC;
 const infuraId = process.env.INFURA_ID;
 
@@ -22,20 +23,12 @@ module.exports = {
       // confirmations: 1,
       // timeoutBlocks: 200,
     },
-    ropsten: {
-      provider: () => new HDWalletProvider(mnemonic, `wss://ropsten.infura.io/ws/v3/${infuraId}`),
-      network_id: 3,
-      // gas: 5500000,
-      // confirmations: 0,
-      // timeoutBlocks: 50,
-      // skipDryRun: true,
-    },
     rinkeby: {
       provider: () => new HDWalletProvider(mnemonic, `wss://rinkeby.infura.io/ws/v3/${infuraId}`),
       network_id: 4,
+      skipDryRun: true,
       // gasPrice: 10e9,
       // timeoutBlocks: 50,
-      // skipDryRun: true,
     },
     // Another network with more advanced options...
     // advanced: {

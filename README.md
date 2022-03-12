@@ -6,19 +6,30 @@ RatAlert Game
 - [0xf0B3Ee1FA257E0E7816DA1A6E13A0A0bC0c585fD](https://gnosis-safe.io/app/rin:0xf0B3Ee1FA257E0E7816DA1A6E13A0A0bC0c585fD/)
 
 
-## Testing
+## Initial Setup
 
-    $ truffle develop
+    $ npm install
+    $ npx mnemonics
 
-## Rinkeby Deployment
+
+## Local Development
+
+1. Run development chain in one tab:
+
+        $ truffle develop
+
+1. Then run migration
+
+    $ truffle migrate
+
+
+## Testnet Deployment
 
 1. Deploy the contracts
 
-        truffle migrate --network rinkeby --skip-dry-run
+        truffle migrate --network <network> --skip-dry-run 
 
-2. Create a [Chainlink VRF subscription](https://vrf.chain.link/)
-3. Fund it with LINK
-4. Add the Mint address as consumer (from `truffle network`) 
+1. Manually fund the Claim & Mint contracts with LINK
 
 
 ## TODO
