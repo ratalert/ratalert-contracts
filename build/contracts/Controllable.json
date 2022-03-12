@@ -116,18 +116,18 @@
         4413
       ],
       "Controllable": [
-        5396
+        5422
       ],
       "Ownable": [
         3677
       ]
     },
-    "id": 5397,
+    "id": 5423,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5330,
+        "id": 5356,
         "literals": [
           "solidity",
           "^",
@@ -140,10 +140,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 5331,
+        "id": 5357,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5397,
+        "scope": 5423,
         "sourceUnit": 3678,
         "src": "58:52:30",
         "symbolAliases": [],
@@ -154,13 +154,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 5332,
+              "id": 5358,
               "name": "Ownable",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 3677,
               "src": "146:7:30"
             },
-            "id": 5333,
+            "id": 5359,
             "nodeType": "InheritanceSpecifier",
             "src": "146:7:30"
           }
@@ -169,9 +169,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 5396,
+        "id": 5422,
         "linearizedBaseContracts": [
-          5396,
+          5422,
           3677,
           4413
         ],
@@ -181,12 +181,12 @@
         "nodes": [
           {
             "constant": false,
-            "id": 5337,
+            "id": 5363,
             "mutability": "mutable",
             "name": "controllers",
             "nameLocation": "183:11:30",
             "nodeType": "VariableDeclaration",
-            "scope": 5396,
+            "scope": 5422,
             "src": "158:36:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -195,9 +195,9 @@
               "typeString": "mapping(address => bool)"
             },
             "typeName": {
-              "id": 5336,
+              "id": 5362,
               "keyType": {
-                "id": 5334,
+                "id": 5360,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "166:7:30",
@@ -213,7 +213,7 @@
                 "typeString": "mapping(address => bool)"
               },
               "valueType": {
-                "id": 5335,
+                "id": 5361,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
                 "src": "177:4:30",
@@ -227,7 +227,7 @@
           },
           {
             "body": {
-              "id": 5349,
+              "id": 5375,
               "nodeType": "Block",
               "src": "370:82:30",
               "statements": [
@@ -236,21 +236,21 @@
                     "arguments": [
                       {
                         "baseExpression": {
-                          "id": 5341,
+                          "id": 5367,
                           "name": "controllers",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5337,
+                          "referencedDeclaration": 5363,
                           "src": "384:11:30",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                             "typeString": "mapping(address => bool)"
                           }
                         },
-                        "id": 5344,
+                        "id": 5370,
                         "indexExpression": {
                           "expression": {
-                            "id": 5342,
+                            "id": 5368,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -261,7 +261,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 5343,
+                          "id": 5369,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -287,7 +287,7 @@
                       },
                       {
                         "hexValue": "4f6e6c7920636f6e74726f6c6c6572732063616e2065786563757465",
-                        "id": 5345,
+                        "id": 5371,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -313,7 +313,7 @@
                           "typeString": "literal_string \"Only controllers can execute\""
                         }
                       ],
-                      "id": 5340,
+                      "id": 5366,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -327,7 +327,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5346,
+                    "id": 5372,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -342,29 +342,29 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5347,
+                  "id": 5373,
                   "nodeType": "ExpressionStatement",
                   "src": "376:64:30"
                 },
                 {
-                  "id": 5348,
+                  "id": 5374,
                   "nodeType": "PlaceholderStatement",
                   "src": "446:1:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5338,
+              "id": 5364,
               "nodeType": "StructuredDocumentation",
               "src": "263:78:30",
               "text": " @dev Throws if called by any account other than a controller."
             },
-            "id": 5350,
+            "id": 5376,
             "name": "onlyController",
             "nameLocation": "353:14:30",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 5339,
+              "id": 5365,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "367:2:30"
@@ -375,31 +375,31 @@
           },
           {
             "body": {
-              "id": 5364,
+              "id": 5390,
               "nodeType": "Block",
               "src": "634:42:30",
               "statements": [
                 {
                   "expression": {
                     "baseExpression": {
-                      "id": 5360,
+                      "id": 5386,
                       "name": "controllers",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5337,
+                      "referencedDeclaration": 5363,
                       "src": "647:11:30",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                         "typeString": "mapping(address => bool)"
                       }
                     },
-                    "id": 5362,
+                    "id": 5388,
                     "indexExpression": {
-                      "id": 5361,
+                      "id": 5387,
                       "name": "_controller",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5353,
+                      "referencedDeclaration": 5379,
                       "src": "659:11:30",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -417,29 +417,29 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 5359,
-                  "id": 5363,
+                  "functionReturnParameters": 5385,
+                  "id": 5389,
                   "nodeType": "Return",
                   "src": "640:31:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5351,
+              "id": 5377,
               "nodeType": "StructuredDocumentation",
               "src": "456:95:30",
               "text": " Gets controller status by address\n @param _controller - The address to check"
             },
             "functionSelector": "c13aa7b5",
-            "id": 5365,
+            "id": 5391,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5356,
+                "id": 5382,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 5355,
+                  "id": 5381,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 3619,
@@ -453,17 +453,17 @@
             "nameLocation": "563:10:30",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5354,
+              "id": 5380,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5353,
+                  "id": 5379,
                   "mutability": "mutable",
                   "name": "_controller",
                   "nameLocation": "582:11:30",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5365,
+                  "scope": 5391,
                   "src": "574:19:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -472,7 +472,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5352,
+                    "id": 5378,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "574:7:30",
@@ -488,17 +488,17 @@
               "src": "573:21:30"
             },
             "returnParameters": {
-              "id": 5359,
+              "id": 5385,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5358,
+                  "id": 5384,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5365,
+                  "scope": 5391,
                   "src": "628:4:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -507,7 +507,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 5357,
+                    "id": 5383,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "628:4:30",
@@ -521,7 +521,7 @@
               ],
               "src": "627:6:30"
             },
-            "scope": 5396,
+            "scope": 5422,
             "src": "554:122:30",
             "stateMutability": "view",
             "virtual": false,
@@ -529,37 +529,37 @@
           },
           {
             "body": {
-              "id": 5379,
+              "id": 5405,
               "nodeType": "Block",
               "src": "842:42:30",
               "statements": [
                 {
                   "expression": {
-                    "id": 5377,
+                    "id": 5403,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 5373,
+                        "id": 5399,
                         "name": "controllers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5337,
+                        "referencedDeclaration": 5363,
                         "src": "848:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 5375,
+                      "id": 5401,
                       "indexExpression": {
-                        "id": 5374,
+                        "id": 5400,
                         "name": "_controller",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5368,
+                        "referencedDeclaration": 5394,
                         "src": "860:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -581,7 +581,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "74727565",
-                      "id": 5376,
+                      "id": 5402,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -601,28 +601,28 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 5378,
+                  "id": 5404,
                   "nodeType": "ExpressionStatement",
                   "src": "848:31:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5366,
+              "id": 5392,
               "nodeType": "StructuredDocumentation",
               "src": "680:96:30",
               "text": " Enables an address to mint / burn\n @param _controller - The address to enable"
             },
             "functionSelector": "a7fc7a07",
-            "id": 5380,
+            "id": 5406,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5371,
+                "id": 5397,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 5370,
+                  "id": 5396,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 3619,
@@ -636,17 +636,17 @@
             "nameLocation": "788:13:30",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5369,
+              "id": 5395,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5368,
+                  "id": 5394,
                   "mutability": "mutable",
                   "name": "_controller",
                   "nameLocation": "810:11:30",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5380,
+                  "scope": 5406,
                   "src": "802:19:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -655,7 +655,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5367,
+                    "id": 5393,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "802:7:30",
@@ -671,12 +671,12 @@
               "src": "801:21:30"
             },
             "returnParameters": {
-              "id": 5372,
+              "id": 5398,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "842:0:30"
             },
-            "scope": 5396,
+            "scope": 5422,
             "src": "779:105:30",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -684,37 +684,37 @@
           },
           {
             "body": {
-              "id": 5394,
+              "id": 5420,
               "nodeType": "Block",
               "src": "1063:43:30",
               "statements": [
                 {
                   "expression": {
-                    "id": 5392,
+                    "id": 5418,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 5388,
+                        "id": 5414,
                         "name": "controllers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5337,
+                        "referencedDeclaration": 5363,
                         "src": "1069:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 5390,
+                      "id": 5416,
                       "indexExpression": {
-                        "id": 5389,
+                        "id": 5415,
                         "name": "_controller",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5383,
+                        "referencedDeclaration": 5409,
                         "src": "1081:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -736,7 +736,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "66616c7365",
-                      "id": 5391,
+                      "id": 5417,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -756,28 +756,28 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 5393,
+                  "id": 5419,
                   "nodeType": "ExpressionStatement",
                   "src": "1069:32:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5381,
+              "id": 5407,
               "nodeType": "StructuredDocumentation",
               "src": "888:106:30",
               "text": " Disables an address from minting / burning\n @param _controller - The address to disable"
             },
             "functionSelector": "f6a74ed7",
-            "id": 5395,
+            "id": 5421,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5386,
+                "id": 5412,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 5385,
+                  "id": 5411,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 3619,
@@ -791,17 +791,17 @@
             "nameLocation": "1006:16:30",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5384,
+              "id": 5410,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5383,
+                  "id": 5409,
                   "mutability": "mutable",
                   "name": "_controller",
                   "nameLocation": "1031:11:30",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5395,
+                  "scope": 5421,
                   "src": "1023:19:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -810,7 +810,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5382,
+                    "id": 5408,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1023:7:30",
@@ -826,19 +826,19 @@
               "src": "1022:21:30"
             },
             "returnParameters": {
-              "id": 5387,
+              "id": 5413,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1063:0:30"
             },
-            "scope": 5396,
+            "scope": 5422,
             "src": "997:109:30",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5397,
+        "scope": 5423,
         "src": "112:996:30",
         "usedErrors": []
       }
@@ -852,18 +852,18 @@
         4413
       ],
       "Controllable": [
-        5396
+        5422
       ],
       "Ownable": [
         3677
       ]
     },
-    "id": 5397,
+    "id": 5423,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5330,
+        "id": 5356,
         "literals": [
           "solidity",
           "^",
@@ -876,10 +876,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 5331,
+        "id": 5357,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5397,
+        "scope": 5423,
         "sourceUnit": 3678,
         "src": "58:52:30",
         "symbolAliases": [],
@@ -890,13 +890,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 5332,
+              "id": 5358,
               "name": "Ownable",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 3677,
               "src": "146:7:30"
             },
-            "id": 5333,
+            "id": 5359,
             "nodeType": "InheritanceSpecifier",
             "src": "146:7:30"
           }
@@ -905,9 +905,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 5396,
+        "id": 5422,
         "linearizedBaseContracts": [
-          5396,
+          5422,
           3677,
           4413
         ],
@@ -917,12 +917,12 @@
         "nodes": [
           {
             "constant": false,
-            "id": 5337,
+            "id": 5363,
             "mutability": "mutable",
             "name": "controllers",
             "nameLocation": "183:11:30",
             "nodeType": "VariableDeclaration",
-            "scope": 5396,
+            "scope": 5422,
             "src": "158:36:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -931,9 +931,9 @@
               "typeString": "mapping(address => bool)"
             },
             "typeName": {
-              "id": 5336,
+              "id": 5362,
               "keyType": {
-                "id": 5334,
+                "id": 5360,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "166:7:30",
@@ -949,7 +949,7 @@
                 "typeString": "mapping(address => bool)"
               },
               "valueType": {
-                "id": 5335,
+                "id": 5361,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
                 "src": "177:4:30",
@@ -963,7 +963,7 @@
           },
           {
             "body": {
-              "id": 5349,
+              "id": 5375,
               "nodeType": "Block",
               "src": "370:82:30",
               "statements": [
@@ -972,21 +972,21 @@
                     "arguments": [
                       {
                         "baseExpression": {
-                          "id": 5341,
+                          "id": 5367,
                           "name": "controllers",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5337,
+                          "referencedDeclaration": 5363,
                           "src": "384:11:30",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                             "typeString": "mapping(address => bool)"
                           }
                         },
-                        "id": 5344,
+                        "id": 5370,
                         "indexExpression": {
                           "expression": {
-                            "id": 5342,
+                            "id": 5368,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -997,7 +997,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 5343,
+                          "id": 5369,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1023,7 +1023,7 @@
                       },
                       {
                         "hexValue": "4f6e6c7920636f6e74726f6c6c6572732063616e2065786563757465",
-                        "id": 5345,
+                        "id": 5371,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1049,7 +1049,7 @@
                           "typeString": "literal_string \"Only controllers can execute\""
                         }
                       ],
-                      "id": 5340,
+                      "id": 5366,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1063,7 +1063,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5346,
+                    "id": 5372,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1078,29 +1078,29 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5347,
+                  "id": 5373,
                   "nodeType": "ExpressionStatement",
                   "src": "376:64:30"
                 },
                 {
-                  "id": 5348,
+                  "id": 5374,
                   "nodeType": "PlaceholderStatement",
                   "src": "446:1:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5338,
+              "id": 5364,
               "nodeType": "StructuredDocumentation",
               "src": "263:78:30",
               "text": " @dev Throws if called by any account other than a controller."
             },
-            "id": 5350,
+            "id": 5376,
             "name": "onlyController",
             "nameLocation": "353:14:30",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 5339,
+              "id": 5365,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "367:2:30"
@@ -1111,31 +1111,31 @@
           },
           {
             "body": {
-              "id": 5364,
+              "id": 5390,
               "nodeType": "Block",
               "src": "634:42:30",
               "statements": [
                 {
                   "expression": {
                     "baseExpression": {
-                      "id": 5360,
+                      "id": 5386,
                       "name": "controllers",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5337,
+                      "referencedDeclaration": 5363,
                       "src": "647:11:30",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                         "typeString": "mapping(address => bool)"
                       }
                     },
-                    "id": 5362,
+                    "id": 5388,
                     "indexExpression": {
-                      "id": 5361,
+                      "id": 5387,
                       "name": "_controller",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5353,
+                      "referencedDeclaration": 5379,
                       "src": "659:11:30",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1153,29 +1153,29 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 5359,
-                  "id": 5363,
+                  "functionReturnParameters": 5385,
+                  "id": 5389,
                   "nodeType": "Return",
                   "src": "640:31:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5351,
+              "id": 5377,
               "nodeType": "StructuredDocumentation",
               "src": "456:95:30",
               "text": " Gets controller status by address\n @param _controller - The address to check"
             },
             "functionSelector": "c13aa7b5",
-            "id": 5365,
+            "id": 5391,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5356,
+                "id": 5382,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 5355,
+                  "id": 5381,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 3619,
@@ -1189,17 +1189,17 @@
             "nameLocation": "563:10:30",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5354,
+              "id": 5380,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5353,
+                  "id": 5379,
                   "mutability": "mutable",
                   "name": "_controller",
                   "nameLocation": "582:11:30",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5365,
+                  "scope": 5391,
                   "src": "574:19:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1208,7 +1208,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5352,
+                    "id": 5378,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "574:7:30",
@@ -1224,17 +1224,17 @@
               "src": "573:21:30"
             },
             "returnParameters": {
-              "id": 5359,
+              "id": 5385,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5358,
+                  "id": 5384,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5365,
+                  "scope": 5391,
                   "src": "628:4:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1243,7 +1243,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 5357,
+                    "id": 5383,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "628:4:30",
@@ -1257,7 +1257,7 @@
               ],
               "src": "627:6:30"
             },
-            "scope": 5396,
+            "scope": 5422,
             "src": "554:122:30",
             "stateMutability": "view",
             "virtual": false,
@@ -1265,37 +1265,37 @@
           },
           {
             "body": {
-              "id": 5379,
+              "id": 5405,
               "nodeType": "Block",
               "src": "842:42:30",
               "statements": [
                 {
                   "expression": {
-                    "id": 5377,
+                    "id": 5403,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 5373,
+                        "id": 5399,
                         "name": "controllers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5337,
+                        "referencedDeclaration": 5363,
                         "src": "848:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 5375,
+                      "id": 5401,
                       "indexExpression": {
-                        "id": 5374,
+                        "id": 5400,
                         "name": "_controller",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5368,
+                        "referencedDeclaration": 5394,
                         "src": "860:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1317,7 +1317,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "74727565",
-                      "id": 5376,
+                      "id": 5402,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1337,28 +1337,28 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 5378,
+                  "id": 5404,
                   "nodeType": "ExpressionStatement",
                   "src": "848:31:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5366,
+              "id": 5392,
               "nodeType": "StructuredDocumentation",
               "src": "680:96:30",
               "text": " Enables an address to mint / burn\n @param _controller - The address to enable"
             },
             "functionSelector": "a7fc7a07",
-            "id": 5380,
+            "id": 5406,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5371,
+                "id": 5397,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 5370,
+                  "id": 5396,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 3619,
@@ -1372,17 +1372,17 @@
             "nameLocation": "788:13:30",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5369,
+              "id": 5395,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5368,
+                  "id": 5394,
                   "mutability": "mutable",
                   "name": "_controller",
                   "nameLocation": "810:11:30",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5380,
+                  "scope": 5406,
                   "src": "802:19:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1391,7 +1391,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5367,
+                    "id": 5393,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "802:7:30",
@@ -1407,12 +1407,12 @@
               "src": "801:21:30"
             },
             "returnParameters": {
-              "id": 5372,
+              "id": 5398,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "842:0:30"
             },
-            "scope": 5396,
+            "scope": 5422,
             "src": "779:105:30",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -1420,37 +1420,37 @@
           },
           {
             "body": {
-              "id": 5394,
+              "id": 5420,
               "nodeType": "Block",
               "src": "1063:43:30",
               "statements": [
                 {
                   "expression": {
-                    "id": 5392,
+                    "id": 5418,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 5388,
+                        "id": 5414,
                         "name": "controllers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5337,
+                        "referencedDeclaration": 5363,
                         "src": "1069:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 5390,
+                      "id": 5416,
                       "indexExpression": {
-                        "id": 5389,
+                        "id": 5415,
                         "name": "_controller",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5383,
+                        "referencedDeclaration": 5409,
                         "src": "1081:11:30",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1472,7 +1472,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "66616c7365",
-                      "id": 5391,
+                      "id": 5417,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1492,28 +1492,28 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 5393,
+                  "id": 5419,
                   "nodeType": "ExpressionStatement",
                   "src": "1069:32:30"
                 }
               ]
             },
             "documentation": {
-              "id": 5381,
+              "id": 5407,
               "nodeType": "StructuredDocumentation",
               "src": "888:106:30",
               "text": " Disables an address from minting / burning\n @param _controller - The address to disable"
             },
             "functionSelector": "f6a74ed7",
-            "id": 5395,
+            "id": 5421,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 5386,
+                "id": 5412,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 5385,
+                  "id": 5411,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 3619,
@@ -1527,17 +1527,17 @@
             "nameLocation": "1006:16:30",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5384,
+              "id": 5410,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5383,
+                  "id": 5409,
                   "mutability": "mutable",
                   "name": "_controller",
                   "nameLocation": "1031:11:30",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5395,
+                  "scope": 5421,
                   "src": "1023:19:30",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1546,7 +1546,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5382,
+                    "id": 5408,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1023:7:30",
@@ -1562,19 +1562,19 @@
               "src": "1022:21:30"
             },
             "returnParameters": {
-              "id": 5387,
+              "id": 5413,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1063:0:30"
             },
-            "scope": 5396,
+            "scope": 5422,
             "src": "997:109:30",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5397,
+        "scope": 5423,
         "src": "112:996:30",
         "usedErrors": []
       }
@@ -1587,7 +1587,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-12T10:21:32.343Z",
+  "updatedAt": "2022-03-12T17:24:30.116Z",
   "devdoc": {
     "kind": "dev",
     "methods": {
