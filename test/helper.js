@@ -82,8 +82,34 @@ exports.uploadKitchens = async (kitchenShop) => {
     const data = await module.exports.loadKitchens();
     return Promise.all(data.map((kitchen, i) => kitchenShop.uploadImage(i, kitchen)));
 };
-exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists = { all: [], chefs: [], rats: [] }) {
-    const { logs } = await this.character.mint(10, false, { ...options, value: exports.toWei(1) });
+exports.fulfill = async function (res) {
+    const randomNumberRequestedAbi = this.mint.abi.find(item => item.name === 'RandomNumberRequested');
+    const transferAbi = this.mint.abi.find(item => item.name === 'Transfer');
+    const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
+    const requestId = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics).requestId;
+    const res2 = await this.vrfCoordinator.callBackWithRandomness(requestId, 458948534, this.mint.address);
+    const transferEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === transferAbi.signature);
+    res2.requestId = requestId;
+    res2.logs = transferEvents.map(item => {
+        item.args = web3.eth.abi.decodeLog(transferAbi.inputs, item.data, item.topics.slice(1));
+        delete item.data;
+        delete item.topics;
+        return item;
+    });
+    return res2;
+};
+exports.mintAndFulfill = async function (amount, stake, options = { args: {} }) {
+    const character = options.character || this.character;
+    const args = options.args || {};
+    args.value = typeof args.value !== 'undefined' ? args.value : exports.toWei(amount * 0.1);
+    const res1 = await character.mint(amount, stake, { gasPrice: await web3.eth.getGasPrice(), ...args });
+    const res2 = await exports.fulfill.call(this, res1);
+    res1.requestId = res2.requestId;
+    res1.logs = res2.logs;
+    return res1;
+};
+exports.mintUntilWeHave = async function (numChefs, numRats, options, lists = { all: [], chefs: [], rats: [] }) {
+    const { logs } = await exports.mintAndFulfill.call(this, 10, false, options);
     const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
     await Promise.all(ids.map(async id => {
         const traits = await this.character.getTokenTraits(id);
@@ -97,23 +123,57 @@ exports.mintUntilWeHave = async function (numChefs, numRats, options = {}, lists
     }
     return lists;
 };
+exports.fulfillClaimMany = async function (res) {
+    const randomNumberRequestedAbi = this.claim.abi.find(item => item.name === 'RandomNumberRequested');
+    const chefClaimedAbi = this.kitchen.abi.find(item => item.name === 'ChefClaimed');
+    const ratClaimedAbi = this.kitchen.abi.find(item => item.name === 'RatClaimed');
+    const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
+    const requestId = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics).requestId;
+    const res2 = await this.vrfCoordinator.callBackWithRandomness(requestId, Math.floor(Math.random()*1000000000), this.claim.address);
+    const chefClaimedEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === chefClaimedAbi.signature);
+    const ratClaimedEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === ratClaimedAbi.signature);
+    res2.requestId = requestId;
+    chefClaimedEvents.forEach(item => {
+        item.args = web3.eth.abi.decodeLog(chefClaimedAbi.inputs, item.data, item.topics.slice(1));
+        item.event = 'ChefClaimed';
+        delete item.data;
+        delete item.topics;
+        res2.logs.push(item);
+    });
+    ratClaimedEvents.forEach(item => {
+        item.args = web3.eth.abi.decodeLog(ratClaimedAbi.inputs, item.data, item.topics.slice(1));
+        item.event = 'RatClaimed';
+        delete item.data;
+        delete item.topics;
+        res2.logs.push(item);
+    });
+    return res2;
+};
+exports.claimManyAndFulfill = async function (venue, ids, unstake, options = { args: {} }) {
+    const res1 = await venue.claimMany(ids, unstake, { gasPrice: await web3.eth.getGasPrice(), ...options.args });
+    const res2 = await exports.fulfillClaimMany.call(this, res1, options);
+    res1.logs = res2.logs;
+    return res1;
+};
 exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, days, unstake, options = {}) {
-    console.log(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}...`);
+    process.stdout.write(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}`);
     const ids = list.map(item => item.id);
-    await kitchen.stakeMany(options.from, ids, { ...options });
+    await kitchen.stakeMany(options.from, ids, { gasPrice: await web3.eth.getGasPrice(), ...options }); // Because it needs to be a valid tx params object
     let done;
     while (!done) {
         await exports.advanceTimeAndBlock(86400 * days); // Wait a few days
-        const { logs } = await kitchen.claimMany(ids, false);
+        const { logs } = await exports.claimManyAndFulfill.call(this, kitchen, ids, false);
         const efficiencyValues = logs.map(log => Number((log.args.skill ? log.args.skill : log.args.intelligence).toString()));
         const efficiencyReached = (efficiency < 0) ? efficiencyValues.filter(val => val > -efficiency).length === 0 : efficiencyValues.filter(val => val < efficiency).length === 0;
         const toleranceValues = logs.map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
         const toleranceReached = (tolerance < 0) ? toleranceValues.filter(val => val > -tolerance).length === 0 : toleranceValues.filter(val => val < tolerance).length === 0;
         done = efficiencyReached && toleranceReached;
+        process.stdout.write('.');
     }
+    process.stdout.write('\n');
     if (unstake) {
         await exports.advanceTimeAndBlock(3600); // Wait another hour so we can unstake
-        await kitchen.claimMany(ids, true);
+        await exports.claimManyAndFulfill.call(this, kitchen, ids, true);
         await Promise.all(list.map(async (item) => {
             const traits = await this.character.tokenTraits(item.id);
             item.efficiency = Number(traits.efficiency.toString());
@@ -144,4 +204,7 @@ exports.expectRatEarnings = (earned, pot, numRats, tolerance) => {
     const factor = exports.ratBoost(tolerance);
     const net = pot * factor / numRats;
     expect(earned).to.be.a.bignumber.gte(exports.toWei(net * 0.9999)).lt(exports.toWei(net * 1.0001));
+};
+exports.setupVRF = async (linkToken, consumer) => {
+    return linkToken.mint(consumer.address, exports.toWei(1000));
 };

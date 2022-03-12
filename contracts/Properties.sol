@@ -41,28 +41,32 @@ contract Properties is Initializable, OwnableUpgradeable {
 
   /**
    * Does a burnout / cat event occur?
+   * @param isChef - Whether it's a Chef or not
    * @param efficiency - The character's current value
+   * @param randomVal - A ChainLink VRF random number
    * @return true if event occurred
    */
-  function _doesDisasterOccur(bool isChef, int8 efficiency) internal view returns(bool) {
+  function _doesDisasterOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
     if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) {
       return false;
     }
     uint8 likelihood = uint8(((efficiency - 100) / -4 * 10) + 20);
-    return random(uint8(efficiency)) % 1000 < likelihood;
+    return randomVal % 1000 < likelihood;
   }
 
   /**
    * Does a food inspector / rat trap event occur?
+   * @param isChef - Whether it's a Chef or not
    * @param efficiency - The character's current value
+   * @param randomVal - A ChainLink VRF random number
    * @return true if event occurred
    */
-  function _doesMishapOccur(bool isChef, int8 efficiency) internal view returns(bool) {
+  function _doesMishapOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
     if (efficiency <= (isChef ? mishapEfficiencyMinimumChef : mishapEfficiencyMinimumRat)) {
       return false;
     }
     uint8 likelihood = uint8(((efficiency - 100) * -1) + 20);
-    return random(uint8(efficiency)) % 1000 < likelihood;
+    return randomVal % 1000 < likelihood;
   }
 
   function _resolveDisaster() internal pure returns(uint8, uint8) {
@@ -85,31 +89,17 @@ contract Properties is Initializable, OwnableUpgradeable {
     }
   }
 
-  function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement) public view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
+  function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     eventName = "";
-    if (_doesDisasterOccur(isChef, int8(currentEfficiency))) {
+    if (_doesDisasterOccur(isChef, int8(currentEfficiency), randomVal)) {
       (efficiencyValue, toleranceValue) = _resolveDisaster();
       eventName = isChef ? "burnout" : "cat";
-    } else if (_doesMishapOccur(isChef, int8(currentEfficiency))) {
+    } else if (_doesMishapOccur(isChef, int8(currentEfficiency), randomVal)) {
       (efficiencyValue, toleranceValue) = _resolveMishap(isChef, currentEfficiency, currentTolerance);
       eventName = isChef ? "foodInspector" : "ratTrap";
     } else {
       efficiencyValue = _getUpdatedValue(currentEfficiency, efficiencyIncrement);
       toleranceValue = _getUpdatedValue(currentTolerance, toleranceIncrement);
     }
-  }
-
-  /**
-   * Generates a pseudorandom number
-   * @param seed - A value to ensure different outcomes for different sources in the same block
-   * @return A pseudorandom value
-   */
-  function random(uint256 seed) internal view returns (uint256) {
-    return uint256(keccak256(abi.encodePacked(
-        tx.origin,
-        blockhash(block.number - 1),
-        block.timestamp,
-        seed
-      )));
   }
 }

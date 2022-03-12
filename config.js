@@ -1,18 +1,30 @@
 const web3 = require('web3');
 const toWei = web3.utils.toWei;
 
+const vrf = ({ vrfCoordinator, linkToken }) => Object.values({
+    vrfCoordinator: vrfCoordinator || '0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B', // Rinkeby coordinator
+    linkToken: linkToken || '0x01BE23585060835E02B77ef475b0Cc51aA1e0709', // Rinkeby LINK token contract
+    keyHash: '0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311', // Rinkeby 30 gwei Key Hash gas lane
+    fee: toWei('0.1', 'ether'),
+});
+
 module.exports = (network) => ({
+    mint: options => vrf(options),
+    claim: options => vrf(options),
+    payWall: Object.values({
+        mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
+        onlyWhitelist: false,
+    }),
     character: Object.values({
         maxTokens: 50000,
-        mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
     }),
     kitchen: {
-        foodTokenMaxSupply: 50000000,
         dailyChefEarnings: 250,
         ratTheftPercentage: 20,
         vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
         accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
         mcStake: {
+            foodTokenMaxSupply: 50000000,
             propertyIncrements: Object.values({
                 dailySkillRate: 2,
                 dailyInsanityRate: 4,
@@ -21,6 +33,7 @@ module.exports = (network) => ({
             }),
         },
         theStakehouse: {
+            foodTokenMaxSupply: 5000000,
             propertyIncrements: Object.values({
                 dailySkillRate: 4,
                 dailyInsanityRate: 6,
@@ -30,6 +43,7 @@ module.exports = (network) => ({
             minEfficiency: ['live', 'development'].includes(network) ? 28 : 2,
         },
         leStake: {
+            foodTokenMaxSupply: 500000,
             propertyIncrements: Object.values({
                 dailySkillRate: 6,
                 dailyInsanityRate: 8,

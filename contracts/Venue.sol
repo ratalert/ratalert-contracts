@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol";
 import "./IVenue.sol";
+import "./IClaim.sol";
 import "./Character.sol";
 
 abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
@@ -21,11 +22,13 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity, string eventName, uint256 foodTokensPerRat);
   event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness, string eventName);
 
-  Character character; // Reference to the Character NFT contract
+  Character character; // Reference to the Character
+  IClaim public claim; // Reference to the Mint
 
   mapping(uint256 => Stake) public chefs; // Maps tokenId to stake
   mapping(uint256 => Stake) public rats; // Maps tokenId to stake
   mapping(address => uint256[]) public stakers; // Maps address to array of character IDs
+  mapping(bytes32 => uint16[]) public claimRequests; // Maps VRF ID to claim request
   int8 public dailySkillRate;
   int8 public dailyInsanityRate;
   int8 public dailyIntelligenceRate;
@@ -36,11 +39,15 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
   uint256 public vestingPeriod; // Cannot unstake for this many seconds
 
-  function initialize(address _character, uint256 _accrualPeriod) external initializer {
+  function initialize(
+    address[] memory _addresses, // character, claim
+    uint256 _accrualPeriod
+  ) external initializer {
     __Ownable_init();
     __Pausable_init();
 
-    character = Character(_character);
+    character = Character(_addresses[0]);
+    claim = IClaim(_addresses[1]);
     accrualPeriod = _accrualPeriod;
 
     dailySkillRate = 0;
@@ -56,7 +63,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    */
   function stakeMany(address account, uint16[] calldata tokenIds) external {
     require(account == _msgSender() || _msgSender() == address(character), "Do not lose your tokens");
-    require(_checkSpace(tokenIds.length), "Kitchen space required");
+    require(_checkSpace(_msgSender(), tokenIds.length), "Kitchen space required");
     for (uint i = 0; i < tokenIds.length; i++) {
       if (_msgSender() != address(character)) { // Not necessary if it's a mint & stake
         require(character.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
@@ -109,28 +116,51 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   }
 
   /**
-   * Claim food token earnings, level-ups and optionally unstake characters
+   * ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters
    * @param tokenIds - The IDs of the tokens in question
    * @param unstake - Whether or not to unstake the given tokens
    */
   function claimMany(uint16[] calldata tokenIds, bool unstake) external virtual whenNotPaused {
-    address account = _msgSender();
+    for (uint i = 0; i < tokenIds.length; i++) {
+      Stake memory stake = isChef(tokenIds[i]) ? chefs[tokenIds[i]] : rats[tokenIds[i]];
+      require(stake.owner == _msgSender(), "Not your token");
+      require(block.timestamp - stake.timestamp >= vestingPeriod, "Cannot claim before EOB");
+      // TODO Also check space & eligibiltiy stuff here
+    }
+
+    bytes32 requestId = claim.requestRandomNumber(_msgSender(), tokenIds, unstake);
+    claimRequests[requestId] = tokenIds;
+  }
+
+  /**
+   * ChainLink VRF callback for claimMany()
+   * @param v - VRF struct for the corresponding request
+   * @param randomVal - List of random values created by VRF
+   */
+  function fulfillClaimMany(IClaim.VRFStruct memory v, uint256 randomVal) external virtual whenNotPaused {
+    require(msg.sender == address(claim), "Only Claim can fulfill");
+    require(claimRequests[v.requestId].length > 0, "Claim request not found");
+    // TODO Wait for previous request to be fulfilled
+
+    uint16[] memory tokenIds = claimRequests[v.requestId];
+    delete claimRequests[v.requestId];
+
     uint256 owed = 0;
     for (uint i = 0; i < tokenIds.length; i++) {
-      bool space = _checkSpace(0);
+      bool space = _checkSpace(v.sender, 0);
       if (isChef(tokenIds[i]))
-        owed += _claimChef(tokenIds[i], !space || unstake, !space);
+        owed += _claimChef(tokenIds[i], v.sender, !space || v.unstake, !space, randomVal);
       else
-        owed += _claimRat(tokenIds[i], !space || unstake, !space);
-      for (uint j = 0; j < stakers[account].length; j++) {
-        if (stakers[account][j] == tokenIds[i]) {
-          stakers[account][j] = stakers[account][stakers[account].length - 1];
-          stakers[account].pop();
+        owed += _claimRat(tokenIds[i], v.sender, !space || v.unstake, !space, randomVal);
+      for (uint j = 0; j < stakers[v.sender].length; j++) {
+        if (stakers[v.sender][j] == tokenIds[i]) {
+          stakers[v.sender][j] = stakers[v.sender][stakers[v.sender].length - 1];
+          stakers[v.sender].pop();
         }
       }
     }
     if (owed > 0) {
-      _mintFoodToken(owed);
+      _mintFoodToken(v.sender, owed);
     }
   }
 
@@ -138,30 +168,32 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    * Claim food tokens & level-ups for a single Chef and optionally unstake him
    * @param tokenId - The ID of the Chef to level up
    * @param unstake - Whether or not to unstake the Chef
+   * @param sender - User wallet address
    * @param noEarnings - Whether or not to cancel earnings
+   * @param randomVal - A ChainLink VRF random number
    * @return owed - Food tokens produced during staking
    */
-  function _claimChef(uint256 tokenId, bool unstake, bool noEarnings) internal returns (uint256 owed) {
+  function _claimChef(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal returns (uint256 owed) {
     Stake memory stake = chefs[tokenId];
-    require(stake.owner == _msgSender(), "Not your token");
-    require(!(unstake && block.timestamp - stake.timestamp < vestingPeriod), "Cannot leave before EOB");
+    require(stake.owner == sender, "Not your token");
+    require(block.timestamp - stake.timestamp >= vestingPeriod, "Cannot claim before EOB");
 
     owed = noEarnings ? 0 : _getOwedByChef(stake);
 
-    (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId);
+    (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId, randomVal);
 
     if (!_checkEligibility(tokenId)) {
       unstake = true;
     }
 
     if (unstake) {
-      character.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Chef back to owner
+      character.safeTransferFrom(address(this), sender, tokenId, ""); // Send Chef back to owner
       delete chefs[tokenId];
       totalChefsStaked --;
     } else {
       chefs[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),
-        owner: _msgSender(),
+        owner: sender,
         value: uint80(block.timestamp),
         timestamp: uint80(block.timestamp)
       });
@@ -172,31 +204,33 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   /**
    * Claim food tokens & level-ups for a single Rat and optionally unstake it
    * @param tokenId - The ID of the Rat to level up
+   * @param sender - User wallet address
    * @param unstake - Whether or not to unstake the Rat
    * @param noEarnings - Whether or not to cancel earnings
+   * @param randomVal - A ChainLink VRF random number
    * @return owed - Food tokens stolen during staking
    */
-  function _claimRat(uint256 tokenId, bool unstake, bool noEarnings) internal returns (uint256 owed) {
+  function _claimRat(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal returns (uint256 owed) {
     Stake memory stake = rats[tokenId];
-    require(stake.owner == _msgSender(), "Not your token");
-    require(!(unstake && block.timestamp - stake.timestamp < vestingPeriod), "Cannot leave before EOB");
+    require(stake.owner == sender, "Not your token");
+    require(block.timestamp - stake.timestamp >= vestingPeriod, "Cannot claim before EOB");
 
     owed = noEarnings ? 0 : _getOwedByRat(stake);
 
-    (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId);
+    (uint8 efficiency, uint8 tolerance, string memory eventName) = _updateCharacter(tokenId, randomVal);
 
     if (!_checkEligibility(tokenId)) {
       unstake = true;
     }
 
     if (unstake) {
-      character.safeTransferFrom(address(this), _msgSender(), tokenId, ""); // Send Rat back to owner
+      character.safeTransferFrom(address(this), sender, tokenId, ""); // Send Rat back to owner
       delete rats[tokenId];
       totalRatsStaked --;
     } else {
       rats[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),
-        owner: _msgSender(),
+        owner: sender,
         value: _getRatStakeValue(),
         timestamp: uint80(block.timestamp)
       });
@@ -208,7 +242,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
    * Unused here, gets overridden in EntrepreneurKitchen
    * @return true
    */
-  function _checkSpace(uint256) internal virtual view returns (bool) {
+  function _checkSpace(address, uint256) internal virtual view returns (bool) {
     return true;
   }
 
@@ -230,9 +264,8 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
 
   /**
    * Unused here, gets overridden in the kitchen contracts
-   * @param amount - Amount of food tokens to mint
    */
-  function _mintFoodToken(uint256 amount) internal virtual {}
+  function _mintFoodToken(address, uint256) internal virtual {}
 
   /**
    * Unused here, gets overridden in the kitchen contracts
@@ -251,20 +284,20 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   /**
    * Level up & return the given Character's efficiency & tolerance values, including a potential mishap or disaster event
    * @param tokenId - The ID of the Character to level up
+   * @param randomVal - A ChainLink VRF random number
    * @return efficiency - new value
    * @return tolerance - new value
    * @return eventName - if one occurred, otherwise empty string
    */
-  function _updateCharacter(uint256 tokenId) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
-    Stake memory k = chefs[tokenId];
-    Stake memory p = rats[tokenId];
-    uint256 stakingPeriod = block.timestamp - (isChef(tokenId) ? k.timestamp : p.timestamp);
+  function _updateCharacter(uint256 tokenId, uint256 randomVal) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
+    uint256 stakingPeriod = block.timestamp - (isChef(tokenId) ? chefs[tokenId].timestamp : rats[tokenId].timestamp);
     bool chef = isChef(tokenId);
 
     (efficiency, tolerance, eventName) = character.updateCharacter(
       tokenId,
       _getCharacterIncrement(chef ? dailySkillRate : dailyIntelligenceRate, stakingPeriod),
-      _getCharacterIncrement(chef ? dailyInsanityRate : dailyFatnessRate, stakingPeriod)
+      _getCharacterIncrement(chef ? dailyInsanityRate : dailyFatnessRate, stakingPeriod),
+      randomVal
     );
   }
 
@@ -305,19 +338,5 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUp
   function onERC721Received(address, address from, uint256, bytes calldata) external pure override returns (bytes4) {
     require(from == address(0x0), "Cannot send tokens to Venue directly");
     return IERC721ReceiverUpgradeable.onERC721Received.selector;
-  }
-
-  /**
-   * Generates a pseudorandom number
-   * @param seed - A value to ensure different outcomes for different sources in the same block
-   * @return A pseudorandom value
-   */
-  function random(uint256 seed) internal view returns (uint256) {
-    return uint256(keccak256(abi.encodePacked(
-        tx.origin,
-        blockhash(block.number - 1),
-        block.timestamp,
-        seed
-      )));
   }
 }

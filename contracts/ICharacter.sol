@@ -2,6 +2,8 @@
 
 pragma solidity ^0.8.0;
 
+import "./IMint.sol";
+
 interface ICharacter {
   struct CharacterStruct { // Struct to store each token's traits
     bool isChef;
@@ -21,6 +23,7 @@ interface ICharacter {
   }
 
   function mint(uint8 amount, bool stake) external payable;
-  function getPaidTokens() external view returns (uint256);
+  function getGen0Tokens() external view returns (uint256);
   function getTokenTraits(uint256 tokenId) external view returns (CharacterStruct memory);
+  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external;
 }

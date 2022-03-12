@@ -8,7 +8,5 @@ module.exports = async function (deployer, network) {
     if (gnosisSafe[network]) {
         console.log(`Setting Gnosis Safe: ${gnosisSafe[network]}`);
         await admin.transferProxyAdminOwnership(gnosisSafe[network]);
-    } else {
-        console.log(`No Gnosis Safe configured in ${network}, nothing to do.`);
     }
 };

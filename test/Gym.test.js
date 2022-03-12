@@ -1,10 +1,14 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave } = require('./helper');
+const { advanceTimeAndBlock, mintUntilWeHave, setupVRF, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
+const LinkToken = artifacts.require('LinkTokenMock');
+const Mint = artifacts.require('Mint');
+const Claim = artifacts.require('Claim');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
@@ -15,40 +19,31 @@ contract('Gym (proxy)', (accounts) => {
     let lists;
 
     before(async () => {
+        this.vrfCoordinator = await VRFCoordinator.deployed();
+        this.linkToken = await LinkToken.deployed();
+        this.mint = await Mint.deployed();
+        this.claim = await Claim.deployed();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
         this.gym = await Gym.deployed();
+        await setupVRF(this.linkToken, this.mint);
+        await setupVRF(this.linkToken, this.claim);
 
-        lists = await mintUntilWeHave.call(this, 8, 3, { from: owner });
+        lists = await mintUntilWeHave.call(this, 8, 3);
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);
-        const allIds = lists.all.map(item => item.id);
 
         await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
-        await this.kitchen.stakeMany(owner, allIds, { from: owner });
-        let done;
-        while (!done) {
-            await advanceTimeAndBlock(86400 / 2); // Wait half a day
-            const { logs } = await this.kitchen.claimMany(allIds, false);
-            const toleranceValues = logs.map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
-            done = toleranceValues.filter(val => val < 20).length === 0;
-        }
-        await advanceTimeAndBlock(3600); // Wait another hour so we can unstake
-        await this.kitchen.claimMany(allIds, true);
-        await Promise.all(lists.all.map(async (item) => {
-            const traits = await this.character.tokenTraits(item.id);
-            item.tolerance = Number(traits.tolerance.toString());
-        }));
-        // console.log('---lists', lists.chefs);
+        lists.all = await trainUntilWeHave.call(this, this.kitchen, 0, 20, lists.all, 1, true, { from: owner });
     });
 
-    describe('stake()', () => {
+    describe('stakeMany()', () => {
         it('fails to stake non-existent tokens', async () => {
-            await expect(this.gym.stakeMany(owner, [99], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
+            await expect(this.gym.stakeMany(owner, [9999], { from: owner })).to.eventually.be.rejectedWith('owner query for nonexistent token');
         });
         it('fails to stake someone else\'s tokens', async () => {
-            const { logs } = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
+            const { logs } = await mintAndFulfill.call(this, 1, false, { args: { from: anon } });
             const tokenId = Number(logs[0].args.tokenId.toString());
             await expect(this.gym.stakeMany(owner, [tokenId], { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
@@ -66,15 +61,18 @@ contract('Gym (proxy)', (accounts) => {
             await expect(rat0.value.toString()).to.equal('0');
         });
     });
-    describe('unstake()', () => {
+    describe('claimMany()', () => {
         it('fails to unstake someone else\'s tokens', async () => {
             const ids = [lists.chefs[0].id, lists.rats[0].id];
             await expect(this.gym.claimMany(ids, true, { from: anon })).to.eventually.be.rejectedWith('Not your token');
         });
+        it('cannot claim before EOB', async () => {
+            await expect(this.gym.claimMany([lists.chefs[0].id, lists.chefs[1].id], false)).to.eventually.be.rejectedWith('Cannot claim before EOB');
+        });
         it('claims from chefs', async () => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
-            const { logs } = await this.gym.claimMany(chefs, false);
+            const { logs } = await claimManyAndFulfill.call(this, this.gym, chefs, false);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
@@ -93,7 +91,7 @@ contract('Gym (proxy)', (accounts) => {
         });
         it('claims from rats', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
-            const { logs } = await this.gym.claimMany(rats, false);
+            const { logs } = await claimManyAndFulfill.call(this, this.gym, rats, false);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
@@ -111,8 +109,9 @@ contract('Gym (proxy)', (accounts) => {
             }));
         });
         it('does nothing when claimed twice', async () => {
+            await advanceTimeAndBlock(3600); // Wait an hour
             const rats = [lists.rats[0].id, lists.rats[1].id];
-            const { logs } = await this.gym.claimMany(rats, false);
+            const { logs } = await claimManyAndFulfill.call(this, this.gym, rats, false);
             logs.forEach((log, i) => {
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString());
@@ -121,7 +120,7 @@ contract('Gym (proxy)', (accounts) => {
         it('unstakes many chefs', async () => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
-            const { logs } = await this.gym.claimMany(chefs, true);
+            const { logs } = await claimManyAndFulfill.call(this, this.gym, chefs, true);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
@@ -147,11 +146,11 @@ contract('Gym (proxy)', (accounts) => {
         });
         it('fails to unstake chefs twice', async () => {
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
-            await expect(this.gym.claimMany(chefs, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+            await expect(claimManyAndFulfill.call(this, this.gym, chefs, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
         it('unstakes many rats', async () => {
             const rats = lists.rats.map(item => item.id);
-            const { logs } = await this.gym.claimMany(rats, true);
+            const { logs } = await claimManyAndFulfill.call(this, this.gym, rats, true);
             logs.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
@@ -177,7 +176,7 @@ contract('Gym (proxy)', (accounts) => {
         });
         it('fails to unstake rats twice', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
-            await expect(this.gym.claimMany(rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+            await expect(claimManyAndFulfill.call(this, this.gym, rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
         });
     });
 });
