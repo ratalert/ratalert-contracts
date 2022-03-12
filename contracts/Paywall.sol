@@ -15,6 +15,9 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
 
   FastFood fastFood; // Reference to the $FFOOD contract
 
+  event UpdateWhitelist(address account, uint8 amount);
+  event UpdateFreeMints(address account, uint8 amount);
+
   function initialize(address _fastFood, uint256 _mintPrice, bool _onlyWhitelist) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -40,6 +43,7 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = whitelist[addresses[i]];
       whitelist[addresses[i]] = amount < 100 ? amount + 1 : 100;
+      emit UpdateWhitelist(addresses[i], whitelist[addresses[i]]);
     }
   }
 
@@ -51,6 +55,7 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = whitelist[addresses[i]];
       whitelist[addresses[i]] = amount > 1 ? amount - 1 : 0;
+      emit UpdateWhitelist(addresses[i], whitelist[addresses[i]]);
     }
   }
 
@@ -62,6 +67,7 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = freeMints[addresses[i]];
       freeMints[addresses[i]] = amount < 100 ? amount + 1 : 100;
+      emit UpdateFreeMints(addresses[i], freeMints[addresses[i]]);
     }
   }
 
@@ -73,6 +79,7 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = freeMints[addresses[i]];
       freeMints[addresses[i]] = amount > 1 ? amount - 1 : 0;
+      emit UpdateFreeMints(addresses[i], freeMints[addresses[i]]);
     }
   }
 
@@ -95,9 +102,11 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
     }
     if (freeMints[sender] >= amount) {
       freeMints[sender] -= amount;
+      emit UpdateFreeMints(sender, freeMints[sender]);
       txMintPrice = 0;
     } else if (whitelist[sender] >= amount) {
       whitelist[sender] -= amount;
+      emit UpdateWhitelist(sender, whitelist[sender]);
       txMintPrice = mintPrice * 90 / 100;
     }
     uint256 totalCost = 0;
