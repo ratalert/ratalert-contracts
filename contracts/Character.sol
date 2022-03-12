@@ -3,8 +3,8 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "./GenericPausable.sol";
 import "./ControllableUpgradeable.sol";
 import "./ICharacter.sol";
 import "./IMint.sol";
@@ -13,7 +13,7 @@ import "./IProperties.sol";
 import "./IVenue.sol";
 import "./IPaywall.sol";
 
-contract Character is ICharacter, Initializable, OwnableUpgradeable, PausableUpgradeable, ERC721Upgradeable, ControllableUpgradeable {
+contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPausable, ERC721Upgradeable, ControllableUpgradeable {
   uint16 public minted;
   uint16 public numChefs;
   uint16 public numRats;

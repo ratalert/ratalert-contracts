@@ -4,14 +4,14 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./GenericPausable.sol";
 import "./FastFood.sol";
 import "./CasualFood.sol";
 import "./Character.sol";
 
-contract KitchenShop is Initializable, OwnableUpgradeable, PausableUpgradeable, ERC1155Upgradeable {
+contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1155Upgradeable {
   using Strings for uint256;
 
   struct KitchenData { // Struct to store each kitchen's metadata

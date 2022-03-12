@@ -3,11 +3,10 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "./ControllableUpgradeable.sol";
 import "./FastFood.sol";
 
-contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, ControllableUpgradeable {
+contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   uint256 public mintPrice;
   mapping(address => uint8) public whitelist; // Mapping from address to a number of remaining whitelist spots
   mapping(address => uint8) public freeMints; // Mapping from address to a number of remaining free mint spots
@@ -20,7 +19,6 @@ contract Paywall is Initializable, OwnableUpgradeable, PausableUpgradeable, Cont
 
   function initialize(address _fastFood, uint256 _mintPrice, bool _onlyWhitelist) external initializer {
     __Ownable_init();
-    __Pausable_init();
 
     fastFood = FastFood(_fastFood);
     mintPrice = _mintPrice;

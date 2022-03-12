@@ -4,13 +4,13 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol";
+import "./GenericPausable.sol";
 import "./IVenue.sol";
 import "./IClaim.sol";
 import "./Character.sol";
 
-abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, PausableUpgradeable, IERC721ReceiverUpgradeable {
+abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPausable, IERC721ReceiverUpgradeable {
   struct Stake { // Store for a stake's token, owner, and earning values
     uint256 tokenId;
     address owner;
