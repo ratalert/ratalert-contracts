@@ -21,6 +21,10 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
     bytes32 requestId,
     address sender
   );
+  event RandomNumberFulfilled(
+    bytes32 requestId,
+    address sender
+  );
 
   function initialize(
     address _vrfCoordinator,
@@ -69,10 +73,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
     requestId = requestRandomness(keyHash, fee);
     VRFStruct memory v = VRFStruct({ requestId: requestId, sender: sender, amount: amount, stake: stake });
     vrfRequests[requestId] = v;
-    emit RandomNumberRequested(
-      requestId,
-      _msgSender()
-    );
+    emit RandomNumberRequested(requestId, _msgSender());
   }
 
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
@@ -86,6 +87,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
 
     character.fulfillMint(vrfRequests[requestId], tokens);
     delete vrfRequests[requestId];
+    emit RandomNumberFulfilled(requestId, _msgSender());
   }
 
   /**
