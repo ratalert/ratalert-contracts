@@ -30,8 +30,8 @@ module.exports = (network, accounts = []) => ({
     kitchen: {
         dailyChefEarnings: 250,
         ratTheftPercentage: 20,
-        vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
-        accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
+        vestingPeriod: process.env.KITCHEN_VESTING_PERIOD || 3600, // 1h
+        accrualPeriod: process.env.KITCHEN_ACCRUAL_PERIOD || 86400, // 1d
         mcStake: {
             foodTokenMaxSupply: 50000000,
             propertyIncrements: Object.values({
