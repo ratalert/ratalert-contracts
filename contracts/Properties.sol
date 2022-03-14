@@ -21,9 +21,14 @@ contract Properties is Initializable, OwnableUpgradeable {
   uint8 public mishapToleranceLossChef; // Insanity percentage loss for chefs during a food inspector event
   uint8 public mishapToleranceLossRat; // Fatness percentage loss for rats during a rat trap event
 
-  function initialize(uint8[] memory _disasterParams, uint8[] memory _mishapParams) external initializer {
+  function initialize() external initializer {
     __Ownable_init();
+  }
 
+  /**
+   * Allows DAO to update game parameters
+   */
+  function configure(uint8[] memory _disasterParams, uint8[] memory _mishapParams) external onlyOwner {
     disasterEfficiencyMinimumChef = int8(_disasterParams[0]);
     disasterEfficiencyMinimumRat = int8(_disasterParams[1]);
     disasterEfficiencyLossChef = _disasterParams[2];

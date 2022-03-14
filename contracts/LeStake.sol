@@ -10,15 +10,18 @@ contract LeStake is EntrepreneurKitchen {
   GourmetFood foodToken; // Reference to the $GFOOD contract
 
   function initialize(
-    address[] memory _addresses, // character, claim, foodToken, kitchenShop
-    uint256 _foodTokenMaxSupply,
-    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
-    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
-    uint8 _minEfficiency,
-    uint8 _charactersPerKitchen,
-    uint8 _chefEfficiencyMultiplier,
-    int256 _ratEfficiencyMultiplier,
-    int256 _ratEfficiencyOffset
+    address _character,
+    address _claim,
+    address _foodToken,
+    address _kitchenShop
+//    uint256 _foodTokenMaxSupply,
+//    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
+//    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
+//    uint8 _minEfficiency,
+//    uint8 _charactersPerKitchen,
+//    uint8 _chefEfficiencyMultiplier,
+//    int256 _ratEfficiencyMultiplier,
+//    int256 _ratEfficiencyOffset
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -28,10 +31,25 @@ contract LeStake is EntrepreneurKitchen {
     lastClaimTimestamp = 0;
     kitchenId = 2;
 
-    character = Character(_addresses[0]);
-    claim = IClaim(_addresses[1]);
-    foodToken = GourmetFood(_addresses[2]);
-    kitchenShop = KitchenShop(_addresses[3]);
+    character = Character(_character);
+    claim = IClaim(_claim);
+    foodToken = GourmetFood(_foodToken);
+    kitchenShop = KitchenShop(_kitchenShop);
+  }
+
+  /**
+   * Allows DAO to update game parameters
+   */
+  function configure(
+    uint256 _foodTokenMaxSupply,
+    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
+    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
+    uint8 _minEfficiency,
+    uint8 _charactersPerKitchen,
+    uint8 _chefEfficiencyMultiplier,
+    int256 _ratEfficiencyMultiplier,
+    int256 _ratEfficiencyOffset
+  ) external onlyOwner {
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
     ratTheftPercentage = _earningSettings[1];

@@ -8,6 +8,10 @@ import "./FastFood.sol";
 
 contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   uint256 public mintPrice;
+  uint256 public gen1PriceTier0;
+  uint256 public gen1PriceTier1;
+  uint256 public gen1PriceTier2;
+  uint256 public gen1PriceTier3;
   mapping(address => uint8) public whitelist; // Mapping from address to a number of remaining whitelist spots
   mapping(address => uint8) public freeMints; // Mapping from address to a number of remaining free mint spots
   bool public onlyWhitelist; // Whether minting is only open for whitelisted addresses
@@ -17,12 +21,22 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   event UpdateWhitelist(address account, uint8 amount);
   event UpdateFreeMints(address account, uint8 amount);
 
-  function initialize(address _fastFood, uint256 _mintPrice, bool _onlyWhitelist) external initializer {
+  function initialize(address _fastFood) external initializer {
     __Ownable_init();
 
     fastFood = FastFood(_fastFood);
+    onlyWhitelist = false;
+  }
+
+  /**
+   * Allows DAO to update game parameters
+   */
+  function configure(uint256 _mintPrice, uint256[] memory _gen1Prices) external onlyOwner {
     mintPrice = _mintPrice;
-    onlyWhitelist = _onlyWhitelist;
+    gen1PriceTier0 = _gen1Prices[0];
+    gen1PriceTier1 = _gen1Prices[1];
+    gen1PriceTier2 = _gen1Prices[2];
+    gen1PriceTier3 = _gen1Prices[3];
   }
 
   /**
@@ -129,11 +143,11 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * @param tokenId - The token ID to check
    * @return The minting cost of the given ID
    */
-  function mintCost(uint256 tokenId, uint256 maxTokens, uint256 gen0Tokens) public pure returns (uint256) {
+  function mintCost(uint256 tokenId, uint256 maxTokens, uint256 gen0Tokens) public view returns (uint256) {
     if (tokenId <= gen0Tokens) return 0;
-    if (tokenId <= maxTokens * 2 / 5) return 1000 ether;
-    if (tokenId <= maxTokens * 3 / 5) return 1500 ether;
-    if (tokenId <= maxTokens * 4 / 5) return 2000 ether;
-    return 3000 ether;
+    if (tokenId <= maxTokens * 2 / 5) return gen1PriceTier0;
+    if (tokenId <= maxTokens * 3 / 5) return gen1PriceTier1;
+    if (tokenId <= maxTokens * 4 / 5) return gen1PriceTier2;
+    return gen1PriceTier3;
   }
 }

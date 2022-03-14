@@ -9,13 +9,9 @@ contract McStake is Kitchen {
   FastFood foodToken; // Reference to the $FFOOD contract
 
   function initialize(
-    address[] memory _addresses, // character, claim, foodToken
-    uint256 _foodTokenMaxSupply,
-    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
-    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
-    uint8 _chefEfficiencyMultiplier,
-    int256 _ratEfficiencyMultiplier,
-    int256 _ratEfficiencyOffset
+    address _character,
+    address _claim,
+    address _foodToken
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -24,9 +20,22 @@ contract McStake is Kitchen {
     foodTokensPerRat = 0;
     lastClaimTimestamp = 0;
 
-    character = Character(_addresses[0]);
-    claim = IClaim(_addresses[1]);
-    foodToken = FastFood(_addresses[2]);
+    character = Character(_character);
+    claim = IClaim(_claim);
+    foodToken = FastFood(_foodToken);
+  }
+
+  /**
+   * Allows DAO to update game parameters
+   */
+  function configure(
+    uint256 _foodTokenMaxSupply,
+    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
+    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
+    uint8 _chefEfficiencyMultiplier,
+    int256 _ratEfficiencyMultiplier,
+    int256 _ratEfficiencyOffset
+  ) external onlyOwner {
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
     ratTheftPercentage = _earningSettings[1];

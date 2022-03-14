@@ -32,7 +32,8 @@ contract('KitchenShop (proxy)', (accounts) => {
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
         this.kitchenShop = await KitchenShop.deployed();
-        kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address, [5, 5], [28, 72]]);
+        kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address]);
+        await kitchenShopSandbox.configure([5, 5], [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)]);
         await this.fastFood.addController(kitchenShopSandbox.address);
         await this.fastFood.addController(owner);
         await this.casualFood.addController(owner);

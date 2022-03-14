@@ -41,7 +41,8 @@ contract('Character (proxy)', (accounts) => {
         this.traitList = await loadTraits();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
-        characterSandbox = await deployProxy(Character, [[this.paywall.address, this.mint.address, this.traits.address, this.properties.address, config.dao.address], 5]);
+        characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address, this.properties.address, config.dao.address]);
+        await characterSandbox.configure(5);
         await this.fastFood.addController(this.paywall.address);
         await this.fastFood.addController(owner);
         await this.paywall.addController(characterSandbox.address);
@@ -85,7 +86,8 @@ contract('Character (proxy)', (accounts) => {
             await expect(this.character.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
         });
         it('fails with an invalid mint request', async () => {
-            const sandbox = await deployProxy(Character, [[this.paywall.address, owner, this.traits.address, this.properties.address, config.dao.address], 5]);
+            const sandbox = await deployProxy(Character, [this.paywall.address, owner, this.traits.address, this.properties.address, config.dao.address]);
+            await sandbox.configure(5);
             await expect(sandbox.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Mint request not found');
         });
         it('fails if all characters have been minted', async () => {

@@ -17,7 +17,12 @@ module.exports = (network, accounts = []) => ({
     claim: options => vrf(options),
     payWall: Object.values({
         mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
-        onlyWhitelist: false,
+        gen1Prices: Object.values({
+            gen1PriceTier0: toWei('1000', 'ether'),
+            gen1PriceTier1: toWei('1500', 'ether'),
+            gen1PriceTier2: toWei('2000', 'ether'),
+            gen1PriceTier3: toWei('3000', 'ether'),
+        }),
     }),
     character: Object.values({
         maxTokens: 50000,
@@ -70,6 +75,13 @@ module.exports = (network, accounts = []) => ({
     kitchenShop: Object.values({
         maxTokens: [5000, 500],
         minSkill: [28, 72],
+        prices: Object.values({
+            priceTier0: toWei('2000', 'ether'),
+            priceTier1: toWei('3000', 'ether'),
+            priceTier2: toWei('4000', 'ether'),
+            priceTier3: toWei('5000', 'ether'),
+            priceTier4: toWei('6000', 'ether'),
+        }),
     }),
     properties: Object.values({
         disaster: Object.values({

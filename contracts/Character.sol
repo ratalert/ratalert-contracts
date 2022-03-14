@@ -31,23 +31,32 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   address payable public dao;
 
   function initialize(
-    address[] memory _addresses, // paywall, mint, traits, properties, dao
-    uint256 _maxTokens
+    address _paywall,
+    address _mint,
+    address _traits,
+    address _properties,
+    address _dao
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
     __ERC721_init("RatAlert Characters", "RATCAST");
 
-    paywall = IPaywall(_addresses[0]);
-    theMint = IMint(_addresses[1]);
-    traits = ITraits(_addresses[2]);
-    properties = IProperties(_addresses[3]);
-    dao = payable(_addresses[4]);
-    maxTokens = _maxTokens;
-    gen0Tokens = _maxTokens / 5;
+    paywall = IPaywall(_paywall);
+    theMint = IMint(_mint);
+    traits = ITraits(_traits);
+    properties = IProperties(_properties);
+    dao = payable(_dao);
     minted = 0;
     numChefs = 0;
     numRats = 0;
+  }
+
+  /**
+   * Allows DAO to update game parameters
+   */
+  function configure(uint256 _maxTokens) external onlyOwner {
+    maxTokens = _maxTokens;
+    gen0Tokens = _maxTokens / 5;
   }
 
   /**

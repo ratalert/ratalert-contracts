@@ -37,15 +37,24 @@ module.exports = async (deployer, network, accounts) => {
     const gourmetFood = await GourmetFood.deployed();
     const mint = await deployProxy(Mint, config.mint({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), { deployer });
     const traits = await deployProxy(Traits, { deployer });
-    const properties = await deployProxy(Properties, config.properties, { deployer });
-    const paywall = await deployProxy(Paywall, [fastFood.address].concat(config.payWall), { deployer });
-    const character = await deployProxy(Character, [[paywall.address, mint.address, traits.address, properties.address, config.dao.address]].concat(config.character), { deployer });
-    const kitchenShop = await deployProxy(KitchenShop, [fastFood.address, casualFood.address, character.address].concat(config.kitchenShop), { deployer });
+    const properties = await deployProxy(Properties, { deployer });
+    const paywall = await deployProxy(Paywall, [fastFood.address], { deployer });
+    const character = await deployProxy(Character, [paywall.address, mint.address, traits.address, properties.address, config.dao.address], { deployer });
+    const kitchenShop = await deployProxy(KitchenShop, [fastFood.address, casualFood.address, character.address], { deployer });
     const claim = await deployProxy(Claim, config.claim({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), { deployer });
-    const mcStake       = await deployProxy(McStake,       [[character.address, claim.address, fastFood.address                        ], config.kitchen.mcStake.foodTokenMaxSupply,       [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements,                                                                                           config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset], { deployer });
-    const theStakehouse = await deployProxy(TheStakehouse, [[character.address, claim.address, casualFood.address,  kitchenShop.address], config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.charactersPerKitchen,    config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset], { deployer });
-    const leStake       = await deployProxy(LeStake,       [[character.address, claim.address, gourmetFood.address, kitchenShop.address], config.kitchen.leStake.foodTokenMaxSupply,       [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements,       config.kitchen.leStake.minEfficiency,       config.kitchen.charactersPerKitchen,    config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset], { deployer });
-    const gym           = await deployProxy(Gym,           [[character.address, claim.address]].concat(config.gym), { deployer });
+    const mcStake       = await deployProxy(McStake,       [character.address, claim.address, fastFood.address],                         { deployer });
+    const theStakehouse = await deployProxy(TheStakehouse, [character.address, claim.address, casualFood.address,  kitchenShop.address], { deployer });
+    const leStake       = await deployProxy(LeStake,       [character.address, claim.address, gourmetFood.address, kitchenShop.address], { deployer });
+    const gym           = await deployProxy(Gym,           [character.address, claim.address],                                           { deployer });
+
+    await properties.configure(...config.properties);
+    await paywall.configure(...config.payWall);
+    await character.configure(...config.character);
+    await kitchenShop.configure(...config.kitchenShop);
+    await mcStake.configure(      config.kitchen.mcStake.foodTokenMaxSupply,       [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements,                                                                                           config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset);
+    await theStakehouse.configure(config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.charactersPerKitchen,    config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset);
+    await leStake.configure(      config.kitchen.leStake.foodTokenMaxSupply,       [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements,       config.kitchen.leStake.minEfficiency,       config.kitchen.charactersPerKitchen,    config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset);
+    await gym.configure(...config.gym);
 
     await traits.setCharacter(character.address);
     await mint.addController(character.address);

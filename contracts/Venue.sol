@@ -40,14 +40,15 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   uint256 public vestingPeriod; // Cannot unstake for this many seconds
 
   function initialize(
-    address[] memory _addresses, // character, claim
+    address _character,
+    address _claim,
     uint256 _accrualPeriod
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
 
-    character = Character(_addresses[0]);
-    claim = IClaim(_addresses[1]);
+    character = Character(_character);
+    claim = IClaim(_claim);
     accrualPeriod = _accrualPeriod;
 
     dailySkillRate = 0;

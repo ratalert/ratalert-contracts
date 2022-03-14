@@ -23,12 +23,17 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   CasualFood casualFood; // Reference to the $CFOOD contract
   Character character; // Reference to the Character contract
 
+  uint256 public priceTier0;
+  uint256 public priceTier1;
+  uint256 public priceTier2;
+  uint256 public priceTier3;
+  uint256 public priceTier4;
   mapping (uint8 => uint256) public maxTokens;
   mapping (uint8 => uint256) public minSkill;
   mapping (uint8 => uint256) public minted;
   mapping(uint256 => KitchenData) public kitchenData; // Storage of each kitchen's metadata
 
-  function initialize(address _fastFood, address _casualFood, address _character, uint256[] memory _maxTokens, uint8[] memory _minSkill) external initializer {
+  function initialize(address _fastFood, address _casualFood, address _character) external initializer {
     __Ownable_init();
     __Pausable_init();
     // TODO similar to __ERC721_init("RatAlert Characters", "RATCHAR"); or _setURI(string newuri)?
@@ -36,12 +41,27 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
     fastFood = FastFood(_fastFood);
     casualFood = CasualFood(_casualFood);
     character = Character(_character);
+    minted[1] = 0;
+    minted[2] = 0;
+  }
+
+  /**
+   * Allows DAO to update game parameters
+   */
+  function configure(
+    uint256[] memory _maxTokens,
+    uint8[] memory _minSkill,
+    uint256[] memory _prices
+  ) external onlyOwner {
     maxTokens[1] = _maxTokens[0];
     maxTokens[2] = _maxTokens[1];
     minSkill[1] = _minSkill[0];
     minSkill[2] = _minSkill[1];
-    minted[1] = 0;
-    minted[2] = 0;
+    priceTier0 = _prices[0];
+    priceTier1 = _prices[1];
+    priceTier2 = _prices[2];
+    priceTier3 = _prices[3];
+    priceTier4 = _prices[4];
   }
 
   /**
@@ -80,11 +100,11 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
    * @return The minting cost of the given ID
    */
   function mintCost(uint8 kitchen, uint256 tokenId) public view returns (uint256) {
-    if (tokenId <= maxTokens[kitchen] * 1 / 5) return 2000 ether;
-    if (tokenId <= maxTokens[kitchen] * 2 / 5) return 3000 ether;
-    if (tokenId <= maxTokens[kitchen] * 3 / 5) return 4000 ether;
-    if (tokenId <= maxTokens[kitchen] * 4 / 5) return 5000 ether;
-    return 6000 ether;
+    if (tokenId <= maxTokens[kitchen] * 1 / 5) return priceTier0;
+    if (tokenId <= maxTokens[kitchen] * 2 / 5) return priceTier1;
+    if (tokenId <= maxTokens[kitchen] * 3 / 5) return priceTier2;
+    if (tokenId <= maxTokens[kitchen] * 4 / 5) return priceTier3;
+    return priceTier4;
   }
 
   function uri(uint256 tokenId) public view override returns (string memory) {
