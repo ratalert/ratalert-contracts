@@ -809,7 +809,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"skill\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"insanity\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"ChefClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"intelligence\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"fatness\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"}],\"name\":\"RatClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TokenStaked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"accrualPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"charactersPerKitchen\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"chefEfficiencyMultiplier\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"chefs\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claim\",\"outputs\":[{\"internalType\":\"contract IClaim\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"claimRequests\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyChefEarnings\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyFatnessRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyInsanityRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyIntelligenceRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailySkillRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokenMaxSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokensPerRat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomVal\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getProperties\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"efficiency\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"tolerance\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"_accrualPeriod\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"isChef\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"chef\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"kitchenId\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastClaimTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minEfficiency\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratEfficiencyMultiplier\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratEfficiencyOffset\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratTheftPercentage\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"rats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"stakers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalFoodTokensEarned\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalRatsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unaccountedRewards\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vestingPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimMany(uint16[],bool)\":{\"params\":{\"tokenIds\":\"- The IDs of the tokens in question\",\"unstake\":\"- Whether or not to unstake the given tokens\"}},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"params\":{\"randomVal\":\"- List of random values created by VRF\",\"v\":\"- VRF struct for the corresponding request\"}},\"getProperties(uint256)\":{\"params\":{\"tokenId\":\"- The ID of the token to check\"},\"returns\":{\"efficiency\":\"& tolerance values\"}},\"isChef(uint256)\":{\"params\":{\"tokenId\":\"- The ID of the token to check\"},\"returns\":{\"chef\":\"- Whether or not the token is a Chef\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"paused()\":{\"details\":\"Returns true if the contract is paused, and false otherwise.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"stakeMany(address,uint16[])\":{\"params\":{\"account\":\"- The address of the staker\",\"tokenIds\":\"- The IDs of the Chefs & Rats to stake\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"claimMany(uint16[],bool)\":{\"notice\":\"ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters\"},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"notice\":\"ChainLink VRF callback for claimMany()\"},\"getProperties(uint256)\":{\"notice\":\"Get the character's properties\"},\"isChef(uint256)\":{\"notice\":\"Checks if the token is a Chef\"},\"stakeMany(address,uint16[])\":{\"notice\":\"Adds Chefs & Rats\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/EntrepreneurKitchen.sol\":\"EntrepreneurKitchen\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x9ffedb33e192f8821cbaead72596c79ea87fb28a73f8d3a9f5004449799f8e1b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a4d3a7c2729f266c54345044baf1080fb4a85208059cacea28c95622af4371db\",\"dweb:/ipfs/QmcHCX8reksSoQWjjYRcVoEHckz8AQ7CHKiKfzocpQq3Lg\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x68861bcc80cacbd498efde75aab6c74a486cc48262660d326c8d7530d9752097\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5beb2713aca05976562500789329e8c41320d00bd68ea9247856ec73894c3e3f\",\"dweb:/ipfs/QmQKwkpofsZYAzMZs7uNL7Qq58zVBuhoZCGpD6bJdUwyqy\"]},\"@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol\":{\"keccak256\":\"0xf93da311a3b34a8363a759c404d575746fa38351fb29ecd646c608e27219ebec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cfc8c4107004a7ad97a340df1b6841d0eb0aacf4ba1d58f0cfbd0de73493cb7\",\"dweb:/ipfs/QmeBT3UzVzVEaPpisoHFFEGdUxAqNR3pmRnvn1oKseYSSv\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol\":{\"keccak256\":\"0xc8a2776bd48e62498418d7eede80bde0f00c6b5d67286abf49499d7f7b65b95c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3fab905a29ffb7415ae907de56a367274cf80fa5d9caf0138cebb33d66d2d235\",\"dweb:/ipfs/QmVdCh48kvhr588PCvMFWH4J62gEqRrkcuTLV9WAEbCns2\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol\":{\"keccak256\":\"0x19bc90c8301914433c5e9b74a4eaac8942f64ea79d509f445799459fa10695da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7d14cd5453b7f5e396f84bb1b397af9d35c72348d30b873bf5bbe58370a5e626\",\"dweb:/ipfs/QmVEg1yT1DYHtR2zacC7woewcZAgrYBitcBeNwWtRnfJb1\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol\":{\"keccak256\":\"0x1edf4e6819997d1820aea89eff73d4fdaeff0bb87ff2f2b4cb6ad60bfe5ba63c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1296ec1ba3145257dd673ac74f68553512446642281ee23893631b1304c6c9ce\",\"dweb:/ipfs/QmaNvAvByH16Y3mEX1aywp1nLN3YEQUAwnnnYXS31dR4BV\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/IERC1155MetadataURIUpgradeable.sol\":{\"keccak256\":\"0xa350df12a8c10e821af05e0863f44e8317a0efa44df27bfd5dc1d63fdfa3c448\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1870980d15f9003916faf2a9a0eac6dcd4f0e28e2af6f5a3cee0cd685d460ee9\",\"dweb:/ipfs/QmY8K1YZQmuL2WDTPC8QwCm3ztrUD7JKmnvoZkMyGZceiM\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x6c25d4211724a6f4cdc8d25397edc780f48d951fc81c1d507f59b3edb22afaf7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2147fb68fe3bd0cc19b6c7ac5f2f78393488107b0e726f81c5343f6c88236ba5\",\"dweb:/ipfs/QmdK6Cry8qfYdXLTNLdL7dpogsg8s2ByydaG5EWZtzQvgt\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0x2f359f9d5c56394e60d74401487ab55d8ef0012907b07c9abbb8f998bf5ddfec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://47d1408f0b62a24a9c2abd7678665178916fc147b8f23153d61e21353f0205e4\",\"dweb:/ipfs/QmWis4pCq81JzNTqdCoiMqjEtcwp3NGRnCz4nYPYp2jEKd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x714a33fd66816f608f6eda908da24eb6009eee50adf4062c86639d4fe508a7b6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1222806a46ee6d877cff1f609cdb548271a0ae85228716c8d1427462a16bd59b\",\"dweb:/ipfs/QmZVjwuTFqhoFBuug3fvHFVC5Y9ompwdHMwUy5upevMfJ5\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x3f0f878c796dfc7feba6d3c4e3e526c14c7deae8b7bfc71088e3f38fab0d77b3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://69bf7d357ce97852f4fb71045919b1bb2c0ad0c820e3f06b9dd4451b2dc5a343\",\"dweb:/ipfs/QmWt96ZviufDu2qqS7Ln6UCJjfLyoFKbo6YKn54ao3o94z\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x0b0d548f6381370d394f7a434f994dc678b3ef3e755de106109d61343a685ea7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d8a3d42f1333d4224b7e6b7914e7ef5ee6d86586a3529bd1da15cbeece0d25b3\",\"dweb:/ipfs/QmXmFqePuCWzBcz9KyBepE7joHMg8jSjcmd5iayyG7jm3y\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0x398d3323c1932a5986bf36be7c57593e121e69d5db5b6574b4ee0d031443de37\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b268304e03daf22c349abe3c318bc6a6badd6542d62311716ab401eec745f78\",\"dweb:/ipfs/QmNYy2sc2RoTjDhyT6HAibmeDGqfhDiDpsWRbHFHoGVHLr\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0xcd98895383d51dc86669a76ae3ad4419fc5dc079d01faea23498e80c1cf9f78a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://16a9a1816c3dd4130b7836c42482d455075a9a49c7895bfb788ca3d345c82b32\",\"dweb:/ipfs/QmRxf3UetfDEF8NPuMQ1U8f9cddQpdarhCBhaCXEbe7Kw6\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981\",\"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0xd1d8caaeb45f78e0b0715664d56c220c283c89bf8b8c02954af86404d6b367f8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://300a0cc7be3b26c96c22a47ffa9530a585e1c4f2dba3021d9bf309dc63007487\",\"dweb:/ipfs/QmQmxsvxK6CaJmQ4D8vDCYPLHMqcMmZLcBqedG4GFAbzu9\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x61437cb513a887a1bbad006e7b1c8b414478427d33de47c5600af3c748f108da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2c3d0973630ed74f2b5ce3944677a885dc70ec32fc83b35f55045a10224da32b\",\"dweb:/ipfs/QmbefZ5RoEZKNHXCALfh683PnaNYzKPcKMFjyY1DVAgq8A\"]},\"@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol\":{\"keccak256\":\"0x3fe04ed1daf0f12454333fde982a25b103860d8a010dd5d8479b83ebf1dfb788\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8322152771e94c9e28a3bd9e7c9d5dd4fdd00ae214f95915962a6638d8dfc7d6\",\"dweb:/ipfs/QmaXJvF3UjRHacx3nPgt94DwAuXCkEoz6fS7MLr2jbuJyW\"]},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0x32c202bd28995dd20c4347b7c6467a6d3241c74c8ad3edcbb610cd9205916c45\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8179c356adb19e70d6b31a1eedc8c5c7f0c00e669e2540f4099e3844c6074d30\",\"dweb:/ipfs/QmWFbivarEobbqhS1go64ootVuHfVohBseerYy9FTEd1W2\"]},\"project:/contracts/CasualFood.sol\":{\"keccak256\":\"0xbf3b3f7b7172a92e7cc9a9faec2a1ce3ce7f3a4828b96abeeb73d4650d9479c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c5b453bc9c2e9ca4bd64e0e4c5da3dcb80b065a18ddcf511d440cf49ea1bb6ad\",\"dweb:/ipfs/Qmdhtj3yZmdefMVVWuuV1HkE9Ld9KDQ3U6XHRZ4hkHqMMg\"]},\"project:/contracts/Character.sol\":{\"keccak256\":\"0x2291026fd835aebed95d193d4f8f90b9a05415b8e1580e91f50fbff4846d25c9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0612016b7f95cb8cb7a5a0c593b7e6e4d0ea2503ffbc2ef49bfe25f9151cbffa\",\"dweb:/ipfs/QmR9x3GLcSsuZMp19tJdmq3nnnxV4pd2JuZKaNrpiaaSBT\"]},\"project:/contracts/Controllable.sol\":{\"keccak256\":\"0xed76d3b198f37ddc5a1d2fa950bfd2637d4c9fe9417c197e58f4afe872399add\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1aa84929e0c61d191370080f8a8e5ee2e941bf707a9fcc13c59bc26cdc37bcec\",\"dweb:/ipfs/QmU1pi4tRWySiTbdg87cYPYcK6QxYCiABhzEmhRTmzaojo\"]},\"project:/contracts/ControllableUpgradeable.sol\":{\"keccak256\":\"0x69cb50acbe4683899197b3e223bf0ee1ed720c11761a314b02a1964b86065dca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://08d42c344da900274f88dbf0eb6ce04b387ce21541469b3d5d120406ef74edba\",\"dweb:/ipfs/Qme2MGJSLjrBcxo1FWhfXNW6bmkrRSrycc2pSFRuEEbiBa\"]},\"project:/contracts/EntrepreneurKitchen.sol\":{\"keccak256\":\"0x5e023fae9fe25faa96f17b993c0363a2f709686ad92f0651e40c1fda99fab8b0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5e0bf79f849b197ec7bc58a541ef499ac77a6363242541da9d6dc84d096dae2d\",\"dweb:/ipfs/QmcWLFdMiFxVv3aNPYgFMA71bWKsNwsGdiSKicmJEicxQc\"]},\"project:/contracts/FastFood.sol\":{\"keccak256\":\"0xe49b8e2d28ae0d03c9f0e5ef3006f830aa292308036d586116695b5c854042d4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fed543ccbb5306adc787f8d121c3ac40e3cab2bd5405476ea77e1b39ff05d2e0\",\"dweb:/ipfs/QmVrss7v15Z7hAktCHr7QBi4Wdw4N7oSHE9PRX5HCRmpMS\"]},\"project:/contracts/Food.sol\":{\"keccak256\":\"0x7c5b2150f780a77242f5b13761a720febf860496b417f1d4100ff3a4dfa55e0a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1241fbb982916a1ade69ac6a736c06e8bbc576886e8a984897d269685fb592f4\",\"dweb:/ipfs/QmV9Y91LDyRKdoDxjX6xUGAfoNr4HkBdqJc3PswnfRkUoA\"]},\"project:/contracts/GenericPausable.sol\":{\"keccak256\":\"0x9ec53799334e17209b4f8881b5e034916f255077691fedc1e052c03d94e933cc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dd94cf6a1e354c08f6c1731a1ebba9e4959673dc774eb8520aae92cafa1edd13\",\"dweb:/ipfs/QmY6RTDwTjDo8FKfMVqoz9Hm2phVqcWzPuSbhPfZtowzMH\"]},\"project:/contracts/ICharacter.sol\":{\"keccak256\":\"0x3bb2ac140a2ce2da8878352524753af9190525f9db7621d4e2047bb15683668e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://109a34d8333b4b28be0ace1274ceb8d1aa399dd59fcef546f73c32c472f89c03\",\"dweb:/ipfs/QmQhNb2jELW2poz4yPM21zM2i17eU7Qivs8rfP58gGGGAb\"]},\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IMint.sol\":{\"keccak256\":\"0x84e7f12def618f14a7cdfa357255dea2b07c74107c64481e716018be46ad05da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://afa75d7c08228a2a9f32a762946842922bb49bf883f0bf51df0b12e91badd7ec\",\"dweb:/ipfs/QmaPgpcQwUwjHWnft8sSSWFTwjNewqwUHF5geodGzYVy45\"]},\"project:/contracts/IPaywall.sol\":{\"keccak256\":\"0x02b4304398e31a585c75d1d766500d42151b1a8529f58c92712838e91646c60c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b65ac7afff52e554dce9894c9b736d91e6d5535aa4e217c5554d9ca89b9f9ec0\",\"dweb:/ipfs/QmQxCxEMuHr5m5bPbAXicJRYS9Gt11auL3FisqXPZGqVrP\"]},\"project:/contracts/IProperties.sol\":{\"keccak256\":\"0xfab08287f2632d91fe7a9e4c0f818466fd123bc2077a92e8b0c4b4e8be8c41f7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b27835b493a9e0452f5088e2d3546c3daf4b22bb42823071c4ae497011414c7\",\"dweb:/ipfs/QmY7bGASKjTfnfisHSSMvgJnZLoBjVZ7NoPoJ1YF4C1wFU\"]},\"project:/contracts/ITraits.sol\":{\"keccak256\":\"0x41a56d1ca9b05e91d193e07f947a7211b925d4b0aefd489c601d4a30ae775ed6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf4b680b7f4f6069938bd01030a7956c5b5cda4156fcfad2274b39663b7355d4\",\"dweb:/ipfs/QmaxHe1gCdd1DvWfWw3sGm83i1UQuuNhP8rZVkdaH6od4m\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0xe2f45abf5f70537a75d4af3799786c2d8b305f041a84ac48120956c328b4965f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b816dc7dcc46f9782299f1ee1ce487a649f864f60c8aa815e56e66a3cc5b404e\",\"dweb:/ipfs/QmagR9DMiFwLdAB1BhG77notw4px1i7dZC1Qq5GaEvzoPD\"]},\"project:/contracts/Kitchen.sol\":{\"keccak256\":\"0xbd60e65da468cedf4728ae7375f29dfe8809007984729db373a3303879a0d652\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a7a88f184b47230964aad99675e20bd057b84af738062dffc38b8357eda5a388\",\"dweb:/ipfs/QmT2A93UDtQx8HYrSvmSfGcJ6gcWH1iP9FJgDteBBB88cN\"]},\"project:/contracts/KitchenShop.sol\":{\"keccak256\":\"0x5f2db2ef2b8c7ef61ffc8bd7ed125141c541373b6e85191784b086b2a5e85fe0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7e276082dbf48f9f64857db0fbdff43e514e72f866bf78fb7ad258f1ef00526f\",\"dweb:/ipfs/QmfY6hCsbG9fgoWBJKoYLnWMS7ahTp35d535Sc2UCkb5io\"]},\"project:/contracts/Venue.sol\":{\"keccak256\":\"0x87e276f2c8138d557875f9b88790b8cb780a3a2a2d36d7e8307c0cace18a1999\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fd2ee3e0c39d6575797d9ed044fe4787fee0f9292ccf915a1ea18acbe3dcac9f\",\"dweb:/ipfs/QmULSiT4jwvHDdQJpLzxtcYYr63auMu52K96iH2s1GXAre\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"skill\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"insanity\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"ChefClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"intelligence\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"fatness\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"}],\"name\":\"RatClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TokenStaked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"accrualPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"charactersPerKitchen\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"chefEfficiencyMultiplier\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"chefs\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claim\",\"outputs\":[{\"internalType\":\"contract IClaim\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"claimRequests\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyChefEarnings\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyFatnessRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyInsanityRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyIntelligenceRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailySkillRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokenMaxSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokensPerRat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomVal\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getProperties\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"efficiency\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"tolerance\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"_accrualPeriod\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"isChef\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"chef\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"kitchenId\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastClaimTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minEfficiency\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratEfficiencyMultiplier\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratEfficiencyOffset\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratTheftPercentage\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"rats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"stakers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalFoodTokensEarned\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalRatsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unaccountedRewards\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vestingPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimMany(uint16[],bool)\":{\"params\":{\"tokenIds\":\"- The IDs of the tokens in question\",\"unstake\":\"- Whether or not to unstake the given tokens\"}},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"params\":{\"randomVal\":\"- List of random values created by VRF\",\"v\":\"- VRF struct for the corresponding request\"}},\"getProperties(uint256)\":{\"params\":{\"tokenId\":\"- The ID of the token to check\"},\"returns\":{\"efficiency\":\"& tolerance values\"}},\"isChef(uint256)\":{\"params\":{\"tokenId\":\"- The ID of the token to check\"},\"returns\":{\"chef\":\"- Whether or not the token is a Chef\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"paused()\":{\"details\":\"Returns true if the contract is paused, and false otherwise.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"stakeMany(address,uint16[])\":{\"params\":{\"account\":\"- The address of the staker\",\"tokenIds\":\"- The IDs of the Chefs & Rats to stake\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"claimMany(uint16[],bool)\":{\"notice\":\"ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters\"},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"notice\":\"ChainLink VRF callback for claimMany()\"},\"getProperties(uint256)\":{\"notice\":\"Get the character's properties\"},\"isChef(uint256)\":{\"notice\":\"Checks if the token is a Chef\"},\"stakeMany(address,uint16[])\":{\"notice\":\"Adds Chefs & Rats\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/EntrepreneurKitchen.sol\":\"EntrepreneurKitchen\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x9ffedb33e192f8821cbaead72596c79ea87fb28a73f8d3a9f5004449799f8e1b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a4d3a7c2729f266c54345044baf1080fb4a85208059cacea28c95622af4371db\",\"dweb:/ipfs/QmcHCX8reksSoQWjjYRcVoEHckz8AQ7CHKiKfzocpQq3Lg\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x68861bcc80cacbd498efde75aab6c74a486cc48262660d326c8d7530d9752097\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5beb2713aca05976562500789329e8c41320d00bd68ea9247856ec73894c3e3f\",\"dweb:/ipfs/QmQKwkpofsZYAzMZs7uNL7Qq58zVBuhoZCGpD6bJdUwyqy\"]},\"@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol\":{\"keccak256\":\"0xf93da311a3b34a8363a759c404d575746fa38351fb29ecd646c608e27219ebec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cfc8c4107004a7ad97a340df1b6841d0eb0aacf4ba1d58f0cfbd0de73493cb7\",\"dweb:/ipfs/QmeBT3UzVzVEaPpisoHFFEGdUxAqNR3pmRnvn1oKseYSSv\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol\":{\"keccak256\":\"0xc8a2776bd48e62498418d7eede80bde0f00c6b5d67286abf49499d7f7b65b95c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3fab905a29ffb7415ae907de56a367274cf80fa5d9caf0138cebb33d66d2d235\",\"dweb:/ipfs/QmVdCh48kvhr588PCvMFWH4J62gEqRrkcuTLV9WAEbCns2\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol\":{\"keccak256\":\"0x19bc90c8301914433c5e9b74a4eaac8942f64ea79d509f445799459fa10695da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7d14cd5453b7f5e396f84bb1b397af9d35c72348d30b873bf5bbe58370a5e626\",\"dweb:/ipfs/QmVEg1yT1DYHtR2zacC7woewcZAgrYBitcBeNwWtRnfJb1\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol\":{\"keccak256\":\"0x1edf4e6819997d1820aea89eff73d4fdaeff0bb87ff2f2b4cb6ad60bfe5ba63c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1296ec1ba3145257dd673ac74f68553512446642281ee23893631b1304c6c9ce\",\"dweb:/ipfs/QmaNvAvByH16Y3mEX1aywp1nLN3YEQUAwnnnYXS31dR4BV\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/IERC1155MetadataURIUpgradeable.sol\":{\"keccak256\":\"0xa350df12a8c10e821af05e0863f44e8317a0efa44df27bfd5dc1d63fdfa3c448\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1870980d15f9003916faf2a9a0eac6dcd4f0e28e2af6f5a3cee0cd685d460ee9\",\"dweb:/ipfs/QmY8K1YZQmuL2WDTPC8QwCm3ztrUD7JKmnvoZkMyGZceiM\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x6c25d4211724a6f4cdc8d25397edc780f48d951fc81c1d507f59b3edb22afaf7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2147fb68fe3bd0cc19b6c7ac5f2f78393488107b0e726f81c5343f6c88236ba5\",\"dweb:/ipfs/QmdK6Cry8qfYdXLTNLdL7dpogsg8s2ByydaG5EWZtzQvgt\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0x2f359f9d5c56394e60d74401487ab55d8ef0012907b07c9abbb8f998bf5ddfec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://47d1408f0b62a24a9c2abd7678665178916fc147b8f23153d61e21353f0205e4\",\"dweb:/ipfs/QmWis4pCq81JzNTqdCoiMqjEtcwp3NGRnCz4nYPYp2jEKd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x714a33fd66816f608f6eda908da24eb6009eee50adf4062c86639d4fe508a7b6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1222806a46ee6d877cff1f609cdb548271a0ae85228716c8d1427462a16bd59b\",\"dweb:/ipfs/QmZVjwuTFqhoFBuug3fvHFVC5Y9ompwdHMwUy5upevMfJ5\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x3f0f878c796dfc7feba6d3c4e3e526c14c7deae8b7bfc71088e3f38fab0d77b3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://69bf7d357ce97852f4fb71045919b1bb2c0ad0c820e3f06b9dd4451b2dc5a343\",\"dweb:/ipfs/QmWt96ZviufDu2qqS7Ln6UCJjfLyoFKbo6YKn54ao3o94z\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x0b0d548f6381370d394f7a434f994dc678b3ef3e755de106109d61343a685ea7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d8a3d42f1333d4224b7e6b7914e7ef5ee6d86586a3529bd1da15cbeece0d25b3\",\"dweb:/ipfs/QmXmFqePuCWzBcz9KyBepE7joHMg8jSjcmd5iayyG7jm3y\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0x398d3323c1932a5986bf36be7c57593e121e69d5db5b6574b4ee0d031443de37\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b268304e03daf22c349abe3c318bc6a6badd6542d62311716ab401eec745f78\",\"dweb:/ipfs/QmNYy2sc2RoTjDhyT6HAibmeDGqfhDiDpsWRbHFHoGVHLr\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0xcd98895383d51dc86669a76ae3ad4419fc5dc079d01faea23498e80c1cf9f78a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://16a9a1816c3dd4130b7836c42482d455075a9a49c7895bfb788ca3d345c82b32\",\"dweb:/ipfs/QmRxf3UetfDEF8NPuMQ1U8f9cddQpdarhCBhaCXEbe7Kw6\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981\",\"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0xd1d8caaeb45f78e0b0715664d56c220c283c89bf8b8c02954af86404d6b367f8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://300a0cc7be3b26c96c22a47ffa9530a585e1c4f2dba3021d9bf309dc63007487\",\"dweb:/ipfs/QmQmxsvxK6CaJmQ4D8vDCYPLHMqcMmZLcBqedG4GFAbzu9\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x61437cb513a887a1bbad006e7b1c8b414478427d33de47c5600af3c748f108da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2c3d0973630ed74f2b5ce3944677a885dc70ec32fc83b35f55045a10224da32b\",\"dweb:/ipfs/QmbefZ5RoEZKNHXCALfh683PnaNYzKPcKMFjyY1DVAgq8A\"]},\"@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol\":{\"keccak256\":\"0x3fe04ed1daf0f12454333fde982a25b103860d8a010dd5d8479b83ebf1dfb788\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8322152771e94c9e28a3bd9e7c9d5dd4fdd00ae214f95915962a6638d8dfc7d6\",\"dweb:/ipfs/QmaXJvF3UjRHacx3nPgt94DwAuXCkEoz6fS7MLr2jbuJyW\"]},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0x32c202bd28995dd20c4347b7c6467a6d3241c74c8ad3edcbb610cd9205916c45\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8179c356adb19e70d6b31a1eedc8c5c7f0c00e669e2540f4099e3844c6074d30\",\"dweb:/ipfs/QmWFbivarEobbqhS1go64ootVuHfVohBseerYy9FTEd1W2\"]},\"project:/contracts/CasualFood.sol\":{\"keccak256\":\"0xbf3b3f7b7172a92e7cc9a9faec2a1ce3ce7f3a4828b96abeeb73d4650d9479c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c5b453bc9c2e9ca4bd64e0e4c5da3dcb80b065a18ddcf511d440cf49ea1bb6ad\",\"dweb:/ipfs/Qmdhtj3yZmdefMVVWuuV1HkE9Ld9KDQ3U6XHRZ4hkHqMMg\"]},\"project:/contracts/Character.sol\":{\"keccak256\":\"0x9931f27e4206b6f3958e51bcf5e19afc1a79d675991943f1f40fd98fc1c61302\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://36ff72c369bf5b750488dac2fd20e9b836e39fe914a5a03d3e50293177502a9e\",\"dweb:/ipfs/QmZ9BPq7rqKsB9TQzg6ZU6prjAMRKCBaLQFqT98DGSKdhL\"]},\"project:/contracts/Controllable.sol\":{\"keccak256\":\"0xed76d3b198f37ddc5a1d2fa950bfd2637d4c9fe9417c197e58f4afe872399add\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1aa84929e0c61d191370080f8a8e5ee2e941bf707a9fcc13c59bc26cdc37bcec\",\"dweb:/ipfs/QmU1pi4tRWySiTbdg87cYPYcK6QxYCiABhzEmhRTmzaojo\"]},\"project:/contracts/ControllableUpgradeable.sol\":{\"keccak256\":\"0x69cb50acbe4683899197b3e223bf0ee1ed720c11761a314b02a1964b86065dca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://08d42c344da900274f88dbf0eb6ce04b387ce21541469b3d5d120406ef74edba\",\"dweb:/ipfs/Qme2MGJSLjrBcxo1FWhfXNW6bmkrRSrycc2pSFRuEEbiBa\"]},\"project:/contracts/EntrepreneurKitchen.sol\":{\"keccak256\":\"0x5e023fae9fe25faa96f17b993c0363a2f709686ad92f0651e40c1fda99fab8b0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5e0bf79f849b197ec7bc58a541ef499ac77a6363242541da9d6dc84d096dae2d\",\"dweb:/ipfs/QmcWLFdMiFxVv3aNPYgFMA71bWKsNwsGdiSKicmJEicxQc\"]},\"project:/contracts/FastFood.sol\":{\"keccak256\":\"0xe49b8e2d28ae0d03c9f0e5ef3006f830aa292308036d586116695b5c854042d4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fed543ccbb5306adc787f8d121c3ac40e3cab2bd5405476ea77e1b39ff05d2e0\",\"dweb:/ipfs/QmVrss7v15Z7hAktCHr7QBi4Wdw4N7oSHE9PRX5HCRmpMS\"]},\"project:/contracts/Food.sol\":{\"keccak256\":\"0x7c5b2150f780a77242f5b13761a720febf860496b417f1d4100ff3a4dfa55e0a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1241fbb982916a1ade69ac6a736c06e8bbc576886e8a984897d269685fb592f4\",\"dweb:/ipfs/QmV9Y91LDyRKdoDxjX6xUGAfoNr4HkBdqJc3PswnfRkUoA\"]},\"project:/contracts/GenericPausable.sol\":{\"keccak256\":\"0x9ec53799334e17209b4f8881b5e034916f255077691fedc1e052c03d94e933cc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dd94cf6a1e354c08f6c1731a1ebba9e4959673dc774eb8520aae92cafa1edd13\",\"dweb:/ipfs/QmY6RTDwTjDo8FKfMVqoz9Hm2phVqcWzPuSbhPfZtowzMH\"]},\"project:/contracts/ICharacter.sol\":{\"keccak256\":\"0x3bb2ac140a2ce2da8878352524753af9190525f9db7621d4e2047bb15683668e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://109a34d8333b4b28be0ace1274ceb8d1aa399dd59fcef546f73c32c472f89c03\",\"dweb:/ipfs/QmQhNb2jELW2poz4yPM21zM2i17eU7Qivs8rfP58gGGGAb\"]},\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IMint.sol\":{\"keccak256\":\"0x84e7f12def618f14a7cdfa357255dea2b07c74107c64481e716018be46ad05da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://afa75d7c08228a2a9f32a762946842922bb49bf883f0bf51df0b12e91badd7ec\",\"dweb:/ipfs/QmaPgpcQwUwjHWnft8sSSWFTwjNewqwUHF5geodGzYVy45\"]},\"project:/contracts/IPaywall.sol\":{\"keccak256\":\"0x02b4304398e31a585c75d1d766500d42151b1a8529f58c92712838e91646c60c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b65ac7afff52e554dce9894c9b736d91e6d5535aa4e217c5554d9ca89b9f9ec0\",\"dweb:/ipfs/QmQxCxEMuHr5m5bPbAXicJRYS9Gt11auL3FisqXPZGqVrP\"]},\"project:/contracts/IProperties.sol\":{\"keccak256\":\"0xfab08287f2632d91fe7a9e4c0f818466fd123bc2077a92e8b0c4b4e8be8c41f7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b27835b493a9e0452f5088e2d3546c3daf4b22bb42823071c4ae497011414c7\",\"dweb:/ipfs/QmY7bGASKjTfnfisHSSMvgJnZLoBjVZ7NoPoJ1YF4C1wFU\"]},\"project:/contracts/ITraits.sol\":{\"keccak256\":\"0x41a56d1ca9b05e91d193e07f947a7211b925d4b0aefd489c601d4a30ae775ed6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf4b680b7f4f6069938bd01030a7956c5b5cda4156fcfad2274b39663b7355d4\",\"dweb:/ipfs/QmaxHe1gCdd1DvWfWw3sGm83i1UQuuNhP8rZVkdaH6od4m\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0xe2f45abf5f70537a75d4af3799786c2d8b305f041a84ac48120956c328b4965f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b816dc7dcc46f9782299f1ee1ce487a649f864f60c8aa815e56e66a3cc5b404e\",\"dweb:/ipfs/QmagR9DMiFwLdAB1BhG77notw4px1i7dZC1Qq5GaEvzoPD\"]},\"project:/contracts/Kitchen.sol\":{\"keccak256\":\"0xbd60e65da468cedf4728ae7375f29dfe8809007984729db373a3303879a0d652\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a7a88f184b47230964aad99675e20bd057b84af738062dffc38b8357eda5a388\",\"dweb:/ipfs/QmT2A93UDtQx8HYrSvmSfGcJ6gcWH1iP9FJgDteBBB88cN\"]},\"project:/contracts/KitchenShop.sol\":{\"keccak256\":\"0x5f2db2ef2b8c7ef61ffc8bd7ed125141c541373b6e85191784b086b2a5e85fe0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7e276082dbf48f9f64857db0fbdff43e514e72f866bf78fb7ad258f1ef00526f\",\"dweb:/ipfs/QmfY6hCsbG9fgoWBJKoYLnWMS7ahTp35d535Sc2UCkb5io\"]},\"project:/contracts/Venue.sol\":{\"keccak256\":\"0x87e276f2c8138d557875f9b88790b8cb780a3a2a2d36d7e8307c0cace18a1999\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fd2ee3e0c39d6575797d9ed044fe4787fee0f9292ccf915a1ea18acbe3dcac9f\",\"dweb:/ipfs/QmULSiT4jwvHDdQJpLzxtcYYr63auMu52K96iH2s1GXAre\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -838,10 +838,10 @@
         3311
       ],
       "Controllable": [
-        5422
+        5434
       ],
       "ControllableUpgradeable": [
-        5490
+        5502
       ],
       "ERC1155Upgradeable": [
         1822
@@ -859,22 +859,22 @@
         2861
       ],
       "EntrepreneurKitchen": [
-        5557
+        5569
       ],
       "FastFood": [
-        5576
+        5588
       ],
       "Food": [
-        5658
+        5670
       ],
       "GenericPausable": [
-        5685
+        5697
       ],
       "ICharacter": [
-        5825
+        5837
       ],
       "IClaim": [
-        5852
+        5864
       ],
       "IERC1155MetadataURIUpgradeable": [
         2000
@@ -904,28 +904,28 @@
         2995
       ],
       "IMint": [
-        5883
+        5895
       ],
       "IPaywall": [
-        5924
+        5936
       ],
       "IProperties": [
-        5948
+        5960
       ],
       "ITraits": [
-        5958
+        5970
       ],
       "IVenue": [
-        5986
+        5998
       ],
       "Initializable": [
         586
       ],
       "Kitchen": [
-        6256
+        6268
       ],
       "KitchenShop": [
-        6726
+        6738
       ],
       "Ownable": [
         3677
@@ -943,15 +943,15 @@
         3514
       ],
       "Venue": [
-        11149
+        11173
       ]
     },
-    "id": 5558,
+    "id": 5570,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5492,
+        "id": 5504,
         "literals": [
           "solidity",
           "^",
@@ -964,11 +964,11 @@
       {
         "absolutePath": "project:/contracts/Kitchen.sol",
         "file": "./Kitchen.sol",
-        "id": 5493,
+        "id": 5505,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5558,
-        "sourceUnit": 6257,
+        "scope": 5570,
+        "sourceUnit": 6269,
         "src": "58:23:32",
         "symbolAliases": [],
         "unitAlias": ""
@@ -976,11 +976,11 @@
       {
         "absolutePath": "project:/contracts/KitchenShop.sol",
         "file": "./KitchenShop.sol",
-        "id": 5494,
+        "id": 5506,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5558,
-        "sourceUnit": 6727,
+        "scope": 5570,
+        "sourceUnit": 6739,
         "src": "82:27:32",
         "symbolAliases": [],
         "unitAlias": ""
@@ -990,13 +990,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 5495,
+              "id": 5507,
               "name": "Kitchen",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 6256,
+              "referencedDeclaration": 6268,
               "src": "152:7:32"
             },
-            "id": 5496,
+            "id": 5508,
             "nodeType": "InheritanceSpecifier",
             "src": "152:7:32"
           }
@@ -1005,18 +1005,18 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 5557,
+        "id": 5569,
         "linearizedBaseContracts": [
-          5557,
-          6256,
-          11149,
+          5569,
+          6268,
+          11173,
           2879,
-          5685,
+          5697,
           699,
           512,
           3311,
           586,
-          5986
+          5998
         ],
         "name": "EntrepreneurKitchen",
         "nameLocation": "129:19:32",
@@ -1024,33 +1024,33 @@
         "nodes": [
           {
             "constant": false,
-            "id": 5499,
+            "id": 5511,
             "mutability": "mutable",
             "name": "kitchenShop",
             "nameLocation": "176:11:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "164:23:32",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_KitchenShop_$6726",
+              "typeIdentifier": "t_contract$_KitchenShop_$6738",
               "typeString": "contract KitchenShop"
             },
             "typeName": {
-              "id": 5498,
+              "id": 5510,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 5497,
+                "id": 5509,
                 "name": "KitchenShop",
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 6726,
+                "referencedDeclaration": 6738,
                 "src": "164:11:32"
               },
-              "referencedDeclaration": 6726,
+              "referencedDeclaration": 6738,
               "src": "164:11:32",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_KitchenShop_$6726",
+                "typeIdentifier": "t_contract$_KitchenShop_$6738",
                 "typeString": "contract KitchenShop"
               }
             },
@@ -1059,12 +1059,12 @@
           {
             "constant": false,
             "functionSelector": "9317f7f8",
-            "id": 5501,
+            "id": 5513,
             "mutability": "mutable",
             "name": "kitchenId",
             "nameLocation": "204:9:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "191:22:32",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1073,7 +1073,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 5500,
+              "id": 5512,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "191:5:32",
@@ -1087,12 +1087,12 @@
           {
             "constant": false,
             "functionSelector": "9786e4d4",
-            "id": 5503,
+            "id": 5515,
             "mutability": "mutable",
             "name": "charactersPerKitchen",
             "nameLocation": "230:20:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "217:33:32",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1101,7 +1101,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 5502,
+              "id": 5514,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "217:5:32",
@@ -1115,12 +1115,12 @@
           {
             "constant": false,
             "functionSelector": "051d1d49",
-            "id": 5505,
+            "id": 5517,
             "mutability": "mutable",
             "name": "minEfficiency",
             "nameLocation": "267:13:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "254:26:32",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1129,7 +1129,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 5504,
+              "id": 5516,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "254:5:32",
@@ -1142,26 +1142,26 @@
           },
           {
             "baseFunctions": [
-              10917
+              10941
             ],
             "body": {
-              "id": 5535,
+              "id": 5547,
               "nodeType": "Block",
               "src": "548:154:32",
               "statements": [
                 {
                   "assignments": [
-                    5517
+                    5529
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5517,
+                      "id": 5529,
                       "mutability": "mutable",
                       "name": "balance",
                       "nameLocation": "562:7:32",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5535,
+                      "scope": 5547,
                       "src": "554:15:32",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -1170,7 +1170,7 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 5516,
+                        "id": 5528,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
                         "src": "554:7:32",
@@ -1182,15 +1182,15 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 5523,
+                  "id": 5535,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 5520,
+                        "id": 5532,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5508,
+                        "referencedDeclaration": 5520,
                         "src": "594:7:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1198,11 +1198,11 @@
                         }
                       },
                       {
-                        "id": 5521,
+                        "id": 5533,
                         "name": "kitchenId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5501,
+                        "referencedDeclaration": 5513,
                         "src": "603:9:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint8",
@@ -1222,18 +1222,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 5518,
+                        "id": 5530,
                         "name": "kitchenShop",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5499,
+                        "referencedDeclaration": 5511,
                         "src": "572:11:32",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_KitchenShop_$6726",
+                          "typeIdentifier": "t_contract$_KitchenShop_$6738",
                           "typeString": "contract KitchenShop"
                         }
                       },
-                      "id": 5519,
+                      "id": 5531,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1247,7 +1247,7 @@
                         "typeString": "function (address,uint256) view external returns (uint256)"
                       }
                     },
-                    "id": 5522,
+                    "id": 5534,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1271,7 +1271,7 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 5533,
+                    "id": 5545,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1281,17 +1281,17 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 5526,
+                      "id": 5538,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
-                        "id": 5524,
+                        "id": 5536,
                         "name": "balance",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5517,
+                        "referencedDeclaration": 5529,
                         "src": "626:7:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -1301,11 +1301,11 @@
                       "nodeType": "BinaryOperation",
                       "operator": "*",
                       "rightExpression": {
-                        "id": 5525,
+                        "id": 5537,
                         "name": "charactersPerKitchen",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5503,
+                        "referencedDeclaration": 5515,
                         "src": "636:20:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint8",
@@ -1325,7 +1325,7 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 5532,
+                      "id": 5544,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1333,24 +1333,24 @@
                       "leftExpression": {
                         "expression": {
                           "baseExpression": {
-                            "id": 5527,
+                            "id": 5539,
                             "name": "stakers",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 10095,
+                            "referencedDeclaration": 10119,
                             "src": "660:7:32",
                             "typeDescriptions": {
                               "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_uint256_$dyn_storage_$",
                               "typeString": "mapping(address => uint256[] storage ref)"
                             }
                           },
-                          "id": 5529,
+                          "id": 5541,
                           "indexExpression": {
-                            "id": 5528,
+                            "id": 5540,
                             "name": "account",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5508,
+                            "referencedDeclaration": 5520,
                             "src": "668:7:32",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -1368,7 +1368,7 @@
                             "typeString": "uint256[] storage ref"
                           }
                         },
-                        "id": 5530,
+                        "id": 5542,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1384,11 +1384,11 @@
                       "nodeType": "BinaryOperation",
                       "operator": "+",
                       "rightExpression": {
-                        "id": 5531,
+                        "id": 5543,
                         "name": "amountToAdd",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5510,
+                        "referencedDeclaration": 5522,
                         "src": "686:11:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -1407,20 +1407,20 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 5515,
-                  "id": 5534,
+                  "functionReturnParameters": 5527,
+                  "id": 5546,
                   "nodeType": "Return",
                   "src": "619:78:32"
                 }
               ]
             },
             "documentation": {
-              "id": 5506,
+              "id": 5518,
               "nodeType": "StructuredDocumentation",
               "src": "285:163:32",
               "text": " Checks if there is kitchen space for the given amount of characters\n @param amountToAdd - Number of characters to add to stake\n @return true"
             },
-            "id": 5536,
+            "id": 5548,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1428,23 +1428,23 @@
             "nameLocation": "460:11:32",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 5512,
+              "id": 5524,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "519:8:32"
             },
             "parameters": {
-              "id": 5511,
+              "id": 5523,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5508,
+                  "id": 5520,
                   "mutability": "mutable",
                   "name": "account",
                   "nameLocation": "480:7:32",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5536,
+                  "scope": 5548,
                   "src": "472:15:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1453,7 +1453,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5507,
+                    "id": 5519,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "472:7:32",
@@ -1467,12 +1467,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5510,
+                  "id": 5522,
                   "mutability": "mutable",
                   "name": "amountToAdd",
                   "nameLocation": "497:11:32",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5536,
+                  "scope": 5548,
                   "src": "489:19:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1481,7 +1481,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5509,
+                    "id": 5521,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "489:7:32",
@@ -1496,17 +1496,17 @@
               "src": "471:38:32"
             },
             "returnParameters": {
-              "id": 5515,
+              "id": 5527,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5514,
+                  "id": 5526,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5536,
+                  "scope": 5548,
                   "src": "542:4:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1515,7 +1515,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 5513,
+                    "id": 5525,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "542:4:32",
@@ -1529,7 +1529,7 @@
               ],
               "src": "541:6:32"
             },
-            "scope": 5557,
+            "scope": 5569,
             "src": "451:251:32",
             "stateMutability": "view",
             "virtual": false,
@@ -1537,27 +1537,27 @@
           },
           {
             "baseFunctions": [
-              10928
+              10952
             ],
             "body": {
-              "id": 5555,
+              "id": 5567,
               "nodeType": "Block",
               "src": "935:95:32",
               "statements": [
                 {
                   "assignments": [
-                    5546,
+                    5558,
                     null
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5546,
+                      "id": 5558,
                       "mutability": "mutable",
                       "name": "efficiency",
                       "nameLocation": "948:10:32",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5555,
+                      "scope": 5567,
                       "src": "942:16:32",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -1566,7 +1566,7 @@
                         "typeString": "uint8"
                       },
                       "typeName": {
-                        "id": 5545,
+                        "id": 5557,
                         "name": "uint8",
                         "nodeType": "ElementaryTypeName",
                         "src": "942:5:32",
@@ -1579,15 +1579,15 @@
                     },
                     null
                   ],
-                  "id": 5550,
+                  "id": 5562,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 5548,
+                        "id": 5560,
                         "name": "tokenId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5539,
+                        "referencedDeclaration": 5551,
                         "src": "977:7:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -1602,18 +1602,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 5547,
+                      "id": 5559,
                       "name": "getProperties",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11119,
+                      "referencedDeclaration": 11143,
                       "src": "963:13:32",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_uint8_$_t_uint8_$",
                         "typeString": "function (uint256) view returns (uint8,uint8)"
                       }
                     },
-                    "id": 5549,
+                    "id": 5561,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1637,17 +1637,17 @@
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     },
-                    "id": 5553,
+                    "id": 5565,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 5551,
+                      "id": 5563,
                       "name": "efficiency",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5546,
+                      "referencedDeclaration": 5558,
                       "src": "998:10:32",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -1657,11 +1657,11 @@
                     "nodeType": "BinaryOperation",
                     "operator": ">=",
                     "rightExpression": {
-                      "id": 5552,
+                      "id": 5564,
                       "name": "minEfficiency",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5505,
+                      "referencedDeclaration": 5517,
                       "src": "1012:13:32",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -1674,20 +1674,20 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 5544,
-                  "id": 5554,
+                  "functionReturnParameters": 5556,
+                  "id": 5566,
                   "nodeType": "Return",
                   "src": "991:34:32"
                 }
               ]
             },
             "documentation": {
-              "id": 5537,
+              "id": 5549,
               "nodeType": "StructuredDocumentation",
               "src": "706:144:32",
               "text": " Checks if the character is eligible to work in that kitchen\n @param tokenId - Amount of characters to stake\n @return true"
             },
-            "id": 5556,
+            "id": 5568,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1695,23 +1695,23 @@
             "nameLocation": "862:17:32",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 5541,
+              "id": 5553,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "906:8:32"
             },
             "parameters": {
-              "id": 5540,
+              "id": 5552,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5539,
+                  "id": 5551,
                   "mutability": "mutable",
                   "name": "tokenId",
                   "nameLocation": "888:7:32",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5556,
+                  "scope": 5568,
                   "src": "880:15:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1720,7 +1720,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5538,
+                    "id": 5550,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "880:7:32",
@@ -1735,17 +1735,17 @@
               "src": "879:17:32"
             },
             "returnParameters": {
-              "id": 5544,
+              "id": 5556,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5543,
+                  "id": 5555,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5556,
+                  "scope": 5568,
                   "src": "929:4:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1754,7 +1754,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 5542,
+                    "id": 5554,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "929:4:32",
@@ -1768,14 +1768,14 @@
               ],
               "src": "928:6:32"
             },
-            "scope": 5557,
+            "scope": 5569,
             "src": "853:177:32",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 5558,
+        "scope": 5570,
         "src": "111:921:32",
         "usedErrors": []
       }
@@ -1801,10 +1801,10 @@
         3311
       ],
       "Controllable": [
-        5422
+        5434
       ],
       "ControllableUpgradeable": [
-        5490
+        5502
       ],
       "ERC1155Upgradeable": [
         1822
@@ -1822,22 +1822,22 @@
         2861
       ],
       "EntrepreneurKitchen": [
-        5557
+        5569
       ],
       "FastFood": [
-        5576
+        5588
       ],
       "Food": [
-        5658
+        5670
       ],
       "GenericPausable": [
-        5685
+        5697
       ],
       "ICharacter": [
-        5825
+        5837
       ],
       "IClaim": [
-        5852
+        5864
       ],
       "IERC1155MetadataURIUpgradeable": [
         2000
@@ -1867,28 +1867,28 @@
         2995
       ],
       "IMint": [
-        5883
+        5895
       ],
       "IPaywall": [
-        5924
+        5936
       ],
       "IProperties": [
-        5948
+        5960
       ],
       "ITraits": [
-        5958
+        5970
       ],
       "IVenue": [
-        5986
+        5998
       ],
       "Initializable": [
         586
       ],
       "Kitchen": [
-        6256
+        6268
       ],
       "KitchenShop": [
-        6726
+        6738
       ],
       "Ownable": [
         3677
@@ -1906,15 +1906,15 @@
         3514
       ],
       "Venue": [
-        11149
+        11173
       ]
     },
-    "id": 5558,
+    "id": 5570,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5492,
+        "id": 5504,
         "literals": [
           "solidity",
           "^",
@@ -1927,11 +1927,11 @@
       {
         "absolutePath": "project:/contracts/Kitchen.sol",
         "file": "./Kitchen.sol",
-        "id": 5493,
+        "id": 5505,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5558,
-        "sourceUnit": 6257,
+        "scope": 5570,
+        "sourceUnit": 6269,
         "src": "58:23:32",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1939,11 +1939,11 @@
       {
         "absolutePath": "project:/contracts/KitchenShop.sol",
         "file": "./KitchenShop.sol",
-        "id": 5494,
+        "id": 5506,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5558,
-        "sourceUnit": 6727,
+        "scope": 5570,
+        "sourceUnit": 6739,
         "src": "82:27:32",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1953,13 +1953,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 5495,
+              "id": 5507,
               "name": "Kitchen",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 6256,
+              "referencedDeclaration": 6268,
               "src": "152:7:32"
             },
-            "id": 5496,
+            "id": 5508,
             "nodeType": "InheritanceSpecifier",
             "src": "152:7:32"
           }
@@ -1968,18 +1968,18 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 5557,
+        "id": 5569,
         "linearizedBaseContracts": [
-          5557,
-          6256,
-          11149,
+          5569,
+          6268,
+          11173,
           2879,
-          5685,
+          5697,
           699,
           512,
           3311,
           586,
-          5986
+          5998
         ],
         "name": "EntrepreneurKitchen",
         "nameLocation": "129:19:32",
@@ -1987,33 +1987,33 @@
         "nodes": [
           {
             "constant": false,
-            "id": 5499,
+            "id": 5511,
             "mutability": "mutable",
             "name": "kitchenShop",
             "nameLocation": "176:11:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "164:23:32",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_KitchenShop_$6726",
+              "typeIdentifier": "t_contract$_KitchenShop_$6738",
               "typeString": "contract KitchenShop"
             },
             "typeName": {
-              "id": 5498,
+              "id": 5510,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 5497,
+                "id": 5509,
                 "name": "KitchenShop",
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 6726,
+                "referencedDeclaration": 6738,
                 "src": "164:11:32"
               },
-              "referencedDeclaration": 6726,
+              "referencedDeclaration": 6738,
               "src": "164:11:32",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_KitchenShop_$6726",
+                "typeIdentifier": "t_contract$_KitchenShop_$6738",
                 "typeString": "contract KitchenShop"
               }
             },
@@ -2022,12 +2022,12 @@
           {
             "constant": false,
             "functionSelector": "9317f7f8",
-            "id": 5501,
+            "id": 5513,
             "mutability": "mutable",
             "name": "kitchenId",
             "nameLocation": "204:9:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "191:22:32",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2036,7 +2036,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 5500,
+              "id": 5512,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "191:5:32",
@@ -2050,12 +2050,12 @@
           {
             "constant": false,
             "functionSelector": "9786e4d4",
-            "id": 5503,
+            "id": 5515,
             "mutability": "mutable",
             "name": "charactersPerKitchen",
             "nameLocation": "230:20:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "217:33:32",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2064,7 +2064,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 5502,
+              "id": 5514,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "217:5:32",
@@ -2078,12 +2078,12 @@
           {
             "constant": false,
             "functionSelector": "051d1d49",
-            "id": 5505,
+            "id": 5517,
             "mutability": "mutable",
             "name": "minEfficiency",
             "nameLocation": "267:13:32",
             "nodeType": "VariableDeclaration",
-            "scope": 5557,
+            "scope": 5569,
             "src": "254:26:32",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2092,7 +2092,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 5504,
+              "id": 5516,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "254:5:32",
@@ -2105,26 +2105,26 @@
           },
           {
             "baseFunctions": [
-              10917
+              10941
             ],
             "body": {
-              "id": 5535,
+              "id": 5547,
               "nodeType": "Block",
               "src": "548:154:32",
               "statements": [
                 {
                   "assignments": [
-                    5517
+                    5529
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5517,
+                      "id": 5529,
                       "mutability": "mutable",
                       "name": "balance",
                       "nameLocation": "562:7:32",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5535,
+                      "scope": 5547,
                       "src": "554:15:32",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2133,7 +2133,7 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 5516,
+                        "id": 5528,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
                         "src": "554:7:32",
@@ -2145,15 +2145,15 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 5523,
+                  "id": 5535,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 5520,
+                        "id": 5532,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5508,
+                        "referencedDeclaration": 5520,
                         "src": "594:7:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2161,11 +2161,11 @@
                         }
                       },
                       {
-                        "id": 5521,
+                        "id": 5533,
                         "name": "kitchenId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5501,
+                        "referencedDeclaration": 5513,
                         "src": "603:9:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint8",
@@ -2185,18 +2185,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 5518,
+                        "id": 5530,
                         "name": "kitchenShop",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5499,
+                        "referencedDeclaration": 5511,
                         "src": "572:11:32",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_KitchenShop_$6726",
+                          "typeIdentifier": "t_contract$_KitchenShop_$6738",
                           "typeString": "contract KitchenShop"
                         }
                       },
-                      "id": 5519,
+                      "id": 5531,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2210,7 +2210,7 @@
                         "typeString": "function (address,uint256) view external returns (uint256)"
                       }
                     },
-                    "id": 5522,
+                    "id": 5534,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2234,7 +2234,7 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 5533,
+                    "id": 5545,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2244,17 +2244,17 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 5526,
+                      "id": 5538,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
-                        "id": 5524,
+                        "id": 5536,
                         "name": "balance",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5517,
+                        "referencedDeclaration": 5529,
                         "src": "626:7:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -2264,11 +2264,11 @@
                       "nodeType": "BinaryOperation",
                       "operator": "*",
                       "rightExpression": {
-                        "id": 5525,
+                        "id": 5537,
                         "name": "charactersPerKitchen",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5503,
+                        "referencedDeclaration": 5515,
                         "src": "636:20:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint8",
@@ -2288,7 +2288,7 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 5532,
+                      "id": 5544,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2296,24 +2296,24 @@
                       "leftExpression": {
                         "expression": {
                           "baseExpression": {
-                            "id": 5527,
+                            "id": 5539,
                             "name": "stakers",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 10095,
+                            "referencedDeclaration": 10119,
                             "src": "660:7:32",
                             "typeDescriptions": {
                               "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_uint256_$dyn_storage_$",
                               "typeString": "mapping(address => uint256[] storage ref)"
                             }
                           },
-                          "id": 5529,
+                          "id": 5541,
                           "indexExpression": {
-                            "id": 5528,
+                            "id": 5540,
                             "name": "account",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5508,
+                            "referencedDeclaration": 5520,
                             "src": "668:7:32",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -2331,7 +2331,7 @@
                             "typeString": "uint256[] storage ref"
                           }
                         },
-                        "id": 5530,
+                        "id": 5542,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2347,11 +2347,11 @@
                       "nodeType": "BinaryOperation",
                       "operator": "+",
                       "rightExpression": {
-                        "id": 5531,
+                        "id": 5543,
                         "name": "amountToAdd",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5510,
+                        "referencedDeclaration": 5522,
                         "src": "686:11:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -2370,20 +2370,20 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 5515,
-                  "id": 5534,
+                  "functionReturnParameters": 5527,
+                  "id": 5546,
                   "nodeType": "Return",
                   "src": "619:78:32"
                 }
               ]
             },
             "documentation": {
-              "id": 5506,
+              "id": 5518,
               "nodeType": "StructuredDocumentation",
               "src": "285:163:32",
               "text": " Checks if there is kitchen space for the given amount of characters\n @param amountToAdd - Number of characters to add to stake\n @return true"
             },
-            "id": 5536,
+            "id": 5548,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -2391,23 +2391,23 @@
             "nameLocation": "460:11:32",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 5512,
+              "id": 5524,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "519:8:32"
             },
             "parameters": {
-              "id": 5511,
+              "id": 5523,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5508,
+                  "id": 5520,
                   "mutability": "mutable",
                   "name": "account",
                   "nameLocation": "480:7:32",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5536,
+                  "scope": 5548,
                   "src": "472:15:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2416,7 +2416,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5507,
+                    "id": 5519,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "472:7:32",
@@ -2430,12 +2430,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 5510,
+                  "id": 5522,
                   "mutability": "mutable",
                   "name": "amountToAdd",
                   "nameLocation": "497:11:32",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5536,
+                  "scope": 5548,
                   "src": "489:19:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2444,7 +2444,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5509,
+                    "id": 5521,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "489:7:32",
@@ -2459,17 +2459,17 @@
               "src": "471:38:32"
             },
             "returnParameters": {
-              "id": 5515,
+              "id": 5527,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5514,
+                  "id": 5526,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5536,
+                  "scope": 5548,
                   "src": "542:4:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2478,7 +2478,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 5513,
+                    "id": 5525,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "542:4:32",
@@ -2492,7 +2492,7 @@
               ],
               "src": "541:6:32"
             },
-            "scope": 5557,
+            "scope": 5569,
             "src": "451:251:32",
             "stateMutability": "view",
             "virtual": false,
@@ -2500,27 +2500,27 @@
           },
           {
             "baseFunctions": [
-              10928
+              10952
             ],
             "body": {
-              "id": 5555,
+              "id": 5567,
               "nodeType": "Block",
               "src": "935:95:32",
               "statements": [
                 {
                   "assignments": [
-                    5546,
+                    5558,
                     null
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5546,
+                      "id": 5558,
                       "mutability": "mutable",
                       "name": "efficiency",
                       "nameLocation": "948:10:32",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5555,
+                      "scope": 5567,
                       "src": "942:16:32",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2529,7 +2529,7 @@
                         "typeString": "uint8"
                       },
                       "typeName": {
-                        "id": 5545,
+                        "id": 5557,
                         "name": "uint8",
                         "nodeType": "ElementaryTypeName",
                         "src": "942:5:32",
@@ -2542,15 +2542,15 @@
                     },
                     null
                   ],
-                  "id": 5550,
+                  "id": 5562,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 5548,
+                        "id": 5560,
                         "name": "tokenId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5539,
+                        "referencedDeclaration": 5551,
                         "src": "977:7:32",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -2565,18 +2565,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 5547,
+                      "id": 5559,
                       "name": "getProperties",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11119,
+                      "referencedDeclaration": 11143,
                       "src": "963:13:32",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_uint8_$_t_uint8_$",
                         "typeString": "function (uint256) view returns (uint8,uint8)"
                       }
                     },
-                    "id": 5549,
+                    "id": 5561,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2600,17 +2600,17 @@
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     },
-                    "id": 5553,
+                    "id": 5565,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 5551,
+                      "id": 5563,
                       "name": "efficiency",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5546,
+                      "referencedDeclaration": 5558,
                       "src": "998:10:32",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -2620,11 +2620,11 @@
                     "nodeType": "BinaryOperation",
                     "operator": ">=",
                     "rightExpression": {
-                      "id": 5552,
+                      "id": 5564,
                       "name": "minEfficiency",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5505,
+                      "referencedDeclaration": 5517,
                       "src": "1012:13:32",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -2637,20 +2637,20 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 5544,
-                  "id": 5554,
+                  "functionReturnParameters": 5556,
+                  "id": 5566,
                   "nodeType": "Return",
                   "src": "991:34:32"
                 }
               ]
             },
             "documentation": {
-              "id": 5537,
+              "id": 5549,
               "nodeType": "StructuredDocumentation",
               "src": "706:144:32",
               "text": " Checks if the character is eligible to work in that kitchen\n @param tokenId - Amount of characters to stake\n @return true"
             },
-            "id": 5556,
+            "id": 5568,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -2658,23 +2658,23 @@
             "nameLocation": "862:17:32",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 5541,
+              "id": 5553,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "906:8:32"
             },
             "parameters": {
-              "id": 5540,
+              "id": 5552,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5539,
+                  "id": 5551,
                   "mutability": "mutable",
                   "name": "tokenId",
                   "nameLocation": "888:7:32",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5556,
+                  "scope": 5568,
                   "src": "880:15:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2683,7 +2683,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5538,
+                    "id": 5550,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "880:7:32",
@@ -2698,17 +2698,17 @@
               "src": "879:17:32"
             },
             "returnParameters": {
-              "id": 5544,
+              "id": 5556,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5543,
+                  "id": 5555,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5556,
+                  "scope": 5568,
                   "src": "929:4:32",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2717,7 +2717,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 5542,
+                    "id": 5554,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "929:4:32",
@@ -2731,14 +2731,14 @@
               ],
               "src": "928:6:32"
             },
-            "scope": 5557,
+            "scope": 5569,
             "src": "853:177:32",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 5558,
+        "scope": 5570,
         "src": "111:921:32",
         "usedErrors": []
       }
@@ -2751,7 +2751,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-12T17:24:30.117Z",
+  "updatedAt": "2022-03-14T13:32:52.818Z",
   "devdoc": {
     "kind": "dev",
     "methods": {
