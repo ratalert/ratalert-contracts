@@ -28,7 +28,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   IProperties public properties; // Reference to Properties
   IVenue public kitchen;
   IPaywall public paywall;
-  address payable dao;
+  address payable public dao;
 
   function initialize(
     address[] memory _addresses, // paywall, mint, traits, properties, dao

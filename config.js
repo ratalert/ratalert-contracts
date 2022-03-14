@@ -2,10 +2,10 @@ const web3 = require('web3');
 const toWei = web3.utils.toWei;
 
 const vrf = ({ vrfCoordinator, linkToken }) => Object.values({
-    vrfCoordinator: vrfCoordinator || '0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B', // Rinkeby coordinator
-    linkToken: linkToken || '0x01BE23585060835E02B77ef475b0Cc51aA1e0709', // Rinkeby LINK token contract
-    keyHash: '0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311', // Rinkeby 30 gwei Key Hash gas lane
-    fee: toWei('0.1', 'ether'),
+    vrfCoordinator: vrfCoordinator || process.env.VRF_COORDINATOR, // Coordinator contract
+    linkToken: linkToken || process.env.LINK_ADDRESS, // LINK token contract
+    keyHash: process.env.VRF_KEY_HASH || '0x0', // 30 gwei key hash gas lane
+    vrfFee: toWei(process.env.VRF_FEE || '0.0001', 'ether'),
 });
 const dao = (network, account) => ({
     address: (network === 'development') ? account : process.env.DAO_ADDRESS,
