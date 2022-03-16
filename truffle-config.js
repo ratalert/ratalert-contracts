@@ -17,17 +17,24 @@ module.exports = {
       // gas: 22323,
       // gasPrice: 10,
     },
-    dao: {
-      provider: () => new HDWalletProvider([daoPrivKey], `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
-      network_id: 80001,
-      skipDryRun: true,
-    },
-    mumbai: {
-      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`), // `wss://patient-misty-pond.matic-testnet.quiknode.pro/${infuraId}/`
+    test: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
       network_id: 80001,
       skipDryRun: true,
       // confirmations: 1,
       // timeoutBlocks: 200,
+    },
+    beta: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
+      network_id: 80001,
+      skipDryRun: true,
+      // confirmations: 1,
+      // timeoutBlocks: 200,
+    },
+    dao: {
+      provider: () => new HDWalletProvider([daoPrivKey], `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
+      network_id: 80001,
+      skipDryRun: true,
     },
     rinkeby: {
       provider: () => new HDWalletProvider(mnemonic, `wss://rinkeby.infura.io/ws/v3/${infuraId}`),
@@ -35,13 +42,6 @@ module.exports = {
       skipDryRun: true,
       // gasPrice: 10e9,
       // timeoutBlocks: 50,
-    },
-    polygon: {
-      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mainnet.infura.io/ws/v3/${infuraId}`), // `wss://patient-misty-pond.matic-testnet.quiknode.pro/${infuraId}/`
-      network_id: 137,
-      skipDryRun: true,
-      // confirmations: 1,
-      // timeoutBlocks: 200,
     },
     // Another network with more advanced options...
     // advanced: {
