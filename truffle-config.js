@@ -4,6 +4,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 const network = process.argv.includes('--network') ? process.argv[process.argv.indexOf('--network') + 1] || 'develop' : 'develop';
 dotenv.config({ path: `${__dirname}/.env${network === 'develop' ? '' : '.' + network}` });
 const mnemonic = process.env.MNEMONIC;
+const daoPrivKey = process.env.DAO_PRIVKEY;
 const infuraId = process.env.INFURA_ID;
 
 module.exports = {
@@ -16,8 +17,13 @@ module.exports = {
       // gas: 22323,
       // gasPrice: 10,
     },
+    dao: {
+      provider: () => new HDWalletProvider([daoPrivKey], `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
+      network_id: 80001,
+      skipDryRun: true,
+    },
     mumbai: {
-      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
+      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`), // `wss://patient-misty-pond.matic-testnet.quiknode.pro/${infuraId}/`
       network_id: 80001,
       skipDryRun: true,
       // confirmations: 1,
@@ -29,6 +35,13 @@ module.exports = {
       skipDryRun: true,
       // gasPrice: 10e9,
       // timeoutBlocks: 50,
+    },
+    polygon: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mainnet.infura.io/ws/v3/${infuraId}`), // `wss://patient-misty-pond.matic-testnet.quiknode.pro/${infuraId}/`
+      network_id: 137,
+      skipDryRun: true,
+      // confirmations: 1,
+      // timeoutBlocks: 200,
     },
     // Another network with more advanced options...
     // advanced: {
