@@ -8,6 +8,7 @@ import "./FastFood.sol";
 
 contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   uint256 public mintPrice;
+  uint8 public maxMintsPerTx; // Maximum number of tokens that can be minted in a single tx
   uint256 public gen1PriceTier0;
   uint256 public gen1PriceTier1;
   uint256 public gen1PriceTier2;
@@ -31,8 +32,9 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   /**
    * Allows DAO to update game parameters
    */
-  function configure(uint256 _mintPrice, uint256[] memory _gen1Prices) external onlyOwner {
+  function configure(uint256 _mintPrice, uint8 _maxMintsPerTx, uint256[] memory _gen1Prices) external onlyOwner {
     mintPrice = _mintPrice;
+    maxMintsPerTx = _maxMintsPerTx;
     gen1PriceTier0 = _gen1Prices[0];
     gen1PriceTier1 = _gen1Prices[1];
     gen1PriceTier2 = _gen1Prices[2];
@@ -106,7 +108,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * @param gen0Tokens - Number of tokens that can be claimed for free
    */
   function handle(address sender, uint8 amount, uint256 msgValue, uint16 minted, uint256 maxTokens, uint256 gen0Tokens) external onlyController {
-    require(amount > 0 && amount <= 10, "Invalid mint amount");
+    require(amount > 0 && amount <= maxMintsPerTx, "Invalid mint amount");
     require(minted + amount <= maxTokens, "All tokens minted");
     uint256 txMintPrice = mintPrice;
     if (onlyWhitelist) {

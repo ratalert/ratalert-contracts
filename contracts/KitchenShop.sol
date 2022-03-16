@@ -28,6 +28,7 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   uint256 public priceTier2;
   uint256 public priceTier3;
   uint256 public priceTier4;
+  uint8 public maxMintsPerTx; // Maximum number of tokens that can be minted in a single tx
   mapping (uint8 => uint256) public maxTokens;
   mapping (uint8 => uint256) public minSkill;
   mapping (uint8 => uint256) public minted;
@@ -50,11 +51,13 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
    */
   function configure(
     uint256[] memory _maxTokens,
+    uint8 _maxMintsPerTx,
     uint8[] memory _minSkill,
     uint256[] memory _prices
   ) external onlyOwner {
     maxTokens[1] = _maxTokens[0];
     maxTokens[2] = _maxTokens[1];
+    maxMintsPerTx = _maxMintsPerTx;
     minSkill[1] = _minSkill[0];
     minSkill[2] = _minSkill[1];
     priceTier0 = _prices[0];
@@ -71,7 +74,7 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   function mint(uint8 kitchen, uint8 amount) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
     require(kitchen > 0 && kitchen <= 2, "Invalid kitchen");
-    require(amount > 0 && amount <= 10, "Invalid mint amount");
+    require(amount > 0 && amount <= maxMintsPerTx, "Invalid mint amount");
     require(minted[kitchen] + amount <= maxTokens[kitchen], "All tokens minted");
     require(msg.value == 0, "Invalid payment type");
 

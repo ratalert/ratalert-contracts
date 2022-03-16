@@ -38,6 +38,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   uint256 public accrualPeriod; // The period over which earnings & levels are accrued
   uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
   uint256 public vestingPeriod; // Cannot unstake for this many seconds
+  uint8 public maxClaimsPerTx; // Maximum number of tokens that can be claimed in a single tx
 
   function initialize(
     address _character,
@@ -122,6 +123,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param unstake - Whether or not to unstake the given tokens
    */
   function claimMany(uint16[] calldata tokenIds, bool unstake) external virtual whenNotPaused {
+    require(tokenIds.length <= maxClaimsPerTx, "Invalid claim amount");
     for (uint i = 0; i < tokenIds.length; i++) {
       Stake memory stake = isChef(tokenIds[i]) ? chefs[tokenIds[i]] : rats[tokenIds[i]];
       require(stake.owner == _msgSender(), "Not your token");

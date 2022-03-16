@@ -34,7 +34,8 @@ contract McStake is Kitchen {
     int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
     uint8 _chefEfficiencyMultiplier,
     int256 _ratEfficiencyMultiplier,
-    int256 _ratEfficiencyOffset
+    int256 _ratEfficiencyOffset,
+    uint8 _maxClaimsPerTx
   ) external onlyOwner {
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
@@ -48,6 +49,7 @@ contract McStake is Kitchen {
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;
+    maxClaimsPerTx = _maxClaimsPerTx;
   }
 
   /**

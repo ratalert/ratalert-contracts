@@ -17,6 +17,7 @@ module.exports = (network, accounts = []) => ({
     claim: options => vrf(options),
     payWall: Object.values({
         mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
+        maxMintsPerTx: 10,
         gen1Prices: Object.values({
             gen1PriceTier0: toWei('1000', 'ether'),
             gen1PriceTier1: toWei('1500', 'ether'),
@@ -65,15 +66,18 @@ module.exports = (network, accounts = []) => ({
         chefEfficiencyMultiplier: 175,
         ratEfficiencyMultiplier: 90,
         ratEfficiencyOffset: 55,
+        maxClaimsPerTx: 10,
     },
     gym: Object.values({
         vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
         accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
         dailyInsanityRate: -12,
         dailyFatnessRate: -8,
+        maxClaimsPerTx: 10,
     }),
     kitchenShop: Object.values({
         maxTokens: [5000, 500],
+        maxMintsPerTx: 10,
         minSkill: [28, 72],
         prices: Object.values({
             priceTier0: toWei('2000', 'ether'),

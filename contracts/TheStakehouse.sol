@@ -40,7 +40,8 @@ contract TheStakehouse is EntrepreneurKitchen {
     uint8 _charactersPerKitchen,
     uint8 _chefEfficiencyMultiplier,
     int256 _ratEfficiencyMultiplier,
-    int256 _ratEfficiencyOffset
+    int256 _ratEfficiencyOffset,
+    uint8 _maxClaimsPerTx
   ) external onlyOwner {
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
@@ -56,6 +57,7 @@ contract TheStakehouse is EntrepreneurKitchen {
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;
+    maxClaimsPerTx = _maxClaimsPerTx;
   }
 
   /**
