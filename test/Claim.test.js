@@ -32,7 +32,7 @@ contract('Claim (proxy)', (accounts) => {
         it('fails if LINK balance is insufficient', async () => {
             await expect(this.claimSandbox.requestRandomNumber(owner, [1, 2, 3], false)).to.eventually.be.rejectedWith('Insufficient LINK');
         });
-        it('creates a mint request', async () => {
+        it('creates a claimMany request', async () => {
             const { logs } = await this.claim.requestRandomNumber(owner, [1, 2, 3], true);
             const requestId = logs[0].args.requestId;
             expect(logs[0].args.sender).to.equal(owner);

@@ -85,16 +85,26 @@ exports.uploadKitchens = async (kitchenShop) => {
 exports.fulfill = async function (res) {
     const randomNumberRequestedAbi = this.mint.abi.find(item => item.name === 'RandomNumberRequested');
     const transferAbi = this.mint.abi.find(item => item.name === 'Transfer');
+    const randomNumberFulfilledAbi = this.claim.abi.find(item => item.name === 'RandomNumberFulfilled');
     const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
     const requestId = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics).requestId;
     const res2 = await this.vrfCoordinator.callBackWithRandomness(requestId, 458948534, this.mint.address);
     const transferEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === transferAbi.signature);
+    const randomNumberFulfilledEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === randomNumberFulfilledAbi.signature);
     res2.requestId = requestId;
     res2.logs = transferEvents.map(item => {
         item.args = web3.eth.abi.decodeLog(transferAbi.inputs, item.data, item.topics.slice(1));
+        item.event = 'Transfer';
         delete item.data;
         delete item.topics;
         return item;
+    });
+    randomNumberFulfilledEvents.forEach(item => {
+        item.args = web3.eth.abi.decodeLog(randomNumberFulfilledAbi.inputs, item.data, item.topics);
+        item.event = 'RandomNumberFulfilled';
+        delete item.data;
+        delete item.topics;
+        res2.logs.push(item);
     });
     return res2;
 };
@@ -110,7 +120,7 @@ exports.mintAndFulfill = async function (amount, stake, options = { args: {} }) 
 };
 exports.mintUntilWeHave = async function (numChefs, numRats, options, lists = { all: [], chefs: [], rats: [] }) {
     const { logs } = await exports.mintAndFulfill.call(this, 10, false, options);
-    const ids = logs.map(ev => Number(ev.args.tokenId.toString()));
+    const ids = logs.filter(item => item.event === 'Transfer').map(ev => Number(ev.args.tokenId.toString()));
     await Promise.all(ids.map(async id => {
         const traits = await this.character.getTokenTraits(id);
         const copy = { id, ...traits }; // traits is frozen!
@@ -125,11 +135,13 @@ exports.mintUntilWeHave = async function (numChefs, numRats, options, lists = { 
 };
 exports.fulfillClaimMany = async function (res) {
     const randomNumberRequestedAbi = this.claim.abi.find(item => item.name === 'RandomNumberRequested');
+    const randomNumberFulfilledAbi = this.claim.abi.find(item => item.name === 'RandomNumberFulfilled');
     const chefClaimedAbi = this.kitchen.abi.find(item => item.name === 'ChefClaimed');
     const ratClaimedAbi = this.kitchen.abi.find(item => item.name === 'RatClaimed');
     const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
     const requestId = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics).requestId;
-    const res2 = await this.vrfCoordinator.callBackWithRandomness(requestId, Math.floor(Math.random()*1000000000), this.claim.address);
+    const res2 = await this.vrfCoordinator.callBackWithRandomness(requestId, Math.floor(Math.random() * 1000000000), this.claim.address);
+    const randomNumberFulfilledEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === randomNumberFulfilledAbi.signature);
     const chefClaimedEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === chefClaimedAbi.signature);
     const ratClaimedEvents = res2.receipt.rawLogs.filter(item => item.topics[0] === ratClaimedAbi.signature);
     res2.requestId = requestId;
@@ -143,6 +155,13 @@ exports.fulfillClaimMany = async function (res) {
     ratClaimedEvents.forEach(item => {
         item.args = web3.eth.abi.decodeLog(ratClaimedAbi.inputs, item.data, item.topics.slice(1));
         item.event = 'RatClaimed';
+        delete item.data;
+        delete item.topics;
+        res2.logs.push(item);
+    });
+    randomNumberFulfilledEvents.forEach(item => {
+        item.args = web3.eth.abi.decodeLog(randomNumberFulfilledAbi.inputs, item.data, item.topics);
+        item.event = 'RandomNumberFulfilled';
         delete item.data;
         delete item.topics;
         res2.logs.push(item);
@@ -163,9 +182,9 @@ exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, 
     while (!done) {
         await exports.advanceTimeAndBlock(86400 * days); // Wait a few days
         const { logs } = await exports.claimManyAndFulfill.call(this, kitchen, ids, false);
-        const efficiencyValues = logs.map(log => Number((log.args.skill ? log.args.skill : log.args.intelligence).toString()));
+        const efficiencyValues = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => Number((log.args.skill ? log.args.skill : log.args.intelligence).toString()));
         const efficiencyReached = (efficiency < 0) ? efficiencyValues.filter(val => val > -efficiency).length === 0 : efficiencyValues.filter(val => val < efficiency).length === 0;
-        const toleranceValues = logs.map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
+        const toleranceValues = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
         const toleranceReached = (tolerance < 0) ? toleranceValues.filter(val => val > -tolerance).length === 0 : toleranceValues.filter(val => val < tolerance).length === 0;
         done = efficiencyReached && toleranceReached;
         process.stdout.write('.');

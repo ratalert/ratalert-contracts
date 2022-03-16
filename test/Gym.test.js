@@ -28,6 +28,7 @@ contract('Gym (proxy)', (accounts) => {
         this.gym = await Gym.deployed();
 
         lists = await mintUntilWeHave.call(this, 8, 3);
+        lists.events = [lists.chefs[3], lists.chefs[4]];
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);
@@ -67,12 +68,28 @@ contract('Gym (proxy)', (accounts) => {
         it('cannot claim before EOB', async () => {
             await expect(this.gym.claimMany([lists.chefs[0].id, lists.chefs[1].id], false)).to.eventually.be.rejectedWith('Cannot claim before EOB');
         });
+        it('emits the RandomNumberRequested event', async () => {
+            const ids = lists.events.map(item => item.id);
+            await this.gym.stakeMany(owner, ids, { from: owner });
+            await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
+            const res = await this.gym.claimMany(ids, false);
+            const randomNumberRequestedAbi = this.claim.abi.find(item => item.name === 'RandomNumberRequested');
+            const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
+            randomNumberRequestedEvent.args = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics);
+            randomNumberRequestedEvent.event = 'RandomNumberRequested';
+            delete randomNumberRequestedEvent.data;
+            delete randomNumberRequestedEvent.topics;
+            expect(randomNumberRequestedEvent.args.sender).to.equal(owner);
+        });
         it('claims from chefs', async () => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
             const { logs } = await claimManyAndFulfill.call(this, this.gym, chefs, false);
-            logs.forEach((log, i) => {
-                expect(log.event).to.equal('ChefClaimed');
+            const fulfilledEvent = logs.find(item => item.event === 'RandomNumberFulfilled');
+            expect(fulfilledEvent.args.sender).to.equal(owner);
+            const claimEvents = logs.filter(item => item.event === 'ChefClaimed');
+            expect(claimEvents).to.have.length(2);
+            claimEvents.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.false;
@@ -90,8 +107,9 @@ contract('Gym (proxy)', (accounts) => {
         it('claims from rats', async () => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
             const { logs } = await claimManyAndFulfill.call(this, this.gym, rats, false);
-            logs.forEach((log, i) => {
-                expect(log.event).to.equal('RatClaimed');
+            const claimEvents = logs.filter(item => item.event === 'RatClaimed');
+            expect(claimEvents).to.have.length(2);
+            claimEvents.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.false;
@@ -110,7 +128,9 @@ contract('Gym (proxy)', (accounts) => {
             await advanceTimeAndBlock(3600); // Wait an hour
             const rats = [lists.rats[0].id, lists.rats[1].id];
             const { logs } = await claimManyAndFulfill.call(this, this.gym, rats, false);
-            logs.forEach((log, i) => {
+            const claimEvents = logs.filter(item => item.event === 'RatClaimed');
+            expect(claimEvents).to.have.length(2);
+            claimEvents.forEach((log, i) => {
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString());
             });
@@ -119,8 +139,9 @@ contract('Gym (proxy)', (accounts) => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
             const { logs } = await claimManyAndFulfill.call(this, this.gym, chefs, true);
-            logs.forEach((log, i) => {
-                expect(log.event).to.equal('ChefClaimed');
+            const claimEvents = logs.filter(item => item.event === 'ChefClaimed');
+            expect(claimEvents).to.have.length(2);
+            claimEvents.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.true;
@@ -149,8 +170,9 @@ contract('Gym (proxy)', (accounts) => {
         it('unstakes many rats', async () => {
             const rats = lists.rats.map(item => item.id);
             const { logs } = await claimManyAndFulfill.call(this, this.gym, rats, true);
-            logs.forEach((log, i) => {
-                expect(log.event).to.equal('RatClaimed');
+            const claimEvents = logs.filter(item => item.event === 'RatClaimed');
+            expect(claimEvents).to.have.length(2);
+            claimEvents.forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.true;

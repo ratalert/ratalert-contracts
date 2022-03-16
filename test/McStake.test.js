@@ -93,7 +93,10 @@ contract('McStake (proxy)', (accounts) => {
             await advanceTimeAndBlock(86400 / 2); // Wait half a day
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, chefs, false);
-            logs.forEach((log, i) => {
+            const fulfilledEvent = logs.find(item => item.event === 'RandomNumberFulfilled');
+            expect(fulfilledEvent.args.sender).to.equal(owner);
+            const claimEvents = logs.filter(item => item.event === 'ChefClaimed');
+            claimEvents.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expectChefEarnings(log.args.earned, 86400 / 2, 0);
@@ -122,7 +125,8 @@ contract('McStake (proxy)', (accounts) => {
             const rats = [lists.rats[0].id, lists.rats[1].id];
             ownerBalance = BN(await this.foodToken.balanceOf(owner));
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, rats, false);
-            logs.forEach((log, i) => {
+            const claimEvents = logs.filter(item => item.event === 'RatClaimed');
+            claimEvents.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expectRatEarnings(log.args.earned, 50, lists.rats.length, 0);
@@ -155,7 +159,8 @@ contract('McStake (proxy)', (accounts) => {
             const chefs = [lists.chefs[0].id, lists.chefs[1].id];
             ownerBalance = BN(await this.foodToken.balanceOf(owner));
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, chefs, true);
-            logs.forEach((log, i) => {
+            const claimEvents = logs.filter(item => item.event === 'ChefClaimed');
+            claimEvents.forEach((log, i) => {
                 expect(log.event).to.equal('ChefClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expectChefEarnings(log.args.earned, 86400 / 2, 1);
@@ -200,7 +205,8 @@ contract('McStake (proxy)', (accounts) => {
             const rats = lists.rats.map(item => item.id);
             ownerBalance = BN(await this.foodToken.balanceOf(owner));
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, rats, true);
-            logs.forEach((log, i) => {
+            const claimEvents = logs.filter(item => item.event === 'RatClaimed');
+            claimEvents.forEach((log, i) => {
                 expect(log.event).to.equal('RatClaimed');
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expectRatEarnings(log.args.earned, 50 * chefBoost(1), lists.rats.length, 4);
@@ -253,7 +259,8 @@ contract('McStake (proxy)', (accounts) => {
             for (let i = 0; i <= 100; i += 1) {
                 await advanceTimeAndBlock(86400); // Wait a day
                 const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(list).map(item => item.id), false);
-                logs.forEach(({ event, args }) => {
+                const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
+                claimEvents.forEach(({ event, args }) => {
                     const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
                     const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
                     if (event === 'ChefClaimed') {

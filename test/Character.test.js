@@ -28,6 +28,7 @@ contract('Character (proxy)', (accounts) => {
     let lists;
     let characterSandbox;
     let daoBalance;
+    let totalMints = 0;
 
     before(async () => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
@@ -124,16 +125,28 @@ contract('Character (proxy)', (accounts) => {
         it('fails if the max supply is reached', async () => {
             await expect(characterSandbox.mint(1, false)).to.eventually.be.rejectedWith('All tokens minted');
         });
+        it('emits the RandomNumberRequested event', async () => {
+            const res = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
+            totalMints += 1;
+            const randomNumberRequestedAbi = this.mint.abi.find(item => item.name === 'RandomNumberRequested');
+            const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
+            randomNumberRequestedEvent.args = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics);
+            randomNumberRequestedEvent.event = 'RandomNumberRequested';
+            delete randomNumberRequestedEvent.data;
+            delete randomNumberRequestedEvent.topics;
+            expect(randomNumberRequestedEvent.args.sender).to.equal(anon);
+        });
 
         it('allows owner to mint', async () => {
             lists = await mintUntilWeHave.call(this, 8, 2);
+            totalMints += lists.all.length;
             daoBalance = await web3.eth.getBalance(config.dao.address);
             await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
             await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
-            await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
+            await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.character.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
-            await expect(this.character.ownerOf(1)).to.eventually.equal(owner);
-            await expect(this.character.ownerOf(lists.all.length)).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(totalMints - lists.all.length + 1)).to.eventually.equal(owner);
+            await expect(this.character.ownerOf(totalMints)).to.eventually.equal(owner);
             const IDs = lists.all.map(item => item.id);
             const checks = {
                 isChef: { traitType: 'type', name: 'Type' },
@@ -194,10 +207,11 @@ contract('Character (proxy)', (accounts) => {
         });
 
         it('allows anonymous to mint', async () => {
-            const totalMints = lists.all.length + 5;
-            const res = await mintAndFulfill.call(this, 5, false, { args: { from: anon } });
-            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
-            await expect(res.receipt.status).to.be.true;
+            const { logs } = await mintAndFulfill.call(this, 5, false, { args: { from: anon } });
+            totalMints += 5;
+            const fulfilledEvent = logs.find(item => item.event === 'RandomNumberFulfilled');
+            expect(fulfilledEvent.args.sender).to.equal(anon);
+            const IDs = logs.filter(item => item.event === 'Transfer').map(it => Number(it.args.tokenId.toString()));
             daoBalance = await web3.eth.getBalance(config.dao.address);
             await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
             await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
@@ -213,9 +227,9 @@ contract('Character (proxy)', (accounts) => {
         });
 
         it('mints and stakes', async () => {
-            const totalMints = lists.all.length + 10;
             const res = await mintAndFulfill.call(this, 5, true, { args: { from: anon } });
-            const IDs = res.logs.map(it => Number(it.args.tokenId.toString()));
+            totalMints += 5;
+            const IDs = res.logs.filter(item => item.event === 'Transfer').map(it => Number(it.args.tokenId.toString()));
             await expect(res.receipt.status).to.be.true;
             daoBalance = await web3.eth.getBalance(config.dao.address);
             await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
@@ -228,7 +242,7 @@ contract('Character (proxy)', (accounts) => {
 
             await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, IDs, true, { args: { from: anon } });
-            logs.forEach((log, i) => {
+            logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).forEach((log, i) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(IDs[i].toString());
                 expect(log.args.unstaked).to.be.true;
             });
@@ -246,9 +260,9 @@ contract('Character (proxy)', (accounts) => {
             const res4b = await fulfill.call(this, res4a);
             const res3b = await fulfill.call(this, res3a);
             const res2b = await fulfill.call(this, res2a);
-            res2b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 1));
-            res3b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 3));
-            res4b.logs.forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
+            res2b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 1));
+            res3b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 3));
+            res4b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
         });
         it('fails if not whitelisted', async () => {
             await this.paywall.toggleWhitelist(true);

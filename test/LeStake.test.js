@@ -85,7 +85,8 @@ contract('LeStake (proxy)', (accounts) => {
             expect(this.kitchenShop.balanceOf(owner, 2)).to.eventually.be.a.bignumber.eq('0');
             lists.remaining = [lists.chefs[0], lists.rats[0]];
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, lists.remaining.map(item => item.id), false);
-            logs.forEach((log, i) => {
+            const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
+            claimEvents.forEach((log, i) => {
                 const tokenId = Number(log.args.tokenId.toString());
                 expect(tokenId).to.equal(lists.remaining[i].id);
                 expect(log.args.earned).to.be.a.bignumber.eq('0');

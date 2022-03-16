@@ -57,7 +57,7 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer, Contro
     requestId = requestRandomness(keyHash, fee);
     VRFStruct memory v = VRFStruct({ requestId: requestId, venue: _msgSender(), sender: sender, tokenIds: tokenIds, unstake: unstake });
     vrfRequests[requestId] = v;
-    emit RandomNumberRequested(requestId, _msgSender());
+    emit RandomNumberRequested(requestId, sender);
   }
 
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
@@ -65,7 +65,7 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer, Contro
     require(v.requestId != 0, "VRF request ID not found");
     venues[v.venue].fulfillClaimMany(vrfRequests[requestId], randomness);
     delete vrfRequests[requestId];
-    emit RandomNumberFulfilled(requestId, _msgSender());
+    emit RandomNumberFulfilled(requestId, v.sender);
   }
 
   /**
