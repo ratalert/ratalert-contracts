@@ -128,7 +128,6 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
       Stake memory stake = isChef(tokenIds[i]) ? chefs[tokenIds[i]] : rats[tokenIds[i]];
       require(stake.owner == _msgSender(), "Not your token");
       require(block.timestamp - stake.timestamp >= vestingPeriod, "Cannot claim before EOB");
-      // TODO Also check space & eligibiltiy stuff here
     }
 
     bytes32 requestId = claim.requestRandomNumber(_msgSender(), tokenIds, unstake);
@@ -143,7 +142,6 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   function fulfillClaimMany(IClaim.VRFStruct memory v, uint256 randomVal) external virtual whenNotPaused {
     require(msg.sender == address(claim), "Only Claim can fulfill");
     require(claimRequests[v.requestId].length > 0, "Claim request not found");
-    // TODO Wait for previous request to be fulfilled
 
     uint16[] memory tokenIds = claimRequests[v.requestId];
     delete claimRequests[v.requestId];
@@ -179,7 +177,6 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   function _claimChef(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal returns (uint256 owed) {
     Stake memory stake = chefs[tokenId];
     require(stake.owner == sender, "Not your token");
-    require(block.timestamp - stake.timestamp >= vestingPeriod, "Cannot claim before EOB");
 
     owed = noEarnings ? 0 : _getOwedByChef(stake);
 
@@ -216,7 +213,6 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   function _claimRat(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal returns (uint256 owed) {
     Stake memory stake = rats[tokenId];
     require(stake.owner == sender, "Not your token");
-    require(block.timestamp - stake.timestamp >= vestingPeriod, "Cannot claim before EOB");
 
     owed = noEarnings ? 0 : _getOwedByRat(stake);
 
