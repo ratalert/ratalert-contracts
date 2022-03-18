@@ -11,6 +11,7 @@ const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
 const Claim = artifacts.require('Claim');
 const FastFood = artifacts.require('FastFood');
+const Paywall = artifacts.require('Paywall');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 
@@ -32,6 +33,7 @@ contract('McStake (proxy)', (accounts) => {
         this.mint = await Mint.deployed();
         this.claim = await Claim.deployed();
         this.foodToken = await FastFood.deployed();
+        this.paywall = await Paywall.deployed();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
 
@@ -333,6 +335,47 @@ contract('McStake (proxy)', (accounts) => {
                 } else {
                     expect(efficiency).to.equal(2);
                     expect(tolerance).to.equal(8);
+                }
+            });
+        });
+        it('boosts efficiency if staked long enough', async () => {
+            await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]);
+            const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
+            await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
+            await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
+            await advanceTimeAndBlock(86400 * 2); // Wait 3 days
+            const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(boostLists.all).map(item => item.id), false, { args: { from: anon } });
+            const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
+            claimEvents.forEach(({ event, args }) => {
+                const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
+                const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                if (event === 'ChefClaimed') {
+                    expectChefEarnings(args.earned, 86400, 0);
+                    expect(efficiency).to.equal(3);
+                    expect(tolerance).to.equal(4);
+                } else {
+                    expect(efficiency).to.equal(3);
+                    expect(tolerance).to.equal(8);
+                }
+            });
+        });
+        it('does not boost efficiency if not staked long enough', async () => {
+            await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]);
+            const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
+            await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
+            await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
+            await advanceTimeAndBlock(43200); // Wait 3 days
+            const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(boostLists.all).map(item => item.id), false, { args: { from: anon } });
+            const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
+            claimEvents.forEach(({ event, args }) => {
+                const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
+                const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                if (event === 'ChefClaimed') {
+                    expect(efficiency).to.equal(1);
+                    expect(tolerance).to.equal(2);
+                } else {
+                    expect(efficiency).to.equal(1);
+                    expect(tolerance).to.equal(4);
                 }
             });
         });

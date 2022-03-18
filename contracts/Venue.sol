@@ -38,7 +38,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   uint256 public accrualPeriod; // The period over which earnings & levels are accrued
   uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
   uint256 public vestingPeriod; // Cannot unstake for this many seconds
-  uint8 public maxClaimsPerTx; // Maximum number of tokens that can be claimed in a single tx
+  uint8 maxClaimsPerTx; // Maximum number of tokens that can be claimed in a single tx
 
   function initialize(
     address _character,
@@ -293,13 +293,13 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @return eventName - if one occurred, otherwise empty string
    */
   function _updateCharacter(uint256 tokenId, uint256 randomVal) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
-    uint256 stakingPeriod = block.timestamp - (isChef(tokenId) ? chefs[tokenId].timestamp : rats[tokenId].timestamp);
-    bool chef = isChef(tokenId);
+    (bool chef, , , , , , , , , , int8 boost) = character.tokenTraits(tokenId);
+    uint256 stakingPeriod = block.timestamp - (chef ? chefs[tokenId].timestamp : rats[tokenId].timestamp);
 
     (efficiency, tolerance, eventName) = character.updateCharacter(
       tokenId,
-      _getCharacterIncrement(chef ? dailySkillRate : dailyIntelligenceRate, stakingPeriod),
-      _getCharacterIncrement(chef ? dailyInsanityRate : dailyFatnessRate, stakingPeriod),
+      _getCharacterIncrement(chef ? dailySkillRate : dailyIntelligenceRate, stakingPeriod, boost),
+      _getCharacterIncrement(chef ? dailyInsanityRate : dailyFatnessRate, stakingPeriod, 0),
       randomVal
     );
   }
@@ -309,11 +309,15 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param dailyRate - The amount that can be gained over the accrualPeriod
    * @return The total accrued value
    */
-  function _getCharacterIncrement(int8 dailyRate, uint256 stakingPeriod) internal view returns(int8) {
+  function _getCharacterIncrement(int8 dailyRate, uint256 stakingPeriod, int8 boost) internal view returns(int8) {
     if (stakingPeriod > accrualPeriod) {
       stakingPeriod = accrualPeriod; // cut-off
     }
     int256 increment = int256(stakingPeriod) * dailyRate / int256(accrualPeriod);
+    if (stakingPeriod >= accrualPeriod) {
+      increment += boost;
+    }
+
     if (increment > 100) {
       return 100;
     } else if (increment < -100) {
