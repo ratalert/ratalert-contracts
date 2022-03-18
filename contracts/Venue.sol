@@ -310,6 +310,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @return The total accrued value
    */
   function _getCharacterIncrement(int8 dailyRate, uint256 stakingPeriod) internal view returns(int8) {
+    if (stakingPeriod > accrualPeriod) {
+      stakingPeriod = accrualPeriod; // cut-off
+    }
     int256 increment = int256(stakingPeriod) * dailyRate / int256(accrualPeriod);
     if (increment > 100) {
       return 100;

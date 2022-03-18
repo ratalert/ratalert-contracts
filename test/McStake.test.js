@@ -36,6 +36,7 @@ contract('McStake (proxy)', (accounts) => {
         this.kitchen = await McStake.deployed();
 
         lists = await mintUntilWeHave.call(this, 8, 3);
+        lists.cutoff = [lists.chefs[2], lists.rats[2]];
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);
@@ -316,6 +317,24 @@ contract('McStake (proxy)', (accounts) => {
                 process.stdout.write('.');
             }
             process.stdout.write(`\n        Events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
+        });
+        it('does not upgrade beyond cutoff', async () => {
+            await this.kitchen.stakeMany(owner, Object.values(lists.cutoff).map(item => item.id), { from: owner });
+            await advanceTimeAndBlock(86400 * 3); // Wait 3 days
+            const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(lists.cutoff).map(item => item.id), false);
+            const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
+            claimEvents.forEach(({ event, args }) => {
+                const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
+                const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                if (event === 'ChefClaimed') {
+                    expectChefEarnings(args.earned, 86400, 0);
+                    expect(efficiency).to.equal(2);
+                    expect(tolerance).to.equal(4);
+                } else {
+                    expect(efficiency).to.equal(2);
+                    expect(tolerance).to.equal(8);
+                }
+            });
         });
     });
 });
