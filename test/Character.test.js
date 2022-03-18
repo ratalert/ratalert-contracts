@@ -153,6 +153,7 @@ contract('Character (proxy)', (accounts) => {
                 insanity: { traitType: 'dynamic', name: 'Insanity', character: 'chef', category: 'tolerance', value: 'Bored', additional: 'Insanity percentage' },
                 intelligence: { traitType: 'dynamic', name: 'Intelligence', character: 'rat', category: 'efficiency', value: 'Braindead', additional: 'Intelligence quotient' },
                 fatness: { traitType: 'dynamic', name: 'Fatness', character: 'rat', category: 'tolerance', value: 'Anorexic', additional: 'Fatness percentage' },
+                boost: { traitType: 'boost', name: 'Boost', value: 0 },
             }
             const traitMap = {
                 chef: { Body: 0, Head: 1, Eyes: 2, Hat: 3, Neck: 4, Mouth: 5, Hand: 6 },
@@ -191,6 +192,10 @@ contract('Character (proxy)', (accounts) => {
                         const additionalAttr = json.attributes.find(v => v.trait_type === val.additional);
                         expect(additionalAttr.value).to.equal(0);
                         expect(additionalAttr.max_value).to.equal(100);
+                    }
+                    if (val.traitType === 'boost') {
+                        expect(attr.trait_type).to.equal(val.name);
+                        expect(attr.value).to.equal(val.value);
                     }
                 });
             }));
@@ -267,6 +272,21 @@ contract('Character (proxy)', (accounts) => {
         it('succeeds if whitelisted', async () => {
             await this.paywall.addToWhitelist([anon]);
             await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: toWei(0.09) } })).to.eventually.have.nested.property('receipt.status', true); // discounted
+        });
+        it('mints boosted characters', async () => {
+            await this.paywall.addToWhitelist([anon, anon, anon]);
+            const { logs } = await mintAndFulfill.call(this, 3, true, { args: { from: anon, value: toWei(0.27) } });
+            const IDs = logs.filter(item => item.event === 'Transfer').map(it => Number(it.args.tokenId.toString()));
+            await Promise.all(IDs.map(async id => {
+                const traits = await this.character.getTokenTraits(id);
+                const tokenUri = await this.character.tokenURI(id);
+                const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
+                const boostAttribute = json.attributes.find(item => item.trait_type === 'Boost');
+                expect(boostAttribute.display_type).to.equal('boost_percentage');
+                expect(boostAttribute.max_value).to.equal(100);
+                expect(boostAttribute.value).to.equal(1);
+                expect(traits.boost).to.equal('1');
+            }));
         });
     });
 

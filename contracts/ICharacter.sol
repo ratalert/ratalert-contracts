@@ -16,6 +16,7 @@ interface ICharacter {
     uint8 tail;
     uint8 efficiency;
     uint8 tolerance;
+    int8 boost;
   }
   struct Prop {
     string name;

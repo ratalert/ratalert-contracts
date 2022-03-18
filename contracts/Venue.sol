@@ -326,7 +326,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @return chef - Whether or not the token is a Chef
    */
   function isChef(uint256 tokenId) public view returns (bool chef) {
-    (chef, , , , , , , , ,) = character.tokenTraits(tokenId);
+    (chef, , , , , , , , , ,) = character.tokenTraits(tokenId);
   }
 
   /**
@@ -335,7 +335,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @return efficiency & tolerance values
    */
   function getProperties(uint256 tokenId) public view returns (uint8 efficiency, uint8 tolerance) {
-    (, , , , , , , , efficiency, tolerance) = character.tokenTraits(tokenId);
+    (, , , , , , , , efficiency, tolerance,) = character.tokenTraits(tokenId);
   }
 
   function onERC721Received(address, address from, uint256, bytes calldata) external pure override returns (bytes4) {

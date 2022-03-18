@@ -27,13 +27,13 @@ contract('Mint (proxy)', (accounts) => {
 
     describe('requestRandomNumber()', () => {
         it('allows only controllers to execute', async () => {
-            await expect(this.mint.requestRandomNumber(owner, 5, false, { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
+            await expect(this.mint.requestRandomNumber(owner, 5, false, 1, { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
         });
         it('fails if LINK balance is insufficient', async () => {
-            await expect(this.mintSandbox.requestRandomNumber(owner, 5, false)).to.eventually.be.rejectedWith('Insufficient LINK');
+            await expect(this.mintSandbox.requestRandomNumber(owner, 5, false, 1)).to.eventually.be.rejectedWith('Insufficient LINK');
         });
         it('creates a mint request', async () => {
-            const { logs } = await this.mint.requestRandomNumber(owner, 5, true);
+            const { logs } = await this.mint.requestRandomNumber(owner, 5, true, 1);
             const requestId = logs[0].args.requestId;
             expect(requestId).to.have.length(66);
             expect(logs[0].args.sender).to.equal(owner);
@@ -52,7 +52,7 @@ contract('Mint (proxy)', (accounts) => {
             expect(res.amount).to.equal('0');
         });
         it('returns a valid object', async () => {
-            const { logs } = await this.mint.requestRandomNumber(owner, 5, true);
+            const { logs } = await this.mint.requestRandomNumber(owner, 5, true, 1);
             const requestId = logs[0].args.requestId;
             const res = await this.mint.getVrfRequest(requestId);
             expect(res.requestId).to.equal(requestId);

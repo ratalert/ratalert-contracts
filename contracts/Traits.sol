@@ -17,7 +17,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     string png;
   }
 
-  string[15] _traitTypes;
+  string[16] _traitTypes;
   uint16 public numHeadAndBodyTraits;
   mapping(uint8 => mapping(uint8 => Trait)) public traitData; // Storage of each trait's name and base64 SVG data
 
@@ -42,7 +42,8 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       "Skill percentage",
       "Insanity percentage",
       "Intelligence quotient",
-      "Fatness percentage"
+      "Fatness percentage",
+      "Boost"
     ];
   }
 
@@ -125,29 +126,33 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
   function getAttributes(uint256 tokenId) public view returns (string memory) {
     ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
     string memory traits;
+    uint16 boost = s.boost < 0 ? 256 - uint8(s.boost) : uint8(s.boost);
+    bool boostNegative = s.boost < 0;
     if (s.isChef) {
       traits = string(abi.encodePacked(
-        getAttribute(_traitTypes[0], traitData[3][s.hat].name, false),
-        getAttribute(_traitTypes[1], traitData[2][s.eyes].name, false),
-        getAttribute(_traitTypes[3], traitData[5][s.mouth].name, false),
-        getAttribute(_traitTypes[4], traitData[4][s.neck].name, false),
-        getAttribute(_traitTypes[5], traitData[6][s.hand].name, false),
-        getAttribute(_traitTypes[7], traitData[0][getBodyIndex(s.efficiency)].name, false),
-        getAttribute(_traitTypes[8], traitData[1][getBodyIndex(s.tolerance)].name, false),
-        getAttribute(_traitTypes[11], Strings.toString(s.efficiency), true),
-        getAttribute(_traitTypes[12], Strings.toString(s.tolerance), true)
+        getAttribute(_traitTypes[0], "", traitData[3][s.hat].name, false, false),
+        getAttribute(_traitTypes[1], "", traitData[2][s.eyes].name, false, false),
+        getAttribute(_traitTypes[3], "", traitData[5][s.mouth].name, false, false),
+        getAttribute(_traitTypes[4], "", traitData[4][s.neck].name, false, false),
+        getAttribute(_traitTypes[5], "", traitData[6][s.hand].name, false, false),
+        getAttribute(_traitTypes[7], "", traitData[0][getBodyIndex(s.efficiency)].name, false, false),
+        getAttribute(_traitTypes[8], "", traitData[1][getBodyIndex(s.tolerance)].name, false, false),
+        getAttribute(_traitTypes[11], "", Strings.toString(s.efficiency), true, false),
+        getAttribute(_traitTypes[12], "", Strings.toString(s.tolerance), true, false),
+        getAttribute(_traitTypes[15], "boost_percentage", Strings.toString(boost), true, boostNegative)
       ));
     } else {
       traits = string(abi.encodePacked(
-        getAttribute(_traitTypes[0], traitData[15][s.hat].name, false),
-        getAttribute(_traitTypes[1], traitData[14][s.eyes].name, false),
-        getAttribute(_traitTypes[2], traitData[13][s.piercing].name, false),
-        getAttribute(_traitTypes[4], traitData[16][s.neck].name, false),
-        getAttribute(_traitTypes[6], traitData[11][s.tail].name, false),
-        getAttribute(_traitTypes[9], traitData[12][getBodyIndex(s.efficiency)].name, false),
-        getAttribute(_traitTypes[10], traitData[10][getBodyIndex(s.tolerance)].name, false),
-        getAttribute(_traitTypes[13], Strings.toString(s.efficiency), true),
-        getAttribute(_traitTypes[14], Strings.toString(s.tolerance), true)
+        getAttribute(_traitTypes[0], "", traitData[15][s.hat].name, false, false),
+        getAttribute(_traitTypes[1], "", traitData[14][s.eyes].name, false, false),
+        getAttribute(_traitTypes[2], "", traitData[13][s.piercing].name, false, false),
+        getAttribute(_traitTypes[4], "", traitData[16][s.neck].name, false, false),
+        getAttribute(_traitTypes[6], "", traitData[11][s.tail].name, false, false),
+        getAttribute(_traitTypes[9], "", traitData[12][getBodyIndex(s.efficiency)].name, false, false),
+        getAttribute(_traitTypes[10], "", traitData[10][getBodyIndex(s.tolerance)].name, false, false),
+        getAttribute(_traitTypes[13], "", Strings.toString(s.efficiency), true, false),
+        getAttribute(_traitTypes[14], "", Strings.toString(s.tolerance), true, false),
+        getAttribute(_traitTypes[15], "boost_percentage", Strings.toString(boost), true, boostNegative)
       ));
     }
     return string(abi.encodePacked(
@@ -165,12 +170,14 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @param value - The token's trait associated with the key
    * @return A JSON dictionary for the single attribute
    */
-  function getAttribute(string memory traitType, string memory value, bool isInteger) internal pure returns (string memory) {
+  function getAttribute(string memory traitType, string memory valueType, string memory value, bool isInteger, bool isNegative) internal pure returns (string memory) {
     if (!isInteger && bytes(value).length == 0) return '';
-    string memory val = isInteger ? value : string(abi.encodePacked('"', value, '"'));
+    string memory val = isInteger ? (isNegative ? string(abi.encodePacked('-', value)) : value) : string(abi.encodePacked('"', value, '"'));
+    string memory displayType = bytes(valueType).length > 0 ? string(abi.encodePacked('"display_type":"', valueType, '",')) : '';
     return string(abi.encodePacked(
       '{',
         '"trait_type":"', traitType, '",',
+        bytes(displayType).length > 0 ? displayType : '',
         isInteger ? '"max_value":100,' : '',
         '"value":', val,
       '},'

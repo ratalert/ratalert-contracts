@@ -17,6 +17,7 @@ module.exports = (network, accounts = []) => ({
     claim: options => vrf(options),
     payWall: Object.values({
         mintPrice: ['live', 'development'].includes(network) ? toWei('0.1', 'ether') : toWei('0.01', 'ether'),
+        whitelistBoost: 1,
         maxMintsPerTx: 10,
         gen1Prices: Object.values({
             gen1PriceTier0: toWei('1000', 'ether'),

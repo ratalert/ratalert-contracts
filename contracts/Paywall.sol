@@ -8,6 +8,7 @@ import "./FastFood.sol";
 
 contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   uint256 public mintPrice;
+  int8 public whitelistBoost;
   uint8 public maxMintsPerTx; // Maximum number of tokens that can be minted in a single tx
   uint256 public gen1PriceTier0;
   uint256 public gen1PriceTier1;
@@ -32,8 +33,9 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   /**
    * Allows DAO to update game parameters
    */
-  function configure(uint256 _mintPrice, uint8 _maxMintsPerTx, uint256[] memory _gen1Prices) external onlyOwner {
+  function configure(uint256 _mintPrice, int8 _whitelistBoost, uint8 _maxMintsPerTx, uint256[] memory _gen1Prices) external onlyOwner {
     mintPrice = _mintPrice;
+    whitelistBoost = _whitelistBoost;
     maxMintsPerTx = _maxMintsPerTx;
     gen1PriceTier0 = _gen1Prices[0];
     gen1PriceTier1 = _gen1Prices[1];
@@ -107,9 +109,10 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * @param maxTokens - Max number of tokens that can be minted
    * @param gen0Tokens - Number of tokens that can be claimed for free
    */
-  function handle(address sender, uint8 amount, uint256 msgValue, uint16 minted, uint256 maxTokens, uint256 gen0Tokens) external onlyController {
+  function handle(address sender, uint8 amount, uint256 msgValue, uint16 minted, uint256 maxTokens, uint256 gen0Tokens) external onlyController returns (int8 boost) {
     require(amount > 0 && amount <= maxMintsPerTx, "Invalid mint amount");
     require(minted + amount <= maxTokens, "All tokens minted");
+    boost = 0;
     uint256 txMintPrice = mintPrice;
     if (onlyWhitelist) {
       require(freeMints[sender] >= amount || whitelist[sender] >= amount, "Not whitelisted");
@@ -122,6 +125,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
       whitelist[sender] -= amount;
       emit UpdateWhitelist(sender, whitelist[sender]);
       txMintPrice = mintPrice * 90 / 100;
+      boost = whitelistBoost;
     }
     uint256 totalCost = 0;
     if (minted < gen0Tokens) {

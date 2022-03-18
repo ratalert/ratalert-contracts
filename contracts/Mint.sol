@@ -68,10 +68,10 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
     fee = _fee;
   }
 
-  function requestRandomNumber(address sender, uint8 amount, bool stake) external onlyController returns (bytes32 requestId) {
+  function requestRandomNumber(address sender, uint8 amount, bool stake, int8 boost) external onlyController returns (bytes32 requestId) {
     require(link.balanceOf(address(this)) >= fee, "Insufficient LINK");
     requestId = requestRandomness(keyHash, fee);
-    VRFStruct memory v = VRFStruct({ requestId: requestId, sender: sender, amount: amount, stake: stake });
+    VRFStruct memory v = VRFStruct({ requestId: requestId, sender: sender, amount: amount, stake: stake, boost: boost });
     vrfRequests[requestId] = v;
     emit RandomNumberRequested(requestId, sender);
   }
@@ -83,6 +83,7 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
 
     for (uint i = 0; i < v.amount; i++) {
       tokens[i] = generate(requestId, uint256(keccak256(abi.encode(randomness, i))));
+      tokens[i].boost = v.boost;
     }
 
     character.fulfillMint(requestId, tokens);

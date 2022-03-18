@@ -64,11 +64,11 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
    */
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
-    paywall.handle(_msgSender(), amount, msg.value, paid, maxTokens, gen0Tokens);
+    int8 boost = paywall.handle(_msgSender(), amount, msg.value, paid, maxTokens, gen0Tokens);
     if (msg.value > 0) {
       dao.transfer(msg.value); // Transfer to Gnosis Safe
     }
-    theMint.requestRandomNumber(_msgSender(), amount, stake);
+    theMint.requestRandomNumber(_msgSender(), amount, stake, boost);
     paid += amount;
   }
 
