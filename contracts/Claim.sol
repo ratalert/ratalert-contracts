@@ -70,17 +70,21 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer, Contro
 
   /**
    * Enables a venue address to fulfill claims
-   * @param _venue - The address to enable
+   * @param _venues - The address to enable
    */
-  function addVenue(address _venue) external onlyOwner {
-    venues[_venue] = IVenue(_venue);
+  function addVenue(address[] memory _venues) external onlyOwner {
+    for (uint i = 0; i < _venues.length; i++) {
+      venues[_venues[i]] = IVenue(_venues[i]);
+    }
   }
 
   /**
    * Disables a venue address from fulfilling claims
-   * @param _venue the address to disable
+   * @param _venues the address to disable
    */
-  function removeVenue(address _venue) external onlyOwner {
-    delete venues[_venue];
+  function removeVenue(address[] memory _venues) external onlyOwner {
+    for (uint i = 0; i < _venues.length; i++) {
+      delete venues[_venues[i]];
+    }
   }
 }

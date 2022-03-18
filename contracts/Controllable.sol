@@ -24,18 +24,22 @@ abstract contract Controllable is Ownable {
   }
 
   /**
-   * Enables an address to mint / burn
-   * @param _controller - The address to enable
+   * Enables multiple addresses to execute
+   * @param _controllers - The addresses to enable
    */
-  function addController(address _controller) external onlyOwner {
-    controllers[_controller] = true;
+  function addController(address[] memory _controllers) external onlyOwner {
+    for (uint i = 0; i < _controllers.length; i++) {
+      controllers[_controllers[i]] = true;
+    }
   }
 
   /**
-   * Disables an address from minting / burning
-   * @param _controller - The address to disable
+   * Prevents multiple addresses from executing
+   * @param _controllers - The addresses to disable
    */
-  function removeController(address _controller) external onlyOwner {
-    controllers[_controller] = false;
+  function removeController(address[] memory _controllers) external onlyOwner {
+    for (uint i = 0; i < _controllers.length; i++) {
+      controllers[_controllers[i]] = false;
+    }
   }
 }

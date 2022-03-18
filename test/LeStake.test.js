@@ -32,7 +32,7 @@ contract('LeStake (proxy)', (accounts) => {
         this.mcStake = await McStake.deployed();
         this.kitchenShop = await KitchenShop.deployed();
         this.casualFood = await CasualFood.deployed();
-        await this.casualFood.addController(owner);
+        await this.casualFood.addController([owner]);
 
         lists = await mintUntilWeHave.call(this, 8, 3);
         lists.many = lists.all;

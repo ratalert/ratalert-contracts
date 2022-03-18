@@ -14,7 +14,7 @@ contract('Paywall (proxy)', (accounts) => {
 
     before(async () => {
         this.paywall = await Paywall.deployed();
-        await this.paywall.addController(owner);
+        await this.paywall.addController([owner]);
     });
 
     describe('handle()', () => {});

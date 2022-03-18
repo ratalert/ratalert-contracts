@@ -13,7 +13,7 @@ contract('FastFood', (accounts) => {
 
     before(async () => {
         this.foodToken = await FastFood.deployed();
-        await this.foodToken.addController(owner, { from: owner });
+        await this.foodToken.addController([owner], { from: owner });
         expect(await this.foodToken.totalSupply()).to.be.a.bignumber.eq(toWei(0));
     });
 
@@ -57,11 +57,11 @@ contract('FastFood', (accounts) => {
 
     describe('addController()', () => {
         it('denies anonymous to add a controller', async () => {
-            await expect(this.foodToken.addController(anon, { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.addController([anon], { from: anon })).to.eventually.be.rejected;
         });
 
         it('allows owner to add a controller', async () => {
-            const res = await this.foodToken.addController(owner);
+            const res = await this.foodToken.addController([owner]);
             await expect(res.receipt.status).to.be.true;
         });
     });
@@ -78,11 +78,11 @@ contract('FastFood', (accounts) => {
 
     describe('removeController()', () => {
         it('denies anonymous to remove a controller', async () => {
-            await expect(this.foodToken.removeController(anon, { from: anon })).to.eventually.be.rejected;
+            await expect(this.foodToken.removeController([anon], { from: anon })).to.eventually.be.rejected;
         });
 
         it('allows owner to remove a controller', async () => {
-            const res = await this.foodToken.removeController(owner);
+            const res = await this.foodToken.removeController([owner]);
             await expect(res.receipt.status).to.be.true;
             await expect(this.foodToken.controller(owner)).to.eventually.be.false;
         });

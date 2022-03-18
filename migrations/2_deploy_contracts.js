@@ -57,27 +57,14 @@ module.exports = async (deployer, network, accounts) => {
     await gym.configure(...config.gym);
 
     await traits.setCharacter(character.address);
-    await mint.addController(character.address);
+    await mint.addController([character.address]);
     await mint.setCharacter(character.address);
-    await claim.addController(mcStake.address); // TODO Single request?
-    await claim.addController(theStakehouse.address);
-    await claim.addController(leStake.address);
-    await claim.addController(gym.address);
-    await claim.addVenue(mcStake.address); // TODO Single request?
-    await claim.addVenue(theStakehouse.address);
-    await claim.addVenue(leStake.address);
-    await claim.addVenue(gym.address);
-    await fastFood.addController(paywall.address);
-    await fastFood.addController(mcStake.address);
-    await fastFood.addController(kitchenShop.address);
-    await casualFood.addController(theStakehouse.address);
-    await casualFood.addController(kitchenShop.address);
-    await gourmetFood.addController(leStake.address);
-    await gourmetFood.addController(kitchenShop.address);
-    await paywall.addController(character.address);
-    await character.addController(mcStake.address);
-    await character.addController(theStakehouse.address);
-    await character.addController(leStake.address);
-    await character.addController(gym.address);
+    await claim.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
+    await claim.addVenue([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
+    await fastFood.addController([paywall.address, mcStake.address, kitchenShop.address]);
+    await casualFood.addController([theStakehouse.address, kitchenShop.address]);
+    await gourmetFood.addController([leStake.address, kitchenShop.address]);
+    await paywall.addController([character.address]);
+    await character.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
     await character.setKitchen(mcStake.address);
 };

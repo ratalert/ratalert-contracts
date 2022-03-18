@@ -21,8 +21,8 @@ contract('Claim (proxy)', (accounts) => {
         this.linkToken = await LinkToken.deployed();
         this.claim = await Claim.deployed();
         this.claimSandbox = await deployProxy(Claim, config.claim({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }));
-        await this.claim.addController(owner);
-        await this.claimSandbox.addController(owner);
+        await this.claim.addController([owner]);
+        await this.claimSandbox.addController([owner]);
     });
 
     describe('requestRandomNumber()', () => {

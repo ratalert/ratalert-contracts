@@ -21,8 +21,8 @@ contract('Mint (proxy)', (accounts) => {
         this.linkToken = await LinkToken.deployed();
         this.mint = await Mint.deployed();
         this.mintSandbox = await deployProxy(Mint, config.mint({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }))
-        await this.mint.addController(owner);
-        await this.mintSandbox.addController(owner);
+        await this.mint.addController([owner]);
+        await this.mintSandbox.addController([owner]);
     });
 
     describe('requestRandomNumber()', () => {
