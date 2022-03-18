@@ -44,8 +44,24 @@ contract('Mint (proxy)', (accounts) => {
             expect(res.stake).to.be.true;
         });
     });
+    describe('getVrfRequest()', () => {
+        it('returns an invalid object', async () => {
+            const res = await this.mint.getVrfRequest('0x');
+            expect(res.requestId).to.equal('0x0000000000000000000000000000000000000000000000000000000000000000');
+            expect(res.sender).to.equal('0x0000000000000000000000000000000000000000');
+            expect(res.amount).to.equal('0');
+        });
+        it('returns a valid object', async () => {
+            const { logs } = await this.mint.requestRandomNumber(owner, 5, true);
+            const requestId = logs[0].args.requestId;
+            const res = await this.mint.getVrfRequest(requestId);
+            expect(res.requestId).to.equal(requestId);
+            expect(res.sender).to.equal(owner);
+            expect(res.amount).to.equal('5');
+        })
+    });
     describe('withdrawLink()', () => {
-        it('denies anyone else but the owner to withdraw', async () => {
+        it('allows nobody but the owner to withdraw', async () => {
             await expect(this.mint.withdrawLink(1, { from: anon })).to.eventually.be.rejectedWith('Ownable: caller is not the owner');
         });
         it('allows owner to withdraw', async () => {

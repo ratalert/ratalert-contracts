@@ -85,9 +85,13 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
       tokens[i] = generate(requestId, uint256(keccak256(abi.encode(randomness, i))));
     }
 
-    character.fulfillMint(vrfRequests[requestId], tokens);
+    character.fulfillMint(requestId, tokens);
     delete vrfRequests[requestId];
     emit RandomNumberFulfilled(requestId, v.sender);
+  }
+
+  function getVrfRequest(bytes32 requestId) external view returns(VRFStruct memory) {
+    return vrfRequests[requestId];
   }
 
   /**

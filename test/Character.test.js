@@ -26,9 +26,9 @@ contract('Character (proxy)', (accounts) => {
     const anon = accounts[1];
     const stats = { numChefs : 0, numRats: 0 };
     let lists;
-    let characterSandbox;
     let daoBalance;
     let totalMints = 0;
+    let totalPaid = 0;
 
     before(async () => {
         this.vrfCoordinator = await VRFCoordinator.deployed();
@@ -42,33 +42,13 @@ contract('Character (proxy)', (accounts) => {
         this.traitList = await loadTraits();
         this.character = await Character.deployed();
         this.kitchen = await McStake.deployed();
-        characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address, this.properties.address, config.dao.address]);
-        await characterSandbox.configure(5);
+        this.characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address, this.properties.address, config.dao.address]);
+        await this.characterSandbox.configure(5);
         await this.fastFood.addController(this.paywall.address);
         await this.fastFood.addController(owner);
-        await this.paywall.addController(characterSandbox.address);
+        await this.paywall.addController(this.characterSandbox.address);
         await this.paywall.addController(owner);
-        await this.mint.addController(characterSandbox.address);
-        await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals('0');
-        await expect(this.character.numChefs()).to.eventually.be.a.bignumber.that.equals('0');
-        await expect(this.character.numRats()).to.eventually.be.a.bignumber.that.equals('0');
-        await expect(this.character.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals('0');
-        await expect(this.character.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('0');
-    });
-
-    describe.skip('random', () => {
-        it('creates the expected population', async () => {
-            const population = {};
-            for (let i = 1; i <= 10000; i++) {
-                const rand = Number((await this.character.testSelectTrait(Math.round(Math.random() * 65535), 4)).toString());
-                if (!population[rand]) {
-                    population[rand] = 1;
-                } else {
-                    population[rand] += 1;
-                }
-            }
-            console.log(population);
-        });
+        await this.mint.addController(this.characterSandbox.address);
     });
 
     describe('mint()', () => {
@@ -83,51 +63,60 @@ contract('Character (proxy)', (accounts) => {
             await expect(this.character.mint(3, false, { from: owner, value: toWei(0.4) })).to.eventually.be.rejectedWith('Invalid payment amount');
         });
 
-        it('denies anyone but the Mint to fulfill', async () => {
-            await expect(this.character.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
-        });
         it('fails with an invalid mint request', async () => {
-            const sandbox = await deployProxy(Character, [this.paywall.address, owner, this.traits.address, this.properties.address, config.dao.address]);
-            await sandbox.configure(5);
-            await expect(sandbox.fulfillMint({ requestId: '0x0000000000000000000000000000000000000000000000000000000000000000', sender: owner, amount: 1, stake: false }, [])).to.eventually.be.rejectedWith('Mint request not found');
+            await expect(this.characterSandbox.fulfillMint('0x', [])).to.eventually.be.rejectedWith('Invalid vrfRequest');
+            await expect(this.characterSandbox.fulfillMint('0x0', [])).to.eventually.be.rejectedWith('Invalid vrfRequest');
+            await expect(this.characterSandbox.fulfillMint('0x0000000000000000000000000000000000000000000000000000000000000000', [])).to.eventually.be.rejectedWith('Invalid vrfRequest');
+            await expect(this.characterSandbox.fulfillMint('0x1234567890', [])).to.eventually.be.rejectedWith('vrfRequest not found');
+        });
+        it('allows nobody but the Mint to fulfill', async () => {
+            const res = await this.character.mint(5, false, { value: toWei(0.5) });
+            totalPaid += 5;
+            const randomNumberRequestedAbi = this.mint.abi.find(item => item.name === 'RandomNumberRequested');
+            const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
+            const requestId = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics).requestId;
+            await expect(this.character.fulfillMint(requestId, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
+            await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(totalPaid.toString());
         });
         it('fails if all characters have been minted', async () => {
-            await expect(characterSandbox.mint(6, false)).to.eventually.be.rejectedWith('All tokens minted');
+            await expect(this.characterSandbox.mint(6, false)).to.eventually.be.rejectedWith('All tokens minted');
         });
         it('rejects Gen0 exceeding mints', async () => {
-            await expect(characterSandbox.mint(2, false, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Not enough Gen 0 tokens left, reduce amount');
+            await expect(this.characterSandbox.mint(2, false, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Not enough Gen 0 tokens left, reduce amount');
         });
         it('rejects ETH for Gen1 payments', async () => {
-            await this.mint.setCharacter(characterSandbox.address);
-            const res = await mintAndFulfill.call(this, 1, false, { character: characterSandbox });
+            await this.mint.setCharacter(this.characterSandbox.address);
+            const res = await mintAndFulfill.call(this, 1, false, { character: this.characterSandbox });
             this.mintRequestId = res.requestId;
-            await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('1');
-            await expect(characterSandbox.mint(2, false, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Invalid payment type, accepting food tokens only');
+            await expect(this.characterSandbox.minted()).to.eventually.be.a.bignumber.eq('1');
+            await expect(this.characterSandbox.mint(2, false, { value: toWei(0.2) })).to.eventually.be.rejectedWith('Invalid payment type, accepting food tokens only');
             await this.mint.setCharacter(this.character.address);
         });
-        it('deletes mint requests', async () => {
-            await expect(characterSandbox.mintRequests(this.mintRequestId, 0)).to.eventually.be.rejectedWith('VM Exception');
-        });
         it('fails if out of $FFOOD', async () => {
-            await expect(characterSandbox.mint(4, false)).to.eventually.be.rejectedWith('burn amount exceeds balance');
+            await expect(this.characterSandbox.mint(4, false)).to.eventually.be.rejectedWith('burn amount exceeds balance');
         });
         it('calculates mint price correctly', async () => {
+            await this.mint.setCharacter(this.characterSandbox.address);
             const price = 1000 + 1500 + 2000 + 3000; // each character has a new price break
             await this.fastFood.mint(owner, toWei(price));
             const balance = await this.fastFood.balanceOf(owner);
             expect(balance).to.be.a.bignumber.eq(toWei(7500));
-            const res = await mintAndFulfill.call(this, 4, false, { character: characterSandbox, args: { value: 0, from: owner } });
+            const res = await mintAndFulfill.call(this, 4, false, { character: this.characterSandbox, args: { value: 0, from: owner } });
             await expect(res.receipt.status).to.be.true;
             const newBalance = await this.fastFood.balanceOf(owner);
             expect(newBalance).to.be.a.bignumber.eq('0');
-            await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('5');
+            await expect(this.characterSandbox.paid()).to.eventually.be.a.bignumber.eq('5');
+            await expect(this.characterSandbox.minted()).to.eventually.be.a.bignumber.eq('5');
+            await this.mint.setCharacter(this.character.address);
         });
         it('fails if the max supply is reached', async () => {
-            await expect(characterSandbox.mint(1, false)).to.eventually.be.rejectedWith('All tokens minted');
+            await this.mint.setCharacter(this.characterSandbox.address);
+            await expect(this.characterSandbox.mint(1, false)).to.eventually.be.rejectedWith('All tokens minted');
+            await this.mint.setCharacter(this.character.address);
         });
         it('emits the RandomNumberRequested event', async () => {
             const res = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
-            totalMints += 1;
+            totalPaid += 1;
             const randomNumberRequestedAbi = this.mint.abi.find(item => item.name === 'RandomNumberRequested');
             const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
             randomNumberRequestedEvent.args = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics);
@@ -135,14 +124,17 @@ contract('Character (proxy)', (accounts) => {
             delete randomNumberRequestedEvent.data;
             delete randomNumberRequestedEvent.topics;
             expect(randomNumberRequestedEvent.args.sender).to.equal(anon);
+            await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(totalPaid.toString());
         });
 
         it('allows owner to mint', async () => {
             lists = await mintUntilWeHave.call(this, 8, 2);
             totalMints += lists.all.length;
+            totalPaid += lists.all.length;
             daoBalance = await web3.eth.getBalance(config.dao.address);
             await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
             await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
+            await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(totalPaid.toString());
             await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
             await expect(this.character.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
             await expect(this.character.ownerOf(totalMints - lists.all.length + 1)).to.eventually.equal(owner);

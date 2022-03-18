@@ -44,7 +44,7 @@ contract('Claim (proxy)', (accounts) => {
         });
     });
     describe('withdrawLink()', () => {
-        it('denies anyone else but the owner to withdraw', async () => {
+        it('allows nobody but the owner to withdraw', async () => {
             await expect(this.claim.withdrawLink(1, { from: anon })).to.eventually.be.rejectedWith('Ownable: caller is not the owner');
         });
         it('allows owner to withdraw', async () => {

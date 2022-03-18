@@ -25,5 +25,5 @@ interface ICharacter {
   function mint(uint8 amount, bool stake) external payable;
   function getGen0Tokens() external view returns (uint256);
   function getTokenTraits(uint256 tokenId) external view returns (CharacterStruct memory);
-  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external;
+  function fulfillMint(bytes32 requestId, CharacterStruct[] memory tokens) external;
 }

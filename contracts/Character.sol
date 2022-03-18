@@ -14,6 +14,7 @@ import "./IVenue.sol";
 import "./IPaywall.sol";
 
 contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPausable, ERC721Upgradeable, ControllableUpgradeable {
+  uint16 public paid;
   uint16 public minted;
   uint16 public numChefs;
   uint16 public numRats;
@@ -21,7 +22,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   uint256 gen0Tokens; // Number of tokens that are purchased with native token
 
   mapping(uint256 => CharacterStruct) public tokenTraits; // Mapping from tokenId to a struct containing the token's traits
-  mapping(bytes32 => uint16[]) public mintRequests;
 
   IMint public theMint; // Reference to Mint
   ITraits public traits; // Reference to Traits
@@ -46,9 +46,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
     traits = ITraits(_traits);
     properties = IProperties(_properties);
     dao = payable(_dao);
-    minted = 0;
-    numChefs = 0;
-    numRats = 0;
   }
 
   /**
@@ -67,31 +64,30 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
    */
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
-    paywall.handle(_msgSender(), amount, msg.value, minted, maxTokens, gen0Tokens);
+    paywall.handle(_msgSender(), amount, msg.value, paid, maxTokens, gen0Tokens);
     if (msg.value > 0) {
       dao.transfer(msg.value); // Transfer to Gnosis Safe
     }
-    bytes32 requestId = theMint.requestRandomNumber(_msgSender(), amount, stake);
-    mintRequests[requestId] = new uint16[](amount);
-    for (uint i = 0; i < amount; i++) {
-      minted++;
-      mintRequests[requestId][i] = minted;
-    }
+    theMint.requestRandomNumber(_msgSender(), amount, stake);
+    paid += amount;
   }
 
   /**
    * ChainLink VRF callback for mint()
-   * @param v - VRF struct for the corresponding request
+   * @param requestId - The VRF request ID
    * @param tokens - List of characters created by the Mint
    */
-  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external whenNotPaused {
+  function fulfillMint(bytes32 requestId, CharacterStruct[] memory tokens) external whenNotPaused {
+    require(requestId != 0, "Invalid vrfRequest");
+    IMint.VRFStruct memory v = theMint.getVrfRequest(requestId);
+    require(requestId == v.requestId, "vrfRequest not found");
     require(msg.sender == address(theMint), "Only the Mint can fulfill");
-    require(mintRequests[v.requestId].length > 0, "Mint request not found");
-    uint16[] memory tokenIds = mintRequests[v.requestId];
-    delete mintRequests[v.requestId];
-    for (uint i = 0; i < tokenIds.length; i++) {
-      _safeMint(v.stake ? address(kitchen) : v.sender, tokenIds[i]);
-      tokenTraits[tokenIds[i]] = tokens[i];
+    uint16[] memory tokenIds = new uint16[](v.amount);
+    for (uint i = 0; i < v.amount; i++) {
+      minted ++;
+      _safeMint(v.stake ? address(kitchen) : v.sender, minted);
+      tokenIds[i] = minted;
+      tokenTraits[minted] = tokens[i];
       tokens[i].isChef ? numChefs++ : numRats++;
     }
     if (v.stake) kitchen.stakeMany(v.sender, tokenIds);
