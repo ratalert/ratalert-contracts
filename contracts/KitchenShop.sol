@@ -23,6 +23,9 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   CasualFood casualFood; // Reference to the $CFOOD contract
   Character character; // Reference to the Character contract
 
+  string public name;
+  string public symbol;
+  uint256 public tokenSupply;
   uint256 public priceTier0;
   uint256 public priceTier1;
   uint256 public priceTier2;
@@ -37,13 +40,15 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   function initialize(address _fastFood, address _casualFood, address _character) external initializer {
     __Ownable_init();
     __Pausable_init();
-    // TODO similar to __ERC721_init("RatAlert Characters", "RATCHAR"); or _setURI(string newuri)?
 
     fastFood = FastFood(_fastFood);
     casualFood = CasualFood(_casualFood);
     character = Character(_character);
     minted[1] = 0;
     minted[2] = 0;
+
+    name = "RatAlert Kitchens";
+    symbol = "RATCUISINE";
   }
 
   /**
@@ -65,6 +70,7 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
     priceTier2 = _prices[2];
     priceTier3 = _prices[3];
     priceTier4 = _prices[4];
+    tokenSupply = _maxTokens[0] + _maxTokens[1];
   }
 
   /**

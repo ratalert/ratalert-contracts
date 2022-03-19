@@ -61,6 +61,24 @@ contract('KitchenShop (proxy)', (accounts) => {
         });
     });
 
+    describe('name()', () => {
+        it('returns the string', async () => {
+            await expect(this.kitchenShop.name()).to.eventually.equal('RatAlert Kitchens');
+        });
+    });
+
+    describe('symbol()', () => {
+        it('returns the string', async () => {
+            await expect(this.kitchenShop.symbol()).to.eventually.equal('RATCUISINE')
+        });
+    });
+
+    describe('tokenSupply()', () => {
+        it('returns the total supply', async () => {
+            await expect(this.kitchenShop.tokenSupply()).to.eventually.be.a.bignumber.eq('5500');
+        });
+    });
+
     describe('mint()', () => {
         it('fails to mint invalid kitchens', async () => {
             await expect(this.kitchenShop.mint(0, 1)).to.eventually.be.rejectedWith('Invalid kitchen');
