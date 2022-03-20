@@ -26,7 +26,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   IMint public theMint; // Reference to Mint
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
-  IVenue public kitchen;
+  address[] venues;
   IPaywall public paywall;
   address payable public dao;
 
@@ -85,12 +85,12 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
     uint16[] memory tokenIds = new uint16[](v.amount);
     for (uint i = 0; i < v.amount; i++) {
       minted ++;
-      _safeMint(v.stake ? address(kitchen) : v.sender, minted);
+      _safeMint(v.stake ? venues[0] : v.sender, minted);
       tokenIds[i] = minted;
       tokenTraits[minted] = tokens[i];
       tokens[i].isChef ? numChefs++ : numRats++;
     }
-    if (v.stake) kitchen.stakeMany(v.sender, tokenIds);
+    if (v.stake) IVenue(venues[0]).stakeMany(v.sender, tokenIds);
   }
 
   function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public onlyController returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
@@ -117,10 +117,26 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   }
 
   /**
-   * Sets the kitchen address to optionally stake newly minted characters in
-   * @param _kitchen - The address of the Kitchen
+   * Override to avoid venue approvals so that users don't have to waste gas
    */
-  function setKitchen(address _kitchen) external onlyOwner {
-    kitchen = IVenue(_kitchen);
+  function transferFrom(address from, address to, uint256 tokenId) public virtual override {
+    bool wl = false;
+    for (uint i = 0; i < venues.length; i++) {
+      wl = wl || _msgSender() == venues[i];
+    }
+    if (!wl)
+      require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
+    _transfer(from, to, tokenId);
+  }
+
+  /**
+   * Sets the venue addresses to optionally stake newly minted characters and avoid approvals
+   * @param _venues - A list of venue addresses
+   */
+  function setVenues(address[] memory _venues) external onlyOwner {
+    delete venues;
+    for (uint i = 0; i < _venues.length; i++) {
+      venues.push(_venues[i]);
+    }
   }
 }

@@ -66,5 +66,5 @@ module.exports = async (deployer, network, accounts) => {
     await gourmetFood.addController([leStake.address, kitchenShop.address]);
     await paywall.addController([character.address]);
     await character.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
-    await character.setKitchen(mcStake.address);
+    await character.setVenues([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
 };

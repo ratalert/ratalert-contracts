@@ -42,7 +42,6 @@ contract('McStake (proxy)', (accounts) => {
         lists.chefs = [lists.chefs[0], lists.chefs[1]];
         lists.rats = [lists.rats[0], lists.rats[1]];
         lists.all = lists.chefs.concat(lists.rats);
-        await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
     });
 
     describe('stakeMany()', () => {
@@ -340,7 +339,6 @@ contract('McStake (proxy)', (accounts) => {
         it('boosts efficiency if staked long enough', async () => {
             await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]);
             const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
-            await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
             await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
             await advanceTimeAndBlock(86400 * 2); // Wait 3 days
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(boostLists.all).map(item => item.id), false, { args: { from: anon } });
@@ -361,7 +359,6 @@ contract('McStake (proxy)', (accounts) => {
         it('does not boost efficiency if not staked long enough', async () => {
             await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]);
             const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
-            await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
             await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
             await advanceTimeAndBlock(43200); // Wait 3 days
             const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(boostLists.all).map(item => item.id), false, { args: { from: anon } });
