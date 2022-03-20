@@ -51,12 +51,14 @@ contract('KitchenShop (proxy)', (accounts) => {
         it('returns a valid JSON', async () => {
             const checks = ['TheStakeHouse (CasualFood Kitchen)', 'LeStake (GourmetFood Kitchen)'];
             await Promise.all(checks.map(async (check, i) => {
-                let res = await this.kitchenShop.uri(i + 1);
-                let json = JSON.parse(Buffer.from(res.split(',')[1], 'base64').toString());
+                const res = await this.kitchenShop.uri(i + 1);
+                const json = JSON.parse(Buffer.from(res.split(',')[1], 'base64').toString());
+                const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
+                expect(svg).to.include('<svg id="kitchen"');
                 expect(json.name).to.equal(check);
                 expect(json.description).to.include('https://ratalert.com');
                 expect(json.external_url).to.equal(`https://ratalert.com/kitchens/${i + 1}`);
-                expect(json.image.length).to.be.above(2000); // Contains image
+                expect(svg.length).to.be.above(2000); // Contains image
             }));
         });
     });

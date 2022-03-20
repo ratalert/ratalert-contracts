@@ -125,11 +125,26 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
         '"name":"', kitchen.name, '",',
         '"description":"RatAlert, the NFT game that lets you Train2Earn your characters on-chain for higher rewards! https://ratalert.com/",',
         '"external_url":"https://ratalert.com/kitchens/', tokenId.toString(), '",',
-        '"image":"data:image/png;base64,', bytes(kitchen.png), '"',
+        '"image":"data:image/png;base64,', base64(bytes(drawSVG(bytes(kitchen.png)))), '"',
       '}'
     ));
 
     return string(abi.encodePacked("data:application/json;base64,", base64(bytes(metadata))));
+  }
+
+  /**
+   * Generates an SVG by composing the PNG
+   * @param png - The png to add
+   * @return A valid SVG of the kitchen
+   */
+  function drawSVG(bytes memory png) private pure returns (string memory) {
+    return string(abi.encodePacked(
+        '<svg id="kitchen" width="100%" height="100%" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
+          '<image x="0" y="0" width="100" height="100" image-rendering="pixelated" preserveAspectRatio="xMidYMid" xlink:href="data:image/png;base64,',
+            png,
+          '"/>',
+        "</svg>"
+      ));
   }
 
   /**
