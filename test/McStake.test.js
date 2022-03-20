@@ -68,12 +68,12 @@ contract('McStake (proxy)', (accounts) => {
                     expect(Number(log.args.value.toString())).to.equal(0);
                 }
             });
-            await Promise.all(lists.all.map(async (item, i) => {
+            await Promise.all(lists.chefs.map(async (item, i) => {
                 item.stakerIndex = i;
                 const stakerIndexId = await this.kitchen.stakers(owner, i);
                 expect(stakerIndexId).to.be.a.bignumber.eq(item.id.toString());
             }));
-            expect(this.kitchen.stakers(owner, 5)).to.eventually.be.rejected;
+            expect(this.kitchen.stakers(owner, 2)).to.eventually.be.rejected;
             await expect(this.character.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.kitchen.address);
             await expect(this.character.ownerOf(lists.rats[1].id)).to.eventually.equal(this.kitchen.address);
             const chef0 = await this.kitchen.chefs(lists.chefs[0].id);
@@ -174,10 +174,9 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((50 + (i + 1) * 25 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + (i + 1) * 25.4475) / lists.rats.length));
                 ownerBalance.iadd(new BN(log.args.earned));
             });
-            await Promise.all([lists.chefs[0], lists.chefs[1]].map(async item => {
+            await Promise.all(lists.chefs.map(async item => {
                 await expect(this.kitchen.stakers(owner, item.stakerIndex)).to.eventually.be.rejected;
             }));
-            expect(this.kitchen.stakers(owner, 5)).to.eventually.be.rejected;
             totalFoodTokensEarned += 2 * 125 * chefBoost(1) * 0.8; // 2 chefs for half a day at skill 1
             await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
             await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(owner);

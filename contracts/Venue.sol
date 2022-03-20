@@ -27,7 +27,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
   mapping(uint256 => Stake) public chefs; // Maps tokenId to stake
   mapping(uint256 => Stake) public rats; // Maps tokenId to stake
-  mapping(address => uint256[]) public stakers; // Maps address to array of character IDs
+  mapping(address => uint256[]) public stakers; // Maps address to array of chef IDs
   mapping(bytes32 => uint16[]) public claimRequests; // Maps VRF ID to claim request
   int8 public dailySkillRate;
   int8 public dailyInsanityRate;
@@ -65,7 +65,6 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    */
   function stakeMany(address account, uint16[] calldata tokenIds) external {
     require(account == _msgSender() || _msgSender() == address(character), "Do not lose your tokens");
-    require(_checkSpace(_msgSender(), tokenIds.length), "Kitchen space required");
     for (uint i = 0; i < tokenIds.length; i++) {
       if (_msgSender() != address(character)) { // Not necessary if it's a mint & stake
         require(character.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
@@ -77,11 +76,11 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
       require(_checkEligibility(tokenIds[i]), "Not eligible");
       if (isChef(tokenIds[i])) {
         _stakeChef(account, tokenIds[i]);
+        require(_checkSpace(_msgSender(), 1), "Kitchen space required");
+        stakers[account].push(tokenIds[i]);
       } else {
         _stakeRat(account, tokenIds[i]);
       }
-
-      stakers[account].push(tokenIds[i]);
     }
   }
 
@@ -135,11 +134,11 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   }
 
   /**
-   * ChainLink VRF callback for claimMany()
+   * Callback for claimMany(), called by Claim.fulfillRandomness()
    * @param v - VRF struct for the corresponding request
-   * @param randomVal - List of random values created by VRF
+   * @param randomness - Random value created by VRF
    */
-  function fulfillClaimMany(IClaim.VRFStruct memory v, uint256 randomVal) external virtual whenNotPaused {
+  function fulfillClaimMany(IClaim.VRFStruct memory v, uint256 randomness) external virtual whenNotPaused {
     require(msg.sender == address(claim), "Only Claim can fulfill");
     require(claimRequests[v.requestId].length > 0, "Claim request not found");
 
@@ -148,11 +147,12 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
     uint256 owed = 0;
     for (uint i = 0; i < tokenIds.length; i++) {
+      uint256 randomVal = uint256(keccak256(abi.encode(randomness, i)));
       bool space = _checkSpace(v.sender, 0);
       if (isChef(tokenIds[i]))
         owed += _claimChef(tokenIds[i], v.sender, !space || v.unstake, !space, randomVal);
       else
-        owed += _claimRat(tokenIds[i], v.sender, !space || v.unstake, !space, randomVal);
+        owed += _claimRat(tokenIds[i], v.sender, v.unstake, !space, randomVal);
       for (uint j = 0; j < stakers[v.sender].length; j++) {
         if (stakers[v.sender][j] == tokenIds[i]) {
           stakers[v.sender][j] = stakers[v.sender][stakers[v.sender].length - 1];

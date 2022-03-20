@@ -34,7 +34,7 @@ contract('Gym (proxy)', (accounts) => {
         lists.all = lists.chefs.concat(lists.rats);
 
         await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
-        lists.all = await trainUntilWeHave.call(this, this.kitchen, 0, 20, lists.all, 1, true, { from: owner });
+        lists.all = await trainUntilWeHave.call(this, this.kitchen, 0, 20, lists.all, 1, true, true, { from: owner });
     });
 
     describe('stakeMany()', () => {

@@ -14,14 +14,6 @@ contract LeStake is EntrepreneurKitchen {
     address _claim,
     address _foodToken,
     address _kitchenShop
-//    uint256 _foodTokenMaxSupply,
-//    uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
-//    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
-//    uint8 _minEfficiency,
-//    uint8 _charactersPerKitchen,
-//    uint8 _chefEfficiencyMultiplier,
-//    int256 _ratEfficiencyMultiplier,
-//    int256 _ratEfficiencyOffset
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -45,7 +37,7 @@ contract LeStake is EntrepreneurKitchen {
     uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
     int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
     uint8 _minEfficiency,
-    uint8 _charactersPerKitchen,
+    uint8 _chefsPerKitchen,
     uint8 _chefEfficiencyMultiplier,
     int256 _ratEfficiencyMultiplier,
     int256 _ratEfficiencyOffset,
@@ -61,7 +53,7 @@ contract LeStake is EntrepreneurKitchen {
     dailyIntelligenceRate = _propertyIncrements[2];
     dailyFatnessRate = _propertyIncrements[3];
     minEfficiency = _minEfficiency;
-    charactersPerKitchen = _charactersPerKitchen;
+    chefsPerKitchen = _chefsPerKitchen;
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;

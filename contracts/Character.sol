@@ -73,7 +73,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   }
 
   /**
-   * ChainLink VRF callback for mint()
+   * Callback for mint(), called by Mint.fulfillRandomness()
    * @param requestId - The VRF request ID
    * @param tokens - List of characters created by the Mint
    */

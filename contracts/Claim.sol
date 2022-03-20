@@ -60,6 +60,11 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer, Contro
     emit RandomNumberRequested(requestId, sender);
   }
 
+  /**
+   * ChainLink VRF callback for requestRandomNumber()
+   * @param requestId - VRF request ID
+   * @param randomness - Random value created by VRF
+   */
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
     VRFStruct memory v = vrfRequests[requestId];
     require(v.requestId != 0, "VRF request ID not found");

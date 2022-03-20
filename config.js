@@ -63,7 +63,7 @@ module.exports = (network, accounts = []) => ({
             }),
             minEfficiency: ['live', 'development'].includes(network) ? 72 : 8,
         },
-        charactersPerKitchen: 10,
+        chefsPerKitchen: 10,
         chefEfficiencyMultiplier: 175,
         ratEfficiencyMultiplier: 90,
         ratEfficiencyOffset: 55,

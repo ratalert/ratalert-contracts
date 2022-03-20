@@ -174,25 +174,33 @@ exports.claimManyAndFulfill = async function (venue, ids, unstake, options = { a
     res1.logs = res2.logs;
     return res1;
 };
-exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, days, unstake, options = {}) {
+exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, days, stake, unstake, options = {}) {
     process.stdout.write(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}`);
-    const ids = list.map(item => item.id);
-    await kitchen.stakeMany(options.from, ids, { gasPrice: await web3.eth.getGasPrice(), ...options }); // Because it needs to be a valid tx params object
+    let ids = list.map(item => item.id);
+    if (stake) {
+        await kitchen.stakeMany(options.from, ids, {gasPrice: await web3.eth.getGasPrice(), ...options}); // Because it needs to be a valid tx params object
+    }
     let done;
     while (!done) {
         await exports.advanceTimeAndBlock(86400 * days); // Wait a few days
         const { logs } = await exports.claimManyAndFulfill.call(this, kitchen, ids, false);
-        const efficiencyValues = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => Number((log.args.skill ? log.args.skill : log.args.intelligence).toString()));
-        const efficiencyReached = (efficiency < 0) ? efficiencyValues.filter(val => val > -efficiency).length === 0 : efficiencyValues.filter(val => val < efficiency).length === 0;
-        const toleranceValues = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => Number((log.args.insanity ? log.args.insanity : log.args.fatness).toString()));
-        const toleranceReached = (tolerance < 0) ? toleranceValues.filter(val => val > -tolerance).length === 0 : toleranceValues.filter(val => val < tolerance).length === 0;
-        done = efficiencyReached && toleranceReached;
+        ids = [];
+        logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => {
+            const tokenEfficiency = Number((log.args.skill || log.args.intelligence).toString());
+            const tokenTolerance = Number((log.args.insanity || log.args.fatness).toString());
+            const efficiencyReached = (efficiency < 0) ? tokenEfficiency < -efficiency : tokenEfficiency > efficiency;
+            const toleranceReached = (efficiency < 0) ? tokenTolerance < -tolerance : tokenTolerance > tolerance;
+            if (!efficiencyReached || !toleranceReached) {
+                ids.push(Number(log.args.tokenId));
+            }
+        });
+        done = ids.length === 0;
         process.stdout.write('.');
     }
     process.stdout.write('\n');
     if (unstake) {
         await exports.advanceTimeAndBlock(3600); // Wait another hour so we can unstake
-        await exports.claimManyAndFulfill.call(this, kitchen, ids, true);
+        await exports.claimManyAndFulfill.call(this, kitchen, list.map(item => item.id), true);
         await Promise.all(list.map(async (item) => {
             const traits = await this.character.tokenTraits(item.id);
             item.efficiency = Number(traits.efficiency.toString());

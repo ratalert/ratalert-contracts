@@ -8,17 +8,17 @@ import "./KitchenShop.sol";
 abstract contract EntrepreneurKitchen is Kitchen {
   KitchenShop kitchenShop;
   uint8 public kitchenId;
-  uint8 public charactersPerKitchen;
+  uint8 public chefsPerKitchen;
   uint8 public minEfficiency;
 
   /**
-   * Checks if there is kitchen space for the given amount of characters
-   * @param amountToAdd - Number of characters to add to stake
+   * Checks if there is kitchen space for the given amount of chefs (rats have no limit)
+   * @param amountToAdd - Number of chefs to add to stake
    * @return true
    */
   function _checkSpace(address account, uint256 amountToAdd) internal override view returns (bool) {
     uint256 balance = kitchenShop.balanceOf(account, kitchenId);
-    return balance * charactersPerKitchen >= stakers[account].length + amountToAdd;
+    return balance * chefsPerKitchen >= stakers[account].length + amountToAdd;
   }
 
   /**

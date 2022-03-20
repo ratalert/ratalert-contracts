@@ -43,7 +43,7 @@ contract('KitchenShop (proxy)', (accounts) => {
         lists.all = lists.chefs.concat(lists.rats);
 
         await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
-        lists.all = await trainUntilWeHave.call(this, this.kitchen, 72, 0, [lists.all[0], lists.all[2]], 10, true, { from: owner });
+        lists.all = await trainUntilWeHave.call(this, this.kitchen, 72, 0, [lists.all[0], lists.all[2]], 10, true, true, { from: owner });
         fastFoodBalance = await this.fastFood.balanceOf(owner);
     });
 
