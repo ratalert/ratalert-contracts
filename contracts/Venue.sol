@@ -59,7 +59,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   }
 
   /**
-   * Adds Chefs & Rats
+   * Adds Characters to staking
    * @param account - The address of the staker
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
@@ -168,8 +168,8 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   /**
    * Claim food tokens & level-ups for a single Chef and optionally unstake him
    * @param tokenId - The ID of the Chef to level up
-   * @param unstake - Whether or not to unstake the Chef
    * @param sender - User wallet address
+   * @param unstake - Whether or not to unstake the Chef
    * @param noEarnings - Whether or not to cancel earnings
    * @param randomVal - A ChainLink VRF random number
    * @return owed - Food tokens produced during staking
@@ -284,9 +284,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * Level up & return the given Character's efficiency & tolerance values, including a potential mishap or disaster event
    * @param tokenId - The ID of the Character to level up
    * @param randomVal - A ChainLink VRF random number
-   * @return efficiency - new value
-   * @return tolerance - new value
-   * @return eventName - if one occurred, otherwise empty string
+   * @return efficiency - New value
+   * @return tolerance - New value
+   * @return eventName - If one occurred, empty string otherwise
    */
   function _updateCharacter(uint256 tokenId, uint256 randomVal) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
     (bool chef, , , , , , , , , , int8 boost) = character.tokenTraits(tokenId);
@@ -303,6 +303,8 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   /**
    * Calculates the level that was accrued for the given property over the given staking period
    * @param dailyRate - The amount that can be gained over the accrualPeriod
+   * @param stakingPeriod - The duration during which the character was staked
+   * @param boost - The boost percentage to add
    * @return The total accrued value
    */
   function _getCharacterIncrement(int8 dailyRate, uint256 stakingPeriod, int8 boost) internal view returns(int8) {

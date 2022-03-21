@@ -64,7 +64,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   }
 
   /**
-   * Remove a list of addresses from the whitelist
+   * Removes a list of addresses from the whitelist
    * @param addresses - An array of addresses to remove
    */
   function removeFromWhitelist(address[] memory addresses) external onlyOwner {
@@ -88,7 +88,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   }
 
   /**
-   * Remove a list of addresses from the free mints
+   * Removes a list of addresses from the free mints
    * @param addresses - An array of addresses to remove
    */
   function removeFromFreeMints(address[] memory addresses) external onlyOwner {
@@ -108,6 +108,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * @param minted - Number of total tokens minted
    * @param maxTokens - Max number of tokens that can be minted
    * @param gen0Tokens - Number of tokens that can be claimed for free
+   * @return boost - Boost percentage if the token was minted using a whitelist spot
    */
   function handle(address sender, uint8 amount, uint256 msgValue, uint16 minted, uint256 maxTokens, uint256 gen0Tokens) external onlyController returns (int8 boost) {
     require(amount > 0 && amount <= maxMintsPerTx, "Invalid mint amount");
@@ -141,12 +142,10 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
   }
 
   /**
-   *     1 - 10000: cost ETH
-   * 10001 - 20000: 1000 $FFOOD
-   * 20001 - 30000: 1500 $FFOOD
-   * 30001 - 40000: 2000 $FFOOD
-   * 40001 - 50000: 3000 $FFOOD
+   * Returns the latest mint price for the given token using 5 price breaks
    * @param tokenId - The token ID to check
+   * @param maxTokens - The total supply of tokens
+   * @param gen0Tokens - The supply of Gen0 tokens
    * @return The minting cost of the given ID
    */
   function mintCost(uint256 tokenId, uint256 maxTokens, uint256 gen0Tokens) public view returns (uint256) {

@@ -55,19 +55,25 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
 
   /**
    * Set ChainLink VRF params
+   * @param _vrfCoordinator - ChainLink's VRF coordinator contract address
+   * @param _link - ChinLink token contract address
+   * @param _keyHash - ChainLink env specific VRF key hash
+   * @param _fee - VRF env specific gas fee
    */
-  function setVrfParams(
-    address _vrfCoordinator,
-    address _link,
-    bytes32 _keyHash,
-    uint256 _fee
-  ) external onlyOwner {
+  function setVrfParams(address _vrfCoordinator, address _link, bytes32 _keyHash, uint256 _fee) external onlyOwner {
     vrfCoordinator = _vrfCoordinator;
     link = LinkTokenInterface(_link);
     keyHash = _keyHash;
     fee = _fee;
   }
 
+  /**
+   * Requests a random number from ChainLink VRF and stores the request until it's fulfilled, called by Character.mint().
+   * @param sender - User wallet address
+   * @param amount - Amount of tokens to mint
+   * @param stake - Whether to right away stake those Characters
+   * @return requestId - VRF request ID
+   */
   function requestRandomNumber(address sender, uint8 amount, bool stake, int8 boost) external onlyController returns (bytes32 requestId) {
     require(link.balanceOf(address(this)) >= fee, "Insufficient LINK");
     requestId = requestRandomness(keyHash, fee);
@@ -96,6 +102,11 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
     emit RandomNumberFulfilled(requestId, v.sender);
   }
 
+  /**
+   * Getter for the given VRF request
+   * @param requestId - ChainLink VRF request ID
+   * @return A struct of the VRF request
+   */
   function getVrfRequest(bytes32 requestId) external view returns(VRFStruct memory) {
     return vrfRequests[requestId];
   }
