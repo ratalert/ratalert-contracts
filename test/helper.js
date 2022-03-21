@@ -187,7 +187,7 @@ exports.trainUntilWeHave = async function(kitchen, efficiency, tolerance, list, 
         ids = [];
         logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => {
             const tokenEfficiency = Number((log.args.skill || log.args.intelligence).toString());
-            const tokenTolerance = Number((log.args.insanity || log.args.fatness).toString());
+            const tokenTolerance = Number((log.args.freak || log.args.bodyMass).toString());
             const efficiencyReached = (efficiency < 0) ? tokenEfficiency < -efficiency : tokenEfficiency > efficiency;
             const toleranceReached = (efficiency < 0) ? tokenTolerance < -tolerance : tokenTolerance > tolerance;
             if (!efficiencyReached || !toleranceReached) {

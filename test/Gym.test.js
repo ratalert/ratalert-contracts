@@ -91,7 +91,7 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.false;
-                expect(log.args.insanity).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 6).toString()); // half a day at the gym
+                expect(log.args.freak).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 6).toString()); // half a day at the gym
                 expect(log.args.eventName).to.equal('');
             });
             await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.gym.address);
@@ -111,7 +111,7 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.false;
-                expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString()); // half a day in the gym
+                expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString()); // half a day in the gym
                 expect(log.args.eventName).to.equal('');
             });
             await expect(this.character.ownerOf(rats[0])).to.eventually.equal(this.gym.address);
@@ -130,7 +130,7 @@ contract('Gym (proxy)', (accounts) => {
             expect(claimEvents).to.have.length(2);
             claimEvents.forEach((log, i) => {
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
-                expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString());
+                expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString());
             });
         });
         it('unstakes many chefs', async () => {
@@ -143,7 +143,7 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.true;
-                expect(log.args.insanity).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 12).toString()); // full day at the gym
+                expect(log.args.freak).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 12).toString()); // full day at the gym
                 expect(log.args.eventName).to.equal('');
             });
             await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
@@ -174,7 +174,7 @@ contract('Gym (proxy)', (accounts) => {
                 expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
                 expect(log.args.earned).to.be.a.bignumber.eq('0');
                 expect(log.args.unstaked).to.be.true;
-                expect(log.args.fatness).to.be.a.bignumber.eq((lists.rats[i].tolerance - 8).toString()); // half a day in the gym
+                expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 8).toString()); // half a day in the gym
                 expect(log.args.eventName).to.equal('');
             });
             await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);

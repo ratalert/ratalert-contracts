@@ -35,7 +35,7 @@ contract LeStake is EntrepreneurKitchen {
   function configure(
     uint256 _foodTokenMaxSupply,
     uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
-    int8[] memory _propertyIncrements, // dailySkillRate, dailyInsanityRate, dailyIntelligenceRate, dailyFatnessRate
+    int8[] memory _propertyIncrements, // dailySkillRate, dailyFreakRate, dailyIntelligenceRate, dailyBodyMassRate
     uint8 _minEfficiency,
     uint8 _chefsPerKitchen,
     uint8 _chefEfficiencyMultiplier,
@@ -49,9 +49,9 @@ contract LeStake is EntrepreneurKitchen {
     vestingPeriod = _earningSettings[2];
     accrualPeriod = _earningSettings[3];
     dailySkillRate = _propertyIncrements[0];
-    dailyInsanityRate = _propertyIncrements[1];
+    dailyFreakRate = _propertyIncrements[1];
     dailyIntelligenceRate = _propertyIncrements[2];
-    dailyFatnessRate = _propertyIncrements[3];
+    dailyBodyMassRate = _propertyIncrements[3];
     minEfficiency = _minEfficiency;
     chefsPerKitchen = _chefsPerKitchen;
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;

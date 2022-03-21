@@ -11,15 +11,15 @@ contract Properties is Initializable, OwnableUpgradeable {
   int8 public disasterEfficiencyMinimumRat; // Minimum intelligence percentage for rats during a burnout event
   uint8 public disasterEfficiencyLossChef; // Skill percentage loss for chefs during a burnout event
   uint8 public disasterEfficiencyLossRat; // Intelligence percentage loss for rats during a cat event
-  uint8 public disasterToleranceLossChef; // Insanity percentage loss for chefs during a burnout event
-  uint8 public disasterToleranceLossRat; // Fatness percentage loss for rats during a cat event
+  uint8 public disasterToleranceLossChef; // Freak percentage loss for chefs during a burnout event
+  uint8 public disasterToleranceLossRat; // BodyMass percentage loss for rats during a cat event
 
   int8 public mishapEfficiencyMinimumChef; // Minimum skill percentage for chefs during a foot inspector event
   int8 public mishapEfficiencyMinimumRat; // Minimum intelligence percentage for rats during a rat trap event
   uint8 public mishapEfficiencyLossChef; // Skill percentage loss for chefs during a food inspector event
   uint8 public mishapEfficiencyLossRat; // Intelligence percentage loss for rats during a rat trap event
-  uint8 public mishapToleranceLossChef; // Insanity percentage loss for chefs during a food inspector event
-  uint8 public mishapToleranceLossRat; // Fatness percentage loss for rats during a rat trap event
+  uint8 public mishapToleranceLossChef; // Freak percentage loss for chefs during a food inspector event
+  uint8 public mishapToleranceLossRat; // BodyMass percentage loss for rats during a rat trap event
 
   function initialize() external initializer {
     __Ownable_init();

@@ -38,18 +38,18 @@ module.exports = (network, accounts = []) => ({
             foodTokenMaxSupply: 50000000,
             propertyIncrements: Object.values({
                 dailySkillRate: 2,
-                dailyInsanityRate: 4,
+                dailyFreakRate: 4,
                 dailyIntelligenceRate: 2,
-                dailyFatnessRate: 8,
+                dailyBodyMassRate: 8,
             }),
         },
         theStakehouse: {
             foodTokenMaxSupply: 5000000,
             propertyIncrements: Object.values({
                 dailySkillRate: 4,
-                dailyInsanityRate: 6,
+                dailyFreakRate: 6,
                 dailyIntelligenceRate: 4,
-                dailyFatnessRate: 6,
+                dailyBodyMassRate: 6,
             }),
             minEfficiency: ['live', 'development'].includes(network) ? 28 : 2,
         },
@@ -57,9 +57,9 @@ module.exports = (network, accounts = []) => ({
             foodTokenMaxSupply: 500000,
             propertyIncrements: Object.values({
                 dailySkillRate: 6,
-                dailyInsanityRate: 8,
+                dailyFreakRate: 8,
                 dailyIntelligenceRate: 6,
-                dailyFatnessRate: 4,
+                dailyBodyMassRate: 4,
             }),
             minEfficiency: ['live', 'development'].includes(network) ? 72 : 8,
         },
@@ -72,8 +72,8 @@ module.exports = (network, accounts = []) => ({
     gym: Object.values({
         vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
         accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
-        dailyInsanityRate: -12,
-        dailyFatnessRate: -8,
+        dailyFreakRate: -12,
+        dailyBodyMassRate: -8,
         maxClaimsPerTx: 10,
     }),
     kitchenShop: Object.values({

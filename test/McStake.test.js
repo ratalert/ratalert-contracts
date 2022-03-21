@@ -104,7 +104,7 @@ contract('McStake (proxy)', (accounts) => {
                 expectChefEarnings(log.args.earned, 86400 / 2, 0);
                 expect(log.args.unstaked).to.be.false;
                 expect(log.args.skill).to.be.a.bignumber.eq('1');
-                expect(log.args.insanity).to.be.a.bignumber.eq('2');
+                expect(log.args.freak).to.be.a.bignumber.eq('2');
                 expect(log.args.eventName).to.equal('');
                 expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((i + 1) * 25 / lists.rats.length)).lt(toWei((i + 1) * 25 * 1.0001 / lists.rats.length));
             });
@@ -134,11 +134,11 @@ contract('McStake (proxy)', (accounts) => {
                 expectRatEarnings(log.args.earned, 50, lists.rats.length, 0);
                 expect(log.args.unstaked).to.be.false;
                 expect(log.args.intelligence).to.be.a.bignumber.eq('1');
-                expect(log.args.fatness).to.be.a.bignumber.eq('4');
+                expect(log.args.bodyMass).to.be.a.bignumber.eq('4');
                 expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(new BN(log.args.earned));
             });
-            totalFoodTokensEarned += 2 * 25 * 0.55; // 2 rats for half a day at fatness 0
+            totalFoodTokensEarned += 2 * 25 * 0.55; // 2 rats for half a day at bodyMass 0
             await expect(this.character.ownerOf(rats[0])).to.eventually.equal(this.kitchen.address);
             await expect(this.character.ownerOf(rats[1])).to.eventually.equal(this.kitchen.address);
             await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
@@ -168,7 +168,7 @@ contract('McStake (proxy)', (accounts) => {
                 expectChefEarnings(log.args.earned, 86400 / 2, 1);
                 expect(log.args.unstaked).to.be.true;
                 expect(log.args.skill).to.be.a.bignumber.eq('2');
-                expect(log.args.insanity).to.be.a.bignumber.eq('4');
+                expect(log.args.freak).to.be.a.bignumber.eq('4');
                 expect(log.args.eventName).to.equal('');
                 expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((50 + (i + 1) * 25 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + (i + 1) * 25.4475) / lists.rats.length));
                 ownerBalance.iadd(new BN(log.args.earned));
@@ -213,11 +213,11 @@ contract('McStake (proxy)', (accounts) => {
                 expectRatEarnings(log.args.earned, 50 * chefBoost(1), lists.rats.length, 4);
                 expect(log.args.unstaked).to.be.true;
                 expect(log.args.intelligence).to.be.a.bignumber.eq('2');
-                expect(log.args.fatness).to.be.a.bignumber.eq('8');
+                expect(log.args.bodyMass).to.be.a.bignumber.eq('8');
                 expect(log.args.eventName).to.equal('');
                 ownerBalance.iadd(new BN(log.args.earned));
             });
-            totalFoodTokensEarned += 2 * 25 * chefBoost(1) * ratBoost(4); // food tokens from 2 skill 1 chefs for 2 rats for half a day at fatness 4
+            totalFoodTokensEarned += 2 * 25 * chefBoost(1) * ratBoost(4); // food tokens from 2 skill 1 chefs for 2 rats for half a day at bodyMass 4
             await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);
             await expect(this.character.ownerOf(rats[1])).to.eventually.equal(owner);
             await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
@@ -263,7 +263,7 @@ contract('McStake (proxy)', (accounts) => {
                 const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
                 claimEvents.forEach(({ event, args }) => {
                     const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
-                    const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                    const tolerance = Number((event === 'ChefClaimed' ? args.freak : args.bodyMass).toString());
                     if (event === 'ChefClaimed') {
                         expectChefEarnings(args.earned, 86400, list.chef.efficiency);
                         list.chef.earned = args.earned;
@@ -325,7 +325,7 @@ contract('McStake (proxy)', (accounts) => {
             const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
             claimEvents.forEach(({ event, args }) => {
                 const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
-                const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                const tolerance = Number((event === 'ChefClaimed' ? args.freak : args.bodyMass).toString());
                 if (event === 'ChefClaimed') {
                     expectChefEarnings(args.earned, 86400, 0);
                     expect(efficiency).to.equal(2);
@@ -345,7 +345,7 @@ contract('McStake (proxy)', (accounts) => {
             const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
             claimEvents.forEach(({ event, args }) => {
                 const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
-                const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                const tolerance = Number((event === 'ChefClaimed' ? args.freak : args.bodyMass).toString());
                 if (event === 'ChefClaimed') {
                     expectChefEarnings(args.earned, 86400, 0);
                     expect(efficiency).to.equal(3);
@@ -365,7 +365,7 @@ contract('McStake (proxy)', (accounts) => {
             const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
             claimEvents.forEach(({ event, args }) => {
                 const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
-                const tolerance = Number((event === 'ChefClaimed' ? args.insanity : args.fatness).toString());
+                const tolerance = Number((event === 'ChefClaimed' ? args.freak : args.bodyMass).toString());
                 if (event === 'ChefClaimed') {
                     expect(efficiency).to.equal(1);
                     expect(tolerance).to.equal(2);

@@ -36,13 +36,13 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       "Hand",
       "Tail",
       "Skill",
-      "Insanity",
+      "Freak",
       "Intelligence",
-      "Fatness",
+      "Body mass",
       "Skill percentage",
-      "Insanity percentage",
+      "Freak percentage",
       "Intelligence quotient",
-      "Fatness percentage",
+      "Body mass percentage",
       "Boost"
     ];
   }

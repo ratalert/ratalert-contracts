@@ -148,9 +148,9 @@ contract('Character (proxy)', (accounts) => {
                 hand: { traitType: 'trait', name: 'Hand' },
                 tail: { traitType: 'trait', name: 'Tail' },
                 skill: { traitType: 'dynamic', name: 'Skill', character: 'chef', category: 'efficiency', value: 'Kitchen Scullion', additional: 'Skill percentage' },
-                insanity: { traitType: 'dynamic', name: 'Insanity', character: 'chef', category: 'tolerance', value: 'Bored', additional: 'Insanity percentage' },
+                freak: { traitType: 'dynamic', name: 'Freak', character: 'chef', category: 'tolerance', value: 'Bored', additional: 'Freak percentage' },
                 intelligence: { traitType: 'dynamic', name: 'Intelligence', character: 'rat', category: 'efficiency', value: 'Braindead', additional: 'Intelligence quotient' },
-                fatness: { traitType: 'dynamic', name: 'Fatness', character: 'rat', category: 'tolerance', value: 'Anorexic', additional: 'Fatness percentage' },
+                bodyMass: { traitType: 'dynamic', name: 'Body mass', character: 'rat', category: 'tolerance', value: 'Anorexic', additional: 'Body mass percentage' },
                 boost: { traitType: 'boost', name: 'Boost', value: 0 },
             }
             const traitMap = {

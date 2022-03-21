@@ -19,8 +19,8 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   }
 
   event TokenStaked(uint256 tokenId, address owner, uint256 value);
-  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 insanity, string eventName, uint256 foodTokensPerRat);
-  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 fatness, string eventName);
+  event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 freak, string eventName, uint256 foodTokensPerRat);
+  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 bodyMass, string eventName);
 
   Character character; // Reference to the Character
   IClaim public claim; // Reference to the Mint
@@ -30,9 +30,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   mapping(address => uint256[]) public stakers; // Maps address to array of chef IDs
   mapping(bytes32 => uint16[]) public claimRequests; // Maps VRF ID to claim request
   int8 public dailySkillRate;
-  int8 public dailyInsanityRate;
+  int8 public dailyFreakRate;
   int8 public dailyIntelligenceRate;
-  int8 public dailyFatnessRate;
+  int8 public dailyBodyMassRate;
   uint256 public totalChefsStaked; // Number of Chefs staked
   uint256 public totalRatsStaked; // Number of Rats staked
   uint256 public accrualPeriod; // The period over which earnings & levels are accrued
@@ -53,9 +53,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     accrualPeriod = _accrualPeriod;
 
     dailySkillRate = 0;
-    dailyInsanityRate = 0;
+    dailyFreakRate = 0;
     dailyIntelligenceRate = 0;
-    dailyFatnessRate = 0;
+    dailyBodyMassRate = 0;
   }
 
   /**
@@ -295,7 +295,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     (efficiency, tolerance, eventName) = character.updateCharacter(
       tokenId,
       _getCharacterIncrement(chef ? dailySkillRate : dailyIntelligenceRate, stakingPeriod, boost),
-      _getCharacterIncrement(chef ? dailyInsanityRate : dailyFatnessRate, stakingPeriod, 0),
+      _getCharacterIncrement(chef ? dailyFreakRate : dailyBodyMassRate, stakingPeriod, 0),
       randomVal
     );
   }
