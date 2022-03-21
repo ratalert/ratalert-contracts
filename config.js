@@ -70,8 +70,8 @@ module.exports = (network, accounts = []) => ({
         maxClaimsPerTx: 10,
     },
     gym: Object.values({
-        vestingPeriod: ['live', 'development'].includes(network) ? 3600 : 60,
-        accrualPeriod: ['live', 'development'].includes(network) ? 86400 : 3600,
+        vestingPeriod: process.env.KITCHEN_VESTING_PERIOD || 3600, // 1h
+        accrualPeriod: process.env.KITCHEN_ACCRUAL_PERIOD || 86400, // 1d
         dailyInsanityRate: -12,
         dailyFatnessRate: -8,
         maxClaimsPerTx: 10,
