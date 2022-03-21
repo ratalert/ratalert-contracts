@@ -83,8 +83,7 @@ abstract contract Kitchen is Venue {
       unaccountedRewards += amount; // keep track of food tokens owed to Rats
       return;
     }
-    // makes sure to include any unaccounted food tokens
-    foodTokensPerRat += (amount + unaccountedRewards) / totalRatsStaked;
+    foodTokensPerRat += (amount + unaccountedRewards) / totalRatsStaked; // make sure to include any unaccounted food tokens
     unaccountedRewards = 0;
   }
 }

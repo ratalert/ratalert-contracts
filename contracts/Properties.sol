@@ -49,7 +49,7 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @param isChef - Whether it's a Chef or not
    * @param efficiency - The character's current value
    * @param randomVal - A ChainLink VRF random number
-   * @return true if event occurred
+   * @return Whether an event occurred
    */
   function _doesDisasterOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
     if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) {
@@ -64,7 +64,7 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @param isChef - Whether it's a Chef or not
    * @param efficiency - The character's current value
    * @param randomVal - A ChainLink VRF random number
-   * @return true if event occurred
+   * @return Whether an event occurred
    */
   function _doesMishapOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
     if (efficiency <= (isChef ? mishapEfficiencyMinimumChef : mishapEfficiencyMinimumRat)) {
@@ -74,10 +74,23 @@ contract Properties is Initializable, OwnableUpgradeable {
     return randomVal % 1000 < likelihood;
   }
 
+  /**
+   * Returns the efficiency & tolerance values after a disaster event occurred
+   * @return New efficiency value
+   * @return New tolerance value
+   */
   function _resolveDisaster() internal pure returns(uint8, uint8) {
     return (0, 0);
   }
 
+  /**
+   * Returns the efficiency & tolerance values after a mishap event occurred
+   * @param isChef - Whether this is a chef
+   * @param efficiencyValue - Current efficiency value
+   * @param toleranceValue - Current tolerance value
+   * @return New efficiency value
+   * @return New tolerance value
+   */
   function _resolveMishap(bool isChef, uint8 efficiencyValue, uint8 toleranceValue) internal view returns(uint8, uint8) {
     uint8 efficiencyLoss = isChef ? mishapEfficiencyLossChef : mishapEfficiencyLossRat;
     uint8 toleranceLoss = isChef ? mishapToleranceLossChef : mishapToleranceLossRat;
@@ -86,6 +99,12 @@ contract Properties is Initializable, OwnableUpgradeable {
     return (efficiencyValue, toleranceValue);
   }
 
+  /**
+   * Adds/subtracts the given increment to/from the old value within a 0 - 100 range
+   * @param old - Current value
+   * @param increment - Value to add/subtract
+   * @return New value
+   */
   function _getUpdatedValue(uint8 old, int8 increment) internal pure returns(uint8) {
     if (increment >= 0) {
       return (uint8(increment) + old > 100) ? 100 : old + uint8(increment);
@@ -94,6 +113,18 @@ contract Properties is Initializable, OwnableUpgradeable {
     }
   }
 
+  /**
+   * Event & level dispatcher, checks if events are triggered and returns new levels accordingly
+   * @param isChef - Whether it's a Chef or not
+   * @param currentEfficiency - The character's current efficiency value
+   * @param currentTolerance - The character's current tolerance value
+   * @param efficiencyIncrement - Value to add/subtract to/from efficiency
+   * @param toleranceIncrement - Value to add/subtract to/from tolerance
+   * @param randomVal - A ChainLink VRF random number
+   * @return efficiencyValue - New efficiency value
+   * @return toleranceValue - New tolerance value
+   * @return eventName - String containing the event or empty string if none occurred
+   */
   function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     eventName = "";
     if (_doesDisasterOccur(isChef, int8(currentEfficiency), randomVal)) {

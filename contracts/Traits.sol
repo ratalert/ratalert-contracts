@@ -71,6 +71,11 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     ));
   }
 
+  /**
+   * Returns the array index to use for rendering the respective head or body by the given value
+   * @param value - skill or tolerance value
+   * @return Array index
+   */
   function getBodyIndex(uint8 value) internal view returns(uint8) {
     uint256 val = value * numHeadAndBodyTraits / 100;
     return val > numHeadAndBodyTraits - 1 ? uint8(numHeadAndBodyTraits - 1) : uint8(val);
@@ -79,7 +84,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
   /**
    * Generates an entire SVG by composing multiple <image> elements of PNGs
    * @param tokenId - The ID of the token to generate an SVG for
-   * @return A valid SVG of the Chef / Rat
+   * @return A valid SVG string of the Character
    */
   function drawSVG(uint256 tokenId) public view returns (string memory) {
     ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
@@ -184,6 +189,10 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     ));
   }
 
+  /**
+   * Sets the character interface
+   * @param _character - The character contract address
+   */
   function setCharacter(address _character) external onlyOwner {
     character = ICharacter(_character);
   }
@@ -203,7 +212,9 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
     }
   }
 
-  /** BASE 64 - Written by Brech Devos */
+  /**
+   * base64 implementation - Written by Brech Devos
+   */
   string internal constant TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   function base64(bytes memory data) internal pure returns (string memory) {
     if (data.length == 0) return '';

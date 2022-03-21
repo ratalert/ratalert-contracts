@@ -22,6 +22,7 @@ abstract contract VRFConsumer is Initializable, OwnableUpgradeable, VRFRequestID
   }
 
   /**
+   * Internal function that gets implemented in  Mint & Claim contracts
    * @param requestId - The Id initially returned by requestRandomness
    * @param randomness - The VRF output
    */
@@ -29,7 +30,8 @@ abstract contract VRFConsumer is Initializable, OwnableUpgradeable, VRFRequestID
 
   uint256 private constant USER_SEED_PLACEHOLDER = 0;
 
-   /**
+  /**
+   * Internal function that is used by Mint & Claim contracts
    * @param _keyHash ID of public key against which randomness is generated
    * @param _fee The amount of LINK to send with the request
    * @return requestId unique ID for this request
@@ -41,11 +43,21 @@ abstract contract VRFConsumer is Initializable, OwnableUpgradeable, VRFRequestID
     return makeRequestId(_keyHash, vRFSeed);
   }
 
+  /**
+   * Callback function used by ChainLink
+   * @param requestId - Unique ID for this request
+   * @param randomness - The VRF output
+   */
   function rawFulfillRandomness(bytes32 requestId, uint256 randomness) external {
     require(msg.sender == vrfCoordinator, "Only VRFCoordinator can fulfill");
     fulfillRandomness(requestId, randomness);
   }
 
+  /**
+   * Sends the given LINK amount back to the owner
+   * @param amount - Amount of LINK to send
+   * @return success - Whether the transaction succeeded
+   */
   function withdrawLink(uint amount) external onlyOwner returns(bool success) {
     return link.transfer(_msgSender(), amount);
   }

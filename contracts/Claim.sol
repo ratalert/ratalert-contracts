@@ -39,19 +39,25 @@ contract Claim is Initializable, OwnableUpgradeable, IClaim, VRFConsumer, Contro
 
   /**
    * Set ChainLink VRF params
+   * @param _vrfCoordinator - ChainLink's VRF coordinator contract address
+   * @param _link - ChinLink token contract address
+   * @param _keyHash - ChainLink env specific VRF key hash
+   * @param _fee - VRF env specific gas fee
    */
-  function setVrfParams(
-    address _vrfCoordinator,
-    address _link,
-    bytes32 _keyHash,
-    uint256 _fee
-  ) external onlyOwner {
+  function setVrfParams(address _vrfCoordinator, address _link, bytes32 _keyHash, uint256 _fee) external onlyOwner {
     vrfCoordinator = _vrfCoordinator;
     link = LinkTokenInterface(_link);
     keyHash = _keyHash;
     fee = _fee;
   }
 
+  /**
+   * Requests a random number from ChainLink VRF and stores the request until it's fulfilled, called by Venue.claimMany().
+   * @param sender - User wallet address
+   * @param tokenIds - The ID of the Characters to claim
+   * @param unstake - Whether to unstake those Characters
+   * @return requestId - VRF request ID
+   */
   function requestRandomNumber(address sender, uint16[] memory tokenIds, bool unstake) external onlyController returns (bytes32 requestId) {
     require(link.balanceOf(address(this)) >= fee, "Insufficient LINK");
     requestId = requestRandomness(keyHash, fee);

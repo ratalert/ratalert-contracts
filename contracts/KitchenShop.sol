@@ -74,8 +74,9 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   }
 
   /**
-   * Mints new ERC1155 token(s) of a kitchen
-   * @param amount Number of tokens to mint
+   * Mints new ERC1155 token(s) of the given kitchen type
+   * @param kitchen - The kitchen type
+   * @param amount - Number of tokens to mint
    */
   function mint(uint8 kitchen, uint8 amount) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
@@ -100,11 +101,8 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   }
 
   /**
-   *    1 - 1000: 2000 $FFOOD
-   * 1001 - 2000: 3000 $FFOOD
-   * 2001 - 3000: 4000 $FFOOD
-   * 3001 - 4000: 5000 $FFOOD
-   * 4001 - 5000: 6000 $FFOOD
+   * Returns the latest mint price for the given token using 5 price breaks
+   * @param kitchen - The kitchen type
    * @param tokenId - The token ID to check
    * @return The minting cost of the given ID
    */
@@ -116,6 +114,11 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
     return priceTier4;
   }
 
+  /**
+   * Returns the base64 encoded ERC1155 metadata
+   * @param tokenId - The ID of the Kitchen
+   * @return base64 encoded JSON string
+   */
   function uri(uint256 tokenId) public view override returns (string memory) {
     require(tokenId > 0 && tokenId <= 2, "ERC1155Metadata: URI query for non-existent token");
     KitchenData memory kitchen = kitchenData[tokenId - 1];
@@ -133,9 +136,9 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
   }
 
   /**
-   * Generates an SVG by composing the PNG
+   * Generates an SVG by composing kitchen PNG, this has better OpenSea support
    * @param png - The png to add
-   * @return A valid SVG of the kitchen
+   * @return A valid SVG string of the kitchen
    */
   function drawSVG(bytes memory png) private pure returns (string memory) {
     return string(abi.encodePacked(
@@ -159,7 +162,9 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
     );
   }
 
-  /** BASE 64 - Written by Brech Devos */
+  /**
+   * base64 implementation - Written by Brech Devos
+   */
   string internal constant TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   function base64(bytes memory data) internal pure returns (string memory) {
     if (data.length == 0) return '';

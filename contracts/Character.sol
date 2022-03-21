@@ -93,6 +93,13 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
     if (v.stake) IVenue(venues[0]).stakeMany(v.sender, tokenIds);
   }
 
+  /**
+   * Allows the venues to update the character's efficiency & tolerance values when claiming
+   * @param tokenId - The ID of the Character
+   * @param efficiencyIncrement - The value to add/subtract to the current value
+   * @param toleranceIncrement - The value to add/subtract to the current value
+   * @param randomVal - A ChainLink VRF random number
+   */
   function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public onlyController returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     bool isChef = tokenTraits[tokenId].isChef;
     uint8 currentEfficiency = tokenTraits[tokenId].efficiency;
@@ -102,22 +109,35 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
     tokenTraits[tokenId].tolerance = toleranceValue;
   }
 
+  /**
+   * Returns the base64 encoded ERC721 metadata
+   * @param tokenId - The ID of the Character
+   * @return base64 encoded JSON string
+   */
   function tokenURI(uint256 tokenId) public view override returns (string memory) {
     require(_exists(tokenId), "ERC721Metadata: URI query for non-existent token");
     return traits.tokenURI(tokenId);
   }
 
+  /**
+   * Returns the Character's struct
+   * @param tokenId - The ID of the Character
+   * @return Current CharacterStruct
+   */
   function getTokenTraits(uint256 tokenId) external view override returns (CharacterStruct memory) {
     require(_exists(tokenId), "ERC721Metadata: URI query for non-existent token");
     return tokenTraits[tokenId];
   }
 
+  /**
+   * Custom getter required for Traits contract
+   */
   function getGen0Tokens() external view override returns (uint256) {
     return gen0Tokens;
   }
 
   /**
-   * Override to avoid venue approvals so that users don't have to waste gas
+   * ERC721 transfer override to avoid venue approvals so that users don't have to waste gas
    */
   function transferFrom(address from, address to, uint256 tokenId) public virtual override {
     bool wl = false;
