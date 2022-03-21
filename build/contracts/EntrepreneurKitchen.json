@@ -1,0 +1,2839 @@
+{
+  "contractName": "EntrepreneurKitchen",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "earned",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "unstaked",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "skill",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "freak",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "foodTokensPerRat",
+          "type": "uint256"
+        }
+      ],
+      "name": "ChefClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "earned",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "unstaked",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "intelligence",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "bodyMass",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "foodTokensPerRat",
+          "type": "uint256"
+        }
+      ],
+      "name": "RatClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "TokenStaked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "accrualPeriod",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "chefEfficiencyMultiplier",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "chefs",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint80",
+          "name": "value",
+          "type": "uint80"
+        },
+        {
+          "internalType": "uint80",
+          "name": "timestamp",
+          "type": "uint80"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "chefsPerKitchen",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claim",
+      "outputs": [
+        {
+          "internalType": "contract IClaim",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "unstake",
+          "type": "bool"
+        }
+      ],
+      "name": "claimMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimRequests",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dailyBodyMassRate",
+      "outputs": [
+        {
+          "internalType": "int8",
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dailyChefEarnings",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dailyFreakRate",
+      "outputs": [
+        {
+          "internalType": "int8",
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dailyIntelligenceRate",
+      "outputs": [
+        {
+          "internalType": "int8",
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dailySkillRate",
+      "outputs": [
+        {
+          "internalType": "int8",
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "foodTokenMaxSupply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "foodTokensPerRat",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "requestId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "venue",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "internalType": "uint16[]",
+              "name": "tokenIds",
+              "type": "uint16[]"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstake",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IClaim.VRFStruct",
+          "name": "v",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint256",
+          "name": "randomness",
+          "type": "uint256"
+        }
+      ],
+      "name": "fulfillClaimMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProperties",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "efficiency",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "tolerance",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_character",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_claim",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_accrualPeriod",
+          "type": "uint256"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "isChef",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "chef",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "kitchenId",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "lastClaimTimestamp",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minEfficiency",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "name": "onERC721Received",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ratEfficiencyMultiplier",
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ratEfficiencyOffset",
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ratTheftPercentage",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "rats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint80",
+          "name": "value",
+          "type": "uint80"
+        },
+        {
+          "internalType": "uint80",
+          "name": "timestamp",
+          "type": "uint80"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        }
+      ],
+      "name": "stakeMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "stakers",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalChefsStaked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalFoodTokensEarned",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRatsStaked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unaccountedRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "vestingPeriod",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"skill\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"freak\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"ChefClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"intelligence\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"bodyMass\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"RatClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TokenStaked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"accrualPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"chefEfficiencyMultiplier\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"chefs\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"chefsPerKitchen\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claim\",\"outputs\":[{\"internalType\":\"contract IClaim\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"claimRequests\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyBodyMassRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyChefEarnings\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyFreakRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailyIntelligenceRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dailySkillRate\",\"outputs\":[{\"internalType\":\"int8\",\"name\":\"\",\"type\":\"int8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokenMaxSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokensPerRat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomness\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getProperties\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"efficiency\",\"type\":\"uint8\"},{\"internalType\":\"uint8\",\"name\":\"tolerance\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_character\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_claim\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_accrualPeriod\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"isChef\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"chef\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"kitchenId\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastClaimTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minEfficiency\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratEfficiencyMultiplier\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratEfficiencyOffset\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ratTheftPercentage\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"rats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"stakers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalFoodTokensEarned\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalRatsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unaccountedRewards\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vestingPeriod\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimMany(uint16[],bool)\":{\"params\":{\"tokenIds\":\"- The IDs of the tokens in question\",\"unstake\":\"- Whether or not to unstake the given tokens\"}},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"params\":{\"randomness\":\"- Random value created by VRF\",\"v\":\"- VRF struct for the corresponding request\"}},\"getProperties(uint256)\":{\"params\":{\"tokenId\":\"- The ID of the token to check\"},\"returns\":{\"efficiency\":\"& tolerance values\"}},\"isChef(uint256)\":{\"params\":{\"tokenId\":\"- The ID of the token to check\"},\"returns\":{\"chef\":\"- Whether or not the token is a Chef\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"paused()\":{\"details\":\"Returns true if the contract is paused, and false otherwise.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"stakeMany(address,uint16[])\":{\"params\":{\"account\":\"- The address of the staker\",\"tokenIds\":\"- The IDs of the Chefs & Rats to stake\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"claimMany(uint16[],bool)\":{\"notice\":\"ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters\"},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"notice\":\"Callback for claimMany(), called by Claim.fulfillRandomness()\"},\"getProperties(uint256)\":{\"notice\":\"Get the character's properties\"},\"isChef(uint256)\":{\"notice\":\"Checks if the token is a Chef\"},\"stakeMany(address,uint16[])\":{\"notice\":\"Adds Chefs & Rats\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/EntrepreneurKitchen.sol\":\"EntrepreneurKitchen\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x9ffedb33e192f8821cbaead72596c79ea87fb28a73f8d3a9f5004449799f8e1b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a4d3a7c2729f266c54345044baf1080fb4a85208059cacea28c95622af4371db\",\"dweb:/ipfs/QmcHCX8reksSoQWjjYRcVoEHckz8AQ7CHKiKfzocpQq3Lg\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x68861bcc80cacbd498efde75aab6c74a486cc48262660d326c8d7530d9752097\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5beb2713aca05976562500789329e8c41320d00bd68ea9247856ec73894c3e3f\",\"dweb:/ipfs/QmQKwkpofsZYAzMZs7uNL7Qq58zVBuhoZCGpD6bJdUwyqy\"]},\"@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol\":{\"keccak256\":\"0xf93da311a3b34a8363a759c404d575746fa38351fb29ecd646c608e27219ebec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cfc8c4107004a7ad97a340df1b6841d0eb0aacf4ba1d58f0cfbd0de73493cb7\",\"dweb:/ipfs/QmeBT3UzVzVEaPpisoHFFEGdUxAqNR3pmRnvn1oKseYSSv\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol\":{\"keccak256\":\"0xc8a2776bd48e62498418d7eede80bde0f00c6b5d67286abf49499d7f7b65b95c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3fab905a29ffb7415ae907de56a367274cf80fa5d9caf0138cebb33d66d2d235\",\"dweb:/ipfs/QmVdCh48kvhr588PCvMFWH4J62gEqRrkcuTLV9WAEbCns2\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol\":{\"keccak256\":\"0x19bc90c8301914433c5e9b74a4eaac8942f64ea79d509f445799459fa10695da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7d14cd5453b7f5e396f84bb1b397af9d35c72348d30b873bf5bbe58370a5e626\",\"dweb:/ipfs/QmVEg1yT1DYHtR2zacC7woewcZAgrYBitcBeNwWtRnfJb1\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol\":{\"keccak256\":\"0x1edf4e6819997d1820aea89eff73d4fdaeff0bb87ff2f2b4cb6ad60bfe5ba63c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1296ec1ba3145257dd673ac74f68553512446642281ee23893631b1304c6c9ce\",\"dweb:/ipfs/QmaNvAvByH16Y3mEX1aywp1nLN3YEQUAwnnnYXS31dR4BV\"]},\"@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/IERC1155MetadataURIUpgradeable.sol\":{\"keccak256\":\"0xa350df12a8c10e821af05e0863f44e8317a0efa44df27bfd5dc1d63fdfa3c448\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1870980d15f9003916faf2a9a0eac6dcd4f0e28e2af6f5a3cee0cd685d460ee9\",\"dweb:/ipfs/QmY8K1YZQmuL2WDTPC8QwCm3ztrUD7JKmnvoZkMyGZceiM\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x6c25d4211724a6f4cdc8d25397edc780f48d951fc81c1d507f59b3edb22afaf7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2147fb68fe3bd0cc19b6c7ac5f2f78393488107b0e726f81c5343f6c88236ba5\",\"dweb:/ipfs/QmdK6Cry8qfYdXLTNLdL7dpogsg8s2ByydaG5EWZtzQvgt\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0x2f359f9d5c56394e60d74401487ab55d8ef0012907b07c9abbb8f998bf5ddfec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://47d1408f0b62a24a9c2abd7678665178916fc147b8f23153d61e21353f0205e4\",\"dweb:/ipfs/QmWis4pCq81JzNTqdCoiMqjEtcwp3NGRnCz4nYPYp2jEKd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x714a33fd66816f608f6eda908da24eb6009eee50adf4062c86639d4fe508a7b6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1222806a46ee6d877cff1f609cdb548271a0ae85228716c8d1427462a16bd59b\",\"dweb:/ipfs/QmZVjwuTFqhoFBuug3fvHFVC5Y9ompwdHMwUy5upevMfJ5\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x3f0f878c796dfc7feba6d3c4e3e526c14c7deae8b7bfc71088e3f38fab0d77b3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://69bf7d357ce97852f4fb71045919b1bb2c0ad0c820e3f06b9dd4451b2dc5a343\",\"dweb:/ipfs/QmWt96ZviufDu2qqS7Ln6UCJjfLyoFKbo6YKn54ao3o94z\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x0b0d548f6381370d394f7a434f994dc678b3ef3e755de106109d61343a685ea7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d8a3d42f1333d4224b7e6b7914e7ef5ee6d86586a3529bd1da15cbeece0d25b3\",\"dweb:/ipfs/QmXmFqePuCWzBcz9KyBepE7joHMg8jSjcmd5iayyG7jm3y\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0x398d3323c1932a5986bf36be7c57593e121e69d5db5b6574b4ee0d031443de37\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b268304e03daf22c349abe3c318bc6a6badd6542d62311716ab401eec745f78\",\"dweb:/ipfs/QmNYy2sc2RoTjDhyT6HAibmeDGqfhDiDpsWRbHFHoGVHLr\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0xcd98895383d51dc86669a76ae3ad4419fc5dc079d01faea23498e80c1cf9f78a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://16a9a1816c3dd4130b7836c42482d455075a9a49c7895bfb788ca3d345c82b32\",\"dweb:/ipfs/QmRxf3UetfDEF8NPuMQ1U8f9cddQpdarhCBhaCXEbe7Kw6\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981\",\"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0xd1d8caaeb45f78e0b0715664d56c220c283c89bf8b8c02954af86404d6b367f8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://300a0cc7be3b26c96c22a47ffa9530a585e1c4f2dba3021d9bf309dc63007487\",\"dweb:/ipfs/QmQmxsvxK6CaJmQ4D8vDCYPLHMqcMmZLcBqedG4GFAbzu9\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x61437cb513a887a1bbad006e7b1c8b414478427d33de47c5600af3c748f108da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2c3d0973630ed74f2b5ce3944677a885dc70ec32fc83b35f55045a10224da32b\",\"dweb:/ipfs/QmbefZ5RoEZKNHXCALfh683PnaNYzKPcKMFjyY1DVAgq8A\"]},\"@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol\":{\"keccak256\":\"0x3fe04ed1daf0f12454333fde982a25b103860d8a010dd5d8479b83ebf1dfb788\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8322152771e94c9e28a3bd9e7c9d5dd4fdd00ae214f95915962a6638d8dfc7d6\",\"dweb:/ipfs/QmaXJvF3UjRHacx3nPgt94DwAuXCkEoz6fS7MLr2jbuJyW\"]},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0x32c202bd28995dd20c4347b7c6467a6d3241c74c8ad3edcbb610cd9205916c45\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8179c356adb19e70d6b31a1eedc8c5c7f0c00e669e2540f4099e3844c6074d30\",\"dweb:/ipfs/QmWFbivarEobbqhS1go64ootVuHfVohBseerYy9FTEd1W2\"]},\"project:/contracts/CasualFood.sol\":{\"keccak256\":\"0xbf3b3f7b7172a92e7cc9a9faec2a1ce3ce7f3a4828b96abeeb73d4650d9479c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c5b453bc9c2e9ca4bd64e0e4c5da3dcb80b065a18ddcf511d440cf49ea1bb6ad\",\"dweb:/ipfs/Qmdhtj3yZmdefMVVWuuV1HkE9Ld9KDQ3U6XHRZ4hkHqMMg\"]},\"project:/contracts/Character.sol\":{\"keccak256\":\"0x1bcdb9318b0619aa461d452038e6618e8bc8d0081f970e26ee0b1c56d1ecd689\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://65cfb09955698335af3a6ae63848364a663e437c8a9ba72dc927fbece3c0d4ea\",\"dweb:/ipfs/QmZeEjwoJYmwTF8LghZbDRCxNqYQG8Lrv9ukBdLbzU4m4P\"]},\"project:/contracts/Controllable.sol\":{\"keccak256\":\"0x6226f9758620dc34b76ff238793b708449262726613bdc50812820f811754ba7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b750c0551aebd7ff026639c2fce20ec18d4ec8c43c9f58525cecf26621661b75\",\"dweb:/ipfs/QmRH4HjgHeqVrxvQQp6YU5tEEr4bFJHowV4TAEC4ogxDGu\"]},\"project:/contracts/ControllableUpgradeable.sol\":{\"keccak256\":\"0xbbdcce32458968d395b783ae88d4696c32e26784acb304bbe7c4ffa1e47468d3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6efa4e8861a987d06f2193d387c4826f70ff68777cb2d6b1d35718a8398311eb\",\"dweb:/ipfs/QmfGicdK3zPKYUJMmJhTgsXphuVWu1vEYvuW7QJd52dCqK\"]},\"project:/contracts/EntrepreneurKitchen.sol\":{\"keccak256\":\"0x5be27d3373361d78271a0985679146c4cbd13b01ddaa6274ca5449992ca8c30a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ef3f56b690a10029332e1822bb3babedc0d179110e54b31ffde7f4ec2e40de51\",\"dweb:/ipfs/QmTPppQBZu51Ft9aWqc5FsLCGReKwa6Xa4CJAW3xUW34j8\"]},\"project:/contracts/FastFood.sol\":{\"keccak256\":\"0xe49b8e2d28ae0d03c9f0e5ef3006f830aa292308036d586116695b5c854042d4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fed543ccbb5306adc787f8d121c3ac40e3cab2bd5405476ea77e1b39ff05d2e0\",\"dweb:/ipfs/QmVrss7v15Z7hAktCHr7QBi4Wdw4N7oSHE9PRX5HCRmpMS\"]},\"project:/contracts/Food.sol\":{\"keccak256\":\"0x7c5b2150f780a77242f5b13761a720febf860496b417f1d4100ff3a4dfa55e0a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1241fbb982916a1ade69ac6a736c06e8bbc576886e8a984897d269685fb592f4\",\"dweb:/ipfs/QmV9Y91LDyRKdoDxjX6xUGAfoNr4HkBdqJc3PswnfRkUoA\"]},\"project:/contracts/GenericPausable.sol\":{\"keccak256\":\"0x9ec53799334e17209b4f8881b5e034916f255077691fedc1e052c03d94e933cc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dd94cf6a1e354c08f6c1731a1ebba9e4959673dc774eb8520aae92cafa1edd13\",\"dweb:/ipfs/QmY6RTDwTjDo8FKfMVqoz9Hm2phVqcWzPuSbhPfZtowzMH\"]},\"project:/contracts/ICharacter.sol\":{\"keccak256\":\"0x4758018fcdddfb6af5a05215868413ee9a2be24f408ac9f4245211af665d7b1d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://082140d10b8960beefef4cd2e460c4c790b1a9d416cad6247b4ae7dd5d484c33\",\"dweb:/ipfs/QmW3PzXrAWPyw8sp1aj39mkNjUQGxi4iBVDvSa7vhoFaTJ\"]},\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IMint.sol\":{\"keccak256\":\"0x79a087d2d830b62d96d3baa81f63b658df4b3f2c76ad93056c61c57bf64c29f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1e11b871873c035ffc168e107790b6f089ac97d11c373fe172a90e1a49b7151d\",\"dweb:/ipfs/QmNkz8yYzShXU3g8c4mkx5M1o7JuBssuzMZVCmDPjBeaJm\"]},\"project:/contracts/IPaywall.sol\":{\"keccak256\":\"0x24920300a3aa65b9e05aad6b84a3db07e57e991a7a74e293dccbb572a874107a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a61208f32a801ace0056dfdf09f187f6b79fc0789a865449c078714513d41b39\",\"dweb:/ipfs/Qmb6FEGigxN7jcAH9i3pKkYqrEwZqCkydyaM3zN6QWpw7Z\"]},\"project:/contracts/IProperties.sol\":{\"keccak256\":\"0xfab08287f2632d91fe7a9e4c0f818466fd123bc2077a92e8b0c4b4e8be8c41f7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b27835b493a9e0452f5088e2d3546c3daf4b22bb42823071c4ae497011414c7\",\"dweb:/ipfs/QmY7bGASKjTfnfisHSSMvgJnZLoBjVZ7NoPoJ1YF4C1wFU\"]},\"project:/contracts/ITraits.sol\":{\"keccak256\":\"0x41a56d1ca9b05e91d193e07f947a7211b925d4b0aefd489c601d4a30ae775ed6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf4b680b7f4f6069938bd01030a7956c5b5cda4156fcfad2274b39663b7355d4\",\"dweb:/ipfs/QmaxHe1gCdd1DvWfWw3sGm83i1UQuuNhP8rZVkdaH6od4m\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0xe2f45abf5f70537a75d4af3799786c2d8b305f041a84ac48120956c328b4965f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b816dc7dcc46f9782299f1ee1ce487a649f864f60c8aa815e56e66a3cc5b404e\",\"dweb:/ipfs/QmagR9DMiFwLdAB1BhG77notw4px1i7dZC1Qq5GaEvzoPD\"]},\"project:/contracts/Kitchen.sol\":{\"keccak256\":\"0x23156582043d8dc667cf1e0de85f875cec21aad915abe6dba05ecf7ad1d9bd6e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://97d00dcfc702ef3db00c6f0433a88ab6293891ab6811cee7201c6ace305315b3\",\"dweb:/ipfs/Qmb3X16BsifbNh8JiCJfJuTQTnrgjhJjRxbMjNJq5kcrZ6\"]},\"project:/contracts/KitchenShop.sol\":{\"keccak256\":\"0xa2635b2d653667e79c3af2b1be5c86743dc51b398fa57ffd98b39f33e782ee92\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4b1b55f79c6008409a36b9d6091a0f85754ceea4b9f6b97cb831bf2aa71650ba\",\"dweb:/ipfs/QmQiXrza14jYf6Ves4FRVVad9f5nMC8ch6JpnJsde9Giob\"]},\"project:/contracts/Venue.sol\":{\"keccak256\":\"0x6f55770e0d990f5404abe86ddac5d6b5182e60c8e80a6f628ce4b4b06dad8a81\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8df111d93d2f388a9f67b253429f08a82706a6f2879c088cc232c4a2df092ea0\",\"dweb:/ipfs/QmeEg3VuNMKnnmQnWhQkGvSPg9M1yeJQTAjLM83ceUMcXz\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"./Kitchen.sol\";\nimport \"./KitchenShop.sol\";\n\nabstract contract EntrepreneurKitchen is Kitchen {\n  KitchenShop kitchenShop;\n  uint8 public kitchenId;\n  uint8 public chefsPerKitchen;\n  uint8 public minEfficiency;\n\n  /**\n   * Checks if there is kitchen space for the given amount of chefs (rats have no limit)\n   * @param amountToAdd - Number of chefs to add to stake\n   * @return true\n   */\n  function _checkSpace(address account, uint256 amountToAdd) internal override view returns (bool) {\n    uint256 balance = kitchenShop.balanceOf(account, kitchenId);\n    return balance * chefsPerKitchen >= stakers[account].length + amountToAdd;\n  }\n\n  /**\n   * Checks if the character is eligible to work in that kitchen\n   * @param tokenId - Amount of characters to stake\n   * @return true\n   */\n  function _checkEligibility(uint256 tokenId) internal override view returns (bool) {\n    (uint8 efficiency,) = getProperties(tokenId);\n    return efficiency >= minEfficiency;\n  }\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/EntrepreneurKitchen.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/EntrepreneurKitchen.sol",
+    "exportedSymbols": {
+      "AddressUpgradeable": [
+        3267
+      ],
+      "CasualFood": [
+        4635
+      ],
+      "Character": [
+        5172
+      ],
+      "Context": [
+        4413
+      ],
+      "ContextUpgradeable": [
+        3311
+      ],
+      "Controllable": [
+        5554
+      ],
+      "ControllableUpgradeable": [
+        5654
+      ],
+      "ERC1155Upgradeable": [
+        1822
+      ],
+      "ERC165Upgradeable": [
+        3560
+      ],
+      "ERC20": [
+        4223
+      ],
+      "ERC20Capped": [
+        4366
+      ],
+      "ERC721Upgradeable": [
+        2861
+      ],
+      "EntrepreneurKitchen": [
+        5721
+      ],
+      "FastFood": [
+        5740
+      ],
+      "Food": [
+        5822
+      ],
+      "GenericPausable": [
+        5849
+      ],
+      "ICharacter": [
+        6000
+      ],
+      "IClaim": [
+        6027
+      ],
+      "IERC1155MetadataURIUpgradeable": [
+        2000
+      ],
+      "IERC1155ReceiverUpgradeable": [
+        1863
+      ],
+      "IERC1155Upgradeable": [
+        1985
+      ],
+      "IERC165Upgradeable": [
+        3572
+      ],
+      "IERC20": [
+        4301
+      ],
+      "IERC20Metadata": [
+        4391
+      ],
+      "IERC721MetadataUpgradeable": [
+        3022
+      ],
+      "IERC721ReceiverUpgradeable": [
+        2879
+      ],
+      "IERC721Upgradeable": [
+        2995
+      ],
+      "IMint": [
+        6070
+      ],
+      "IPaywall": [
+        6113
+      ],
+      "IProperties": [
+        6137
+      ],
+      "ITraits": [
+        6147
+      ],
+      "IVenue": [
+        6175
+      ],
+      "Initializable": [
+        586
+      ],
+      "Kitchen": [
+        6457
+      ],
+      "KitchenShop": [
+        7037
+      ],
+      "Ownable": [
+        3677
+      ],
+      "OwnableUpgradeable": [
+        512
+      ],
+      "PausableUpgradeable": [
+        699
+      ],
+      "Strings": [
+        4616
+      ],
+      "StringsUpgradeable": [
+        3514
+      ],
+      "Venue": [
+        11749
+      ]
+    },
+    "id": 5722,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5656,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:32"
+      },
+      {
+        "absolutePath": "project:/contracts/Kitchen.sol",
+        "file": "./Kitchen.sol",
+        "id": 5657,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5722,
+        "sourceUnit": 6458,
+        "src": "58:23:32",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/KitchenShop.sol",
+        "file": "./KitchenShop.sol",
+        "id": 5658,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5722,
+        "sourceUnit": 7038,
+        "src": "82:27:32",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 5659,
+              "name": "Kitchen",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 6457,
+              "src": "152:7:32"
+            },
+            "id": 5660,
+            "nodeType": "InheritanceSpecifier",
+            "src": "152:7:32"
+          }
+        ],
+        "canonicalName": "EntrepreneurKitchen",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 5721,
+        "linearizedBaseContracts": [
+          5721,
+          6457,
+          11749,
+          2879,
+          5849,
+          699,
+          512,
+          3311,
+          586,
+          6175
+        ],
+        "name": "EntrepreneurKitchen",
+        "nameLocation": "129:19:32",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 5663,
+            "mutability": "mutable",
+            "name": "kitchenShop",
+            "nameLocation": "176:11:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "164:23:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_KitchenShop_$7037",
+              "typeString": "contract KitchenShop"
+            },
+            "typeName": {
+              "id": 5662,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 5661,
+                "name": "KitchenShop",
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 7037,
+                "src": "164:11:32"
+              },
+              "referencedDeclaration": 7037,
+              "src": "164:11:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_KitchenShop_$7037",
+                "typeString": "contract KitchenShop"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "functionSelector": "9317f7f8",
+            "id": 5665,
+            "mutability": "mutable",
+            "name": "kitchenId",
+            "nameLocation": "204:9:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "191:22:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 5664,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "191:5:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "99fd1ddf",
+            "id": 5667,
+            "mutability": "mutable",
+            "name": "chefsPerKitchen",
+            "nameLocation": "230:15:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "217:28:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 5666,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "217:5:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "051d1d49",
+            "id": 5669,
+            "mutability": "mutable",
+            "name": "minEfficiency",
+            "nameLocation": "262:13:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "249:26:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 5668,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "249:5:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "baseFunctions": [
+              11494
+            ],
+            "body": {
+              "id": 5699,
+              "nodeType": "Block",
+              "src": "554:149:32",
+              "statements": [
+                {
+                  "assignments": [
+                    5681
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5681,
+                      "mutability": "mutable",
+                      "name": "balance",
+                      "nameLocation": "568:7:32",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5699,
+                      "src": "560:15:32",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 5680,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "560:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5687,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5684,
+                        "name": "account",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5672,
+                        "src": "600:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 5685,
+                        "name": "kitchenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5665,
+                        "src": "609:9:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5682,
+                        "name": "kitchenShop",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5663,
+                        "src": "578:11:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_KitchenShop_$7037",
+                          "typeString": "contract KitchenShop"
+                        }
+                      },
+                      "id": 5683,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "balanceOf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 838,
+                      "src": "578:21:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$_t_address_$_t_uint256_$returns$_t_uint256_$",
+                        "typeString": "function (address,uint256) view external returns (uint256)"
+                      }
+                    },
+                    "id": 5686,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "578:41:32",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "560:59:32"
+                },
+                {
+                  "expression": {
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 5697,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 5690,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "id": 5688,
+                        "name": "balance",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5681,
+                        "src": "632:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": "*",
+                      "rightExpression": {
+                        "id": 5689,
+                        "name": "chefsPerKitchen",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5667,
+                        "src": "642:15:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "src": "632:25:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": ">=",
+                    "rightExpression": {
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 5696,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "expression": {
+                          "baseExpression": {
+                            "id": 5691,
+                            "name": "stakers",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 10677,
+                            "src": "661:7:32",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_uint256_$dyn_storage_$",
+                              "typeString": "mapping(address => uint256[] storage ref)"
+                            }
+                          },
+                          "id": 5693,
+                          "indexExpression": {
+                            "id": 5692,
+                            "name": "account",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5672,
+                            "src": "669:7:32",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "661:16:32",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
+                            "typeString": "uint256[] storage ref"
+                          }
+                        },
+                        "id": 5694,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "length",
+                        "nodeType": "MemberAccess",
+                        "src": "661:23:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": "+",
+                      "rightExpression": {
+                        "id": 5695,
+                        "name": "amountToAdd",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5674,
+                        "src": "687:11:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "src": "661:37:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "632:66:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 5679,
+                  "id": 5698,
+                  "nodeType": "Return",
+                  "src": "625:73:32"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5670,
+              "nodeType": "StructuredDocumentation",
+              "src": "280:174:32",
+              "text": " Checks if there is kitchen space for the given amount of chefs (rats have no limit)\n @param amountToAdd - Number of chefs to add to stake\n @return true"
+            },
+            "id": 5700,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_checkSpace",
+            "nameLocation": "466:11:32",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 5676,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "525:8:32"
+            },
+            "parameters": {
+              "id": 5675,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5672,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "486:7:32",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5700,
+                  "src": "478:15:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5671,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "478:7:32",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5674,
+                  "mutability": "mutable",
+                  "name": "amountToAdd",
+                  "nameLocation": "503:11:32",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5700,
+                  "src": "495:19:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5673,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "495:7:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "477:38:32"
+            },
+            "returnParameters": {
+              "id": 5679,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5678,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5700,
+                  "src": "548:4:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5677,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "548:4:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "547:6:32"
+            },
+            "scope": 5721,
+            "src": "457:246:32",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "baseFunctions": [
+              11505
+            ],
+            "body": {
+              "id": 5719,
+              "nodeType": "Block",
+              "src": "936:95:32",
+              "statements": [
+                {
+                  "assignments": [
+                    5710,
+                    null
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5710,
+                      "mutability": "mutable",
+                      "name": "efficiency",
+                      "nameLocation": "949:10:32",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5719,
+                      "src": "943:16:32",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      },
+                      "typeName": {
+                        "id": 5709,
+                        "name": "uint8",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "943:5:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "visibility": "internal"
+                    },
+                    null
+                  ],
+                  "id": 5714,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5712,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5703,
+                        "src": "978:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 5711,
+                      "name": "getProperties",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 11719,
+                      "src": "964:13:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_uint8_$_t_uint8_$",
+                        "typeString": "function (uint256) view returns (uint8,uint8)"
+                      }
+                    },
+                    "id": 5713,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "964:22:32",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$_t_uint8_$_t_uint8_$",
+                      "typeString": "tuple(uint8,uint8)"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "942:44:32"
+                },
+                {
+                  "expression": {
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 5717,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "id": 5715,
+                      "name": "efficiency",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 5710,
+                      "src": "999:10:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": ">=",
+                    "rightExpression": {
+                      "id": 5716,
+                      "name": "minEfficiency",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 5669,
+                      "src": "1013:13:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "src": "999:27:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 5708,
+                  "id": 5718,
+                  "nodeType": "Return",
+                  "src": "992:34:32"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5701,
+              "nodeType": "StructuredDocumentation",
+              "src": "707:144:32",
+              "text": " Checks if the character is eligible to work in that kitchen\n @param tokenId - Amount of characters to stake\n @return true"
+            },
+            "id": 5720,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_checkEligibility",
+            "nameLocation": "863:17:32",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 5705,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "907:8:32"
+            },
+            "parameters": {
+              "id": 5704,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5703,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "889:7:32",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5720,
+                  "src": "881:15:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5702,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "881:7:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "880:17:32"
+            },
+            "returnParameters": {
+              "id": 5708,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5707,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5720,
+                  "src": "930:4:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5706,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "930:4:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "929:6:32"
+            },
+            "scope": 5721,
+            "src": "854:177:32",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 5722,
+        "src": "111:922:32",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1001:32"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/EntrepreneurKitchen.sol",
+    "exportedSymbols": {
+      "AddressUpgradeable": [
+        3267
+      ],
+      "CasualFood": [
+        4635
+      ],
+      "Character": [
+        5172
+      ],
+      "Context": [
+        4413
+      ],
+      "ContextUpgradeable": [
+        3311
+      ],
+      "Controllable": [
+        5554
+      ],
+      "ControllableUpgradeable": [
+        5654
+      ],
+      "ERC1155Upgradeable": [
+        1822
+      ],
+      "ERC165Upgradeable": [
+        3560
+      ],
+      "ERC20": [
+        4223
+      ],
+      "ERC20Capped": [
+        4366
+      ],
+      "ERC721Upgradeable": [
+        2861
+      ],
+      "EntrepreneurKitchen": [
+        5721
+      ],
+      "FastFood": [
+        5740
+      ],
+      "Food": [
+        5822
+      ],
+      "GenericPausable": [
+        5849
+      ],
+      "ICharacter": [
+        6000
+      ],
+      "IClaim": [
+        6027
+      ],
+      "IERC1155MetadataURIUpgradeable": [
+        2000
+      ],
+      "IERC1155ReceiverUpgradeable": [
+        1863
+      ],
+      "IERC1155Upgradeable": [
+        1985
+      ],
+      "IERC165Upgradeable": [
+        3572
+      ],
+      "IERC20": [
+        4301
+      ],
+      "IERC20Metadata": [
+        4391
+      ],
+      "IERC721MetadataUpgradeable": [
+        3022
+      ],
+      "IERC721ReceiverUpgradeable": [
+        2879
+      ],
+      "IERC721Upgradeable": [
+        2995
+      ],
+      "IMint": [
+        6070
+      ],
+      "IPaywall": [
+        6113
+      ],
+      "IProperties": [
+        6137
+      ],
+      "ITraits": [
+        6147
+      ],
+      "IVenue": [
+        6175
+      ],
+      "Initializable": [
+        586
+      ],
+      "Kitchen": [
+        6457
+      ],
+      "KitchenShop": [
+        7037
+      ],
+      "Ownable": [
+        3677
+      ],
+      "OwnableUpgradeable": [
+        512
+      ],
+      "PausableUpgradeable": [
+        699
+      ],
+      "Strings": [
+        4616
+      ],
+      "StringsUpgradeable": [
+        3514
+      ],
+      "Venue": [
+        11749
+      ]
+    },
+    "id": 5722,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5656,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:32"
+      },
+      {
+        "absolutePath": "project:/contracts/Kitchen.sol",
+        "file": "./Kitchen.sol",
+        "id": 5657,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5722,
+        "sourceUnit": 6458,
+        "src": "58:23:32",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/KitchenShop.sol",
+        "file": "./KitchenShop.sol",
+        "id": 5658,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 5722,
+        "sourceUnit": 7038,
+        "src": "82:27:32",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 5659,
+              "name": "Kitchen",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 6457,
+              "src": "152:7:32"
+            },
+            "id": 5660,
+            "nodeType": "InheritanceSpecifier",
+            "src": "152:7:32"
+          }
+        ],
+        "canonicalName": "EntrepreneurKitchen",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 5721,
+        "linearizedBaseContracts": [
+          5721,
+          6457,
+          11749,
+          2879,
+          5849,
+          699,
+          512,
+          3311,
+          586,
+          6175
+        ],
+        "name": "EntrepreneurKitchen",
+        "nameLocation": "129:19:32",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 5663,
+            "mutability": "mutable",
+            "name": "kitchenShop",
+            "nameLocation": "176:11:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "164:23:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_KitchenShop_$7037",
+              "typeString": "contract KitchenShop"
+            },
+            "typeName": {
+              "id": 5662,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 5661,
+                "name": "KitchenShop",
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 7037,
+                "src": "164:11:32"
+              },
+              "referencedDeclaration": 7037,
+              "src": "164:11:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_KitchenShop_$7037",
+                "typeString": "contract KitchenShop"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "functionSelector": "9317f7f8",
+            "id": 5665,
+            "mutability": "mutable",
+            "name": "kitchenId",
+            "nameLocation": "204:9:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "191:22:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 5664,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "191:5:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "99fd1ddf",
+            "id": 5667,
+            "mutability": "mutable",
+            "name": "chefsPerKitchen",
+            "nameLocation": "230:15:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "217:28:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 5666,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "217:5:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "051d1d49",
+            "id": 5669,
+            "mutability": "mutable",
+            "name": "minEfficiency",
+            "nameLocation": "262:13:32",
+            "nodeType": "VariableDeclaration",
+            "scope": 5721,
+            "src": "249:26:32",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 5668,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "249:5:32",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "baseFunctions": [
+              11494
+            ],
+            "body": {
+              "id": 5699,
+              "nodeType": "Block",
+              "src": "554:149:32",
+              "statements": [
+                {
+                  "assignments": [
+                    5681
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5681,
+                      "mutability": "mutable",
+                      "name": "balance",
+                      "nameLocation": "568:7:32",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5699,
+                      "src": "560:15:32",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 5680,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "560:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 5687,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5684,
+                        "name": "account",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5672,
+                        "src": "600:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 5685,
+                        "name": "kitchenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5665,
+                        "src": "609:9:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      ],
+                      "expression": {
+                        "id": 5682,
+                        "name": "kitchenShop",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5663,
+                        "src": "578:11:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_KitchenShop_$7037",
+                          "typeString": "contract KitchenShop"
+                        }
+                      },
+                      "id": 5683,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "balanceOf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 838,
+                      "src": "578:21:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$_t_address_$_t_uint256_$returns$_t_uint256_$",
+                        "typeString": "function (address,uint256) view external returns (uint256)"
+                      }
+                    },
+                    "id": 5686,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "578:41:32",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "560:59:32"
+                },
+                {
+                  "expression": {
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 5697,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 5690,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "id": 5688,
+                        "name": "balance",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5681,
+                        "src": "632:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": "*",
+                      "rightExpression": {
+                        "id": 5689,
+                        "name": "chefsPerKitchen",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5667,
+                        "src": "642:15:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "src": "632:25:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": ">=",
+                    "rightExpression": {
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 5696,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "expression": {
+                          "baseExpression": {
+                            "id": 5691,
+                            "name": "stakers",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 10677,
+                            "src": "661:7:32",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_uint256_$dyn_storage_$",
+                              "typeString": "mapping(address => uint256[] storage ref)"
+                            }
+                          },
+                          "id": 5693,
+                          "indexExpression": {
+                            "id": 5692,
+                            "name": "account",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5672,
+                            "src": "669:7:32",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "661:16:32",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
+                            "typeString": "uint256[] storage ref"
+                          }
+                        },
+                        "id": 5694,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "length",
+                        "nodeType": "MemberAccess",
+                        "src": "661:23:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": "+",
+                      "rightExpression": {
+                        "id": 5695,
+                        "name": "amountToAdd",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5674,
+                        "src": "687:11:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "src": "661:37:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "632:66:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 5679,
+                  "id": 5698,
+                  "nodeType": "Return",
+                  "src": "625:73:32"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5670,
+              "nodeType": "StructuredDocumentation",
+              "src": "280:174:32",
+              "text": " Checks if there is kitchen space for the given amount of chefs (rats have no limit)\n @param amountToAdd - Number of chefs to add to stake\n @return true"
+            },
+            "id": 5700,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_checkSpace",
+            "nameLocation": "466:11:32",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 5676,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "525:8:32"
+            },
+            "parameters": {
+              "id": 5675,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5672,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "486:7:32",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5700,
+                  "src": "478:15:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5671,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "478:7:32",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5674,
+                  "mutability": "mutable",
+                  "name": "amountToAdd",
+                  "nameLocation": "503:11:32",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5700,
+                  "src": "495:19:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5673,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "495:7:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "477:38:32"
+            },
+            "returnParameters": {
+              "id": 5679,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5678,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5700,
+                  "src": "548:4:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5677,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "548:4:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "547:6:32"
+            },
+            "scope": 5721,
+            "src": "457:246:32",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "baseFunctions": [
+              11505
+            ],
+            "body": {
+              "id": 5719,
+              "nodeType": "Block",
+              "src": "936:95:32",
+              "statements": [
+                {
+                  "assignments": [
+                    5710,
+                    null
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 5710,
+                      "mutability": "mutable",
+                      "name": "efficiency",
+                      "nameLocation": "949:10:32",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 5719,
+                      "src": "943:16:32",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      },
+                      "typeName": {
+                        "id": 5709,
+                        "name": "uint8",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "943:5:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "visibility": "internal"
+                    },
+                    null
+                  ],
+                  "id": 5714,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 5712,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5703,
+                        "src": "978:7:32",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 5711,
+                      "name": "getProperties",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 11719,
+                      "src": "964:13:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_uint8_$_t_uint8_$",
+                        "typeString": "function (uint256) view returns (uint8,uint8)"
+                      }
+                    },
+                    "id": 5713,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "964:22:32",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$_t_uint8_$_t_uint8_$",
+                      "typeString": "tuple(uint8,uint8)"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "942:44:32"
+                },
+                {
+                  "expression": {
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 5717,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "id": 5715,
+                      "name": "efficiency",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 5710,
+                      "src": "999:10:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": ">=",
+                    "rightExpression": {
+                      "id": 5716,
+                      "name": "minEfficiency",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 5669,
+                      "src": "1013:13:32",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "src": "999:27:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 5708,
+                  "id": 5718,
+                  "nodeType": "Return",
+                  "src": "992:34:32"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 5701,
+              "nodeType": "StructuredDocumentation",
+              "src": "707:144:32",
+              "text": " Checks if the character is eligible to work in that kitchen\n @param tokenId - Amount of characters to stake\n @return true"
+            },
+            "id": 5720,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_checkEligibility",
+            "nameLocation": "863:17:32",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 5705,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "907:8:32"
+            },
+            "parameters": {
+              "id": 5704,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5703,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "889:7:32",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5720,
+                  "src": "881:15:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5702,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "881:7:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "880:17:32"
+            },
+            "returnParameters": {
+              "id": 5708,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5707,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5720,
+                  "src": "930:4:32",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 5706,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "930:4:32",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "929:6:32"
+            },
+            "scope": 5721,
+            "src": "854:177:32",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 5722,
+        "src": "111:922:32",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1001:32"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-03-21T14:23:05.929Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "claimMany(uint16[],bool)": {
+        "params": {
+          "tokenIds": "- The IDs of the tokens in question",
+          "unstake": "- Whether or not to unstake the given tokens"
+        }
+      },
+      "fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)": {
+        "params": {
+          "randomness": "- Random value created by VRF",
+          "v": "- VRF struct for the corresponding request"
+        }
+      },
+      "getProperties(uint256)": {
+        "params": {
+          "tokenId": "- The ID of the token to check"
+        },
+        "returns": {
+          "efficiency": "& tolerance values"
+        }
+      },
+      "isChef(uint256)": {
+        "params": {
+          "tokenId": "- The ID of the token to check"
+        },
+        "returns": {
+          "chef": "- Whether or not the token is a Chef"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "paused()": {
+        "details": "Returns true if the contract is paused, and false otherwise."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "stakeMany(address,uint16[])": {
+        "params": {
+          "account": "- The address of the staker",
+          "tokenIds": "- The IDs of the Chefs & Rats to stake"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "claimMany(uint16[],bool)": {
+        "notice": "ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters"
+      },
+      "fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)": {
+        "notice": "Callback for claimMany(), called by Claim.fulfillRandomness()"
+      },
+      "getProperties(uint256)": {
+        "notice": "Get the character's properties"
+      },
+      "isChef(uint256)": {
+        "notice": "Checks if the token is a Chef"
+      },
+      "stakeMany(address,uint16[])": {
+        "notice": "Adds Chefs & Rats"
+      }
+    },
+    "version": 1
+  }
+}

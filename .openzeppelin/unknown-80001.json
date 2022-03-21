@@ -1,0 +1,2452 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0xB7B9461cd33CD44ACe11297Ac6d9Eddd458b5084",
+    "txHash": "0xc83bd9bc454631678daf2e9dcd704e5673378e82aaba5f8f9505e63577cf4c61"
+  },
+  "proxies": [
+    {
+      "address": "0x476C0ADE754a40a8cDE1f48bF277e7a993fAc162",
+      "txHash": "0x47724bed4722e1fcfd96bb82f4fe6705cb0daa667ed3966b3c2e8544701a9138",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x13c5fA2eE5212EE52322993f93f37926E2Fd5186",
+      "txHash": "0x9aebe7eb8c0b54581a59eb42ad1f2b6390ad9d0bf8704bdb391ea7c3de9e852d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xe24563F815f70c3337b3285BE03C72b6d1bcB949",
+      "txHash": "0x6448f5448b27e211ab83434660861174669bb58a3d93bc4ad8759068d6174e05",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x2bC78051F66b399E5eFaDFE71A98d8f52c3C94Af",
+      "txHash": "0x82fdb176a262081a29a3490e96fcdfda649527c83ebda3fd39636cccd9dc9107",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xb3f79FBBbb478782Eb3BeB6B1121A9664f9303a4",
+      "txHash": "0x592905aabf6dfff4d38b785425061dfa8d01afbc29f5fc7a94ad6bf24e9749eb",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xcFD889e6208C246225a490E94178feBC0B66010B",
+      "txHash": "0x0951b71c1151b500decd21717a6a3bf53196417f26da3a7c3955c653b9856e77",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xDE72f8c21f86eB6C7736992CB0AB825F07c7FAdA",
+      "txHash": "0x214c164a093c29b2862aff0b647e352e882c6066c86d3003530341c8d6eaa848",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xb813ceCFCC8C2d726b0D81afE20622b28F65dC73",
+      "txHash": "0xd9dc6107df1826d0ae12b4f60aeb8196b049ea230a118c86928b318d284625e2",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xF3676f225b02ADD6340fB267998c2c29136B0968",
+      "txHash": "0x9be5ccd8d55b053a496ba1c195375dc4554e58c2a40cf01b6e79b0e346462b70",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4Cc6FC2261F2922735EE59f875690F76F96568CE",
+      "txHash": "0x9f3c9e6b91739be22dcf1b85dae0bd28d34008341c73eea14344ac4413890bb6",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x86AD6Ee5Dd049490E22f7496803eAe019b75953A",
+      "txHash": "0xe6dedb48fe916ad83e888f382a7b040696ffc9a5636905c3eada7cb1c3ec0d21",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "0f8addd342614076bcf63f124c6aa8ee992019a0a220c6a633c94f4ea6c79633": {
+      "address": "0x312B5050B489ec4C41979e7942bF701832e2817D",
+      "txHash": "0x1125c393ecaa62cca7dd880c85e9c9a018bc74c52926e0cc2ac2c4e69171d40c",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "VRFConsumer",
+            "label": "link",
+            "type": "t_contract(LinkTokenInterface)265",
+            "src": "../project:/contracts/VRFConsumer.sol:10"
+          },
+          {
+            "contract": "VRFConsumer",
+            "label": "vrfCoordinator",
+            "type": "t_address",
+            "src": "../project:/contracts/VRFConsumer.sol:11"
+          },
+          {
+            "contract": "VRFConsumer",
+            "label": "nonces",
+            "type": "t_mapping(t_bytes32,t_uint256)",
+            "src": "../project:/contracts/VRFConsumer.sol:13"
+          },
+          {
+            "contract": "ControllableUpgradeable",
+            "label": "controllers",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "../project:/contracts/ControllableUpgradeable.sol:8"
+          },
+          {
+            "contract": "Mint",
+            "label": "rarities",
+            "type": "t_array(t_array(t_uint8)dyn_storage)18_storage",
+            "src": "../project:/contracts/Mint.sol:12"
+          },
+          {
+            "contract": "Mint",
+            "label": "existingCombinations",
+            "type": "t_mapping(t_uint256,t_bytes32)",
+            "src": "../project:/contracts/Mint.sol:13"
+          },
+          {
+            "contract": "Mint",
+            "label": "character",
+            "type": "t_contract(ICharacter)6000",
+            "src": "../project:/contracts/Mint.sol:15"
+          },
+          {
+            "contract": "Mint",
+            "label": "keyHash",
+            "type": "t_bytes32",
+            "src": "../project:/contracts/Mint.sol:16"
+          },
+          {
+            "contract": "Mint",
+            "label": "fee",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Mint.sol:17"
+          },
+          {
+            "contract": "Mint",
+            "label": "vrfRequests",
+            "type": "t_mapping(t_bytes32,t_struct(VRFStruct)6040_storage)",
+            "src": "../project:/contracts/Mint.sol:18"
+          }
+        ],
+        "types": {
+          "t_array(t_array(t_uint8)dyn_storage)18_storage": {
+            "label": "uint8[][18]"
+          },
+          "t_array(t_uint8)dyn_storage": {
+            "label": "uint8[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint256,t_bytes32)": {
+            "label": "mapping(uint256 => bytes32)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_contract(ICharacter)6000": {
+            "label": "contract ICharacter"
+          },
+          "t_mapping(t_bytes32,t_struct(VRFStruct)6040_storage)": {
+            "label": "mapping(bytes32 => struct IMint.VRFStruct)"
+          },
+          "t_struct(VRFStruct)6040_storage": {
+            "label": "struct IMint.VRFStruct",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_bytes32"
+              },
+              {
+                "label": "sender",
+                "type": "t_address"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint8"
+              },
+              {
+                "label": "stake",
+                "type": "t_bool"
+              },
+              {
+                "label": "boost",
+                "type": "t_int8"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_contract(LinkTokenInterface)265": {
+            "label": "contract LinkTokenInterface"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "c362c55ff246ec289b8b7ddec8704c5e4ccb25fd87ff7bdc7da5f908d7a51381": {
+      "address": "0x78875fF0043D1FCe12636B8DBe1AbE1a33Fca4c0",
+      "txHash": "0x7c1c0bc7ad0a2ef6be885fc6f6863c7bdcc8f7c3a800645cb6e55f3b4a53f9f0",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "Traits",
+            "label": "_traitTypes",
+            "type": "t_array(t_string_storage)16_storage",
+            "src": "../project:/contracts/Traits.sol:20"
+          },
+          {
+            "contract": "Traits",
+            "label": "numHeadAndBodyTraits",
+            "type": "t_uint16",
+            "src": "../project:/contracts/Traits.sol:21"
+          },
+          {
+            "contract": "Traits",
+            "label": "traitData",
+            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)9444_storage))",
+            "src": "../project:/contracts/Traits.sol:22"
+          },
+          {
+            "contract": "Traits",
+            "label": "character",
+            "type": "t_contract(ICharacter)6000",
+            "src": "../project:/contracts/Traits.sol:24"
+          }
+        ],
+        "types": {
+          "t_array(t_string_storage)16_storage": {
+            "label": "string[16]"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)9444_storage))": {
+            "label": "mapping(uint8 => mapping(uint8 => struct Traits.Trait))"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint8,t_struct(Trait)9444_storage)": {
+            "label": "mapping(uint8 => struct Traits.Trait)"
+          },
+          "t_struct(Trait)9444_storage": {
+            "label": "struct Traits.Trait",
+            "members": [
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "png",
+                "type": "t_string_storage"
+              }
+            ]
+          },
+          "t_contract(ICharacter)6000": {
+            "label": "contract ICharacter"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    },
+    "a4695eeec9db478cee39c503cbba23cdda7c2bc2c305a6a8328b1148fed5c444": {
+      "address": "0xD2b73054efDadaBA3c28Bf9EE9386A8a5fa4EDc3",
+      "txHash": "0x2eef39233aea1c939e28f073c8ad5609dca86295142d8efbb90a1afec79513a4",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyMinimumChef",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:10"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyMinimumRat",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:11"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:12"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterEfficiencyLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:13"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterToleranceLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:14"
+          },
+          {
+            "contract": "Properties",
+            "label": "disasterToleranceLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:15"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyMinimumChef",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:17"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyMinimumRat",
+            "type": "t_int8",
+            "src": "../project:/contracts/Properties.sol:18"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:19"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapEfficiencyLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:20"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapToleranceLossChef",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:21"
+          },
+          {
+            "contract": "Properties",
+            "label": "mishapToleranceLossRat",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Properties.sol:22"
+          }
+        ],
+        "types": {
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    },
+    "df9bc2a633e6d5dcb26119901e73b8f27541a8e149261973d523800f96f6da89": {
+      "address": "0xB9d75bEC69dEb23Df9DC0B046937509BEDDa0FA9",
+      "txHash": "0x7d19f6a894cf465d38c162f44f3efd3dae970d19f333a22fd82fb06a14d3e7f2",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "ControllableUpgradeable",
+            "label": "controllers",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "../project:/contracts/ControllableUpgradeable.sol:8"
+          },
+          {
+            "contract": "Paywall",
+            "label": "mintPrice",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Paywall.sol:10"
+          },
+          {
+            "contract": "Paywall",
+            "label": "whitelistBoost",
+            "type": "t_int8",
+            "src": "../project:/contracts/Paywall.sol:11"
+          },
+          {
+            "contract": "Paywall",
+            "label": "maxMintsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Paywall.sol:12"
+          },
+          {
+            "contract": "Paywall",
+            "label": "gen1PriceTier0",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Paywall.sol:13"
+          },
+          {
+            "contract": "Paywall",
+            "label": "gen1PriceTier1",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Paywall.sol:14"
+          },
+          {
+            "contract": "Paywall",
+            "label": "gen1PriceTier2",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Paywall.sol:15"
+          },
+          {
+            "contract": "Paywall",
+            "label": "gen1PriceTier3",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Paywall.sol:16"
+          },
+          {
+            "contract": "Paywall",
+            "label": "whitelist",
+            "type": "t_mapping(t_address,t_uint8)",
+            "src": "../project:/contracts/Paywall.sol:17"
+          },
+          {
+            "contract": "Paywall",
+            "label": "freeMints",
+            "type": "t_mapping(t_address,t_uint8)",
+            "src": "../project:/contracts/Paywall.sol:18"
+          },
+          {
+            "contract": "Paywall",
+            "label": "onlyWhitelist",
+            "type": "t_bool",
+            "src": "../project:/contracts/Paywall.sol:19"
+          },
+          {
+            "contract": "Paywall",
+            "label": "fastFood",
+            "type": "t_contract(FastFood)5740",
+            "src": "../project:/contracts/Paywall.sol:21"
+          }
+        ],
+        "types": {
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_address,t_uint8)": {
+            "label": "mapping(address => uint8)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_contract(FastFood)5740": {
+            "label": "contract FastFood"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "96b381710b8f56470b5840de1ad2ffbc513f43c41049ce5aa25eb761604fbef3": {
+      "address": "0xDcC46Ea4577127a9AF0777D547d2dC20171DbD76",
+      "txHash": "0x5142541ce308bb58e0e29344f38adaeb4f7920c20bb12fa8919a6f0a57c0b2ac",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:36"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_name",
+            "type": "t_string_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:25"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_symbol",
+            "type": "t_string_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:28"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_owners",
+            "type": "t_mapping(t_uint256,t_address)",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:31"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:34"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_tokenApprovals",
+            "type": "t_mapping(t_uint256,t_address)",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:37"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_operatorApprovals",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:40"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)44_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:431"
+          },
+          {
+            "contract": "ControllableUpgradeable",
+            "label": "controllers",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "../project:/contracts/ControllableUpgradeable.sol:8"
+          },
+          {
+            "contract": "Character",
+            "label": "paid",
+            "type": "t_uint16",
+            "src": "../project:/contracts/Character.sol:17"
+          },
+          {
+            "contract": "Character",
+            "label": "minted",
+            "type": "t_uint16",
+            "src": "../project:/contracts/Character.sol:18"
+          },
+          {
+            "contract": "Character",
+            "label": "numChefs",
+            "type": "t_uint16",
+            "src": "../project:/contracts/Character.sol:19"
+          },
+          {
+            "contract": "Character",
+            "label": "numRats",
+            "type": "t_uint16",
+            "src": "../project:/contracts/Character.sol:20"
+          },
+          {
+            "contract": "Character",
+            "label": "maxTokens",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Character.sol:21"
+          },
+          {
+            "contract": "Character",
+            "label": "gen0Tokens",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Character.sol:22"
+          },
+          {
+            "contract": "Character",
+            "label": "tokenTraits",
+            "type": "t_mapping(t_uint256,t_struct(CharacterStruct)5965_storage)",
+            "src": "../project:/contracts/Character.sol:24"
+          },
+          {
+            "contract": "Character",
+            "label": "theMint",
+            "type": "t_contract(IMint)6070",
+            "src": "../project:/contracts/Character.sol:26"
+          },
+          {
+            "contract": "Character",
+            "label": "traits",
+            "type": "t_contract(ITraits)6147",
+            "src": "../project:/contracts/Character.sol:27"
+          },
+          {
+            "contract": "Character",
+            "label": "properties",
+            "type": "t_contract(IProperties)6137",
+            "src": "../project:/contracts/Character.sol:28"
+          },
+          {
+            "contract": "Character",
+            "label": "venues",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Character.sol:29"
+          },
+          {
+            "contract": "Character",
+            "label": "paywall",
+            "type": "t_contract(IPaywall)6113",
+            "src": "../project:/contracts/Character.sol:30"
+          },
+          {
+            "contract": "Character",
+            "label": "dao",
+            "type": "t_address_payable",
+            "src": "../project:/contracts/Character.sol:31"
+          }
+        ],
+        "types": {
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(CharacterStruct)5965_storage)": {
+            "label": "mapping(uint256 => struct ICharacter.CharacterStruct)"
+          },
+          "t_struct(CharacterStruct)5965_storage": {
+            "label": "struct ICharacter.CharacterStruct",
+            "members": [
+              {
+                "label": "isChef",
+                "type": "t_bool"
+              },
+              {
+                "label": "hat",
+                "type": "t_uint8"
+              },
+              {
+                "label": "eyes",
+                "type": "t_uint8"
+              },
+              {
+                "label": "piercing",
+                "type": "t_uint8"
+              },
+              {
+                "label": "mouth",
+                "type": "t_uint8"
+              },
+              {
+                "label": "neck",
+                "type": "t_uint8"
+              },
+              {
+                "label": "hand",
+                "type": "t_uint8"
+              },
+              {
+                "label": "tail",
+                "type": "t_uint8"
+              },
+              {
+                "label": "efficiency",
+                "type": "t_uint8"
+              },
+              {
+                "label": "tolerance",
+                "type": "t_uint8"
+              },
+              {
+                "label": "boost",
+                "type": "t_int8"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_contract(IMint)6070": {
+            "label": "contract IMint"
+          },
+          "t_contract(ITraits)6147": {
+            "label": "contract ITraits"
+          },
+          "t_contract(IProperties)6137": {
+            "label": "contract IProperties"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(IPaywall)6113": {
+            "label": "contract IPaywall"
+          },
+          "t_address_payable": {
+            "label": "address payable"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_mapping(t_uint256,t_address)": {
+            "label": "mapping(uint256 => address)"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+            "label": "mapping(address => mapping(address => bool))"
+          },
+          "t_array(t_uint256)44_storage": {
+            "label": "uint256[44]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "cf711ba0f925d336b823913a8c63bf6f0cc1c2d7b32848d5112e7a73148a3c46": {
+      "address": "0xb0c366316F4e7c3E82575079f08e77F087AA7Cc0",
+      "txHash": "0xc68075ad58f18f3078f35df7c9a28397e162eb3c03661abdd2f039389f50e41d",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:36"
+          },
+          {
+            "contract": "ERC1155Upgradeable",
+            "label": "_balances",
+            "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:25"
+          },
+          {
+            "contract": "ERC1155Upgradeable",
+            "label": "_operatorApprovals",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:28"
+          },
+          {
+            "contract": "ERC1155Upgradeable",
+            "label": "_uri",
+            "type": "t_string_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:31"
+          },
+          {
+            "contract": "ERC1155Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)47_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:471"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "fastFood",
+            "type": "t_contract(FastFood)5740",
+            "src": "../project:/contracts/KitchenShop.sol:22"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "casualFood",
+            "type": "t_contract(CasualFood)4635",
+            "src": "../project:/contracts/KitchenShop.sol:23"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "character",
+            "type": "t_contract(Character)5172",
+            "src": "../project:/contracts/KitchenShop.sol:24"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "name",
+            "type": "t_string_storage",
+            "src": "../project:/contracts/KitchenShop.sol:26"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "symbol",
+            "type": "t_string_storage",
+            "src": "../project:/contracts/KitchenShop.sol:27"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "tokenSupply",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenShop.sol:28"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "priceTier0",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenShop.sol:29"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "priceTier1",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenShop.sol:30"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "priceTier2",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenShop.sol:31"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "priceTier3",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenShop.sol:32"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "priceTier4",
+            "type": "t_uint256",
+            "src": "../project:/contracts/KitchenShop.sol:33"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "maxMintsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/KitchenShop.sol:34"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "maxTokens",
+            "type": "t_mapping(t_uint8,t_uint256)",
+            "src": "../project:/contracts/KitchenShop.sol:35"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "minSkill",
+            "type": "t_mapping(t_uint8,t_uint256)",
+            "src": "../project:/contracts/KitchenShop.sol:36"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "minted",
+            "type": "t_mapping(t_uint8,t_uint256)",
+            "src": "../project:/contracts/KitchenShop.sol:37"
+          },
+          {
+            "contract": "KitchenShop",
+            "label": "kitchenData",
+            "type": "t_mapping(t_uint256,t_struct(KitchenData)6483_storage)",
+            "src": "../project:/contracts/KitchenShop.sol:38"
+          }
+        ],
+        "types": {
+          "t_contract(FastFood)5740": {
+            "label": "contract FastFood"
+          },
+          "t_contract(CasualFood)4635": {
+            "label": "contract CasualFood"
+          },
+          "t_contract(Character)5172": {
+            "label": "contract Character"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint8,t_uint256)": {
+            "label": "mapping(uint8 => uint256)"
+          },
+          "t_mapping(t_uint256,t_struct(KitchenData)6483_storage)": {
+            "label": "mapping(uint256 => struct KitchenShop.KitchenData)"
+          },
+          "t_struct(KitchenData)6483_storage": {
+            "label": "struct KitchenShop.KitchenData",
+            "members": [
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "png",
+                "type": "t_string_storage"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(uint256 => mapping(address => uint256))"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+            "label": "mapping(address => mapping(address => bool))"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)47_storage": {
+            "label": "uint256[47]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "5ce77d8c7641bcf29cdd9419c6d45bcbaaef7dcba7c3c72ed5ebe78664154e44": {
+      "address": "0x1DCdE858BfDaB446F339f293e990D543de88dd2f",
+      "txHash": "0x6d7b16a386c0da038301d36c8c846941c8d341f1f4252d48af2404b1862fb693",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "VRFConsumer",
+            "label": "link",
+            "type": "t_contract(LinkTokenInterface)265",
+            "src": "../project:/contracts/VRFConsumer.sol:10"
+          },
+          {
+            "contract": "VRFConsumer",
+            "label": "vrfCoordinator",
+            "type": "t_address",
+            "src": "../project:/contracts/VRFConsumer.sol:11"
+          },
+          {
+            "contract": "VRFConsumer",
+            "label": "nonces",
+            "type": "t_mapping(t_bytes32,t_uint256)",
+            "src": "../project:/contracts/VRFConsumer.sol:13"
+          },
+          {
+            "contract": "ControllableUpgradeable",
+            "label": "controllers",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "../project:/contracts/ControllableUpgradeable.sol:8"
+          },
+          {
+            "contract": "Claim",
+            "label": "venues",
+            "type": "t_mapping(t_address,t_contract(IVenue)6175)",
+            "src": "../project:/contracts/Claim.sol:12"
+          },
+          {
+            "contract": "Claim",
+            "label": "keyHash",
+            "type": "t_bytes32",
+            "src": "../project:/contracts/Claim.sol:13"
+          },
+          {
+            "contract": "Claim",
+            "label": "fee",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Claim.sol:14"
+          },
+          {
+            "contract": "Claim",
+            "label": "vrfRequests",
+            "type": "t_mapping(t_bytes32,t_struct(VRFStruct)6014_storage)",
+            "src": "../project:/contracts/Claim.sol:15"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_contract(IVenue)6175)": {
+            "label": "mapping(address => contract IVenue)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(IVenue)6175": {
+            "label": "contract IVenue"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_bytes32,t_struct(VRFStruct)6014_storage)": {
+            "label": "mapping(bytes32 => struct IClaim.VRFStruct)"
+          },
+          "t_struct(VRFStruct)6014_storage": {
+            "label": "struct IClaim.VRFStruct",
+            "members": [
+              {
+                "label": "requestId",
+                "type": "t_bytes32"
+              },
+              {
+                "label": "venue",
+                "type": "t_address"
+              },
+              {
+                "label": "sender",
+                "type": "t_address"
+              },
+              {
+                "label": "tokenIds",
+                "type": "t_array(t_uint16)dyn_storage"
+              },
+              {
+                "label": "unstake",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_array(t_uint16)dyn_storage": {
+            "label": "uint16[]"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_contract(LinkTokenInterface)265": {
+            "label": "contract LinkTokenInterface"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "309df2167fed75b8aef591f329ec622895e4df6e97b35a196dabd9191570155c": {
+      "address": "0x91eE21b4FC21e5e8F9c1678ab3Ba89Ea69F87490",
+      "txHash": "0xa54cae63ff4a5219c0431e0ea91270b3c1adf90ca6f911ce0f6540ee2c0a28b2",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
+          },
+          {
+            "contract": "Venue",
+            "label": "character",
+            "type": "t_contract(Character)5172",
+            "src": "../project:/contracts/Venue.sol:25"
+          },
+          {
+            "contract": "Venue",
+            "label": "claim",
+            "type": "t_contract(IClaim)6027",
+            "src": "../project:/contracts/Venue.sol:26"
+          },
+          {
+            "contract": "Venue",
+            "label": "chefs",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:28"
+          },
+          {
+            "contract": "Venue",
+            "label": "rats",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:29"
+          },
+          {
+            "contract": "Venue",
+            "label": "stakers",
+            "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:30"
+          },
+          {
+            "contract": "Venue",
+            "label": "claimRequests",
+            "type": "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:31"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailySkillRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:32"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyFreakRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:33"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyIntelligenceRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:34"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyBodyMassRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:35"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalChefsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:36"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalRatsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:37"
+          },
+          {
+            "contract": "Venue",
+            "label": "accrualPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:38"
+          },
+          {
+            "contract": "Venue",
+            "label": "foodTokensPerRat",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:39"
+          },
+          {
+            "contract": "Venue",
+            "label": "vestingPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:40"
+          },
+          {
+            "contract": "Venue",
+            "label": "maxClaimsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Venue.sol:41"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "foodTokenMaxSupply",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:8"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "dailyChefEarnings",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:9"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratTheftPercentage",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:10"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "unaccountedRewards",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:11"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "totalFoodTokensEarned",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:12"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "lastClaimTimestamp",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:13"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "chefEfficiencyMultiplier",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Kitchen.sol:14"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratEfficiencyMultiplier",
+            "type": "t_int256",
+            "src": "../project:/contracts/Kitchen.sol:15"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratEfficiencyOffset",
+            "type": "t_int256",
+            "src": "../project:/contracts/Kitchen.sol:16"
+          },
+          {
+            "contract": "McStake",
+            "label": "foodToken",
+            "type": "t_contract(FastFood)5740",
+            "src": "../project:/contracts/McStake.sol:9"
+          }
+        ],
+        "types": {
+          "t_contract(FastFood)5740": {
+            "label": "contract FastFood"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_int256": {
+            "label": "int256"
+          },
+          "t_contract(Character)5172": {
+            "label": "contract Character"
+          },
+          "t_contract(IClaim)6027": {
+            "label": "contract IClaim"
+          },
+          "t_mapping(t_uint256,t_struct(Stake)10616_storage)": {
+            "label": "mapping(uint256 => struct Venue.Stake)"
+          },
+          "t_struct(Stake)10616_storage": {
+            "label": "struct Venue.Stake",
+            "members": [
+              {
+                "label": "tokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "value",
+                "type": "t_uint80"
+              },
+              {
+                "label": "timestamp",
+                "type": "t_uint80"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint80": {
+            "label": "uint80"
+          },
+          "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(address => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)": {
+            "label": "mapping(bytes32 => uint16[])"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_array(t_uint16)dyn_storage": {
+            "label": "uint16[]"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "f5263bb2587fe8c5e3c4f349939d01cedeba9bbb9ce387b1683e02e189988db5": {
+      "address": "0x9c034155BF88270e893906EB6D6A0Ef9165173B8",
+      "txHash": "0x5ce3b7348b6b6ce23435ba99645a580bc3643e4b47c4cfeef98e554585eb7d0e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
+          },
+          {
+            "contract": "Venue",
+            "label": "character",
+            "type": "t_contract(Character)5172",
+            "src": "../project:/contracts/Venue.sol:25"
+          },
+          {
+            "contract": "Venue",
+            "label": "claim",
+            "type": "t_contract(IClaim)6027",
+            "src": "../project:/contracts/Venue.sol:26"
+          },
+          {
+            "contract": "Venue",
+            "label": "chefs",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:28"
+          },
+          {
+            "contract": "Venue",
+            "label": "rats",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:29"
+          },
+          {
+            "contract": "Venue",
+            "label": "stakers",
+            "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:30"
+          },
+          {
+            "contract": "Venue",
+            "label": "claimRequests",
+            "type": "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:31"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailySkillRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:32"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyFreakRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:33"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyIntelligenceRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:34"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyBodyMassRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:35"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalChefsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:36"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalRatsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:37"
+          },
+          {
+            "contract": "Venue",
+            "label": "accrualPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:38"
+          },
+          {
+            "contract": "Venue",
+            "label": "foodTokensPerRat",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:39"
+          },
+          {
+            "contract": "Venue",
+            "label": "vestingPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:40"
+          },
+          {
+            "contract": "Venue",
+            "label": "maxClaimsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Venue.sol:41"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "foodTokenMaxSupply",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:8"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "dailyChefEarnings",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:9"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratTheftPercentage",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:10"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "unaccountedRewards",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:11"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "totalFoodTokensEarned",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:12"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "lastClaimTimestamp",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:13"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "chefEfficiencyMultiplier",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Kitchen.sol:14"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratEfficiencyMultiplier",
+            "type": "t_int256",
+            "src": "../project:/contracts/Kitchen.sol:15"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratEfficiencyOffset",
+            "type": "t_int256",
+            "src": "../project:/contracts/Kitchen.sol:16"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "kitchenShop",
+            "type": "t_contract(KitchenShop)7037",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:9"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "kitchenId",
+            "type": "t_uint8",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:10"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "chefsPerKitchen",
+            "type": "t_uint8",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:11"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "minEfficiency",
+            "type": "t_uint8",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:12"
+          },
+          {
+            "contract": "TheStakehouse",
+            "label": "foodToken",
+            "type": "t_contract(CasualFood)4635",
+            "src": "../project:/contracts/TheStakehouse.sol:10"
+          }
+        ],
+        "types": {
+          "t_contract(CasualFood)4635": {
+            "label": "contract CasualFood"
+          },
+          "t_contract(KitchenShop)7037": {
+            "label": "contract KitchenShop"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_int256": {
+            "label": "int256"
+          },
+          "t_contract(Character)5172": {
+            "label": "contract Character"
+          },
+          "t_contract(IClaim)6027": {
+            "label": "contract IClaim"
+          },
+          "t_mapping(t_uint256,t_struct(Stake)10616_storage)": {
+            "label": "mapping(uint256 => struct Venue.Stake)"
+          },
+          "t_struct(Stake)10616_storage": {
+            "label": "struct Venue.Stake",
+            "members": [
+              {
+                "label": "tokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "value",
+                "type": "t_uint80"
+              },
+              {
+                "label": "timestamp",
+                "type": "t_uint80"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint80": {
+            "label": "uint80"
+          },
+          "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(address => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)": {
+            "label": "mapping(bytes32 => uint16[])"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_array(t_uint16)dyn_storage": {
+            "label": "uint16[]"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "2d5c818253859547608ce33a8e3a604b035839b67017fe2b004d80c06496ca00": {
+      "address": "0x21A76090d4BAba68b1cDF130ea585998860b7f3b",
+      "txHash": "0xddb68fb4757d0430afe63533649fa4ad08cf26d69eab560851d8299cc039187b",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
+          },
+          {
+            "contract": "Venue",
+            "label": "character",
+            "type": "t_contract(Character)5172",
+            "src": "../project:/contracts/Venue.sol:25"
+          },
+          {
+            "contract": "Venue",
+            "label": "claim",
+            "type": "t_contract(IClaim)6027",
+            "src": "../project:/contracts/Venue.sol:26"
+          },
+          {
+            "contract": "Venue",
+            "label": "chefs",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:28"
+          },
+          {
+            "contract": "Venue",
+            "label": "rats",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:29"
+          },
+          {
+            "contract": "Venue",
+            "label": "stakers",
+            "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:30"
+          },
+          {
+            "contract": "Venue",
+            "label": "claimRequests",
+            "type": "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:31"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailySkillRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:32"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyFreakRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:33"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyIntelligenceRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:34"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyBodyMassRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:35"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalChefsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:36"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalRatsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:37"
+          },
+          {
+            "contract": "Venue",
+            "label": "accrualPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:38"
+          },
+          {
+            "contract": "Venue",
+            "label": "foodTokensPerRat",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:39"
+          },
+          {
+            "contract": "Venue",
+            "label": "vestingPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:40"
+          },
+          {
+            "contract": "Venue",
+            "label": "maxClaimsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Venue.sol:41"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "foodTokenMaxSupply",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:8"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "dailyChefEarnings",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:9"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratTheftPercentage",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:10"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "unaccountedRewards",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:11"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "totalFoodTokensEarned",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:12"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "lastClaimTimestamp",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Kitchen.sol:13"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "chefEfficiencyMultiplier",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Kitchen.sol:14"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratEfficiencyMultiplier",
+            "type": "t_int256",
+            "src": "../project:/contracts/Kitchen.sol:15"
+          },
+          {
+            "contract": "Kitchen",
+            "label": "ratEfficiencyOffset",
+            "type": "t_int256",
+            "src": "../project:/contracts/Kitchen.sol:16"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "kitchenShop",
+            "type": "t_contract(KitchenShop)7037",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:9"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "kitchenId",
+            "type": "t_uint8",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:10"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "chefsPerKitchen",
+            "type": "t_uint8",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:11"
+          },
+          {
+            "contract": "EntrepreneurKitchen",
+            "label": "minEfficiency",
+            "type": "t_uint8",
+            "src": "../project:/contracts/EntrepreneurKitchen.sol:12"
+          },
+          {
+            "contract": "LeStake",
+            "label": "foodToken",
+            "type": "t_contract(GourmetFood)5868",
+            "src": "../project:/contracts/LeStake.sol:10"
+          }
+        ],
+        "types": {
+          "t_contract(GourmetFood)5868": {
+            "label": "contract GourmetFood"
+          },
+          "t_contract(KitchenShop)7037": {
+            "label": "contract KitchenShop"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_int256": {
+            "label": "int256"
+          },
+          "t_contract(Character)5172": {
+            "label": "contract Character"
+          },
+          "t_contract(IClaim)6027": {
+            "label": "contract IClaim"
+          },
+          "t_mapping(t_uint256,t_struct(Stake)10616_storage)": {
+            "label": "mapping(uint256 => struct Venue.Stake)"
+          },
+          "t_struct(Stake)10616_storage": {
+            "label": "struct Venue.Stake",
+            "members": [
+              {
+                "label": "tokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "value",
+                "type": "t_uint80"
+              },
+              {
+                "label": "timestamp",
+                "type": "t_uint80"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint80": {
+            "label": "uint80"
+          },
+          "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(address => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)": {
+            "label": "mapping(bytes32 => uint16[])"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_array(t_uint16)dyn_storage": {
+            "label": "uint16[]"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "55b0cbf8c4e2fe727cbcda9d9ebec6d5d5ebc30049d19d0dade3927133747bcd": {
+      "address": "0x07DF1a414E1Cc2bA2E6C53334411E56Afa2392fa",
+      "txHash": "0x87381f25e10ed573dd988b44520f8054678c21cf99e4cfc258db2df678cd3704",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "_paused",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "contract": "PausableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:97"
+          },
+          {
+            "contract": "Venue",
+            "label": "character",
+            "type": "t_contract(Character)5172",
+            "src": "../project:/contracts/Venue.sol:25"
+          },
+          {
+            "contract": "Venue",
+            "label": "claim",
+            "type": "t_contract(IClaim)6027",
+            "src": "../project:/contracts/Venue.sol:26"
+          },
+          {
+            "contract": "Venue",
+            "label": "chefs",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:28"
+          },
+          {
+            "contract": "Venue",
+            "label": "rats",
+            "type": "t_mapping(t_uint256,t_struct(Stake)10616_storage)",
+            "src": "../project:/contracts/Venue.sol:29"
+          },
+          {
+            "contract": "Venue",
+            "label": "stakers",
+            "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:30"
+          },
+          {
+            "contract": "Venue",
+            "label": "claimRequests",
+            "type": "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)",
+            "src": "../project:/contracts/Venue.sol:31"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailySkillRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:32"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyFreakRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:33"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyIntelligenceRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:34"
+          },
+          {
+            "contract": "Venue",
+            "label": "dailyBodyMassRate",
+            "type": "t_int8",
+            "src": "../project:/contracts/Venue.sol:35"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalChefsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:36"
+          },
+          {
+            "contract": "Venue",
+            "label": "totalRatsStaked",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:37"
+          },
+          {
+            "contract": "Venue",
+            "label": "accrualPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:38"
+          },
+          {
+            "contract": "Venue",
+            "label": "foodTokensPerRat",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:39"
+          },
+          {
+            "contract": "Venue",
+            "label": "vestingPeriod",
+            "type": "t_uint256",
+            "src": "../project:/contracts/Venue.sol:40"
+          },
+          {
+            "contract": "Venue",
+            "label": "maxClaimsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/Venue.sol:41"
+          }
+        ],
+        "types": {
+          "t_contract(Character)5172": {
+            "label": "contract Character"
+          },
+          "t_contract(IClaim)6027": {
+            "label": "contract IClaim"
+          },
+          "t_mapping(t_uint256,t_struct(Stake)10616_storage)": {
+            "label": "mapping(uint256 => struct Venue.Stake)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(Stake)10616_storage": {
+            "label": "struct Venue.Stake",
+            "members": [
+              {
+                "label": "tokenId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "owner",
+                "type": "t_address"
+              },
+              {
+                "label": "value",
+                "type": "t_uint80"
+              },
+              {
+                "label": "timestamp",
+                "type": "t_uint80"
+              }
+            ]
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint80": {
+            "label": "uint80"
+          },
+          "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(address => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_mapping(t_bytes32,t_array(t_uint16)dyn_storage)": {
+            "label": "mapping(bytes32 => uint16[])"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_array(t_uint16)dyn_storage": {
+            "label": "uint16[]"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    }
+  }
+}
