@@ -20,7 +20,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
   event TokenStaked(uint256 tokenId, address owner, uint256 value);
   event ChefClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 skill, uint8 freak, string eventName, uint256 foodTokensPerRat);
-  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 bodyMass, string eventName);
+  event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 bodyMass, string eventName, uint256 foodTokensPerRat);
 
   Character character; // Reference to the Character
   IClaim public claim; // Reference to the Mint
@@ -234,7 +234,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
         timestamp: uint80(block.timestamp)
       });
     }
-    emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName);
+    emit RatClaimed(tokenId, owed, unstake, efficiency, tolerance, eventName, foodTokensPerRat);
   }
 
   /**

@@ -136,6 +136,7 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.intelligence).to.be.a.bignumber.eq('1');
                 expect(log.args.bodyMass).to.be.a.bignumber.eq('4');
                 expect(log.args.eventName).to.equal('');
+                expect(log.args.foodTokensPerRat).to.be.a.bignumber.gt('0');
                 ownerBalance.iadd(new BN(log.args.earned));
             });
             totalFoodTokensEarned += 2 * 25 * 0.55; // 2 rats for half a day at bodyMass 0
@@ -215,6 +216,7 @@ contract('McStake (proxy)', (accounts) => {
                 expect(log.args.intelligence).to.be.a.bignumber.eq('2');
                 expect(log.args.bodyMass).to.be.a.bignumber.eq('8');
                 expect(log.args.eventName).to.equal('');
+                expect(log.args.foodTokensPerRat).to.be.a.bignumber.gt('0');
                 ownerBalance.iadd(new BN(log.args.earned));
             });
             totalFoodTokensEarned += 2 * 25 * chefBoost(1) * ratBoost(4); // food tokens from 2 skill 1 chefs for 2 rats for half a day at bodyMass 4
