@@ -54,6 +54,18 @@ This repository contains the Solidity smart [contracts](./contracts/) of the gam
 3. Deploy the contracts locally: `truffle migrate`
 4. Interact with them using the console: `truffle console`
 
+#### Local VRF Coordinator
+
+Both [Mint](./contracts/Mint.sol) & [Claim](./contracts/Claim.sol) use ChainLink VRF to fulfill requests.
+In order to simulate VRF locally, we use a truffle external script that listens for `RandomNumberRequested`
+events and triggers the respective rawFulfillRandomness() callback function.
+
+By default, the VRF coordinator is not enabled. To enable, add the following line to your .env file:
+
+    LOCAL_VRF="true"
+
+Then run a deployment using `truffle migrate` and start the VRF coordinator using `truffle exec bin/vrf.js`.
+
 
 ### Configuration
 

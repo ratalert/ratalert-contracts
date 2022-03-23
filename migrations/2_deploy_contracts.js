@@ -27,7 +27,12 @@ module.exports = async (deployer, network, accounts) => {
     linkToken = await LinkTokenMock.deployed();
     const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock');
     await deployer.deploy(VRFCoordinatorMock, linkToken.address);
-    vrfCoordinator = await VRFCoordinatorMock.deployed();
+    if (process.env.LOCAL_VRF === 'true') {
+      vrfCoordinator = { address: accounts[8] };
+      console.log('   Using local VRFCoordinator', vrfCoordinator);
+    } else {
+      vrfCoordinator = await VRFCoordinatorMock.deployed();
+    }
   }
   await deployer.deploy(FastFood);
   await deployer.deploy(CasualFood);
