@@ -14,6 +14,7 @@ module.exports = {
       port: 9545,        // Truffle
       // port: 7545,     // Ganache
       network_id: '*',   // Any network (default: none)
+      websockets: process.env.LOCAL_VRF === 'true',
       // gas: 22323,
       // gasPrice: 10,
     },
