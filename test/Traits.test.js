@@ -8,7 +8,9 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 const Traits = artifacts.require('Traits');
 
-contract('Traits (proxy)', () => {
+contract('Traits (proxy)', (accounts) => {
+  const dao = accounts[9];
+
   const data = [
     [
       { name: 'Single', png: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUik7wECIkqAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg==' },
@@ -26,13 +28,13 @@ contract('Traits (proxy)', () => {
 
   describe('uploadTraits()', () => {
     it('uploads data', async () => {
-      const res = await uploadCharacters(this.traits);
+      const res = await uploadCharacters(this.traits, dao);
       expect(res.length).to.equal(14); // 7 chef traits + 7 rat traits
       res.forEach(item => expect(item.receipt.status).to.be.true);
     });
     it('replaces with test data', async () => {
       await Promise.all(data.map(async (traits, i) => {
-        const res = await this.traits.uploadTraits(i, traits);
+        const res = await this.traits.uploadTraits(i, traits, { from: dao });
         await expect(res.receipt.status).to.be.true;
       }));
     });

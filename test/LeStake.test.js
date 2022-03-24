@@ -21,6 +21,7 @@ contract('LeStake (proxy)', (accounts) => {
   const config = Config('development', accounts)
   const owner = accounts[0];
   const anon = accounts[1];
+  const dao = accounts[9];
   let lists;
 
   before(async () => {
@@ -34,9 +35,9 @@ contract('LeStake (proxy)', (accounts) => {
     this.mcStake = await McStake.deployed();
     this.kitchenShop = await KitchenShop.deployed();
     this.casualFood = await CasualFood.deployed();
-    await this.mcStake.configure(config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100);
-    await this.kitchen.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
-    await this.casualFood.addController([owner]);
+    await this.mcStake.configure(config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100, { from: dao });
+    await this.kitchen.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, { from: dao });
+    await this.casualFood.addController([dao], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 12, 3);
     lists.eligibleChefs = lists.chefs.slice(1, 12);
@@ -58,7 +59,7 @@ contract('LeStake (proxy)', (accounts) => {
       await expect(this.kitchen.stakeMany(owner, [lists.eligibleChefs[0].id], { from: owner })).to.eventually.be.rejectedWith('Kitchen space required');
     });
     it('stakes eligible chefs', async () => {
-      await this.casualFood.mint(owner, toWei(2000)); // Need kitchen space first
+      await this.casualFood.mint(owner, toWei(2000), { from: dao }); // Need kitchen space first
       await this.kitchenShop.mint(2, 1);
       const res = await this.kitchen.stakeMany(owner, lists.eligibleChefs.slice(0, 10).map(item => item.id), { from: owner });
       await expect(res.receipt.status).to.be.true;

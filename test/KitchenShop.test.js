@@ -18,9 +18,9 @@ const KitchenShop = artifacts.require('KitchenShop');
 
 contract('KitchenShop (proxy)', (accounts) => {
   const owner = accounts[0];
+  const dao = accounts[9];
   let lists;
   let fastFoodBalance;
-  let kitchenShopSandbox;
 
   before(async () => {
     this.vrfCoordinator = await VRFCoordinator.deployed();
@@ -32,10 +32,11 @@ contract('KitchenShop (proxy)', (accounts) => {
     this.character = await Character.deployed();
     this.kitchen = await McStake.deployed();
     this.kitchenShop = await KitchenShop.deployed();
-    kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address]);
-    await kitchenShopSandbox.configure([5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)]);
-    await this.fastFood.addController([kitchenShopSandbox.address, owner]);
-    await this.casualFood.addController([owner]);
+    this.kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address]);
+    await this.kitchenShopSandbox.transferOwnership(dao);
+    await this.kitchenShopSandbox.configure([5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)], { from: dao });
+    await this.fastFood.addController([this.kitchenShopSandbox.address, dao], { from: dao });
+    await this.casualFood.addController([dao], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 2, 2);
     lists.chefs = [lists.chefs[0], lists.chefs[1]];
@@ -92,7 +93,7 @@ contract('KitchenShop (proxy)', (accounts) => {
     });
 
     it('fails if all kitchens have been minted', async () => {
-      await expect(kitchenShopSandbox.mint(1, 6)).to.eventually.be.rejectedWith('All tokens minted');
+      await expect(this.kitchenShopSandbox.mint(1, 6)).to.eventually.be.rejectedWith('All tokens minted');
     });
 
     it('rejects invalid payments', async () => {
@@ -115,9 +116,9 @@ contract('KitchenShop (proxy)', (accounts) => {
 
     it('calculates mint price correctly', async () => {
       const price = 2000 + 3000 + 4000 + 5000 + 6000; // each kitchen has a new price break
-      await this.fastFood.mint(owner, toWei(price));
+      await this.fastFood.mint(owner, toWei(price), { from: dao });
       const balance = await this.fastFood.balanceOf(owner);
-      const res = await kitchenShopSandbox.mint(1, 5);
+      const res = await this.kitchenShopSandbox.mint(1, 5);
       await expect(res.receipt.status).to.be.true;
       const newBalance = await this.fastFood.balanceOf(owner);
       expect(balance.sub(newBalance)).to.be.a.bignumber.eq(toWei(price));
@@ -135,7 +136,7 @@ contract('KitchenShop (proxy)', (accounts) => {
 
     it('mints LeStake with $CFOOD', async () => {
       const price = 5 * 2000;
-      await this.casualFood.mint(owner, toWei(price));
+      await this.casualFood.mint(owner, toWei(price), { from: dao });
       const balance = await this.casualFood.balanceOf(owner);
 
       const { logs } = await this.kitchenShop.mint(2, 5);
