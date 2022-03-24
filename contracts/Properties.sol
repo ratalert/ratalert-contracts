@@ -52,9 +52,8 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @return Whether an event occurred
    */
   function _doesDisasterOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
-    if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) {
-      return false;
-    }
+    if (randomVal == 0) return false;
+    if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) return false;
     uint8 likelihood = uint8(((efficiency - 100) / -4 * 10) + 20);
     return randomVal % 1000 < likelihood;
   }
@@ -67,9 +66,8 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @return Whether an event occurred
    */
   function _doesMishapOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
-    if (efficiency <= (isChef ? mishapEfficiencyMinimumChef : mishapEfficiencyMinimumRat)) {
-      return false;
-    }
+    if (randomVal == 0) return false;
+    if (efficiency <= (isChef ? mishapEfficiencyMinimumChef : mishapEfficiencyMinimumRat)) return false;
     uint8 likelihood = uint8(((efficiency - 100) * -1) + 20);
     return randomVal % 1000 < likelihood;
   }

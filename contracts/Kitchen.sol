@@ -75,6 +75,14 @@ abstract contract Kitchen is Venue {
   }
 
   /**
+   * Events are enabled in kitchens
+   * @return true
+   */
+  function _triggerEvents() internal pure override returns(bool) {
+    return true;
+  }
+
+  /**
    * Add food tokens to claimable pot for the Rats
    * @param amount - Food tokens to add to the pot
    */

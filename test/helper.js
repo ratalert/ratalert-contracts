@@ -180,6 +180,7 @@ exports.claimManyAndFulfill = async function (venue, ids, unstake, options = { a
 };
 exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list, days, stake, unstake, options = {}) {
   process.stdout.write(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}`);
+  const events = { foodInspector: 0, ratTrap: 0, burnout: 0, cat: 0 };
   let ids = list.map(item => item.id);
   if (stake) {
     await kitchen.stakeMany(options.from, ids, { gasPrice: await web3.eth.getGasPrice(), ...options }); // Because it needs to be a valid tx params object
@@ -190,6 +191,9 @@ exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list,
     const { logs } = await exports.claimManyAndFulfill.call(this, kitchen, ids, false);
     ids = [];
     logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event)).map(log => {
+      if (log.args.eventName) {
+        events[log.args.eventName] ++;
+      }
       const tokenEfficiency = Number((log.args.skill || log.args.intelligence).toString());
       const tokenTolerance = Number((log.args.freak || log.args.bodyMass).toString());
       const efficiencyReached = (efficiency < 0) ? tokenEfficiency < -efficiency : tokenEfficiency > efficiency;
@@ -201,7 +205,7 @@ exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list,
     done = ids.length === 0;
     process.stdout.write('.');
   }
-  process.stdout.write('\n');
+  process.stdout.write(`\n        done, events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
   if (unstake) {
     await exports.advanceTimeAndBlock(3600); // Wait another hour so we can unstake
     await exports.claimManyAndFulfill.call(this, kitchen, list.map(item => item.id), true);
@@ -211,7 +215,7 @@ exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list,
       item.tolerance = Number(traits.tolerance.toString());
     }));
     if (list.find(item => item.efficiency < efficiency) || list.find(item => item.tolerance < tolerance)) {
-      return exports.trainUntilWeHave.call(this, kitchen, efficiency, tolerance, list, days, unstake, options);
+      return exports.trainUntilWeHave.call(this, kitchen, efficiency, tolerance, list, days, stake, unstake, options);
     }
   }
   return list;

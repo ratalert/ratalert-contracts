@@ -281,6 +281,14 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   }
 
   /**
+   * Events are disabled by default
+   * @return false
+   */
+  function _triggerEvents() internal pure virtual returns(bool) {
+    return false;
+  }
+
+  /**
    * Level up & return the given Character's efficiency & tolerance values, including a potential mishap or disaster event
    * @param tokenId - The ID of the Character to level up
    * @param randomVal - A ChainLink VRF random number
@@ -296,7 +304,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
       tokenId,
       _getCharacterIncrement(chef ? dailySkillRate : dailyIntelligenceRate, stakingPeriod, boost),
       _getCharacterIncrement(chef ? dailyFreakRate : dailyBodyMassRate, stakingPeriod, 0),
-      randomVal
+      _triggerEvents() ? randomVal : 0
     );
   }
 
