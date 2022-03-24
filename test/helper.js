@@ -61,10 +61,10 @@ exports.loadTraits = async () => {
   }, Promise.resolve());
   return data;
 };
-exports.uploadCharacters = async (traits) => {
+exports.uploadCharacters = async (traits, from) => {
   const data = await module.exports.loadTraits();
-  const res1 = await Promise.all(Object.values(data.chef).map((trait, i) => traits.uploadTraits(i, trait)));
-  const res2 = await Promise.all(Object.values(data.rat).map((trait, i) => traits.uploadTraits(i + 10, trait)));
+  const res1 = await Promise.all(Object.values(data.chef).map((trait, i) => traits.uploadTraits(i, trait, { from })));
+  const res2 = await Promise.all(Object.values(data.rat).map((trait, i) => traits.uploadTraits(i + 10, trait, { from })));
   return res1.concat(res2);
 };
 exports.loadKitchens = async () => {

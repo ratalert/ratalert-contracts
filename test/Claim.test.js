@@ -15,14 +15,16 @@ const config = Config('development')
 contract('Claim (proxy)', (accounts) => {
   const owner = accounts[0];
   const anon = accounts[1];
+  const dao = accounts[9];
 
   before(async () => {
     this.vrfCoordinator = await VRFCoordinator.deployed();
     this.linkToken = await LinkToken.deployed();
     this.claim = await Claim.deployed();
     this.claimSandbox = await deployProxy(Claim, config.claim({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }));
-    await this.claim.addController([owner]);
-    await this.claimSandbox.addController([owner]);
+    await this.claimSandbox.transferOwnership(dao);
+    await this.claim.addController([dao], { from: dao });
+    await this.claimSandbox.addController([dao], { from: dao });
   });
 
   describe('requestRandomNumber()', () => {
@@ -30,10 +32,10 @@ contract('Claim (proxy)', (accounts) => {
       await expect(this.claim.requestRandomNumber(owner, [1, 2, 3], false, { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
     });
     it('fails if LINK balance is insufficient', async () => {
-      await expect(this.claimSandbox.requestRandomNumber(owner, [1, 2, 3], false)).to.eventually.be.rejectedWith('Insufficient LINK');
+      await expect(this.claimSandbox.requestRandomNumber(owner, [1, 2, 3], false, { from: dao })).to.eventually.be.rejectedWith('Insufficient LINK');
     });
     it('creates a claimMany request', async () => {
-      const { logs } = await this.claim.requestRandomNumber(owner, [1, 2, 3], true);
+      const { logs } = await this.claim.requestRandomNumber(owner, [1, 2, 3], true, { from: dao });
       const requestId = logs[0].args.requestId;
       expect(logs[0].args.sender).to.equal(owner);
       expect(requestId).to.have.length(66);
@@ -49,11 +51,11 @@ contract('Claim (proxy)', (accounts) => {
     });
     it('allows owner to withdraw', async () => {
       const balance = await this.linkToken.balanceOf(this.claim.address);
-      await this.claim.withdrawLink(111);
+      await this.claim.withdrawLink(111, { from: dao });
       const newBalance = await this.linkToken.balanceOf(this.claim.address);
       expect(balance.sub(newBalance)).to.be.a.bignumber.eq('111');
-      const ownerBalance = await this.linkToken.balanceOf(owner);
-      expect(ownerBalance).to.be.a.bignumber.eq('111');
+      const daoBalance = await this.linkToken.balanceOf(dao);
+      expect(daoBalance).to.be.a.bignumber.eq('111');
     });
   });
 });

@@ -24,6 +24,7 @@ function expectTotalFoodTokenEarnings() {
 contract('McStake (proxy)', (accounts) => {
   const owner = accounts[0];
   const anon = accounts[1];
+  const dao = accounts[9];
   let lists;
   let ownerBalance;
 
@@ -339,7 +340,7 @@ contract('McStake (proxy)', (accounts) => {
       });
     });
     it('boosts efficiency if staked long enough', async () => {
-      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]);
+      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon], { from: dao });
       const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
       await advanceTimeAndBlock(86400 * 2); // Wait 3 days
@@ -359,7 +360,7 @@ contract('McStake (proxy)', (accounts) => {
       });
     });
     it('does not boost efficiency if not staked long enough', async () => {
-      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]);
+      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon], { from: dao });
       const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
       await advanceTimeAndBlock(43200); // Wait 3 days

@@ -15,14 +15,16 @@ const config = Config('development')
 contract('Mint (proxy)', (accounts) => {
   const owner = accounts[0];
   const anon = accounts[1];
+  const dao = accounts[9];
 
   before(async () => {
     this.vrfCoordinator = await VRFCoordinator.deployed();
     this.linkToken = await LinkToken.deployed();
     this.mint = await Mint.deployed();
-    this.mintSandbox = await deployProxy(Mint, config.mint({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }))
-    await this.mint.addController([owner]);
-    await this.mintSandbox.addController([owner]);
+    this.mintSandbox = await deployProxy(Mint, config.mint({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }));
+    await this.mintSandbox.transferOwnership(dao);
+    await this.mint.addController([owner], { from: dao });
+    await this.mintSandbox.addController([owner], { from: dao });
   });
 
   describe('requestRandomNumber()', () => {
@@ -66,11 +68,11 @@ contract('Mint (proxy)', (accounts) => {
     });
     it('allows owner to withdraw', async () => {
       const balance = await this.linkToken.balanceOf(this.mint.address);
-      await this.mint.withdrawLink(111);
+      await this.mint.withdrawLink(111, { from: dao });
       const newBalance = await this.linkToken.balanceOf(this.mint.address);
       expect(balance.sub(newBalance)).to.be.a.bignumber.eq('111');
-      const ownerBalance = await this.linkToken.balanceOf(owner);
-      expect(ownerBalance).to.be.a.bignumber.eq('111');
+      const daoBalance = await this.linkToken.balanceOf(dao);
+      expect(daoBalance).to.be.a.bignumber.eq('111');
     });
   });
 });
