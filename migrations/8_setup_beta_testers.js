@@ -104,5 +104,7 @@ module.exports = async (deployer) => {
     }
 
     console.log(`Adding ${amount} free mint(s) for ${accounts.length} users (${cumulated.length} addresses).`);
-    await paywall.addToFreeMints(cumulated);
+    if (cumulated.length > 0) {
+        await paywall.addToFreeMints(cumulated);
+    }
 };
