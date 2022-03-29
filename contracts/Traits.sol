@@ -89,8 +89,8 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
   function drawSVG(uint256 tokenId) public view returns (string memory) {
     ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
     uint8 shift = s.isChef ? 0 : 10;
-    uint8 head = getBodyIndex(s.efficiency);
-    uint8 body = getBodyIndex(s.tolerance);
+    uint8 head = getBodyIndex(s.tolerance);
+    uint8 body = getBodyIndex(s.efficiency);
     uint8[17] memory order = [body, head, s.eyes, s.hat, s.neck, s.mouth, s.hand, 0, 0, 0, body, s.tail, head, s.piercing, s.eyes, s.hat, s.neck];
     string memory svgString = string(abi.encodePacked(
       drawTrait(traitData[0 + shift][order[0 + shift]]),
