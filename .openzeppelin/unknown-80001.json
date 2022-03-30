@@ -285,13 +285,13 @@
           {
             "contract": "Traits",
             "label": "traitData",
-            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)9444_storage))",
+            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)9458_storage))",
             "src": "../project:/contracts/Traits.sol:22"
           },
           {
             "contract": "Traits",
             "label": "character",
-            "type": "t_contract(ICharacter)6000",
+            "type": "t_contract(ICharacter)6007",
             "src": "../project:/contracts/Traits.sol:24"
           }
         ],
@@ -305,16 +305,16 @@
           "t_uint16": {
             "label": "uint16"
           },
-          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)9444_storage))": {
+          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)9458_storage))": {
             "label": "mapping(uint8 => mapping(uint8 => struct Traits.Trait))"
           },
           "t_uint8": {
             "label": "uint8"
           },
-          "t_mapping(t_uint8,t_struct(Trait)9444_storage)": {
+          "t_mapping(t_uint8,t_struct(Trait)9458_storage)": {
             "label": "mapping(uint8 => struct Traits.Trait)"
           },
-          "t_struct(Trait)9444_storage": {
+          "t_struct(Trait)9458_storage": {
             "label": "struct Traits.Trait",
             "members": [
               {
@@ -327,7 +327,7 @@
               }
             ]
           },
-          "t_contract(ICharacter)6000": {
+          "t_contract(ICharacter)6007": {
             "label": "contract ICharacter"
           },
           "t_address": {
@@ -2444,6 +2444,119 @@
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "b70f728e9352894dbf31cca22cc0360b434a01fccb66ebb1eb2cfa884a00d53b": {
+      "address": "0xeFda38AF51a338E76B1a76fDAfe36BA54Fe3d738",
+      "txHash": "0x55b64e411811b155a99fce2e7b6c7d73c254f768987841036d65822f6f2a6c4e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "TraitsV2",
+            "label": "_traitTypes",
+            "type": "t_array(t_string_storage)16_storage",
+            "src": "../project:/contracts/TraitsV2.sol:20"
+          },
+          {
+            "contract": "TraitsV2",
+            "label": "numHeadAndBodyTraits",
+            "type": "t_uint16",
+            "src": "../project:/contracts/TraitsV2.sol:21"
+          },
+          {
+            "contract": "TraitsV2",
+            "label": "traitData",
+            "type": "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)10479_storage))",
+            "src": "../project:/contracts/TraitsV2.sol:22"
+          },
+          {
+            "contract": "TraitsV2",
+            "label": "character",
+            "type": "t_contract(ICharacter)6007",
+            "src": "../project:/contracts/TraitsV2.sol:24"
+          }
+        ],
+        "types": {
+          "t_array(t_string_storage)16_storage": {
+            "label": "string[16]"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_mapping(t_uint8,t_mapping(t_uint8,t_struct(Trait)10479_storage))": {
+            "label": "mapping(uint8 => mapping(uint8 => struct TraitsV2.Trait))"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_uint8,t_struct(Trait)10479_storage)": {
+            "label": "mapping(uint8 => struct TraitsV2.Trait)"
+          },
+          "t_struct(Trait)10479_storage": {
+            "label": "struct TraitsV2.Trait",
+            "members": [
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "png",
+                "type": "t_string_storage"
+              }
+            ]
+          },
+          "t_contract(ICharacter)6007": {
+            "label": "contract ICharacter"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
           }
         }
       }
