@@ -33,7 +33,7 @@ contract('Gym (proxy)', (accounts) => {
     lists.rats = [lists.rats[0], lists.rats[1]];
     lists.all = lists.chefs.concat(lists.rats);
 
-    lists.all = await trainUntilWeHave.call(this, this.kitchen, 0, 20, lists.all, 1, true, true, { from: owner });
+    lists.all = await trainUntilWeHave.call(this, this.kitchen, 0, 72, lists.all, 1, true, true, { from: owner }); // Make sure to maximise the event risk
   });
 
   describe('stakeMany()', () => {
@@ -88,11 +88,11 @@ contract('Gym (proxy)', (accounts) => {
       const claimEvents = logs.filter(item => item.event === 'ChefClaimed');
       expect(claimEvents).to.have.length(2);
       claimEvents.forEach((log, i) => {
+        expect(log.args.eventName).to.equal('');
         expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.false;
         expect(log.args.freak).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 6).toString()); // half a day at the gym
-        expect(log.args.eventName).to.equal('');
       });
       await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.gym.address);
       await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(this.gym.address);
@@ -108,11 +108,11 @@ contract('Gym (proxy)', (accounts) => {
       const claimEvents = logs.filter(item => item.event === 'RatClaimed');
       expect(claimEvents).to.have.length(2);
       claimEvents.forEach((log, i) => {
+        expect(log.args.eventName).to.equal('');
         expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.false;
         expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString()); // half a day in the gym
-        expect(log.args.eventName).to.equal('');
         expect(log.args.foodTokensPerRat).to.equal('0');
       });
       await expect(this.character.ownerOf(rats[0])).to.eventually.equal(this.gym.address);
@@ -141,11 +141,11 @@ contract('Gym (proxy)', (accounts) => {
       const claimEvents = logs.filter(item => item.event === 'ChefClaimed');
       expect(claimEvents).to.have.length(2);
       claimEvents.forEach((log, i) => {
+        expect(log.args.eventName).to.equal('');
         expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.true;
         expect(log.args.freak).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 12).toString()); // full day at the gym
-        expect(log.args.eventName).to.equal('');
       });
       await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
       await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(owner);
@@ -172,11 +172,11 @@ contract('Gym (proxy)', (accounts) => {
       const claimEvents = logs.filter(item => item.event === 'RatClaimed');
       expect(claimEvents).to.have.length(2);
       claimEvents.forEach((log, i) => {
+        expect(log.args.eventName).to.equal('');
         expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.true;
         expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 8).toString()); // half a day in the gym
-        expect(log.args.eventName).to.equal('');
         expect(log.args.foodTokensPerRat).to.equal('0');
       });
       await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);

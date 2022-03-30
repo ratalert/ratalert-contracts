@@ -258,7 +258,7 @@ contract('McStake (proxy)', (accounts) => {
         item.efficiency = Number(traits.efficiency.toString());
         item.tolerance = Number(traits.tolerance.toString());
       }));
-      process.stdout.write('        Running 100 claims');
+      process.stdout.write('        running 100 claims');
       const events = { foodInspector: 0, burnout: 0, ratTrap: 0, cat: 0 };
       for (let i = 0; i <= 100; i += 1) {
         await advanceTimeAndBlock(86400); // Wait a day
@@ -319,7 +319,7 @@ contract('McStake (proxy)', (accounts) => {
         });
         process.stdout.write('.');
       }
-      process.stdout.write(`\n        Events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
+      process.stdout.write(`\n        done, events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
     });
     it('does not upgrade beyond cutoff', async () => {
       await this.kitchen.stakeMany(owner, Object.values(lists.cutoff).map(item => item.id), { from: owner });

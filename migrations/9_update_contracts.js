@@ -1,5 +1,4 @@
 const Config = require('../config');
-const {deployProxy} = require("@openzeppelin/truffle-upgrades");
 
 const Properties = artifacts.require('Properties');
 const Paywall = artifacts.require('Paywall');

@@ -1,8 +1,10 @@
+const Config = require("../config");
 const Paywall = artifacts.require('Paywall');
 
-module.exports = async (deployer) => {
+module.exports = async (deployer, network, accounts) => {
+    const config = Config(network, accounts);
     const paywall = await Paywall.deployed();
-    const accounts = [
+    const userAccounts = [
         '0x8988a1E4AdBd1EeB05c25225ff753e006c27E199',
         '0x27CC196d34D9649F531189228d87CcFF7f18a5A7',
         '0xe5EF9746B8023B41C48c192c87138Bd0ba17a1bB',
@@ -97,14 +99,14 @@ module.exports = async (deployer) => {
         '0x79AE95403f7EA7b9937EFeE88642b791E0dedE51',
     ];
     const amount = 12;
-    let cumulated = amount > 0 ? accounts : [];
+    let cumulated = amount > 0 ? userAccounts : [];
 
     for (let i = 0; i < amount - 1; i++) {
-        cumulated = cumulated.concat(accounts);
+        cumulated = cumulated.concat(userAccounts);
     }
 
-    console.log(`Adding ${amount} free mint(s) for ${accounts.length} users (${cumulated.length} addresses).`);
+    console.log(`Adding ${amount} free mint(s) for ${userAccounts.length} users (${cumulated.length} addresses).`);
     if (cumulated.length > 0) {
-        await paywall.addToFreeMints(cumulated);
+        await paywall.addToFreeMints(cumulated, { from: config.dao.address });
     }
 };
