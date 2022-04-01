@@ -1,4 +1,5 @@
 const { readdir, readFile } = require('fs/promises');
+const crypto = require('crypto');
 const chai = require('chai');
 require('@openzeppelin/test-helpers');
 const Config = require('../config');
@@ -44,7 +45,10 @@ exports.advanceTimeAndBlock = async (time) => {
   return Promise.resolve(web3.eth.getBlock('latest'));
 };
 exports.loadTraits = async () => {
-  const data = { chef: {}, rat: {} };
+  if (exports.traits) {
+    return exports.traits;
+  }
+  exports.traits = { chef: {}, rat: {} };
   const path = `${__dirname}/../images/characters`;
   const files = (await readdir(path)).sort();
   await files.reduce(async (previousPromise, file) => {
@@ -52,14 +56,15 @@ exports.loadTraits = async () => {
     if (!file.includes('.png')) {
       return;
     }
-    const [type, trait, , traitName, name] = file.substr(0, file.indexOf('.')).split('_')
+    const [type, , , traitName, name] = file.substr(0, file.indexOf('.')).split('_');
     const png = (await readFile(`${path}/${file}`)).toString('base64');
-    if (!data[type][trait]) {
-      data[type][trait] = ['body', 'head'].includes(traitName) ? [] : [{ name: '', png: '' }];
+    const md5 = crypto.createHash('md5').update(png);
+    if (!exports.traits[type][traitName]) {
+      exports.traits[type][traitName] = ['body', 'head'].includes(traitName) ? [] : [{ name: '', png: '', md5: '' }];
     }
-    data[type][trait].push({ name, png });
+    exports.traits[type][traitName].push({ name, png, md5: md5.digest('hex') });
   }, Promise.resolve());
-  return data;
+  return exports.traits;
 };
 exports.uploadCharacters = async (traits, from) => {
   const data = await module.exports.loadTraits();
@@ -242,4 +247,17 @@ exports.expectRatEarnings = (earned, pot, numRats, tolerance) => {
 };
 exports.setupVRF = async (linkToken, consumer) => {
   return linkToken.mint(consumer.address, exports.toWei(1000));
+};
+exports.doesSvgTraitMatch = async (svg, type, trait, val) => {
+  let idx = Math.floor(val * 7 / 100);
+  if (idx > 6) idx = 6;
+  const traitObj = (await exports.loadTraits())[type][trait][idx];
+  svg = svg.split('>').join('>\n');
+  let matches = svg.match(/"data:image\/png;base64,.*"/g);
+  matches = matches.map(m => {
+    const png = m.match(/"data:image\/png;base64,(.*)"/)[1];
+    const md5 = crypto.createHash('md5').update(png);
+    return { png, md5: md5.digest('hex') };
+  });
+  return typeof matches.find(m => m.md5 === traitObj.md5) !== 'undefined'; // found?
 };

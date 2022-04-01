@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { BN } = require('@openzeppelin/test-helpers');
-const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock, mintAndFulfill, fulfill, claimManyAndFulfill } = require('./helper');
+const { toWei, loadTraits, mintUntilWeHave, advanceTimeAndBlock, mintAndFulfill, fulfill, claimManyAndFulfill, doesSvgTraitMatch } = require('./helper');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
@@ -156,8 +156,8 @@ contract('Character (proxy)', (accounts) => {
         boost: {traitType: 'boost', name: 'Boost', value: 0 },
       }
       const traitMap = {
-        chef: { Body: 0, Head: 1, Eyes: 2, Hat: 3, Neck: 4, Mouth: 5, Hand: 6 },
-        rat: { Body: 0, Tail: 1, Head: 2, Piercing: 3, Eyes: 4, Hat: 5, Neck: 6 },
+        chef: { Body: 'body', Head: 'head', Eyes: 'eyes', Hat: 'hat', Neck: 'neck', Mouth: 'mouth', Hand: 'hand' },
+        rat: { Body: 'body', Tail: 'tail', Head: 'head', Piercing: 'piercing', Eyes: 'eyes', Hat: 'hat', Neck: 'neck' },
       }
       await Promise.all(IDs.map(async id => {
         const traits = await this.character.getTokenTraits(id);
@@ -170,6 +170,8 @@ contract('Character (proxy)', (accounts) => {
         expect(json.external_url).to.equal(`https://ratalert.com/characters/${id}`);
         expect(json.image.length).to.be.above(2500); // Contains images
         expect(svg.length).to.be.above(2500); // Contains images
+        await expect(doesSvgTraitMatch(svg, traits.isChef ? 'chef' : 'rat','body', 0)).to.eventually.be.true;
+        await expect(doesSvgTraitMatch(svg, traits.isChef ? 'chef' : 'rat','head', 0)).to.eventually.be.true;
         traits.isChef ? stats.numChefs += 1 : stats.numRats += 1;
         Object.entries(checks).forEach(([key, val]) => {
           const attr = json.attributes.find(v => v.trait_type === val.name);

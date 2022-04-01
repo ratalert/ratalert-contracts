@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { BN } = require('@openzeppelin/test-helpers');
-const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings, mintAndFulfill, claimManyAndFulfill } = require('./helper');
+const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings, mintAndFulfill, claimManyAndFulfill, doesSvgTraitMatch } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -264,9 +264,13 @@ contract('McStake (proxy)', (accounts) => {
         await advanceTimeAndBlock(86400); // Wait a day
         const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(list).map(item => item.id), false);
         const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
-        claimEvents.forEach(({ event, args }) => {
+        await Promise.all(claimEvents.map(async ({ event, args }) => {
           const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
           const tolerance = Number((event === 'ChefClaimed' ? args.freak : args.bodyMass).toString());
+          const tokenUri = await this.character.tokenURI(args.tokenId);
+          const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
+          const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
+
           if (event === 'ChefClaimed') {
             expectChefEarnings(args.earned, 86400, list.chef.efficiency);
             list.chef.earned = args.earned;
@@ -290,6 +294,8 @@ contract('McStake (proxy)', (accounts) => {
               list.chef.efficiency = newEfficiency;
               list.chef.tolerance = newTolerance;
             }
+            await expect(doesSvgTraitMatch(svg, 'chef','body', efficiency)).to.eventually.be.true;
+            await expect(doesSvgTraitMatch(svg, 'chef','head', tolerance)).to.eventually.be.true;
           } else {
             expectRatEarnings(args.earned, fromWei(list.chef.earned) / 8 * 2, 1, list.rat.tolerance);
             if (args.eventName === 'ratTrap') {
@@ -312,11 +318,13 @@ contract('McStake (proxy)', (accounts) => {
               list.rat.efficiency = newEfficiency;
               list.rat.tolerance = newTolerance;
             }
+            await expect(doesSvgTraitMatch(svg, 'rat','body', efficiency)).to.eventually.be.true;
+            await expect(doesSvgTraitMatch(svg, 'rat','head', tolerance)).to.eventually.be.true;
           }
           if (args.eventName) {
             events[args.eventName] += 1;
           }
-        });
+        }));
         process.stdout.write('.');
       }
       process.stdout.write(`\n        done, events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
