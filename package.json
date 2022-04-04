@@ -10,8 +10,10 @@
     "compile": "truffle compile",
     "migrate": "truffle migrate",
     "test": "truffle test",
-    "deploy-ropsten": "truffle migrate --network ropsten",
-    "deploy-rinkeby": "truffle migrate --network rinkeby"
+    "deploy-test": "truffle migrate --network test",
+    "deploy-beta": "truffle migrate --network beta",
+    "deploy-live": "truffle migrate --network live",
+    "verify": "truffle run verify CasualFood Character Claim FastFood GourmetFood Gym KitchenShop LeStake McStake Migrations Mint Paywall Properties TheStakehouse Traits"
   },
   "author": "",
   "license": "ISC",
@@ -22,7 +24,8 @@
     "@openzeppelin/truffle-upgrades": "^1.12.0",
     "@truffle/hdwallet-provider": "^2.0.1",
     "dotenv": "^14.3.2",
-    "mri": "^1.2.0"
+    "mri": "^1.2.0",
+    "truffle-plugin-verify": "^0.5.24"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.15",
