@@ -45,7 +45,7 @@ contract('Character (proxy)', (accounts) => {
     this.kitchen = await McStake.deployed();
     this.characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address, this.properties.address, config.dao.address]);
     await this.characterSandbox.transferOwnership(dao);
-    await this.characterSandbox.configure(5, { from: dao });
+    await this.characterSandbox.configure(5, 1, { from: dao });
     await this.fastFood.addController([this.paywall.address, dao], { from: dao });
     await this.paywall.addController([this.characterSandbox.address, dao], { from: dao });
     await this.mint.addController([this.characterSandbox.address], { from: dao });

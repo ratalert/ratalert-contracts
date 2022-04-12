@@ -150,9 +150,9 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    */
   function mintCost(uint256 tokenId, uint256 maxTokens, uint256 gen0Tokens) public view returns (uint256) {
     if (tokenId <= gen0Tokens) return 0;
-    if (tokenId <= maxTokens * 2 / 5) return gen1PriceTier0;
-    if (tokenId <= maxTokens * 3 / 5) return gen1PriceTier1;
-    if (tokenId <= maxTokens * 4 / 5) return gen1PriceTier2;
+    if (tokenId <= (maxTokens - gen0Tokens) * 1 / 4 + gen0Tokens) return gen1PriceTier0;
+    if (tokenId <= (maxTokens - gen0Tokens) * 2 / 4 + gen0Tokens) return gen1PriceTier1;
+    if (tokenId <= (maxTokens - gen0Tokens) * 3 / 4 + gen0Tokens) return gen1PriceTier2;
     return gen1PriceTier3;
   }
 }

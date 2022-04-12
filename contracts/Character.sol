@@ -51,9 +51,9 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   /**
    * Allows DAO to update game parameters
    */
-  function configure(uint256 _maxTokens) external onlyOwner {
+  function configure(uint256 _maxTokens, uint256 _gen0Tokens) external onlyOwner {
     maxTokens = _maxTokens;
-    gen0Tokens = _maxTokens / 5;
+    gen0Tokens = _gen0Tokens;
   }
 
   /**

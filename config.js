@@ -29,6 +29,7 @@ module.exports = (network, accounts = []) => ({
   }),
   character: Object.values({
     maxTokens: num('CHARACTER_MAX_TOKENS', '50000'),
+    gen0Tokens: num('CHARACTER_GEN0_TOKENS', '10000'),
   }),
   kitchen: {
     dailyChefEarnings: num('KITCHEN_DAILY_CHEF_EARNINGS', '250'),
