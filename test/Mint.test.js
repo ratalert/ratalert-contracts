@@ -1,12 +1,14 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { deployProxy } = require("@openzeppelin/truffle-upgrades");
+const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+const { scheduleAndExecute } = require('./helper');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
+const TimelockController = artifacts.require('TimelockController');
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
@@ -18,13 +20,14 @@ contract('Mint (proxy)', (accounts) => {
   const dao = accounts[9];
 
   before(async () => {
+    this.timelockController = await TimelockController.deployed();
     this.vrfCoordinator = await VRFCoordinator.deployed();
     this.linkToken = await LinkToken.deployed();
     this.mint = await Mint.deployed();
     this.mintSandbox = await deployProxy(Mint, config.mint({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }));
-    await this.mintSandbox.transferOwnership(dao);
-    await this.mint.addController([owner], { from: dao });
-    await this.mintSandbox.addController([owner], { from: dao });
+    await this.mintSandbox.transferOwnership(this.timelockController.address);
+    await scheduleAndExecute(this.mint, 'addController', [[owner]], { from: dao });
+    await scheduleAndExecute(this.mintSandbox, 'addController', [[owner]], { from: dao });
   });
 
   describe('requestRandomNumber()', () => {
@@ -64,7 +67,7 @@ contract('Mint (proxy)', (accounts) => {
   });
   describe('withdrawLink()', () => {
     it('allows nobody but the owner to withdraw', async () => {
-      await expect(this.mint.withdrawLink(1, { from: anon })).to.eventually.be.rejectedWith('Ownable: caller is not the owner');
+      await expect(this.mint.withdrawLink(1, { from: anon })).to.eventually.be.rejectedWith('Only DAO can execute');
     });
     it('allows owner to withdraw', async () => {
       const balance = await this.linkToken.balanceOf(this.mint.address);

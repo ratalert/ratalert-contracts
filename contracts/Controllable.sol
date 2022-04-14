@@ -19,7 +19,7 @@ abstract contract Controllable is Ownable {
    * Gets controller status by address
    * @param _controller - The address to check
    */
-  function controller(address _controller) external view onlyOwner returns (bool) {
+  function controller(address _controller) external view returns (bool) {
     return controllers[_controller];
   }
 

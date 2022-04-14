@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { BN } = require('@openzeppelin/test-helpers');
-const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings, mintAndFulfill, claimManyAndFulfill, doesSvgTraitMatch } = require('./helper');
+const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings, mintAndFulfill, claimManyAndFulfill, doesSvgTraitMatch, scheduleAndExecute } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -348,7 +348,7 @@ contract('McStake (proxy)', (accounts) => {
       });
     });
     it('boosts efficiency if staked long enough', async () => {
-      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon], { from: dao });
+      await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]], { from: dao });
       const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
       await advanceTimeAndBlock(86400 * 2); // Wait 3 days
@@ -368,7 +368,7 @@ contract('McStake (proxy)', (accounts) => {
       });
     });
     it('does not boost efficiency if not staked long enough', async () => {
-      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon], { from: dao });
+      await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]], { from: dao }, 1);
       const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
       await advanceTimeAndBlock(43200); // Wait 3 days

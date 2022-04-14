@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { uploadCharacters } = require('./helper');
+const { loadTraits, uploadCharacters, scheduleAndExecute } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -26,15 +26,31 @@ contract('Traits (proxy)', (accounts) => {
     this.traits = await Traits.deployed();
   });
 
+  describe('traitData()', () => {
+    it('returns real data', async () => {
+      const traits = await loadTraits();
+      for (let character in traits) {
+        const offset = character === 'chef' ? 0 : 10;
+        Promise.all(Object.entries(traits[character]).map(async ([ trait, items ], i) => {
+          Promise.all(items.map(async (item, j) => {
+            const res = await this.traits.traitData(offset + i, j);
+            expect(item.name).to.equal(res.name);
+            expect(item.png).to.equal(res.png);
+          }));
+        }));
+      }
+    });
+  });
+
   describe('uploadTraits()', () => {
     it('uploads data', async () => {
-      const res = await uploadCharacters(this.traits, dao);
+      const res = await uploadCharacters(this.traits, { from: dao });
       expect(res.length).to.equal(14); // 7 chef traits + 7 rat traits
       res.forEach(item => expect(item.receipt.status).to.be.true);
     });
     it('replaces with test data', async () => {
       await Promise.all(data.map(async (traits, i) => {
-        const res = await this.traits.uploadTraits(i, traits, { from: dao });
+        const res = await scheduleAndExecute(this.traits, 'uploadTraits', [i, traits], { from: dao });
         await expect(res.receipt.status).to.be.true;
       }));
     });

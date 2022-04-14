@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, claimManyAndFulfill } = require('./helper');
+const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, claimManyAndFulfill, scheduleAndExecute } = require('./helper');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
@@ -35,9 +35,9 @@ contract('LeStake (proxy)', (accounts) => {
     this.mcStake = await McStake.deployed();
     this.kitchenShop = await KitchenShop.deployed();
     this.casualFood = await CasualFood.deployed();
-    await this.mcStake.configure(config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100, { from: dao });
-    await this.kitchen.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, { from: dao });
-    await this.casualFood.addController([dao], { from: dao });
+    await scheduleAndExecute(this.mcStake, 'configure', [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100], { from: dao });
+    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx], { from: dao });
+    await scheduleAndExecute(this.casualFood, 'addController', [[dao]], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 12, 3);
     lists.eligibleChefs = lists.chefs.slice(1, 12);

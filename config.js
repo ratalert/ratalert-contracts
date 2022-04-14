@@ -16,6 +16,11 @@ module.exports = (network, accounts = []) => ({
   dao: {
     address: env('DAO_ADDRESS', accounts ? accounts[9] : ''),
   },
+  timelock: {
+    minDelay: num('TIMELOCK_MIN_DELAY', (60 * 60 * 24 * 2).toString()),
+    proposers: env('TIMELOCK_PROPOSERS', accounts ? accounts[9] : ''),
+    executors: env('TIMELOCK_EXECUTORS', accounts ? accounts[9] : ''),
+  },
   payWall: Object.values({
     mintPrice: toWei(env('PAYWALL_MINT_PRICE', '0.1'), 'ether'),
     whitelistBoost: num('PAYWALL_WHITELIST_BOOST', '1'),

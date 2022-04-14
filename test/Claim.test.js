@@ -1,12 +1,14 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
+const { scheduleAndExecute } = require('./helper');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
+const TimelockController = artifacts.require('TimelockController');
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Claim = artifacts.require('Claim');
@@ -18,13 +20,14 @@ contract('Claim (proxy)', (accounts) => {
   const dao = accounts[9];
 
   before(async () => {
+    this.timelockController = await TimelockController.deployed();
     this.vrfCoordinator = await VRFCoordinator.deployed();
     this.linkToken = await LinkToken.deployed();
     this.claim = await Claim.deployed();
     this.claimSandbox = await deployProxy(Claim, config.claim({ vrfCoordinator: this.vrfCoordinator.address, linkToken: this.linkToken.address }));
-    await this.claimSandbox.transferOwnership(dao);
-    await this.claim.addController([dao], { from: dao });
-    await this.claimSandbox.addController([dao], { from: dao });
+    await this.claimSandbox.transferOwnership(this.timelockController.address);
+    await scheduleAndExecute(this.claim, 'addController', [[dao]], { from: dao });
+    await scheduleAndExecute(this.claimSandbox, 'addController', [[dao]], { from: dao });
   });
 
   describe('requestRandomNumber()', () => {
@@ -47,7 +50,7 @@ contract('Claim (proxy)', (accounts) => {
   });
   describe('withdrawLink()', () => {
     it('allows nobody but the owner to withdraw', async () => {
-      await expect(this.claim.withdrawLink(1, { from: anon })).to.eventually.be.rejectedWith('Ownable: caller is not the owner');
+      await expect(this.claim.withdrawLink(1, { from: anon })).to.eventually.be.rejectedWith('Only DAO can execute');
     });
     it('allows owner to withdraw', async () => {
       const balance = await this.linkToken.balanceOf(this.claim.address);

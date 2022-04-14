@@ -44,7 +44,7 @@ module.exports = async (deployer, network, accounts) => {
   const traits = await deployProxy(Traits, {deployer});
   const properties = await deployProxy(Properties, {deployer});
   const paywall = await deployProxy(Paywall, [fastFood.address], {deployer});
-  const character = await deployProxy(Character, [paywall.address, mint.address, traits.address, properties.address, config.dao.address], {deployer});
+  const character = await deployProxy(Character, [paywall.address, mint.address, traits.address, properties.address], {deployer});
   const kitchenShop = await deployProxy(KitchenShop, [fastFood.address, casualFood.address, character.address], {deployer});
   const claim = await deployProxy(Claim, config.claim({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), {deployer});
   const mcStake = await deployProxy(McStake, [character.address, claim.address, fastFood.address], {deployer});
@@ -60,6 +60,15 @@ module.exports = async (deployer, network, accounts) => {
   await theStakehouse.configure(config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
   await leStake.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, config.kitchen.leStake.minEfficiency, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
   await gym.configure(...config.gym);
+
+  await mint.setDao(config.dao.address);
+  await character.setDao(config.dao.address);
+  await kitchenShop.setDao(config.dao.address);
+  await claim.setDao(config.dao.address);
+  await mcStake.setDao(config.dao.address);
+  await theStakehouse.setDao(config.dao.address);
+  await leStake.setDao(config.dao.address);
+  await gym.setDao(config.dao.address);
 
   await traits.setCharacter(character.address);
   await mint.addController([character.address]);

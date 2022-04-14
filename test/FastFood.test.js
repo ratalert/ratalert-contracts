@@ -1,4 +1,4 @@
-const { toWei } = require('./helper');
+const { toWei, scheduleAndExecute } = require('./helper');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 
@@ -14,7 +14,7 @@ contract('FastFood', (accounts) => {
 
   before(async () => {
     this.foodToken = await FastFood.deployed();
-    await this.foodToken.addController([dao], { from: dao });
+    await scheduleAndExecute(this.foodToken, 'addController', [[dao]], { from: dao });
     expect(await this.foodToken.totalSupply()).to.be.a.bignumber.eq(toWei(0));
   });
 
@@ -62,18 +62,14 @@ contract('FastFood', (accounts) => {
     });
 
     it('allows owner to add a controller', async () => {
-      const res = await this.foodToken.addController([owner], { from: dao });
+      const res = await scheduleAndExecute(this.foodToken, 'addController', [[owner]], { from: dao });
       await expect(res.receipt.status).to.be.true;
     });
   });
 
   describe('controller()', () => {
-    it('denies anonymous to get a controller', async () => {
-      await expect(this.foodToken.controller(anon, { from: anon })).to.eventually.be.rejected;
-    });
-
-    it('allows owner to get a controller', async () => {
-      await expect(this.foodToken.controller(owner, { from: dao })).to.eventually.be.true;
+    it('returns a controller status', async () => {
+      await expect(this.foodToken.controller(owner)).to.eventually.be.true;
     });
   });
 
@@ -83,9 +79,9 @@ contract('FastFood', (accounts) => {
     });
 
     it('allows owner to remove a controller', async () => {
-      const res = await this.foodToken.removeController([owner], { from: dao });
+      const res = await scheduleAndExecute(this.foodToken, 'removeController', [[owner]], { from: dao });
       await expect(res.receipt.status).to.be.true;
-      await expect(this.foodToken.controller(owner, { from: dao })).to.eventually.be.false;
+      await expect(this.foodToken.controller(owner)).to.eventually.be.false;
     });
   });
 });

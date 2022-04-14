@@ -28,6 +28,7 @@ This repository contains the Solidity smart [contracts](./contracts/) of the gam
 - Optional: Create a `.env` file in the **project root** directory, run `npx mnemonics` and add the seed phrase in a new line:
 
       MNEMONIC="your twelve word seed phrase"
+      TIMELOCK_MIN_DELAY="0" # Disable timelock in tests
 
 - Run `npm install`
 

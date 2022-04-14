@@ -66,11 +66,23 @@ exports.loadTraits = async () => {
   }, Promise.resolve());
   return exports.traits;
 };
-exports.uploadCharacters = async (traits, from) => {
+exports.uploadCharacters = async (traits, options) => {
   const data = await module.exports.loadTraits();
-  const res1 = await Promise.all(Object.values(data.chef).map((trait, i) => traits.uploadTraits(i, trait, { from })));
-  const res2 = await Promise.all(Object.values(data.rat).map((trait, i) => traits.uploadTraits(i + 10, trait, { from })));
-  return res1.concat(res2);
+  const responses = [];
+  for (let character in data) {
+    await Object.values(data[character]).reduce(async (previousPromise, trait, i) => {
+      await previousPromise;
+      const offset = character === 'chef' ? 0 : 10;
+      let res;
+      if (options) {
+        res = await exports.scheduleAndExecute(traits, 'uploadTraits', [offset + i, trait], options, i);
+      } else {
+        res = await traits.uploadTraits(offset + i, trait);
+      }
+      responses.push(res);
+    }, Promise.resolve());
+  }
+  return responses;
 };
 exports.loadKitchens = async () => {
   const data = [];
@@ -260,4 +272,32 @@ exports.doesSvgTraitMatch = async (svg, type, trait, val) => {
     return { png, md5: md5.digest('hex') };
   });
   return typeof matches.find(m => m.md5 === traitObj.md5) !== 'undefined'; // found?
+};
+exports.scheduleAndExecute = async (contract, func, args, options, salt = 0, delay = 0) => {
+  const timelockController = await artifacts.require('TimelockController').deployed();
+  const abi = contract.abi.find(item => item.name === func);
+  const data = web3.eth.abi.encodeFunctionCall(abi, args);
+  const timelockArgs = [
+    contract.address,
+    0, // value
+    data,
+    '0x0', // predecessor
+    `0x${salt}`, // salt
+    delay,
+  ];
+  await timelockController.schedule(...timelockArgs, options);
+  await new Promise(resolve => setTimeout(resolve, delay * 1000));
+  return timelockController.execute(...timelockArgs.slice(0, -1), options);
+};
+exports.decodeRawLogs = (res, contract, eventName, slice = 0) => {
+  const abi = contract.abi.find(item => item.name === eventName);
+  const ev = res.receipt.rawLogs.filter(item => item.topics[0] === abi.signature);
+  return ev.map(item => {
+    item.args = web3.eth.abi.decodeLog(abi.inputs, item.data, item.topics.slice(slice));
+    item.event = abi.name;
+    delete item.data;
+    delete item.topics;
+    res.logs.push(item);
+    return item;
+  });
 };

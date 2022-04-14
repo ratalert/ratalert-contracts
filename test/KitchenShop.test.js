@@ -1,11 +1,12 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
-const { toWei, mintUntilWeHave, trainUntilWeHave } = require('./helper');
+const { toWei, mintUntilWeHave, trainUntilWeHave, scheduleAndExecute } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const TimelockController = artifacts.require('TimelockController');
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
 const Mint = artifacts.require('Mint');
@@ -23,6 +24,7 @@ contract('KitchenShop (proxy)', (accounts) => {
   let fastFoodBalance;
 
   before(async () => {
+    this.timelockController = await TimelockController.deployed();
     this.vrfCoordinator = await VRFCoordinator.deployed();
     this.linkToken = await LinkToken.deployed();
     this.mint = await Mint.deployed();
@@ -33,10 +35,10 @@ contract('KitchenShop (proxy)', (accounts) => {
     this.kitchen = await McStake.deployed();
     this.kitchenShop = await KitchenShop.deployed();
     this.kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address]);
-    await this.kitchenShopSandbox.transferOwnership(dao);
-    await this.kitchenShopSandbox.configure([5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)], { from: dao });
-    await this.fastFood.addController([this.kitchenShopSandbox.address, dao], { from: dao });
-    await this.casualFood.addController([dao], { from: dao });
+    await this.kitchenShopSandbox.transferOwnership(this.timelockController.address);
+    await scheduleAndExecute(this.kitchenShopSandbox, 'configure', [[5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)]], { from: dao });
+    await scheduleAndExecute(this.fastFood, 'addController', [[this.kitchenShopSandbox.address, dao]], { from: dao });
+    await scheduleAndExecute(this.casualFood, 'addController', [[dao]], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 2, 2);
     lists.chefs = [lists.chefs[0], lists.chefs[1]];

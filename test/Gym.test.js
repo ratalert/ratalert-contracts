@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { advanceTimeAndBlock, mintUntilWeHave, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave } = require('./helper');
+const { advanceTimeAndBlock, mintUntilWeHave, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave, decodeRawLogs } = require('./helper');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -71,12 +71,7 @@ contract('Gym (proxy)', (accounts) => {
       await this.gym.stakeMany(owner, ids, { from: owner });
       await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
       const res = await this.gym.claimMany(ids, false);
-      const randomNumberRequestedAbi = this.claim.abi.find(item => item.name === 'RandomNumberRequested');
-      const randomNumberRequestedEvent = res.receipt.rawLogs.find(item => item.topics[0] === randomNumberRequestedAbi.signature);
-      randomNumberRequestedEvent.args = web3.eth.abi.decodeLog(randomNumberRequestedAbi.inputs, randomNumberRequestedEvent.data, randomNumberRequestedEvent.topics);
-      randomNumberRequestedEvent.event = 'RandomNumberRequested';
-      delete randomNumberRequestedEvent.data;
-      delete randomNumberRequestedEvent.topics;
+      const randomNumberRequestedEvent = decodeRawLogs(res, this.claim, 'RandomNumberRequested')[0];
       expect(randomNumberRequestedEvent.args.sender).to.equal(owner);
     });
     it('claims from chefs', async () => {

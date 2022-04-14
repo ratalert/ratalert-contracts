@@ -27,15 +27,13 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
   address[] venues;
-  IPaywall public paywall;
-  address payable public dao;
+  IPaywall paywall;
 
   function initialize(
     address _paywall,
     address _mint,
     address _traits,
-    address _properties,
-    address _dao
+    address _properties
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -45,7 +43,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
     theMint = IMint(_mint);
     traits = ITraits(_traits);
     properties = IProperties(_properties);
-    dao = payable(_dao);
   }
 
   /**

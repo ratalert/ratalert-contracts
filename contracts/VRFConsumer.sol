@@ -2,11 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol";
+import "./DOWable.sol";
 
-abstract contract VRFConsumer is Initializable, OwnableUpgradeable, VRFRequestIDBase {
+abstract contract VRFConsumer is Initializable, VRFRequestIDBase, DOWable {
   LinkTokenInterface internal link;
   address vrfCoordinator;
 
@@ -58,7 +58,7 @@ abstract contract VRFConsumer is Initializable, OwnableUpgradeable, VRFRequestID
    * @param amount - Amount of LINK to send
    * @return success - Whether the transaction succeeded
    */
-  function withdrawLink(uint amount) external onlyOwner returns(bool success) {
-    return link.transfer(_msgSender(), amount);
+  function withdrawLink(uint amount) external onlyDao returns(bool success) {
+    return link.transfer(tx.origin, amount);
   }
 }
