@@ -7,6 +7,7 @@ const Config = require('../config');
 const expect = chai.expect;
 const config = Config('development')
 
+Number.prototype.fix = function () { return parseFloat(this.toFixed(10)); } // Javascript precision quick fix
 exports.toWei = (ether) => web3.utils.toWei(ether.toString(), 'ether');
 exports.fromWei = (wei) => Number(web3.utils.fromWei(wei, 'ether'));
 exports.advanceTime = (time) => {

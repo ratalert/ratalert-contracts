@@ -62,9 +62,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
     int8 boost = paywall.handle(_msgSender(), amount, msg.value, paid, maxTokens, gen0Tokens);
-    if (msg.value > 0) {
-      dao.transfer(msg.value); // Transfer to Gnosis Safe
-    }
     theMint.requestRandomNumber(_msgSender(), amount, stake, boost);
     paid += amount;
   }
@@ -144,6 +141,13 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
     if (!wl)
       require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
     _transfer(from, to, tokenId);
+  }
+
+  /**
+   * Allows DAO to withdraw funds
+   */
+  function withdrawPayments() external onlyDao {
+    payable(dao).transfer(address(this).balance); // Transfer to DAO wallet
   }
 
   /**

@@ -28,9 +28,7 @@ contract('Character (proxy)', (accounts) => {
   const dao = accounts[9];
   const stats = { numChefs: 0, numRats: 0 };
   let lists;
-  let daoBalance;
-  let totalMints = 0;
-  let totalPaid = 0;
+  const total = { minted: 0, paid: 0, balance: 0 };
 
   before(async () => {
     this.timelockController = await TimelockController.deployed();
@@ -96,10 +94,11 @@ contract('Character (proxy)', (accounts) => {
     });
     it('allows nobody but the Mint to fulfill', async () => {
       const res = await this.character.mint(5, false, { value: toWei(0.5) });
-      totalPaid += 5;
+      total.paid += 5;
+      total.balance += 5 * 0.1;
       const { requestId } = decodeRawLogs(res, this.mint, 'RandomNumberRequested')[0].args;
       await expect(this.character.fulfillMint(requestId, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
-      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(totalPaid.toString());
+      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals((total.paid).toString());
     });
     it('fails if all characters have been minted', async () => {
       await expect(this.characterSandbox.mint(6, false)).to.eventually.be.rejectedWith('All tokens minted');
@@ -139,24 +138,24 @@ contract('Character (proxy)', (accounts) => {
     });
     it('emits the RandomNumberRequested event', async () => {
       const res = await this.character.mint(1, false, { from: anon, value: toWei(0.1) });
-      totalPaid += 1;
+      total.paid += 1;
+      total.balance += 0.1;
       const randomNumberRequestedEvent = decodeRawLogs(res, this.mint, 'RandomNumberRequested')[0];
       expect(randomNumberRequestedEvent.args.sender).to.equal(anon);
-      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(totalPaid.toString());
+      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(total.paid.toString());
     });
 
     it('allows owner to mint', async () => {
       lists = await mintUntilWeHave.call(this, 8, 2);
-      totalMints += lists.all.length;
-      totalPaid += lists.all.length;
-      daoBalance = await web3.eth.getBalance(config.dao.address);
-      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
-      await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
-      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(totalPaid.toString());
-      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
+      total.minted += lists.all.length;
+      total.paid += lists.all.length;
+      total.balance += lists.all.length * 0.1;
+      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(total.balance.fix()));
+      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(total.paid.toString());
+      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(total.minted.toString());
       await expect(this.character.balanceOf(owner)).to.eventually.be.a.bignumber.that.equals(lists.all.length.toString());
-      await expect(this.character.ownerOf(totalMints - lists.all.length + 1)).to.eventually.equal(owner);
-      await expect(this.character.ownerOf(totalMints)).to.eventually.equal(owner);
+      await expect(this.character.ownerOf(total.minted - lists.all.length + 1)).to.eventually.equal(owner);
+      await expect(this.character.ownerOf(total.minted)).to.eventually.equal(owner);
       const IDs = lists.all.map(item => item.id);
       const checks = {
         isChef: { traitType: 'type', name: 'Type' },
@@ -225,14 +224,15 @@ contract('Character (proxy)', (accounts) => {
 
     it('allows anonymous to mint', async () => {
       const { logs } = await mintAndFulfill.call(this, 5, false, { args: { from: anon } });
-      totalMints += 5;
+      total.minted += 5;
+      total.paid += 5;
+      total.balance += 5 * 0.1;
       const fulfilledEvent = logs.find(item => item.event === 'RandomNumberFulfilled');
       expect(fulfilledEvent.args.sender).to.equal(anon);
       const IDs = logs.filter(item => item.event === 'Transfer').map(it => Number(it.args.tokenId.toString()));
-      daoBalance = await web3.eth.getBalance(config.dao.address);
-      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
-      await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
-      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
+      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(total.balance.fix()));
+      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(total.paid.toString());
+      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(total.minted.toString());
       await expect(this.character.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5');
       await Promise.all(IDs.map(async id => {
         await expect(this.character.ownerOf(id)).to.eventually.equal(anon);
@@ -245,13 +245,14 @@ contract('Character (proxy)', (accounts) => {
 
     it('mints and stakes', async () => {
       const res = await mintAndFulfill.call(this, 5, true, { args: { from: anon } });
-      totalMints += 5;
+      total.minted += 5;
+      total.paid += 5;
+      total.balance += 5 * 0.1;
       const IDs = res.logs.filter(item => item.event === 'Transfer').map(it => Number(it.args.tokenId.toString()));
       expect(res.receipt.status).to.be.true;
-      daoBalance = await web3.eth.getBalance(config.dao.address);
-      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
-      await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.that.equals(new BN(daoBalance).add(new BN(lists.all.length).mul(new BN(0.1))));
-      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(totalMints.toString());
+      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(total.balance.fix()));
+      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(total.paid.toString());
+      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(total.minted.toString());
       await expect(this.character.balanceOf(anon)).to.eventually.be.a.bignumber.that.equals('5'); // Because they are staked!
       await Promise.all(IDs.map(async id => {
         await expect(this.character.ownerOf(id)).to.eventually.equal(this.kitchen.address);
@@ -277,6 +278,9 @@ contract('Character (proxy)', (accounts) => {
       const res4b = await fulfill.call(this, res4a);
       const res3b = await fulfill.call(this, res3a);
       const res2b = await fulfill.call(this, res2a);
+      total.paid += 9;
+      total.minted += 9;
+      total.balance += 9 * 0.1;
       res2b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 1));
       res3b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 3));
       res4b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
@@ -288,14 +292,26 @@ contract('Character (proxy)', (accounts) => {
     it('succeeds with free mints', async () => {
       await scheduleAndExecute(this.paywall, 'addToFreeMints', [[anon]], { from: dao });
       await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: 0 } })).to.eventually.have.nested.property('receipt.status', true); // free
+      total.paid += 1;
+      total.minted += 1;
+      total.balance += 0;
     });
     it('succeeds if whitelisted', async () => {
       await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon]], { from: dao });
       await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: toWei(0.09) } })).to.eventually.have.nested.property('receipt.status', true); // discounted
+      total.paid += 1;
+      total.minted += 1;
+      total.balance += 0.09;
     });
     it('mints boosted characters', async () => {
       await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon]], { from: dao });
       const { logs } = await mintAndFulfill.call(this, 3, true, { args: { from: anon, value: toWei(0.27) } });
+      total.paid += 3;
+      total.minted += 3;
+      total.balance += 0.27;
+      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals(toWei(total.balance.fix()));
+      await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals(total.paid.toString());
+      await expect(this.character.minted()).to.eventually.be.a.bignumber.that.equals(total.minted.toString());
       const IDs = logs.filter(item => item.event === 'Transfer').map(it => Number(it.args.tokenId.toString()));
       await Promise.all(IDs.map(async id => {
         const traits = await this.character.getTokenTraits(id);
@@ -307,6 +323,19 @@ contract('Character (proxy)', (accounts) => {
         expect(boostAttribute.value).to.equal(1);
         expect(traits.boost).to.equal('1');
       }));
+    });
+  });
+
+  describe('withdrawPayments()', () => {
+    it('denies anonymous to withdraw', async () => {
+      await expect(this.character.withdrawPayments()).to.eventually.be.rejectedWith('Only DAO can execute');
+    });
+    it('allows DAO to withdraw', async () => {
+      const daoBalance = await web3.eth.getBalance(config.dao.address);
+      const res = await this.character.withdrawPayments({ from: dao });
+      expect(res.receipt.status).to.be.true;
+      await expect(web3.eth.getBalance(this.character.address)).to.eventually.be.a.bignumber.that.equals('0');
+      await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.gte(new BN(daoBalance).add(new BN(toWei(total.balance * 0.9999))));
     });
   });
 
