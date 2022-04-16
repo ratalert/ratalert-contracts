@@ -131,19 +131,6 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
   }
 
   /**
-   * ERC721 transfer override to avoid venue approvals so that users don't have to waste gas
-   */
-  function transferFrom(address from, address to, uint256 tokenId) public virtual override {
-    bool wl = false;
-    for (uint i = 0; i < venues.length; i++) {
-      wl = wl || _msgSender() == venues[i];
-    }
-    if (!wl)
-      require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
-    _transfer(from, to, tokenId);
-  }
-
-  /**
    * Allows DAO to withdraw funds
    */
   function withdrawPayments() external onlyDao {

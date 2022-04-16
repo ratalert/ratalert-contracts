@@ -33,6 +33,7 @@ contract('Gym (proxy)', (accounts) => {
     lists.rats = [lists.rats[0], lists.rats[1]];
     lists.all = lists.chefs.concat(lists.rats);
 
+    await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
     lists.all = await trainUntilWeHave.call(this, this.kitchen, 0, 72, lists.all, 1, true, true, { from: owner }); // Make sure to maximise the event risk
   });
 
@@ -46,6 +47,7 @@ contract('Gym (proxy)', (accounts) => {
       await expect(this.gym.stakeMany(owner, [tokenId], { from: owner })).to.eventually.be.rejectedWith('Not your token');
     });
     it('stakes many tokens', async () => {
+      await this.character.setApprovalForAll(this.gym.address, true, { from: owner });
       await this.gym.stakeMany(owner, lists.all.map(item => item.id), { from: owner });
       const block = await web3.eth.getBlock('latest');
       await expect(this.character.ownerOf(lists.chefs[0].id)).to.eventually.equal(this.gym.address);

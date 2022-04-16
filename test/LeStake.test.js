@@ -47,6 +47,8 @@ contract('LeStake (proxy)', (accounts) => {
     lists.rats = [lists.rats[0]];
     lists.all = lists.chefs.concat(lists.rats);
 
+    await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
+    await this.character.setApprovalForAll(this.mcStake.address, true, { from: owner });
     lists.eligibleAll = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligibleAll, 10, true, true, { from: owner });
   });
 
