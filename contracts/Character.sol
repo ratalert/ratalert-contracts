@@ -94,7 +94,7 @@ contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPaus
    * @param toleranceIncrement - The value to add/subtract to the current value
    * @param randomVal - A ChainLink VRF random number
    */
-  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public onlyController returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
+  function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) external onlyController returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     bool isChef = tokenTraits[tokenId].isChef;
     uint8 currentEfficiency = tokenTraits[tokenId].efficiency;
     uint8 currentTolerance = tokenTraits[tokenId].tolerance;

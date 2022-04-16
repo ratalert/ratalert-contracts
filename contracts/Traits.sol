@@ -53,7 +53,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @param tokenId - The ID of the token to generate the metadata for
    * @return A base64 encoded JSON dictionary of the token's metadata and SVG
    */
-  function tokenURI(uint256 tokenId) public view override returns (string memory) {
+  function tokenURI(uint256 tokenId) external view override returns (string memory) {
     ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
 
     string memory metadata = string(abi.encodePacked(

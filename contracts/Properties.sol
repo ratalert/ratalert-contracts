@@ -123,7 +123,7 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @return toleranceValue - New tolerance value
    * @return eventName - String containing the event or empty string if none occurred
    */
-  function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) public view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
+  function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) external view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     eventName = "";
     if (_doesDisasterOccur(isChef, int8(currentEfficiency), randomVal)) {
       (efficiencyValue, toleranceValue) = _resolveDisaster();
