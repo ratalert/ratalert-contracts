@@ -23,21 +23,21 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   event RatClaimed(uint256 tokenId, uint256 earned, bool unstaked, uint8 intelligence, uint8 bodyMass, string eventName, uint256 foodTokensPerRat);
 
   Character character; // Reference to the Character
-  IClaim public claim; // Reference to the Mint
+  IClaim claim; // Reference to Claim
 
   mapping(uint256 => Stake) public chefs; // Maps tokenId to stake
   mapping(uint256 => Stake) public rats; // Maps tokenId to stake
   mapping(address => uint256[]) public stakers; // Maps address to array of chef IDs
   mapping(bytes32 => uint16[]) public claimRequests; // Maps VRF ID to claim request
-  int8 public dailySkillRate;
-  int8 public dailyFreakRate;
-  int8 public dailyIntelligenceRate;
-  int8 public dailyBodyMassRate;
+  int8 dailySkillRate;
+  int8 dailyFreakRate;
+  int8 dailyIntelligenceRate;
+  int8 dailyBodyMassRate;
   uint256 public totalChefsStaked; // Number of Chefs staked
   uint256 public totalRatsStaked; // Number of Rats staked
-  uint256 public accrualPeriod; // The period over which earnings & levels are accrued
+  uint256 vestingPeriod; // Cannot unstake for this many seconds
+  uint256 accrualPeriod; // The period over which earnings & levels are accrued
   uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
-  uint256 public vestingPeriod; // Cannot unstake for this many seconds
   uint8 maxClaimsPerTx; // Maximum number of tokens that can be claimed in a single tx
 
   function initialize(
@@ -60,7 +60,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
   /**
    * Adds Characters to staking
-   * @param account - The address of the staker
+   * @param account - User wallet address
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
   function stakeMany(address account, uint16[] calldata tokenIds) external {
@@ -75,9 +75,13 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
       require(_checkEligibility(tokenIds[i]), "Not eligible");
       if (isChef(tokenIds[i])) {
-        _stakeChef(account, tokenIds[i]);
-        require(_checkSpace(_msgSender(), 1), "Kitchen space required");
         stakers[account].push(tokenIds[i]);
+        int256 space = _checkSpace(_msgSender(), stakers[account].length);
+        require(space >= 0, "Kitchen space required");
+        if (space == 0) {
+          _stakeKitchen(account);
+        }
+        _stakeChef(account, tokenIds[i]);
       } else {
         _stakeRat(account, tokenIds[i]);
       }
@@ -86,7 +90,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
   /**
    * Adds a single Chef
-   * @param account - The address of the staker
+   * @param account - User wallet address
    * @param tokenId - The ID of the Chef
    */
   function _stakeChef(address account, uint256 tokenId) internal whenNotPaused {
@@ -102,7 +106,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
   /**
    * Adds a single Rat
-   * @param account - The address of the staker
+   * @param account - User wallet address
    * @param tokenId - The ID of the Rat
    */
   function _stakeRat(address account, uint256 tokenId) internal whenNotPaused {
@@ -148,16 +152,20 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     uint256 owed = 0;
     for (uint i = 0; i < tokenIds.length; i++) {
       uint256 randomVal = uint256(keccak256(abi.encode(randomness, i)));
-      bool space = _checkSpace(v.sender, 0);
-      if (isChef(tokenIds[i]))
-        owed += _claimChef(tokenIds[i], v.sender, !space || v.unstake, !space, randomVal);
-      else
-        owed += _claimRat(tokenIds[i], v.sender, v.unstake, !space, randomVal);
-      for (uint j = 0; j < stakers[v.sender].length; j++) {
-        if (stakers[v.sender][j] == tokenIds[i]) {
-          stakers[v.sender][j] = stakers[v.sender][stakers[v.sender].length - 1];
-          stakers[v.sender].pop();
+      if (isChef(tokenIds[i])) {
+        for (uint j = 0; j < stakers[v.sender].length; j++) {
+          if (stakers[v.sender][j] == tokenIds[i]) {
+            stakers[v.sender][j] = stakers[v.sender][stakers[v.sender].length - 1];
+            stakers[v.sender].pop();
+          }
         }
+        int256 space = _checkSpace(v.sender, stakers[v.sender].length);
+        if (space == 2) {
+          _claimKitchen(v.sender);
+        }
+        owed += _claimChef(tokenIds[i], v.sender, v.unstake, false, randomVal);
+      } else {
+        owed += _claimRat(tokenIds[i], v.sender, v.unstake, false, randomVal);
       }
     }
     if (owed > 0) {
@@ -239,10 +247,20 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
 
   /**
    * Unused here, gets overridden in EntrepreneurKitchen
-   * @return true
    */
-  function _checkSpace(address, uint256) internal virtual view returns (bool) {
-    return true;
+  function _stakeKitchen(address) internal virtual {}
+
+  /**
+   * Unused here, gets overridden in EntrepreneurKitchen
+   */
+  function _claimKitchen(address) internal virtual {}
+
+  /**
+   * Unused here, gets overridden in EntrepreneurKitchen
+   * @return Default is maximum space available
+   */
+  function _checkSpace(address, uint256) internal virtual view returns (int256) {
+    return 2; // No limit
   }
 
   /**
@@ -351,8 +369,20 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     (, , , , , , , , efficiency, tolerance,) = character.tokenTraits(tokenId);
   }
 
+  /**
+   * Get the amount of chefs the given account has in staking
+   * @param account - User wallet address
+   * @return Number of chefs in staking
+   */
+  function getChefsStaked(address account) external view returns (uint256) {
+    return stakers[account].length;
+  }
+
+  /**
+   * IERC721ReceiverUpgradeable interface: We do not accept tokens sent directly
+   */
   function onERC721Received(address, address from, uint256, bytes calldata) external pure override returns (bytes4) {
     require(from == address(0x0), "Cannot send tokens to Venue directly");
-    return IERC721ReceiverUpgradeable.onERC721Received.selector;
+    return this.onERC721Received.selector;
   }
 }

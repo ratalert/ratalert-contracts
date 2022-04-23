@@ -10,6 +10,7 @@ const Properties = artifacts.require('Properties');
 const Paywall = artifacts.require('Paywall');
 const Character = artifacts.require('Character');
 const KitchenShop = artifacts.require('KitchenShop');
+const KitchenUsage = artifacts.require('KitchenUsage');
 const Claim = artifacts.require('Claim');
 const McStake = artifacts.require('McStake');
 const TheStakehouse = artifacts.require('TheStakehouse');
@@ -46,19 +47,21 @@ module.exports = async (deployer, network, accounts) => {
   const paywall = await deployProxy(Paywall, [fastFood.address], {deployer});
   const character = await deployProxy(Character, [paywall.address, mint.address, traits.address, properties.address], {deployer});
   const kitchenShop = await deployProxy(KitchenShop, [fastFood.address, casualFood.address, character.address], {deployer});
+  const kitchenUsage = await deployProxy(KitchenUsage, [kitchenShop.address], {deployer});
   const claim = await deployProxy(Claim, config.claim({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), {deployer});
   const mcStake = await deployProxy(McStake, [character.address, claim.address, fastFood.address], {deployer});
-  const theStakehouse = await deployProxy(TheStakehouse, [character.address, claim.address, casualFood.address, kitchenShop.address], {deployer});
-  const leStake = await deployProxy(LeStake, [character.address, claim.address, gourmetFood.address, kitchenShop.address], {deployer});
+  const theStakehouse = await deployProxy(TheStakehouse, [character.address, claim.address, casualFood.address, kitchenUsage.address], {deployer});
+  const leStake = await deployProxy(LeStake, [character.address, claim.address, gourmetFood.address, kitchenUsage.address], {deployer});
   const gym = await deployProxy(Gym, [character.address, claim.address], {deployer});
 
   await properties.configure(...config.properties);
   await paywall.configure(...config.payWall);
   await character.configure(...config.character);
   await kitchenShop.configure(...config.kitchenShop);
+  await kitchenUsage.configure(...config.kitchenUsage, [theStakehouse.address, leStake.address]);
   await mcStake.configure(config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
-  await theStakehouse.configure(config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
-  await leStake.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, config.kitchen.leStake.minEfficiency, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
+  await theStakehouse.configure(config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
+  await leStake.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, config.kitchen.leStake.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx);
   await gym.configure(...config.gym);
 
   await mint.setDao(config.dao.address);
@@ -81,4 +84,5 @@ module.exports = async (deployer, network, accounts) => {
   await paywall.addController([character.address]);
   await character.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
   await character.setVenues([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
+  await kitchenUsage.addController([theStakehouse.address, leStake.address]);
 };

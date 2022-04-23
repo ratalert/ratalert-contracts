@@ -6,7 +6,7 @@ const TimelockController = artifacts.require('TimelockController');
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
   const contracts = [
-    'CasualFood', 'Character', 'Claim', 'FastFood', 'GourmetFood', 'Gym', 'KitchenShop',
+    'CasualFood', 'Character', 'Claim', 'FastFood', 'GourmetFood', 'Gym', 'KitchenShop', 'KitchenUsage',
     'LeStake', 'McStake', 'Mint', 'Paywall', 'Properties', 'TheStakehouse', 'Traits',
   ];
 

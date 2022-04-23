@@ -14,13 +14,13 @@ const CasualFood = artifacts.require('CasualFood');
 const GourmetFood = artifacts.require('GourmetFood');
 const Character = artifacts.require('Character');
 const KitchenShop = artifacts.require('KitchenShop');
+const KitchenUsage = artifacts.require('KitchenUsage');
 const McStake = artifacts.require('McStake');
 const LeStake = artifacts.require('LeStake');
 
 contract('LeStake (proxy)', (accounts) => {
   const config = Config('development', accounts)
   const owner = accounts[0];
-  const anon = accounts[1];
   const dao = accounts[9];
   let lists;
 
@@ -34,9 +34,10 @@ contract('LeStake (proxy)', (accounts) => {
     this.kitchen = await LeStake.deployed();
     this.mcStake = await McStake.deployed();
     this.kitchenShop = await KitchenShop.deployed();
+    this.kitchenUsage = await KitchenUsage.deployed();
     this.casualFood = await CasualFood.deployed();
     await scheduleAndExecute(this.mcStake, 'configure', [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100], { from: dao });
-    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefsPerKitchen, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx], { from: dao });
+    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx], { from: dao });
     await scheduleAndExecute(this.casualFood, 'addController', [[dao]], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 12, 3);
@@ -60,11 +61,20 @@ contract('LeStake (proxy)', (accounts) => {
     it('fails if kitchen space is missing', async () => {
       await expect(this.kitchen.stakeMany(owner, [lists.eligibleChefs[0].id], { from: owner })).to.eventually.be.rejectedWith('Kitchen space required');
     });
-    it('stakes eligible chefs', async () => {
+    it('fails if kitchen is not approved', async () => {
       await this.casualFood.mint(owner, toWei(2000), { from: dao }); // Need kitchen space first
       await this.kitchenShop.mint(2, 1);
+      await expect(this.kitchen.stakeMany(owner, lists.eligibleChefs.slice(0, 10).map(item => item.id), { from: owner })).to.eventually.be.rejectedWith('ERC1155: caller is not owner nor approved');
+    });
+    it('fails if kitchen space is missing', async () => {
+      await this.kitchenShop.setApprovalForAll(this.kitchenUsage.address, true);
+      await expect(this.kitchen.stakeMany(owner, lists.eligibleChefs.slice(0, 11).map(item => item.id), { from: owner })).to.eventually.be.rejectedWith('Kitchen space required');
+    });
+    it('stakes eligible chefs along with a kitchen', async () => {
       const res = await this.kitchen.stakeMany(owner, lists.eligibleChefs.slice(0, 10).map(item => item.id), { from: owner });
       await expect(res.receipt.status).to.be.true;
+      await expect(this.kitchenUsage.spaceInWallet(owner, 2)).to.eventually.be.a.bignumber.eq('0');
+      await expect(this.kitchenUsage.spaceInStaking(owner, 2)).to.eventually.be.a.bignumber.eq('10');
     });
     it('fails if additional kitchen space is missing', async () => {
       await expect(this.kitchen.stakeMany(owner, [lists.eligibleChefs[10].id], { from: owner })).to.eventually.be.rejectedWith('Kitchen space required');
@@ -94,15 +104,19 @@ contract('LeStake (proxy)', (accounts) => {
         await expect(this.character.ownerOf(id)).to.eventually.equal(this.kitchen.address);
       }));
     });
-    it('force unstakes if kitchen space is missing', async () => {
-      await this.kitchenShop.safeTransferFrom(owner, anon, 2, 1, 0x0);
-      expect(this.kitchenShop.balanceOf(owner, 2)).to.eventually.be.a.bignumber.eq('0');
-      let res = await claimManyAndFulfill.call(this, this.kitchen, lists.remainingChefs.map(item => item.id), false);
+    it('fails to unstake a kitchen if it is still in use', async () => {
+      await expect(this.kitchenUsage.claim(owner, 2, 1)).to.eventually.be.rejectedWith('Still in use');
+    });
+    it('automatically unstakes a kitchen once the last chef left', async () => {
+      let res = await claimManyAndFulfill.call(this, this.kitchen, lists.remainingChefs.map(item => item.id), true);
+      await expect(this.kitchenUsage.spaceInStaking(owner, 2)).to.eventually.be.a.bignumber.eq('0');
+      await expect(this.kitchenUsage.spaceInWallet(owner, 2)).to.eventually.be.a.bignumber.eq('10');
+
       let claimEvents = res.logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
       await Promise.all(claimEvents.map(async (log, i) => {
         const tokenId = Number(log.args.tokenId.toString());
         expect(tokenId).to.equal(lists.remainingChefs[i].id);
-        expect(log.args.earned).to.be.a.bignumber.eq('0');
+        expect(log.args.earned).to.be.a.bignumber.gt('0');
         expect(log.args.unstaked).to.be.true;
         await expect(this.character.ownerOf(tokenId)).to.eventually.equal(owner);
       }));

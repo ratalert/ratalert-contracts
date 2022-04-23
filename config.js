@@ -70,7 +70,6 @@ module.exports = (network, accounts = []) => ({
       }),
       minEfficiency: num('KITCHEN_LESTAKE_MIN_EFFICIENCY', '72'),
     },
-    chefsPerKitchen: num('KITCHEN_CHEFS_PER_KITCHEN', '10'),
     chefEfficiencyMultiplier: num('CHEF_EFFICIENCY_MULTIPLIER', '175'),
     ratEfficiencyMultiplier: num('KITCHEN_RAT_EFFICIENCY_MULTIPLIER', '90'),
     ratEfficiencyOffset: num('KITCHEN_RAT_EFFICIENCY_OFFSET', '55'),
@@ -94,6 +93,9 @@ module.exports = (network, accounts = []) => ({
       priceTier3: toWei(env('KITCHENSHOP_PRICE_TIER3', '5000'), 'ether'),
       priceTier4: toWei(env('KITCHENSHOP_PRICE_TIER4', '6000'), 'ether'),
     }),
+  }),
+  kitchenUsage: Object.values({
+    chefsPerKitchen: num('KITCHEN_CHEFS_PER_KITCHEN', '10'),
   }),
   properties: Object.values({
     disaster: Object.values({

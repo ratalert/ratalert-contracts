@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import "./EntrepreneurKitchen.sol";
 import "./CasualFood.sol";
-import "./KitchenShop.sol";
+import "./IKitchenUsage.sol";
 
 contract TheStakehouse is EntrepreneurKitchen {
   CasualFood foodToken; // Reference to the $CFOOD contract
@@ -13,7 +13,7 @@ contract TheStakehouse is EntrepreneurKitchen {
     address _character,
     address _claim,
     address _foodToken,
-    address _kitchenShop
+    address _kitchenUsage
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -26,7 +26,7 @@ contract TheStakehouse is EntrepreneurKitchen {
     character = Character(_character);
     claim = IClaim(_claim);
     foodToken = CasualFood(_foodToken);
-    kitchenShop = KitchenShop(_kitchenShop);
+    kitchenUsage = IKitchenUsage(_kitchenUsage);
   }
 
   /**
@@ -37,7 +37,6 @@ contract TheStakehouse is EntrepreneurKitchen {
     uint256[] memory _earningSettings, // dailyChefEarnings, ratTheftPercentage, vestingPeriod, accrualPeriod
     int8[] memory _propertyIncrements, // dailySkillRate, dailyFreakRate, dailyIntelligenceRate, dailyBodyMassRate
     uint8 _minEfficiency,
-    uint8 _chefsPerKitchen,
     uint8 _chefEfficiencyMultiplier,
     int256 _ratEfficiencyMultiplier,
     int256 _ratEfficiencyOffset,
@@ -53,7 +52,6 @@ contract TheStakehouse is EntrepreneurKitchen {
     dailyIntelligenceRate = _propertyIncrements[2];
     dailyBodyMassRate = _propertyIncrements[3];
     minEfficiency = _minEfficiency;
-    chefsPerKitchen = _chefsPerKitchen;
     chefEfficiencyMultiplier = _chefEfficiencyMultiplier;
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;
