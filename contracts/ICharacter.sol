@@ -27,6 +27,6 @@ interface ICharacter is IERC721Upgradeable {
   function mint(uint8 amount, bool stake) external payable;
   function getGen0Tokens() external view returns (uint256);
   function getTokenTraits(uint256 tokenId) external view returns (CharacterStruct memory);
-  function fulfillMint(bytes32 requestId, CharacterStruct[] memory tokens) external;
+  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external;
   function updateCharacter(uint256 tokenId, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) external returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName);
 }

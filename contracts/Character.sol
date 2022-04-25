@@ -3,6 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "./GenericPausable.sol";
 import "./ControllableUpgradeable.sol";
@@ -13,7 +14,7 @@ import "./IProperties.sol";
 import "./IVenue.sol";
 import "./IPaywall.sol";
 
-contract Character is Initializable, OwnableUpgradeable, GenericPausable, ICharacter, ERC721Upgradeable, ControllableUpgradeable {
+contract Character is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, GenericPausable, ICharacter, ERC721Upgradeable, ControllableUpgradeable {
   uint16 public paid;
   uint16 public minted;
   uint16 public numChefs;
@@ -62,27 +63,25 @@ contract Character is Initializable, OwnableUpgradeable, GenericPausable, IChara
   function mint(uint8 amount, bool stake) external payable whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
     int8 boost = paywall.handle(_msgSender(), amount, msg.value, paid, maxTokens, gen0Tokens);
-    theMint.requestRandomNumber(_msgSender(), amount, stake, boost);
     paid += amount;
+    theMint.requestRandomNumber(_msgSender(), amount, stake, boost);
   }
 
   /**
    * Callback for mint(), called by Mint.fulfillRandomness()
-   * @param requestId - The VRF request ID
+   * @param v - VRF struct for the corresponding request
    * @param tokens - List of characters created by the Mint
    */
-  function fulfillMint(bytes32 requestId, CharacterStruct[] memory tokens) external whenNotPaused {
-    require(requestId != 0, "Invalid vrfRequest");
-    IMint.VRFStruct memory v = theMint.getVrfRequest(requestId);
-    require(requestId == v.requestId, "vrfRequest not found");
+  function fulfillMint(IMint.VRFStruct memory v, CharacterStruct[] memory tokens) external nonReentrant whenNotPaused {
     require(msg.sender == address(theMint), "Only the Mint can fulfill");
+
     uint16[] memory tokenIds = new uint16[](v.amount);
     for (uint i = 0; i < v.amount; i++) {
       minted ++;
-      _safeMint(v.stake ? address(kitchen) : v.sender, minted);
       tokenIds[i] = minted;
       tokenTraits[minted] = tokens[i];
       tokens[i].isChef ? numChefs++ : numRats++;
+      _safeMint(v.stake ? address(kitchen) : v.sender, minted);
     }
     if (v.stake) kitchen.stakeMany(v.sender, tokenIds);
   }

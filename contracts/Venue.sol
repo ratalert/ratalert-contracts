@@ -65,13 +65,13 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
   function stakeMany(address account, uint16[] calldata tokenIds) external {
-    require(account == _msgSender() || _msgSender() == address(character), "Do not lose your tokens");
+    require((tx.origin == _msgSender() && account == _msgSender()) || _msgSender() == address(character), "EOA only");
     for (uint i = 0; i < tokenIds.length; i++) {
-      if (_msgSender() != address(character)) { // Not necessary if it's a mint & stake
+      if (tokenIds[i] == 0) {
+        continue; // In case there are gaps in the array
+      }
+      if (_msgSender() != address(character)) { // Skip if it's a mint & stake
         require(character.ownerOf(tokenIds[i]) == _msgSender(), "Not your token");
-        character.transferFrom(_msgSender(), address(this), tokenIds[i]);
-      } else if (tokenIds[i] == 0) {
-        continue; // There may be gaps in the array for stolen tokens
       }
 
       require(_checkEligibility(tokenIds[i]), "Not eligible");
@@ -85,6 +85,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
         _stakeChef(account, tokenIds[i]);
       } else {
         _stakeRat(account, tokenIds[i]);
+      }
+      if (_msgSender() != address(character)) { // Skip if it's a mint & stake
+        character.transferFrom(_msgSender(), address(this), tokenIds[i]);
       }
     }
   }
@@ -127,6 +130,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param unstake - Whether or not to unstake the given tokens
    */
   function claimMany(uint16[] calldata tokenIds, bool unstake) external virtual payable whenNotPaused {
+    require(tx.origin == _msgSender(), "EOA only");
     require(tokenIds.length <= maxClaimsPerTx, "Invalid claim amount");
     require(msg.value == claimFee, "Invalid claim fee");
     for (uint i = 0; i < tokenIds.length; i++) {
@@ -197,9 +201,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     }
 
     if (unstake) {
-      character.safeTransferFrom(address(this), sender, tokenId, ""); // Send Chef back to owner
       delete chefs[tokenId];
       totalChefsStaked --;
+      character.safeTransferFrom(address(this), sender, tokenId, ""); // Send Chef back to owner
     } else {
       chefs[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),
@@ -233,9 +237,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     }
 
     if (unstake) {
-      character.safeTransferFrom(address(this), sender, tokenId, ""); // Send Rat back to owner
       delete rats[tokenId];
       totalRatsStaked --;
+      character.safeTransferFrom(address(this), sender, tokenId, ""); // Send Rat back to owner
     } else {
       rats[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),

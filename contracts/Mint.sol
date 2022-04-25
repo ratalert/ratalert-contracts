@@ -97,8 +97,8 @@ contract Mint is Initializable, OwnableUpgradeable, IMint, VRFConsumer, Controll
       tokens[i].boost = v.boost;
     }
 
-    character.fulfillMint(requestId, tokens);
     delete vrfRequests[requestId];
+    character.fulfillMint(v, tokens);
     emit RandomNumberFulfilled(requestId, v.sender);
   }
 

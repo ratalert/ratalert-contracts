@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol";
 import "./IKitchenUsage.sol";
 import "./GenericPausable.sol";
@@ -11,7 +12,7 @@ import "./ControllableUpgradeable.sol";
 import "./KitchenShop.sol";
 import "./IVenue.sol";
 
-contract KitchenUsage is IKitchenUsage, Initializable, OwnableUpgradeable, GenericPausable, ControllableUpgradeable, IERC1155ReceiverUpgradeable {
+contract KitchenUsage is IKitchenUsage, Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, GenericPausable, ControllableUpgradeable, IERC1155ReceiverUpgradeable {
   KitchenShop kitchenShop;
 
   event KitchenStaked(address owner, uint8 kitchenId, uint256 amount);
@@ -47,22 +48,22 @@ contract KitchenUsage is IKitchenUsage, Initializable, OwnableUpgradeable, Gener
    * @param kitchenId - The ID of the kitchen
    * @param amount - The amount of kitchens to stake
    */
-  function stake(address account, uint8 kitchenId, uint256 amount) external whenNotPaused {
-    require(account == _msgSender() || controllers[_msgSender()], "Do not lose your tokens");
+  function stake(address account, uint8 kitchenId, uint256 amount) external nonReentrant whenNotPaused {
+    require((tx.origin == _msgSender() && account == _msgSender()) || controllers[_msgSender()], "EOA only");
     require(kitchenShop.balanceOf(account, kitchenId) >= amount, "Insufficient tokens");
-    kitchenShop.safeTransferFrom(account, address(this), kitchenId, amount, new bytes(0));
     Stake memory position = stakers[account][kitchenId];
     if (position.amount > 0) {
       stakers[account][kitchenId].amount += amount;
     } else {
       stakers[account][kitchenId] = Stake({
-      owner: account,
-      kitchenId: kitchenId,
-      amount: amount,
-      timestamp: uint80(block.timestamp)
+        owner: account,
+        kitchenId: kitchenId,
+        amount: amount,
+        timestamp: uint80(block.timestamp)
       });
     }
     totalKitchensStaked[kitchenId] += amount;
+    kitchenShop.safeTransferFrom(account, address(this), kitchenId, amount, new bytes(0));
     emit KitchenStaked(account, kitchenId, amount);
   }
 
@@ -72,20 +73,20 @@ contract KitchenUsage is IKitchenUsage, Initializable, OwnableUpgradeable, Gener
    * @param kitchenId - The ID of the kitchen
    * @param amount - The amount of kitchens to stake
    */
-  function claim(address account, uint8 kitchenId, uint256 amount) external whenNotPaused {
-    require(account == _msgSender() || controllers[_msgSender()], "Do not lose your tokens");
+  function claim(address account, uint8 kitchenId, uint256 amount) external nonReentrant whenNotPaused {
+    require((tx.origin == _msgSender() && account == _msgSender()) || controllers[_msgSender()], "EOA only");
     Stake memory position = stakers[account][kitchenId];
     require(position.owner == account, "Not your token");
     require(position.amount >= amount, "Insufficient tokens");
     require(this.checkUsage(account, kitchenId, amount), "Still in use");
 
-    kitchenShop.safeTransferFrom(address(this), account, kitchenId, amount, new bytes(0));
+    totalKitchensStaked[kitchenId] -= amount;
     stakers[account][kitchenId].amount -= amount;
     if (stakers[account][kitchenId].amount == 0) {
       delete stakers[account][kitchenId];
     }
 
-    totalKitchensStaked[kitchenId] -= amount;
+    kitchenShop.safeTransferFrom(address(this), account, kitchenId, amount, new bytes(0));
     emit KitchenClaimed(account, kitchenId, amount);
   }
 

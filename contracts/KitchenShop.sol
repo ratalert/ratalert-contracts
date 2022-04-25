@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
@@ -12,7 +13,7 @@ import "./FastFood.sol";
 import "./CasualFood.sol";
 import "./Character.sol";
 
-contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1155Upgradeable {
+contract KitchenShop is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, GenericPausable, ERC1155Upgradeable {
   using Strings for uint256;
 
   struct KitchenData { // Struct to store each kitchen's metadata
@@ -79,7 +80,7 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
    * @param kitchen - The kitchen type
    * @param amount - Number of tokens to mint
    */
-  function mint(uint8 kitchen, uint8 amount) external payable whenNotPaused {
+  function mint(uint8 kitchen, uint8 amount) external payable nonReentrant whenNotPaused {
     require(tx.origin == _msgSender(), "EOA only");
     require(kitchen > 0 && kitchen <= 2, "Invalid kitchen");
     require(amount > 0 && amount <= maxMintsPerTx, "Invalid mint amount");

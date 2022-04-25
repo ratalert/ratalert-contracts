@@ -86,18 +86,13 @@ contract('Character (proxy)', (accounts) => {
       await expect(this.character.mint(3, false, { from: owner, value: toWei(0.4) })).to.eventually.be.rejectedWith('Invalid payment amount');
     });
 
-    it('fails with an invalid mint request', async () => {
-      await expect(this.characterSandbox.fulfillMint('0x', [])).to.eventually.be.rejectedWith('Invalid vrfRequest');
-      await expect(this.characterSandbox.fulfillMint('0x0', [])).to.eventually.be.rejectedWith('Invalid vrfRequest');
-      await expect(this.characterSandbox.fulfillMint('0x0000000000000000000000000000000000000000000000000000000000000000', [])).to.eventually.be.rejectedWith('Invalid vrfRequest');
-      await expect(this.characterSandbox.fulfillMint('0x1234567890', [])).to.eventually.be.rejectedWith('vrfRequest not found');
-    });
     it('allows nobody but the Mint to fulfill', async () => {
       const res = await this.character.mint(5, false, { value: toWei(0.5) });
       total.paid += 5;
       total.balance += 5 * 0.1;
       const { requestId } = decodeRawLogs(res, this.mint, 'RandomNumberRequested')[0].args;
-      await expect(this.character.fulfillMint(requestId, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
+      const payload = { requestId, sender: owner, amount: 5, stake: false, boost: 0 };
+      await expect(this.character.fulfillMint(payload, [])).to.eventually.be.rejectedWith('Only the Mint can fulfill');
       await expect(this.character.paid()).to.eventually.be.a.bignumber.that.equals((total.paid).toString());
     });
     it('fails if all characters have been minted', async () => {
