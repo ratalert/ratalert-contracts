@@ -26,7 +26,7 @@ contract Character is Initializable, OwnableUpgradeable, GenericPausable, IChara
   IMint public theMint; // Reference to Mint
   ITraits public traits; // Reference to Traits
   IProperties public properties; // Reference to Properties
-  address[] venues;
+  IVenue kitchen;
   IPaywall paywall;
 
   function initialize(
@@ -79,12 +79,12 @@ contract Character is Initializable, OwnableUpgradeable, GenericPausable, IChara
     uint16[] memory tokenIds = new uint16[](v.amount);
     for (uint i = 0; i < v.amount; i++) {
       minted ++;
-      _safeMint(v.stake ? venues[0] : v.sender, minted);
+      _safeMint(v.stake ? address(kitchen) : v.sender, minted);
       tokenIds[i] = minted;
       tokenTraits[minted] = tokens[i];
       tokens[i].isChef ? numChefs++ : numRats++;
     }
-    if (v.stake) IVenue(venues[0]).stakeMany(v.sender, tokenIds);
+    if (v.stake) kitchen.stakeMany(v.sender, tokenIds);
   }
 
   /**
@@ -138,13 +138,10 @@ contract Character is Initializable, OwnableUpgradeable, GenericPausable, IChara
   }
 
   /**
-   * Sets the venue addresses to optionally stake newly minted characters and avoid approvals
-   * @param _venues - A list of venue addresses
+   * Sets the kitchen address to optionally stake newly minted characters in
+   * @param _kitchen - The address of the Kitchen
    */
-  function setVenues(address[] memory _venues) external onlyOwner {
-    delete venues;
-    for (uint i = 0; i < _venues.length; i++) {
-      venues.push(_venues[i]);
-    }
+  function setKitchen(address _kitchen) external onlyOwner {
+    kitchen = IVenue(_kitchen);
   }
 }
