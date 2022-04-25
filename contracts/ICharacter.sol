@@ -2,9 +2,10 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./IMint.sol";
 
-interface ICharacter {
+interface ICharacter is IERC721Upgradeable {
   struct CharacterStruct { // Struct to store each token's traits
     bool isChef;
     uint8 hat;

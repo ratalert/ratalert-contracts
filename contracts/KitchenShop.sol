@@ -89,7 +89,7 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
     uint256 totalCost = 0;
     for (uint i = 0; i < amount; i++) {
       minted[kitchen] ++;
-      totalCost += mintCost(kitchen, minted[kitchen]);
+      totalCost += this.mintCost(kitchen, minted[kitchen]);
     }
     _mint(_msgSender(), kitchen, amount, "");
     if (totalCost > 0) {
@@ -107,7 +107,7 @@ contract KitchenShop is Initializable, OwnableUpgradeable, GenericPausable, ERC1
    * @param tokenId - The token ID to check
    * @return The minting cost of the given ID
    */
-  function mintCost(uint8 kitchen, uint256 tokenId) public view returns (uint256) {
+  function mintCost(uint8 kitchen, uint256 tokenId) external view returns (uint256) {
     if (tokenId <= maxTokens[kitchen] * 1 / 5) return priceTier0;
     if (tokenId <= maxTokens[kitchen] * 2 / 5) return priceTier1;
     if (tokenId <= maxTokens[kitchen] * 3 / 5) return priceTier2;

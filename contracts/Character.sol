@@ -13,7 +13,7 @@ import "./IProperties.sol";
 import "./IVenue.sol";
 import "./IPaywall.sol";
 
-contract Character is ICharacter, Initializable, OwnableUpgradeable, GenericPausable, ERC721Upgradeable, ControllableUpgradeable {
+contract Character is Initializable, OwnableUpgradeable, GenericPausable, ICharacter, ERC721Upgradeable, ControllableUpgradeable {
   uint16 public paid;
   uint16 public minted;
   uint16 public numChefs;

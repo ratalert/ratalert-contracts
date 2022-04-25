@@ -61,8 +61,8 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
       '"name":"', s.isChef ? 'Chef #' : 'Rat #', tokenId.toString(), '",',
       '"description":"RatAlert, the NFT game that lets you Train2Earn your characters on-chain for higher rewards! https://ratalert.com/",',
       '"external_url":"https://ratalert.com/characters/', tokenId.toString(), '",',
-      '"image":"data:image/svg+xml;base64,', Base64.encode(bytes(drawSVG(tokenId))), '",',
-      '"attributes":', getAttributes(tokenId),
+      '"image":"data:image/svg+xml;base64,', Base64.encode(bytes(this.drawSVG(tokenId))), '",',
+      '"attributes":', this.getAttributes(tokenId),
       '}'
     ));
 
@@ -87,7 +87,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @param tokenId - The ID of the token to generate an SVG for
    * @return A valid SVG string of the Character
    */
-  function drawSVG(uint256 tokenId) public view returns (string memory) {
+  function drawSVG(uint256 tokenId) external view returns (string memory) {
     ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
     uint8 shift = s.isChef ? 0 : 10;
     uint8 head = getBodyIndex(s.tolerance);
@@ -129,7 +129,7 @@ contract Traits is Initializable, OwnableUpgradeable, ITraits {
    * @param tokenId - The ID of the token to compose the metadata for
    * @return A JSON array of all of the attributes for given token ID
    */
-  function getAttributes(uint256 tokenId) public view returns (string memory) {
+  function getAttributes(uint256 tokenId) external view returns (string memory) {
     ICharacter.CharacterStruct memory s = character.getTokenTraits(tokenId);
     string memory traits;
     uint16 boost = s.boost < 0 ? 256 - uint8(s.boost) : uint8(s.boost);

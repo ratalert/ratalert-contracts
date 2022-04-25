@@ -135,7 +135,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
     } else {
       require(msgValue == 0, "Invalid payment type, accepting food tokens only");
       for (uint i = 1; i <= amount; i++) {
-        totalCost += mintCost(minted + i, maxTokens, gen0Tokens);
+        totalCost += this.mintCost(minted + i, maxTokens, gen0Tokens);
       }
     }
     if (totalCost > 0) fastFood.burn(sender, totalCost);
@@ -148,7 +148,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * @param gen0Tokens - The supply of Gen0 tokens
    * @return The minting cost of the given ID
    */
-  function mintCost(uint256 tokenId, uint256 maxTokens, uint256 gen0Tokens) public view returns (uint256) {
+  function mintCost(uint256 tokenId, uint256 maxTokens, uint256 gen0Tokens) external view returns (uint256) {
     if (tokenId <= gen0Tokens) return 0;
     if (tokenId <= (maxTokens - gen0Tokens) * 1 / 4 + gen0Tokens) return gen1PriceTier0;
     if (tokenId <= (maxTokens - gen0Tokens) * 2 / 4 + gen0Tokens) return gen1PriceTier1;
