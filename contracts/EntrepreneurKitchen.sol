@@ -8,7 +8,7 @@ import "./IKitchenUsage.sol";
 abstract contract EntrepreneurKitchen is Kitchen {
   IKitchenUsage kitchenUsage;
   uint8 kitchenId;
-  uint8 public minEfficiency;
+  uint8 minEfficiency;
 
   /**
    * Checks if the character is eligible to work in that kitchen

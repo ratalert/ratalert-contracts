@@ -5,27 +5,19 @@ pragma solidity ^0.8.0;
 import "./Venue.sol";
 
 abstract contract Kitchen is Venue {
-  uint256 public foodTokenMaxSupply; // There will only ever be x tokens earned through staking
-  uint256 public dailyChefEarnings; // Gross food token amount that chefs earn per day
-  uint256 public ratTheftPercentage; // Percentage that Rats steal from all food tokens claimed
+  uint256 foodTokenMaxSupply; // There will only ever be x tokens earned through staking
+  uint256 dailyChefEarnings; // Gross food token amount that chefs earn per day
+  uint256 ratTheftPercentage; // Percentage that Rats steal from all food tokens claimed
   uint256 public unaccountedRewards; // any rewards distributed when no Rats are staked
   uint256 public totalFoodTokensEarned; // Amount of food tokens earned so far
   uint256 public lastClaimTimestamp; // The last time food token was claimed
-  uint8 public chefEfficiencyMultiplier;
-  int256 public ratEfficiencyMultiplier;
-  int256 public ratEfficiencyOffset;
+  uint8 chefEfficiencyMultiplier;
+  int256 ratEfficiencyMultiplier;
+  int256 ratEfficiencyOffset;
 
   function initialize() external virtual initializer {
     __Ownable_init();
     __Pausable_init();
-  }
-
-  /**
-   * Returns the food tokens per Rat value when the Rat was staked
-   * @return current foodTokensPerRat value
-   */
-  function _getRatStakeValue() internal view override returns (uint80) {
-    return uint80(foodTokensPerRat);
   }
 
   /**

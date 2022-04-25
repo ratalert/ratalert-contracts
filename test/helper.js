@@ -191,7 +191,7 @@ exports.fulfillClaimMany = async function (res) {
   return res2;
 };
 exports.claimManyAndFulfill = async function (venue, ids, unstake, options = { args: {} }) {
-  const res1 = await venue.claimMany(ids, unstake, { gasPrice: await web3.eth.getGasPrice(), ...options.args });
+  const res1 = await venue.claimMany(ids, unstake, { value: config.kitchen.claimFee, ...options.args });
   const res2 = await exports.fulfillClaimMany.call(this, res1, options);
   res1.logs = res2.logs;
   return res1;

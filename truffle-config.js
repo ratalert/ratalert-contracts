@@ -92,7 +92,8 @@ module.exports = {
   },
 
   plugins: [
-    'truffle-plugin-verify'
+    'truffle-contract-size',
+    'truffle-plugin-verify',
   ],
 
   api_keys: {

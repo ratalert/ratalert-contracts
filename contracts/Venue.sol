@@ -28,7 +28,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   mapping(uint256 => Stake) public chefs; // Maps tokenId to stake
   mapping(uint256 => Stake) public rats; // Maps tokenId to stake
   mapping(address => uint256[]) public stakers; // Maps address to array of chef IDs
-  mapping(bytes32 => uint16[]) public claimRequests; // Maps VRF ID to claim request
+  mapping(bytes32 => uint16[]) claimRequests; // Maps VRF ID to claim request
   int8 dailySkillRate;
   int8 dailyFreakRate;
   int8 dailyIntelligenceRate;
@@ -39,6 +39,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   uint256 accrualPeriod; // The period over which earnings & levels are accrued
   uint256 public foodTokensPerRat; // amount of food tokens due for each staked Rat
   uint8 maxClaimsPerTx; // Maximum number of tokens that can be claimed in a single tx
+  uint256 claimFee; // Necessary to prevent LINK token draining / DDOS attacks
 
   function initialize(
     address _character,
@@ -113,7 +114,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
     rats[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
-      value: _getRatStakeValue(),
+      value: uint80(foodTokensPerRat),
       timestamp: uint80(block.timestamp)
     });
     totalRatsStaked ++;
@@ -125,8 +126,9 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param tokenIds - The IDs of the tokens in question
    * @param unstake - Whether or not to unstake the given tokens
    */
-  function claimMany(uint16[] calldata tokenIds, bool unstake) external virtual whenNotPaused {
+  function claimMany(uint16[] calldata tokenIds, bool unstake) external virtual payable whenNotPaused {
     require(tokenIds.length <= maxClaimsPerTx, "Invalid claim amount");
+    require(msg.value == claimFee, "Invalid claim fee");
     for (uint i = 0; i < tokenIds.length; i++) {
       Stake memory stake = isChef(tokenIds[i]) ? chefs[tokenIds[i]] : rats[tokenIds[i]];
       require(stake.owner == _msgSender(), "Not your token");
@@ -238,7 +240,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
       rats[tokenId] = Stake({ // Reset stake
         tokenId: uint16(tokenId),
         owner: sender,
-        value: _getRatStakeValue(),
+        value: uint80(foodTokensPerRat),
         timestamp: uint80(block.timestamp)
       });
     }
@@ -269,14 +271,6 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    */
   function _checkEligibility(uint256) internal virtual view returns (bool) {
     return true;
-  }
-
-  /**
-   * Unused here, gets overridden in the kitchen contracts
-   * @return 0
-   */
-  function _getRatStakeValue() internal view virtual returns (uint80) {
-    return 0;
   }
 
   /**
@@ -356,7 +350,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param tokenId - The ID of the token to check
    * @return chef - Whether or not the token is a Chef
    */
-  function isChef(uint256 tokenId) public view returns (bool chef) {
+  function isChef(uint256 tokenId) internal view returns (bool chef) {
     (chef, , , , , , , , , ,) = character.tokenTraits(tokenId);
   }
 
@@ -365,7 +359,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param tokenId - The ID of the token to check
    * @return efficiency & tolerance values
    */
-  function getProperties(uint256 tokenId) public view returns (uint8 efficiency, uint8 tolerance) {
+  function getProperties(uint256 tokenId) internal view returns (uint8 efficiency, uint8 tolerance) {
     (, , , , , , , , efficiency, tolerance,) = character.tokenTraits(tokenId);
   }
 
@@ -376,6 +370,13 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    */
   function getChefsStaked(address account) external view returns (uint256) {
     return stakers[account].length;
+  }
+
+  /**
+   * Allows DAO to withdraw funds
+   */
+  function withdrawPayments() external onlyDao {
+    payable(dao).transfer(address(this).balance); // Transfer to DAO wallet
   }
 
   /**

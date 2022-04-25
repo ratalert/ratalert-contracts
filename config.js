@@ -74,6 +74,7 @@ module.exports = (network, accounts = []) => ({
     ratEfficiencyMultiplier: num('KITCHEN_RAT_EFFICIENCY_MULTIPLIER', '90'),
     ratEfficiencyOffset: num('KITCHEN_RAT_EFFICIENCY_OFFSET', '55'),
     maxClaimsPerTx: num('KITCHEN_MAX_CLAIMS_PER_TX', '10'),
+    claimFee: toWei(env('KITCHEN_CLAIM_FEE', '0.002'), 'ether'),
   },
   gym: Object.values({
     vestingPeriod: num('GYM_VESTING_PERIOD', '3600'),
@@ -81,6 +82,7 @@ module.exports = (network, accounts = []) => ({
     dailyFreakRate: num('GYM_DAILY_FREAK_RATE', '-12'),
     dailyBodyMassRate: num('GYM_DAILY_BODYMASS_RATE', '-8'),
     maxClaimsPerTx: num('GYM_MAX_CLAIMS_PER_TX', '10'),
+    claimFee: toWei(env('GYM_CLAIM_FEE', '0.002'), 'ether'),
   }),
   kitchenShop: Object.values({
     maxTokens: [num('KITCHENSHOP_MAX_TOKENS_THESTAKEHOUSE', '5000'), num('KITCHENSHOP_MAX_TOKENS_LESTAKE', '500')],

@@ -24,12 +24,14 @@ contract Gym is Venue {
     uint256 _accrualPeriod,
     int8 _dailyFreakRate,
     int8 _dailyBodyMassRate,
-    uint8 _maxClaimsPerTx
+    uint8 _maxClaimsPerTx,
+    uint256 _claimFee
   ) external onlyOwner {
     vestingPeriod = _vestingPeriod;
     accrualPeriod = _accrualPeriod;
     dailyFreakRate = _dailyFreakRate;
     dailyBodyMassRate = _dailyBodyMassRate;
     maxClaimsPerTx = _maxClaimsPerTx;
+    claimFee = _claimFee;
   }
 }

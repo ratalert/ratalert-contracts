@@ -35,7 +35,8 @@ contract McStake is Kitchen {
     uint8 _chefEfficiencyMultiplier,
     int256 _ratEfficiencyMultiplier,
     int256 _ratEfficiencyOffset,
-    uint8 _maxClaimsPerTx
+    uint8 _maxClaimsPerTx,
+    uint256 _claimFee
   ) external onlyOwner {
     foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
     dailyChefEarnings = _earningSettings[0] * 1 ether;
@@ -50,6 +51,7 @@ contract McStake is Kitchen {
     ratEfficiencyMultiplier = _ratEfficiencyMultiplier;
     ratEfficiencyOffset = _ratEfficiencyOffset;
     maxClaimsPerTx = _maxClaimsPerTx;
+    claimFee = _claimFee;
   }
 
   /**

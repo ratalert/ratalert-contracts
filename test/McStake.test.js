@@ -2,6 +2,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { BN } = require('@openzeppelin/test-helpers');
 const { toWei, fromWei, advanceTimeAndBlock, mintUntilWeHave, chefBoost, expectChefEarnings, ratBoost, expectRatEarnings, mintAndFulfill, claimManyAndFulfill, doesSvgTraitMatch, scheduleAndExecute } = require('./helper');
+const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -22,6 +23,7 @@ function expectTotalFoodTokenEarnings() {
 }
 
 contract('McStake (proxy)', (accounts) => {
+  const config = Config('development', accounts)
   const owner = accounts[0];
   const anon = accounts[1];
   const dao = accounts[9];
@@ -86,12 +88,16 @@ contract('McStake (proxy)', (accounts) => {
     });
   });
   describe('claimMany()', () => {
+    it('cannot claim without a claim fee', async () => {
+      const ids = [lists.chefs[0].id, lists.rats[0].id];
+      await expect(this.kitchen.claimMany(ids, false)).to.eventually.be.rejectedWith('Invalid claim fee');
+    });
     it('fails to unstake someone else\'s tokens', async () => {
       const ids = [lists.chefs[0].id, lists.rats[0].id];
-      await expect(this.kitchen.claimMany(ids, true, { from: anon })).to.eventually.be.rejectedWith('Not your token');
+      await expect(this.kitchen.claimMany(ids, true, { value: config.kitchen.claimFee, from: anon })).to.eventually.be.rejectedWith('Not your token');
     });
     it('cannot claim before EOB', async () => {
-      await expect(this.kitchen.claimMany([lists.chefs[0].id, lists.chefs[1].id], false)).to.eventually.be.rejectedWith('Cannot claim before EOB');
+      await expect(this.kitchen.claimMany([lists.chefs[0].id, lists.chefs[1].id], false, { value: config.kitchen.claimFee })).to.eventually.be.rejectedWith('Cannot claim before EOB');
     });
     it('claims from chefs', async () => {
       await advanceTimeAndBlock(86400 / 2); // Wait half a day
@@ -157,7 +163,7 @@ contract('McStake (proxy)', (accounts) => {
       }));
     });
     it('distributes nothing when claimed twice', async () => {
-      await expect(this.kitchen.claimMany([lists.rats[0].id, lists.rats[1].id], false)).to.eventually.be.rejectedWith('Cannot claim before EOB');
+      await expect(this.kitchen.claimMany([lists.rats[0].id, lists.rats[1].id], false, { value: config.kitchen.claimFee })).to.eventually.be.rejectedWith('Cannot claim before EOB');
     });
     it('unstakes many chefs', async () => {
       await advanceTimeAndBlock(86400 / 2); // Wait half a day
@@ -203,7 +209,7 @@ contract('McStake (proxy)', (accounts) => {
     });
     it('fails to unstake chefs twice', async () => {
       const chefs = [lists.chefs[0].id, lists.chefs[1].id];
-      await expect(this.kitchen.claimMany(chefs, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+      await expect(this.kitchen.claimMany(chefs, true, { value: config.kitchen.claimFee, from: owner })).to.eventually.be.rejectedWith('Not your token');
     });
     it('unstakes many rats', async () => {
       const rats = lists.rats.map(item => item.id);
@@ -243,7 +249,7 @@ contract('McStake (proxy)', (accounts) => {
     });
     it('fails to unstake rats twice', async () => {
       const rats = [lists.rats[0].id, lists.rats[1].id];
-      await expect(this.kitchen.claimMany(rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+      await expect(this.kitchen.claimMany(rats, true, { value: config.kitchen.claimFee, from: owner })).to.eventually.be.rejectedWith('Not your token');
     });
     it('handles level upgrades', async () => {
       const list = { chef: { id: lists.chefs[0].id }, rat: { id: lists.rats[0].id } };

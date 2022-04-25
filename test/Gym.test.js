@@ -1,6 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { advanceTimeAndBlock, mintUntilWeHave, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave, decodeRawLogs } = require('./helper');
+const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -14,6 +15,7 @@ const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
 
 contract('Gym (proxy)', (accounts) => {
+  const config = Config('development', accounts)
   const owner = accounts[0];
   const anon = accounts[1];
   let lists;
@@ -61,18 +63,22 @@ contract('Gym (proxy)', (accounts) => {
     });
   });
   describe('claimMany()', () => {
+    it('cannot claim without a claim fee', async () => {
+      const ids = [lists.chefs[0].id, lists.rats[0].id];
+      await expect(this.gym.claimMany(ids, false)).to.eventually.be.rejectedWith('Invalid claim fee');
+    });
     it('fails to unstake someone else\'s tokens', async () => {
       const ids = [lists.chefs[0].id, lists.rats[0].id];
-      await expect(this.gym.claimMany(ids, true, { from: anon })).to.eventually.be.rejectedWith('Not your token');
+      await expect(this.gym.claimMany(ids, true, { value: config.kitchen.claimFee, from: anon })).to.eventually.be.rejectedWith('Not your token');
     });
     it('cannot claim before EOB', async () => {
-      await expect(this.gym.claimMany([lists.chefs[0].id, lists.chefs[1].id], false)).to.eventually.be.rejectedWith('Cannot claim before EOB');
+      await expect(this.gym.claimMany([lists.chefs[0].id, lists.chefs[1].id], false, { value: config.kitchen.claimFee })).to.eventually.be.rejectedWith('Cannot claim before EOB');
     });
     it('emits the RandomNumberRequested event', async () => {
       const ids = lists.events.map(item => item.id);
       await this.gym.stakeMany(owner, ids, { from: owner });
       await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
-      const res = await this.gym.claimMany(ids, false);
+      const res = await this.gym.claimMany(ids, false, { value: config.kitchen.claimFee });
       const randomNumberRequestedEvent = decodeRawLogs(res, this.claim, 'RandomNumberRequested')[0];
       expect(randomNumberRequestedEvent.args.sender).to.equal(owner);
     });

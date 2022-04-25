@@ -1,6 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, claimManyAndFulfill, scheduleAndExecute } = require('./helper');
+const { BN } = require('@openzeppelin/test-helpers');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
@@ -36,8 +37,8 @@ contract('LeStake (proxy)', (accounts) => {
     this.kitchenShop = await KitchenShop.deployed();
     this.kitchenUsage = await KitchenUsage.deployed();
     this.casualFood = await CasualFood.deployed();
-    await scheduleAndExecute(this.mcStake, 'configure', [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100], { from: dao });
-    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx], { from: dao });
+    await scheduleAndExecute(this.mcStake, 'configure', [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100, config.kitchen.claimFee], { from: dao });
+    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
     await scheduleAndExecute(this.casualFood, 'addController', [[dao]], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 12, 3);
@@ -129,6 +130,20 @@ contract('LeStake (proxy)', (accounts) => {
         expect(log.args.unstaked).to.be.false;
         await expect(this.character.ownerOf(tokenId)).to.eventually.equal(this.kitchen.address);
       }));
+    });
+  });
+
+  describe('withdrawPayments()', () => {
+    it('denies anonymous to withdraw', async () => {
+      await expect(this.kitchen.withdrawPayments()).to.eventually.be.rejectedWith('Only DAO can execute');
+    });
+    it('allows DAO to withdraw', async () => {
+      const contractBalance = await web3.eth.getBalance(this.kitchen.address);
+      const daoBalance = await web3.eth.getBalance(config.dao.address);
+      const res = await this.kitchen.withdrawPayments({ from: dao });
+      expect(res.receipt.status).to.be.true;
+      await expect(web3.eth.getBalance(this.kitchen.address)).to.eventually.be.a.bignumber.that.equals('0');
+      await expect(web3.eth.getBalance(config.dao.address)).to.eventually.be.a.bignumber.gte(new BN(daoBalance).add(new BN(contractBalance)).sub(new BN(toWei(0.0001)))); // Minus a buffer that is higher than the gas costs for some reason
     });
   });
 });
