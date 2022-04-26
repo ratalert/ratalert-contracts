@@ -4,6 +4,7 @@ const Config = require('../config');
 const FastFood = artifacts.require('FastFood');
 const CasualFood = artifacts.require('CasualFood');
 const GourmetFood = artifacts.require('GourmetFood');
+const ConfigContract = artifacts.require('Config');
 const Mint = artifacts.require('Mint');
 const Traits = artifacts.require('Traits');
 const Properties = artifacts.require('Properties');
@@ -41,6 +42,7 @@ module.exports = async (deployer, network, accounts) => {
   const fastFood = await FastFood.deployed();
   const casualFood = await CasualFood.deployed();
   const gourmetFood = await GourmetFood.deployed();
+  const configContract = await deployProxy(ConfigContract, {deployer});
   const mint = await deployProxy(Mint, config.mint({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), {deployer});
   const traits = await deployProxy(Traits, {deployer});
   const properties = await deployProxy(Properties, {deployer});
@@ -54,6 +56,7 @@ module.exports = async (deployer, network, accounts) => {
   const leStake = await deployProxy(LeStake, [character.address, claim.address, gourmetFood.address, kitchenUsage.address], {deployer});
   const gym = await deployProxy(Gym, [character.address, claim.address], {deployer});
 
+  await configContract.set(...config.config(config));
   await properties.configure(...config.properties);
   await paywall.configure(...config.payWall);
   await character.configure(...config.character);

@@ -6,8 +6,8 @@ const TimelockController = artifacts.require('TimelockController');
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
   const contracts = [
-    'CasualFood', 'Character', 'Claim', 'FastFood', 'GourmetFood', 'Gym', 'KitchenShop', 'KitchenUsage',
-    'LeStake', 'McStake', 'Mint', 'Paywall', 'Properties', 'TheStakehouse', 'Traits',
+    'CasualFood', 'Character', 'Claim', 'Config', 'FastFood', 'GourmetFood', 'Gym', 'KitchenShop',
+    'KitchenUsage', 'LeStake', 'McStake', 'Mint', 'Paywall', 'Properties', 'TheStakehouse', 'Traits',
   ];
 
   await deployer.deploy(TimelockController, config.timelock.minDelay, config.timelock.proposers.split(' '), config.timelock.executors.split(' ')/*, { gasPrice: await web3.eth.getGasPrice(), overwrite: false }*/);
