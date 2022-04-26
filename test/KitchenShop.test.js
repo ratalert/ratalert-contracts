@@ -129,7 +129,7 @@ contract('KitchenShop (proxy)', (accounts) => {
 
     it('fails if out of $FFOOD', async () => {
       await expect(this.kitchenShop.mint(1, 10)).to.eventually.be.rejectedWith('burn amount exceeds balance');
-      expect(this.kitchenShop.balanceOf(owner, 1)).to.eventually.be.a.bignumber.eq('5');
+      await expect(this.kitchenShop.balanceOf(owner, 1)).to.eventually.be.a.bignumber.eq('5');
     });
 
     it('fails if no $CFOOD', async () => {

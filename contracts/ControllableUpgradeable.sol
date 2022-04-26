@@ -9,9 +9,16 @@ abstract contract ControllableUpgradeable is OwnableUpgradeable {
 
   /**
    * @dev Throws if called by any account other than a controller.
+   */
+  function isController() internal view {
+    require(controllers[msg.sender], "Only controllers can execute");
+  }
+
+  /**
+   * @dev Throws if called by any account other than a controller.
      */
   modifier onlyController() {
-    require(controllers[msg.sender], "Only controllers can execute");
+    isController();
     _;
   }
 

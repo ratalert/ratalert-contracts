@@ -132,7 +132,8 @@ contract Character is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
   /**
    * Allows DAO to withdraw funds
    */
-  function withdrawPayments() external onlyDao {
+  function withdrawPayments() external {
+    isDao();
     payable(dao).transfer(address(this).balance); // Transfer to DAO wallet
   }
 

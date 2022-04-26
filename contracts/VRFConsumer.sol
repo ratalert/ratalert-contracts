@@ -58,7 +58,8 @@ abstract contract VRFConsumer is Initializable, VRFRequestIDBase, DOWable {
    * @param amount - Amount of LINK to send
    * @return success - Whether the transaction succeeded
    */
-  function withdrawLink(uint amount) external onlyDao returns(bool success) {
+  function withdrawLink(uint amount) external returns(bool success) {
+    isDao();
     return link.transfer(tx.origin, amount);
   }
 }

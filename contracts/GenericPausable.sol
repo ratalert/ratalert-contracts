@@ -6,6 +6,12 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "./DOWable.sol";
 
 abstract contract GenericPausable is PausableUpgradeable, DOWable {
-  function pause() external onlyDao { _pause(); }
-  function unpause() external onlyDao { _unpause(); }
+  function pause() external {
+    isDao();
+    _pause();
+  }
+  function unpause() external {
+    isDao();
+    _unpause();
+  }
 }

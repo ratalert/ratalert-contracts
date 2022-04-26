@@ -379,7 +379,8 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
   /**
    * Allows DAO to withdraw funds
    */
-  function withdrawPayments() external onlyDao {
+  function withdrawPayments() external {
+    isDao();
     payable(dao).transfer(address(this).balance); // Transfer to DAO wallet
   }
 

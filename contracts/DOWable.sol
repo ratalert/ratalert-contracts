@@ -10,8 +10,15 @@ abstract contract DOWable is OwnableUpgradeable {
   /**
    * @dev Throws if called by any account other than the DAO wallet.
    */
-  modifier onlyDao() {
+  function isDao() internal view {
     require(msg.sender == dao, "Only DAO can execute");
+  }
+
+  /**
+   * @dev Throws if called by any account other than the DAO wallet.
+   */
+  modifier onlyDao() {
+    isDao();
     _;
   }
 
