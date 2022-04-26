@@ -277,6 +277,13 @@ contract('McStake (proxy)', (accounts) => {
           const tokenUri = await this.character.tokenURI(args.tokenId);
           const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
           const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
+          // const { writeFile } = require('fs/promises'); // Uncomment to write SVGs to disk
+          // const attr = {
+          //   efficiency: json.attributes.find(a => ['Skill percentage', 'Intelligence quotient'].includes(a.trait_type)).value,
+          //   tolerance: json.attributes.find(a => ['Freak percentage', 'Body mass percentage'].includes(a.trait_type)).value,
+          // };
+          // await writeFile(`${__dirname}/../images/test/test/${json.name}_E${attr.efficiency}-T${attr.tolerance}.svg`, svg);
+          // await writeFile(`${__dirname}/../images/test/test/${json.name}_T${attr.tolerance}-E${attr.efficiency}.svg`, svg);
 
           if (event === 'ChefClaimed') {
             expectChefEarnings(args.earned, 86400, list.chef.efficiency);
@@ -325,8 +332,8 @@ contract('McStake (proxy)', (accounts) => {
               list.rat.efficiency = newEfficiency;
               list.rat.tolerance = newTolerance;
             }
-            await expect(doesSvgTraitMatch(svg, 'rat','body', efficiency)).to.eventually.be.true;
-            await expect(doesSvgTraitMatch(svg, 'rat','head', tolerance)).to.eventually.be.true;
+            await expect(doesSvgTraitMatch(svg, 'rat','body', tolerance)).to.eventually.be.true;
+            await expect(doesSvgTraitMatch(svg, 'rat','head', efficiency)).to.eventually.be.true;
           }
           if (args.eventName) {
             events[args.eventName] += 1;
