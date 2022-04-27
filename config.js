@@ -116,6 +116,20 @@ module.exports = (network, accounts = []) => ({
       mishapToleranceLossChef: num('PROPERTIES_MISHAP_TOLERANCE_LOSS_CHEF', '25'),
       mishapToleranceLossRat: num('PROPERTIES_MISHAP_TOLERANCE_LOSS_RAT', '50'),
     }),
+    likelihood: Object.values({
+      disasterLikelihoodDividerChef: num('PROPERTIES_DISASTER_LIKELIHOOD_DIVIDER_CHEF', '-4'),
+      disasterLikelihoodMultiplierChef: num('PROPERTIES_DISASTER_LIKELIHOOD_MULTIPLIER_CHEF', '16'),
+      disasterLikelihoodOffsetChef: num('PROPERTIES_DISASTER_LIKELIHOOD_OFFSET_CHEF', '20'),
+      disasterLikelihoodDividerRat: num('PROPERTIES_DISASTER_LIKELIHOOD_DIVIDER_RAT', '-4'),
+      disasterLikelihoodMultiplierRat: num('PROPERTIES_DISASTER_LIKELIHOOD_MULTIPLIER_RAT', '16'),
+      disasterLikelihoodOffsetRat: num('PROPERTIES_DISASTER_LIKELIHOOD_OFFSET_RAT', '20'),
+      mishapLikelihoodDividerChef: num('PROPERTIES_MISHAP_LIKELIHOOD_DIVIDER_CHEF', '-1'),
+      mishapLikelihoodMultiplierChef: num('PROPERTIES_MISHAP_LIKELIHOOD_MULTIPLIER_CHEF', '1'),
+      mishapLikelihoodOffsetChef: num('PROPERTIES_MISHAP_LIKELIHOOD_OFFSET_CHEF', '20'),
+      mishapLikelihoodDividerRat: num('PROPERTIES_MISHAP_LIKELIHOOD_DIVIDER_RAT', '-1'),
+      mishapLikelihoodMultiplierRat: num('PROPERTIES_MISHAP_LIKELIHOOD_MULTIPLIER_RAT', '1'),
+      mishapLikelihoodOffsetRat: num('PROPERTIES_MISHAP_LIKELIHOOD_OFFSET_RAT', '20'),
+    }),
   }),
   config: (cfg) => {
     return Object.values({

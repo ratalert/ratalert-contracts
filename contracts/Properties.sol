@@ -21,6 +21,19 @@ contract Properties is Initializable, OwnableUpgradeable {
   uint8 public mishapToleranceLossChef; // Freak percentage loss for chefs during a food inspector event
   uint8 public mishapToleranceLossRat; // BodyMass percentage loss for rats during a rat trap event
 
+  int16 public disasterLikelihoodDividerChef; // Divider used for chefs in the disaster likelihood calculation
+  int16 public disasterLikelihoodMultiplierChef; // Multiplier used for chefs in the disaster likelihood calculation
+  int16 public disasterLikelihoodOffsetChef; // Offset used for chefs in the disaster likelihood calculation
+  int16 public disasterLikelihoodDividerRat; // Divider used for rats in the disaster likelihood calculation
+  int16 public disasterLikelihoodMultiplierRat; // Multiplier used for rats in the disaster likelihood calculation
+  int16 public disasterLikelihoodOffsetRat; // Offset used for rats in the disaster likelihood calculation
+  int16 public mishapLikelihoodDividerChef; // Divider used for chefs in the mishap likelihood calculation
+  int16 public mishapLikelihoodMultiplierChef; // Multiplier used for chefs in the mishap likelihood calculation
+  int16 public mishapLikelihoodOffsetChef; // Offset used for chefs in the mishap likelihood calculation
+  int16 public mishapLikelihoodDividerRat; // Divider used for rats in the mishap likelihood calculation
+  int16 public mishapLikelihoodMultiplierRat; // Multiplier used for rats in the mishap likelihood calculation
+  int16 public mishapLikelihoodOffsetRat; // Offset used for rats in the mishap likelihood calculation
+
   function initialize() external initializer {
     __Ownable_init();
   }
@@ -28,7 +41,7 @@ contract Properties is Initializable, OwnableUpgradeable {
   /**
    * Allows DAO to update game parameters
    */
-  function configure(uint8[] memory _disasterParams, uint8[] memory _mishapParams) external onlyOwner {
+  function configure(uint8[] memory _disasterParams, uint8[] memory _mishapParams, int16[] memory _likelihoodParams) external onlyOwner {
     disasterEfficiencyMinimumChef = int8(_disasterParams[0]);
     disasterEfficiencyMinimumRat = int8(_disasterParams[1]);
     disasterEfficiencyLossChef = _disasterParams[2];
@@ -42,6 +55,19 @@ contract Properties is Initializable, OwnableUpgradeable {
     mishapEfficiencyLossRat = _mishapParams[3];
     mishapToleranceLossChef = _mishapParams[4];
     mishapToleranceLossRat = _mishapParams[5];
+
+    disasterLikelihoodDividerChef = _likelihoodParams[0];
+    disasterLikelihoodMultiplierChef = _likelihoodParams[1];
+    disasterLikelihoodOffsetChef = _likelihoodParams[2];
+    disasterLikelihoodDividerRat = _likelihoodParams[3];
+    disasterLikelihoodMultiplierRat = _likelihoodParams[4];
+    disasterLikelihoodOffsetRat = _likelihoodParams[5];
+    mishapLikelihoodDividerChef = _likelihoodParams[6];
+    mishapLikelihoodMultiplierChef = _likelihoodParams[7];
+    mishapLikelihoodOffsetChef = _likelihoodParams[8];
+    mishapLikelihoodDividerRat = _likelihoodParams[9];
+    mishapLikelihoodMultiplierRat = _likelihoodParams[10];
+    mishapLikelihoodOffsetRat = _likelihoodParams[11];
   }
 
   /**
@@ -54,7 +80,10 @@ contract Properties is Initializable, OwnableUpgradeable {
   function _doesDisasterOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
     if (randomVal == 0) return false;
     if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) return false;
-    uint8 likelihood = uint8(((efficiency - 100) / -4 * 10) + 20);
+    int16 divider = isChef ? disasterLikelihoodDividerChef : disasterLikelihoodDividerRat;
+    int16 multiplier = isChef ? disasterLikelihoodMultiplierChef : disasterLikelihoodMultiplierRat;
+    int16 offset = isChef ? disasterLikelihoodOffsetChef : disasterLikelihoodOffsetRat;
+    uint16 likelihood = uint16(((efficiency - 100) / divider * multiplier) + offset);
     return randomVal % 1000 < likelihood;
   }
 
@@ -68,7 +97,10 @@ contract Properties is Initializable, OwnableUpgradeable {
   function _doesMishapOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
     if (randomVal == 0) return false;
     if (efficiency <= (isChef ? mishapEfficiencyMinimumChef : mishapEfficiencyMinimumRat)) return false;
-    uint8 likelihood = uint8(((efficiency - 100) * -1) + 20);
+    int16 divider = isChef ? mishapLikelihoodDividerChef : mishapLikelihoodDividerRat;
+    int16 multiplier = isChef ? mishapLikelihoodMultiplierChef : mishapLikelihoodMultiplierRat;
+    int16 offset = isChef ? mishapLikelihoodOffsetChef : mishapLikelihoodOffsetRat;
+    uint16 likelihood = uint16(((efficiency - 100) / divider * multiplier) + offset);
     return randomVal % 1000 < likelihood;
   }
 
