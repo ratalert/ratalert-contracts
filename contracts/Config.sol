@@ -99,7 +99,7 @@ contract Config is Initializable, OwnableUpgradeable {
           '"Venue":', _getVenue(mcStakeVenue), ',',
           '"Kitchen":', _getKitchen(mcStakeKitchen), '',
         '},',
-        '"TheStakehouseStake":{',
+        '"TheStakehouse":{',
           '"Venue":', _getVenue(theStakehouseVenue), ',',
           '"Kitchen":', _getKitchen(theStakehouseKitchen), ',',
           '"EntrepreneurialKitchen":', _getEntrepreneurialKitchen(theStakehouseEntrepreneurialKitchen),
