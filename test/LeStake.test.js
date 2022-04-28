@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, claimManyAndFulfill, scheduleAndExecute } = require('./helper');
+const { toWei, advanceTimeAndBlock, mintUntilWeHave, trainUntilWeHave, claimManyAndFulfill, scheduleAndExecute, expectChefEarnings, doesSvgTraitMatch } = require('./helper');
 const { BN } = require('@openzeppelin/test-helpers');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
@@ -51,7 +51,7 @@ contract('LeStake (proxy)', (accounts) => {
 
     await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
     await this.character.setApprovalForAll(this.mcStake.address, true, { from: owner });
-    lists.eligibleAll = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligibleAll, 10, true, true, { from: owner });
+    lists.eligibleAll = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligibleAll, 10, true, true, { verbose: true, args: { from: owner } });
   });
 
   describe('stakeMany()', () => {
@@ -67,7 +67,7 @@ contract('LeStake (proxy)', (accounts) => {
       await this.kitchenShop.mint(2, 1);
       await expect(this.kitchen.stakeMany(owner, lists.eligibleChefs.slice(0, 10).map(item => item.id), { from: owner })).to.eventually.be.rejectedWith('ERC1155: caller is not owner nor approved');
     });
-    it('fails if kitchen space is missing', async () => {
+    it('fails if additional kitchen space is missing', async () => {
       await this.kitchenShop.setApprovalForAll(this.kitchenUsage.address, true);
       await expect(this.kitchen.stakeMany(owner, lists.eligibleChefs.slice(0, 11).map(item => item.id), { from: owner })).to.eventually.be.rejectedWith('Kitchen space required');
     });
@@ -86,13 +86,97 @@ contract('LeStake (proxy)', (accounts) => {
     });
   });
   describe('claimMany()', () => {
+    it('handles level upgrades', async () => {
+      const verbose = process.argv.includes('-v');
+      const list = lists.eligibleChefs.slice(0, 5).concat(lists.eligibleRats.slice(0, 2));
+      await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
+      await Promise.all(list.map(async item => {
+        const traits = await this.character.getTokenTraits(item.id);
+        item.efficiency = Number(traits.efficiency.toString());
+        item.tolerance = Number(traits.tolerance.toString());
+      }));
+      process.stdout.write(`        running 10 claims${verbose ? '\n' : ''}`);
+      const events = { foodInspector: 0, burnout: 0, ratTrap: 0, cat: 0 };
+      for (let i = 0; i < 10; i += 1) {
+        await advanceTimeAndBlock(86400 * Math.ceil(Math.random()*10)); // Wait a random amount of days (1 to 10)
+        const { logs } = await claimManyAndFulfill.call(this, this.kitchen, list.map(item => item.id), false);
+        const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
+        await Promise.all(claimEvents.map(async ({ event, args }) => {
+          const token = list.find(it => it.id === Number(args.tokenId))
+          const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
+          const tolerance = Number((event === 'ChefClaimed' ? args.freak : args.bodyMass).toString());
+          const tokenUri = await this.character.tokenURI(args.tokenId);
+          const json = JSON.parse(Buffer.from(tokenUri.split(',')[1], 'base64').toString());
+          const svg = Buffer.from(json.image.split(',')[1], 'base64').toString();
+          if (verbose) {
+            console.log(`          [${i}] ${event} #${args.tokenId} E${args.skill || args.intelligence} T${args.freak || args.bodyMass} $${args.earned}   ${args.eventName}`);
+          }
+          if (args.eventName) {
+            events[args.eventName] += 1;
+          }
+          let newEfficiency;
+          let newTolerance;
+          if (event === 'ChefClaimed') {
+            expectChefEarnings(args.earned, 86400, token.efficiency);
+            token.earned = args.earned;
+            if (args.eventName === 'foodInspector') {
+              newEfficiency = (10 > token.efficiency) ? 0 : token.efficiency - 10;
+              newTolerance = (25 > token.tolerance) ? 0 : token.tolerance - 25;
+            } else if (args.eventName === 'burnout') {
+              newEfficiency = 0;
+              newTolerance = 0;
+            } else {
+              newEfficiency = (token.efficiency + 6 > 100) ? 100 : token.efficiency + 6;
+              newTolerance = (token.tolerance + 8 > 100) ? 100 : token.tolerance + 8;
+            }
+            expect(efficiency).to.equal(newEfficiency);
+            expect(tolerance).to.equal(newTolerance);
+            token.efficiency = efficiency;
+            token.tolerance = tolerance;
+            await expect(doesSvgTraitMatch(svg, 'chef','body', efficiency)).to.eventually.be.true;
+            await expect(doesSvgTraitMatch(svg, 'chef','head', tolerance)).to.eventually.be.true;
+          } else {
+            // expectRatEarnings(args.earned, fromWei(args.earned) / 8 * 2, 2, token.tolerance);
+            expect(args.earned).to.be.a.bignumber.gte('100000000000000000000');
+            if (args.eventName === 'ratTrap') {
+              newEfficiency = (10 > token.efficiency) ? 0 : token.efficiency - 10;
+              newTolerance = (50 > token.tolerance) ? 0 : token.tolerance - 50;
+            } else if (args.eventName === 'cat') {
+              newEfficiency = 0;
+              newTolerance = 0;
+            } else {
+              newEfficiency = (token.efficiency + 6 > 100) ? 100 : token.efficiency + 6;
+              newTolerance = (token.tolerance + 4 > 100) ? 100 : token.tolerance + 4;
+            }
+            await expect(doesSvgTraitMatch(svg, 'rat','body', tolerance)).to.eventually.be.true;
+            await expect(doesSvgTraitMatch(svg, 'rat','head', efficiency)).to.eventually.be.true;
+          }
+          expect(efficiency).to.equal(newEfficiency);
+          expect(tolerance).to.equal(newTolerance);
+          token.efficiency = efficiency;
+          token.tolerance = tolerance;
+          if (token.efficiency < 4) {
+            await trainUntilWeHave.call(this, this.mcStake, 4, 4, [token], 10, true, true, { verbose, args: { from: owner } });
+            await this.kitchen.stakeMany(owner, [token.id], { from: owner });
+          }
+        }));
+        if (!verbose) {
+          process.stdout.write('.');
+        }
+      }
+      if (verbose) {
+        console.log(`        done, events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
+      } else {
+        process.stdout.write('\n');
+      }
+    });
     it('force-unstakes ineligible characters', async () => {
       await advanceTimeAndBlock(86400 / 2); // Wait half a day
       lists.ineligible = [lists.eligibleChefs[0], lists.eligibleRats[0]];
       lists.remainingChefs = lists.eligibleChefs.slice(1, 10);
       lists.remainingRats = lists.eligibleRats.slice(1, 10);
       lists.remaining = lists.remainingChefs.concat(lists.remainingRats);
-      await trainUntilWeHave.call(this, this.kitchen, -4, -101, lists.ineligible, 10, false, false, { from: owner });
+      await trainUntilWeHave.call(this, this.kitchen, -4, -101, lists.ineligible, 10, false, false, { verbose: true, args: { from: owner } });
 
       await Promise.all(lists.ineligible.map(async (item) => {
         await expect(this.character.ownerOf(item.id)).to.eventually.equal(owner);

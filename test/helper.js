@@ -196,12 +196,14 @@ exports.claimManyAndFulfill = async function (venue, ids, unstake, options = { a
   res1.logs = res2.logs;
   return res1;
 };
-exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list, days, stake, unstake, options = {}) {
-  process.stdout.write(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}`);
+exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list, days, stake, unstake, options = { verbose: false, args: {} }) {
+  if (options.verbose) {
+    process.stdout.write(`        training at ${kitchen.constructor._json.contractName} until efficiency ${efficiency < 0 ? '<' : '>'} ${Math.abs(efficiency)} & tolerance ${tolerance < 0 ? '<' : '>'} ${Math.abs(tolerance)}`);
+  }
   const events = { foodInspector: 0, ratTrap: 0, burnout: 0, cat: 0 };
   let ids = list.map(item => item.id);
   if (stake) {
-    await kitchen.stakeMany(options.from, ids, { gasPrice: await web3.eth.getGasPrice(), ...options }); // Because it needs to be a valid tx params object
+    await kitchen.stakeMany(options.args.from, ids, { gasPrice: await web3.eth.getGasPrice(), ...options.args }); // Because it needs to be a valid tx params object
   }
   let done;
   while (!done) {
@@ -221,9 +223,11 @@ exports.trainUntilWeHave = async function (kitchen, efficiency, tolerance, list,
       }
     });
     done = ids.length === 0;
-    process.stdout.write('.');
+    process.stdout.write(options.verbose ? '.' : 'T');
   }
-  process.stdout.write(`\n        done, events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
+  if (options.verbose) {
+    process.stdout.write(`\n        done, events: ${Object.entries(events).map(([k, v]) => `${v} ${k}s`).join(', ')}\n`);
+  }
   if (unstake) {
     await exports.advanceTimeAndBlock(3600); // Wait another hour so we can unstake
     await exports.claimManyAndFulfill.call(this, kitchen, list.map(item => item.id), true);

@@ -43,8 +43,8 @@ contract('KitchenUsage (proxy)', (accounts) => {
 
     await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
     await this.character.setApprovalForAll(this.mcStake.address, true, { from: owner });
-    lists.eligible1 = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligible.slice(0, 10), 10, true, true, { from: owner });
-    lists.eligible2 = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligible.slice(10, 13), 10, true, true, { from: owner });
+    lists.eligible1 = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligible.slice(0, 10), 10, true, true, { verbose: true, args: { from: owner } });
+    lists.eligible2 = await trainUntilWeHave.call(this, this.mcStake, 4, 4, lists.eligible.slice(10, 13), 10, true, true, { verbose: true, args: { from: owner } });
   });
 
   describe('stake()', () => {
