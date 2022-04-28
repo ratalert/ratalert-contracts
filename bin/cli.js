@@ -1,8 +1,20 @@
 const mri = require('mri');
-const { scheduleAndExecute } = require('../test/helper');
+const { scheduleAndExecute, getUIConfig } = require('../test/helper');
 const { toWei } = require('../test/helper');
 
 const commands = {
+    pause: async(contract) => {
+        console.log(`Pausing ${contract}...`);
+        console.log(await (await this.getInst(contract)).pause());
+    },
+    unpause: async(contract) => {
+        console.log(`Unpausing ${contract}...`);
+        console.log(await (await this.getInst(contract)).unpause());
+    },
+    paused: async(contract) => {
+        const status = await (await this.getInst(contract)).paused();
+        console.log(`${contract} is ${status ? 'paused' : 'not paused'}`);
+    },
     addController: async(contract, account) => {
         const instance = await artifacts.require(contract).deployed();
         if (account === 'dao') account = this.config.dao.address;
@@ -30,6 +42,10 @@ const commands = {
         }
         console.log(`Configuring ${contract} with`, args[contract]);
         return scheduleAndExecute(instance, 'configure', args[contract], { from: this.config.dao.address }, Date.now());
+    },
+    setConfig: async() => {
+        console.log('Updating UI config...');
+        console.log(await scheduleAndExecute(await this.getInst('Config'), 'set', [getUIConfig(this.config)], { from: this.config.dao.address }, Date.now()));
     },
     toggleWhitelist: async(enable) => {
         console.log(`Setting whitelist status to ${enable}...`);
