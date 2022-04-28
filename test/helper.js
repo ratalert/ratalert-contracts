@@ -350,8 +350,8 @@ exports.getUIConfig = (cfg) => {
     },
     Properties: {
       disaster: {
-        efficiencyMinimumChef: cfg.properties[0][0],
-        efficiencyMinimumRat: cfg.properties[0][1],
+        toleranceMinimumChef: cfg.properties[0][0],
+        toleranceMinimumRat: cfg.properties[0][1],
         efficiencyLossChef: cfg.properties[0][2],
         efficiencyLossRat: cfg.properties[0][3],
         toleranceLossChef: cfg.properties[0][4],

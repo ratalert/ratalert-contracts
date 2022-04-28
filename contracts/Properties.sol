@@ -7,8 +7,8 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 
 contract Properties is Initializable, OwnableUpgradeable {
-  int8 public disasterEfficiencyMinimumChef; // Minimum skill percentage for chefs during a burnout event
-  int8 public disasterEfficiencyMinimumRat; // Minimum intelligence percentage for rats during a burnout event
+  int8 public disasterToleranceMinimumChef; // Minimum skill percentage for chefs during a burnout event
+  int8 public disasterToleranceMinimumRat; // Minimum intelligence percentage for rats during a burnout event
   uint8 public disasterEfficiencyLossChef; // Skill percentage loss for chefs during a burnout event
   uint8 public disasterEfficiencyLossRat; // Intelligence percentage loss for rats during a cat event
   uint8 public disasterToleranceLossChef; // Freak percentage loss for chefs during a burnout event
@@ -42,8 +42,8 @@ contract Properties is Initializable, OwnableUpgradeable {
    * Allows DAO to update game parameters
    */
   function configure(uint8[] memory _disasterParams, uint8[] memory _mishapParams, int16[] memory _likelihoodParams) external onlyOwner {
-    disasterEfficiencyMinimumChef = int8(_disasterParams[0]);
-    disasterEfficiencyMinimumRat = int8(_disasterParams[1]);
+    disasterToleranceMinimumChef = int8(_disasterParams[0]);
+    disasterToleranceMinimumRat = int8(_disasterParams[1]);
     disasterEfficiencyLossChef = _disasterParams[2];
     disasterEfficiencyLossRat = _disasterParams[3];
     disasterToleranceLossChef = _disasterParams[4];
@@ -77,9 +77,9 @@ contract Properties is Initializable, OwnableUpgradeable {
    * @param randomVal - A ChainLink VRF random number
    * @return Whether an event occurred
    */
-  function _doesDisasterOccur(bool isChef, int8 efficiency, uint256 randomVal) internal view returns(bool) {
+  function _doesDisasterOccur(bool isChef, int8 efficiency, int8 tolerance, uint256 randomVal) internal view returns(bool) {
     if (randomVal == 0) return false;
-    if (efficiency <= (isChef ? disasterEfficiencyMinimumChef : disasterEfficiencyMinimumRat)) return false;
+    if (tolerance <= (isChef ? disasterToleranceMinimumChef : disasterToleranceMinimumRat)) return false;
     int16 divider = isChef ? disasterLikelihoodDividerChef : disasterLikelihoodDividerRat;
     int16 multiplier = isChef ? disasterLikelihoodMultiplierChef : disasterLikelihoodMultiplierRat;
     int16 offset = isChef ? disasterLikelihoodOffsetChef : disasterLikelihoodOffsetRat;
@@ -157,7 +157,7 @@ contract Properties is Initializable, OwnableUpgradeable {
    */
   function getEventUpdates(bool isChef, uint8 currentEfficiency, uint8 currentTolerance, int8 efficiencyIncrement, int8 toleranceIncrement, uint256 randomVal) external view returns(uint8 efficiencyValue, uint8 toleranceValue, string memory eventName) {
     eventName = "";
-    if (_doesDisasterOccur(isChef, int8(currentEfficiency), randomVal)) {
+    if (_doesDisasterOccur(isChef, int8(currentEfficiency), int8(currentTolerance), randomVal)) {
       (efficiencyValue, toleranceValue) = _resolveDisaster();
       eventName = isChef ? "burnout" : "cat";
     } else if (_doesMishapOccur(isChef, int8(currentEfficiency), randomVal)) {

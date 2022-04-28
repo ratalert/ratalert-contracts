@@ -101,8 +101,8 @@ module.exports = (network, accounts = []) => ({
   }),
   properties: Object.values({
     disaster: Object.values({
-      disasterEfficiencyMinimumChef: num('PROPERTIES_DISASTER_EFFICIENCY_MINIMUM_CHEF', '86'),
-      disasterEfficiencyMinimumRat: num('PROPERTIES_DISASTER_EFFICIENCY_MINIMUM_RAT', '86'),
+      disasterToleranceMinimumChef: num('PROPERTIES_DISASTER_EFFICIENCY_MINIMUM_CHEF', '86'),
+      disasterToleranceMinimumRat: num('PROPERTIES_DISASTER_EFFICIENCY_MINIMUM_RAT', '86'),
       disasterEfficiencyLossChef: num('PROPERTIES_DISASTER_EFFICIENCY_LOSS_CHEF', '0'),
       disasterEfficiencyLossRat: num('PROPERTIES_DISASTER_EFFICIENCY_LOSS_RAT', '0'),
       disasterToleranceLossChef: num('PROPERTIES_DISASTER_TOLERANCE_LOSS_CHEF', '0'),
