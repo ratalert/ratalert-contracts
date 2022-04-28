@@ -1,4 +1,5 @@
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+const { getUIConfig } = require('../test/helper');
 const Config = require('../config');
 
 const FastFood = artifacts.require('FastFood');
@@ -56,7 +57,7 @@ module.exports = async (deployer, network, accounts) => {
   const leStake = await deployProxy(LeStake, [character.address, claim.address, gourmetFood.address, kitchenUsage.address], {deployer});
   const gym = await deployProxy(Gym, [character.address, claim.address], {deployer});
 
-  await configContract.set(...config.config(config));
+  await configContract.set(getUIConfig(config));
   await properties.configure(...config.properties);
   await paywall.configure(...config.payWall);
   await character.configure(...config.character);

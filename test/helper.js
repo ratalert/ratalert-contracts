@@ -306,3 +306,97 @@ exports.decodeRawLogs = (res, contract, eventName, slice = 0) => {
     return item;
   });
 };
+exports.getUIConfig = (cfg) => {
+  const getVenue = name => ({
+    dailySkillRate: name === 'gym' ? 0 : cfg.kitchen[name].propertyIncrements[0],
+    dailyFreakRate: name === 'gym' ? cfg.gym[2] : cfg.kitchen[name].propertyIncrements[1],
+    dailyIntelligenceRate: name === 'gym' ? 0 : cfg.kitchen[name].propertyIncrements[2],
+    dailyBodyMassRate: name === 'gym' ? cfg.gym[3] : cfg.kitchen[name].propertyIncrements[3],
+    vestingPeriod: name === 'gym' ? cfg.gym[0] : cfg.kitchen.vestingPeriod,
+    accrualPeriod: name === 'gym' ? cfg.gym[1] : cfg.kitchen.accrualPeriod,
+    maxClaimsPerTx: name === 'gym' ? cfg.gym[4] : cfg.kitchen.maxClaimsPerTx,
+    claimFee: name === 'gym' ? cfg.gym[5] : cfg.kitchen.claimFee,
+  });
+  const getKitchen = name => ({
+    foodTokenMaxSupply: cfg.kitchen[name].foodTokenMaxSupply,
+    dailyChefEarnings: cfg.kitchen.dailyChefEarnings,
+    ratTheftPercentage: cfg.kitchen.ratTheftPercentage,
+    chefEfficiencyMultiplier: cfg.kitchen.chefEfficiencyMultiplier,
+    ratEfficiencyMultiplier: cfg.kitchen.ratEfficiencyMultiplier,
+    ratEfficiencyOffset: cfg.kitchen.ratEfficiencyOffset,
+  });
+  const getEntrepreneurialKitchen = name => ({
+    minEfficiency: cfg.kitchen[name].minEfficiency
+  });
+  const out = {
+    Paywall: {
+      mintPrice: cfg.payWall[0],
+      whitelistBoost: cfg.payWall[1],
+      maxMintsPerTx: cfg.payWall[2],
+      gen1PriceTier0: cfg.payWall[3][0],
+      gen1PriceTier1: cfg.payWall[3][1],
+      gen1PriceTier2: cfg.payWall[3][2],
+      gen1PriceTier3: cfg.payWall[3][3],
+    },
+    KitchenShop: {
+      tokenSupply: cfg.kitchenShop[0],
+      maxMintsPerTx: cfg.kitchenShop[1],
+      priceTier0: cfg.kitchenShop[3][0],
+      priceTier1: cfg.kitchenShop[3][1],
+      priceTier2: cfg.kitchenShop[3][2],
+      priceTier3: cfg.kitchenShop[3][3],
+      priceTier4: cfg.kitchenShop[3][4],
+      chefsPerKitchen: cfg.kitchenUsage[0],
+    },
+    Properties: {
+      disaster: {
+        efficiencyMinimumChef: cfg.properties[0][0],
+        efficiencyMinimumRat: cfg.properties[0][1],
+        efficiencyLossChef: cfg.properties[0][2],
+        efficiencyLossRat: cfg.properties[0][3],
+        toleranceLossChef: cfg.properties[0][4],
+        toleranceLossRat: cfg.properties[0][5],
+      },
+      mishap: {
+        efficiencyMinimumChef: cfg.properties[1][0],
+        efficiencyMinimumRat: cfg.properties[1][1],
+        efficiencyLossChef: cfg.properties[1][2],
+        efficiencyLossRat: cfg.properties[1][3],
+        toleranceLossChef: cfg.properties[1][4],
+        toleranceLossRat: cfg.properties[1][5],
+      },
+      likelihood: {
+        disasterLikelihoodDividerChef: cfg.properties[2][0],
+        disasterLikelihoodMultiplierChef: cfg.properties[2][1],
+        disasterLikelihoodOffsetChef: cfg.properties[2][2],
+        disasterLikelihoodDividerRat: cfg.properties[2][3],
+        disasterLikelihoodMultiplierRat: cfg.properties[2][4],
+        disasterLikelihoodOffsetRat: cfg.properties[2][5],
+        mishapLikelihoodDividerChef: cfg.properties[2][6],
+        mishapLikelihoodMultiplierChef: cfg.properties[2][7],
+        mishapLikelihoodOffsetChef: cfg.properties[2][8],
+        mishapLikelihoodDividerRat: cfg.properties[2][9],
+        mishapLikelihoodMultiplierRat: cfg.properties[2][10],
+        mishapLikelihoodOffsetRat: cfg.properties[2][11],
+      }
+    },
+    McStake: {
+      Venue: getVenue('mcStake'),
+      Kitchen: getKitchen('mcStake'),
+    },
+    TheStakehouse: {
+      Venue: getVenue('theStakehouse'),
+      Kitchen: getKitchen('theStakehouse'),
+      EntrepreneurialKitchen: getEntrepreneurialKitchen('theStakehouse'),
+    },
+    LeStake: {
+      Venue: getVenue('leStake'),
+      Kitchen: getKitchen('leStake'),
+      EntrepreneurialKitchen: getEntrepreneurialKitchen('leStake'),
+    },
+    Gym: {
+      Venue: getVenue('gym'),
+    },
+  };
+  return JSON.stringify(out);
+};

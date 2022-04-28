@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { scheduleAndExecute } = require('./helper');
+const { scheduleAndExecute, getUIConfig } = require('./helper');
 const Config = require('../config');
 
 chai.use(chaiAsPromised);
@@ -19,22 +19,21 @@ contract('Mint (proxy)', (accounts) => {
   describe('get()', () => {
     it('gets valid JSON', async () => {
       const res = await this.config.get();
-      const json = JSON.parse(Buffer.from(res.split(',')[1], 'base64').toString());
-      expect(json).to.be.an('object');
+      expect(res).to.equal(getUIConfig(config));
     });
   });
   describe('set()', () => {
     it('denies anonymous to execute', async () => {
-      await expect(this.config.set(...config.config(config))).to.eventually.be.rejectedWith('caller is not the owner');
+      await expect(this.config.set(getUIConfig(config))).to.eventually.be.rejectedWith('caller is not the owner');
     });
     it('allows DAO to execute', async () => {
-      const newConfig = config.config(config);
-      newConfig[0].mintPrice = 666;
-      const res = await scheduleAndExecute(this.config, 'set', [...newConfig], { from: dao });
+      const newConfig = JSON.parse(getUIConfig(config));
+      newConfig.Paywall.mintPrice = 666;
+      const res = await scheduleAndExecute(this.config, 'set', [JSON.stringify(newConfig)], { from: dao });
       expect(res.receipt.status).to.be.true;
       const res2 = await this.config.get();
-      const json = JSON.parse(Buffer.from(res2.split(',')[1], 'base64').toString());
-      expect(json.Paywall.mintPrice).to.equal('666');
+      const json = JSON.parse(res2);
+      expect(json.Paywall.mintPrice).to.equal(666);
     });
   });
 });
