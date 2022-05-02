@@ -89,6 +89,8 @@ contract('LeStake (proxy)', (accounts) => {
     it('handles level upgrades', async () => {
       const verbose = process.argv.includes('-v');
       const list = lists.eligibleChefs.slice(0, 5).concat(lists.eligibleRats.slice(0, 2));
+      await advanceTimeAndBlock(86400); // Wait a random amount of days (1 to 10)
+      await claimManyAndFulfill.call(this, this.kitchen, Object.values(list).map(item => item.id), true);
       await this.kitchen.stakeMany(owner, Object.values(list).map(item => item.id), { from: owner });
       await Promise.all(list.map(async item => {
         const traits = await this.character.getTokenTraits(item.id);
