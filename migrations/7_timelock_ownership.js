@@ -10,8 +10,10 @@ module.exports = async (deployer, network, accounts) => {
     'KitchenUsage', 'LeStake', 'McStake', 'Mint', 'Paywall', 'Properties', 'TheStakehouse', 'Traits',
   ];
 
-  await deployer.deploy(TimelockController, config.timelock.minDelay, config.timelock.proposers.split(' '), config.timelock.executors.split(' ')/*, { gasPrice: await web3.eth.getGasPrice(), overwrite: false }*/);
-  const timelockController = await TimelockController.deployed();
+  let timelockController = { address: config.timelock.address };
+  if (!config.timelock.address) {
+    timelockController = await TimelockController.deployed();
+  }
 
   console.log(`Changing ownership to TimelockController at ${timelockController.address}`);
   await contracts.reduce(async (previousPromise, name) => {

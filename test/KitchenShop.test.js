@@ -37,8 +37,9 @@ contract('KitchenShop (proxy)', (accounts) => {
     this.kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address]);
     await this.kitchenShopSandbox.transferOwnership(this.timelockController.address);
     await scheduleAndExecute(this.kitchenShopSandbox, 'configure', [[5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)]], { from: dao });
-    await scheduleAndExecute(this.fastFood, 'addController', [[this.kitchenShopSandbox.address, dao]], { from: dao });
-    await scheduleAndExecute(this.casualFood, 'addController', [[dao]], { from: dao });
+    await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
+    await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), this.kitchenShopSandbox.address], { from: dao });
+    await scheduleAndExecute(this.casualFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 2, 2);
     lists.chefs = [lists.chefs[0], lists.chefs[1]];

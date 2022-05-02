@@ -2,6 +2,7 @@ const { deployProxy } = require('@openzeppelin/truffle-upgrades');
 const { getUIConfig } = require('../test/helper');
 const Config = require('../config');
 
+const TimelockController = artifacts.require('TimelockController');
 const FastFood = artifacts.require('FastFood');
 const CasualFood = artifacts.require('CasualFood');
 const GourmetFood = artifacts.require('GourmetFood');
@@ -22,6 +23,12 @@ const Gym = artifacts.require('Gym');
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
 
+  let timelockController = { address: config.timelock.address };
+  if (!config.timelock.address) {
+    await deployer.deploy(TimelockController, config.timelock.minDelay, config.timelock.proposers.split(' '), config.timelock.executors.split(' '));
+    timelockController = await TimelockController.deployed();
+  }
+
   let vrfCoordinator = {};
   let linkToken = {};
   if (network === 'development') {
@@ -37,9 +44,10 @@ module.exports = async (deployer, network, accounts) => {
       vrfCoordinator = await VRFCoordinatorMock.deployed();
     }
   }
-  await deployer.deploy(FastFood);
-  await deployer.deploy(CasualFood);
-  await deployer.deploy(GourmetFood);
+
+  await deployer.deploy(FastFood, timelockController.address);
+  await deployer.deploy(CasualFood, timelockController.address);
+  await deployer.deploy(GourmetFood, timelockController.address);
   const fastFood = await FastFood.deployed();
   const casualFood = await CasualFood.deployed();
   const gourmetFood = await GourmetFood.deployed();
@@ -82,9 +90,20 @@ module.exports = async (deployer, network, accounts) => {
   await mint.setCharacter(character.address);
   await claim.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
   await claim.addVenue([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
-  await fastFood.addController([paywall.address, mcStake.address, kitchenShop.address]);
-  await casualFood.addController([theStakehouse.address, kitchenShop.address]);
-  await gourmetFood.addController([leStake.address, kitchenShop.address]);
+
+  await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), config.dao.address);
+  await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), config.dao.address);
+  await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), mcStake.address);
+  await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), paywall.address);
+  await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), kitchenShop.address);
+  await casualFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), config.dao.address);
+  await casualFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), config.dao.address);
+  await casualFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), theStakehouse.address);
+  await casualFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), kitchenShop.address);
+  await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), config.dao.address);
+  await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), config.dao.address);
+  await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), leStake.address);
+  await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), kitchenShop.address);
   await paywall.addController([character.address]);
   await character.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
   await character.setKitchen(mcStake.address);

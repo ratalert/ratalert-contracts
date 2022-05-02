@@ -14,7 +14,7 @@ contract('FastFood', (accounts) => {
 
   before(async () => {
     this.foodToken = await FastFood.deployed();
-    await scheduleAndExecute(this.foodToken, 'addController', [[dao]], { from: dao });
+    await scheduleAndExecute(this.foodToken, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), owner], { from: dao });
     expect(await this.foodToken.totalSupply()).to.be.a.bignumber.eq(toWei(0));
   });
 
@@ -26,7 +26,7 @@ contract('FastFood', (accounts) => {
 
   describe('mint()', () => {
     it('denies anonymous to mint', async () => {
-      await expect(this.foodToken.mint(anon, toWei(100000000), { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
+      await expect(this.foodToken.mint(anon, toWei(100000000), { from: anon })).to.eventually.be.rejectedWith('AccessControl: account');
     });
 
     it('allows owner to mint', async () => {
@@ -42,7 +42,7 @@ contract('FastFood', (accounts) => {
 
   describe('burn()', () => {
     it('denies anonymous to burn', async () => {
-      await expect(this.foodToken.burn(anon, toWei(99999999), { from: anon })).to.eventually.be.rejectedWith('Only controllers can execute');
+      await expect(this.foodToken.burn(anon, toWei(99999999), { from: anon })).to.eventually.be.rejectedWith('AccessControl: account');
     });
 
     it('allows owner to burn', async () => {
@@ -56,32 +56,32 @@ contract('FastFood', (accounts) => {
     });
   });
 
-  describe('addController()', () => {
-    it('denies anonymous to add a controller', async () => {
-      await expect(this.foodToken.addController([anon], { from: anon })).to.eventually.be.rejected;
+  describe('grantRole()', () => {
+    it('denies anonymous to add a role', async () => {
+      await expect(this.foodToken.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), anon, { from: anon })).to.eventually.be.rejected;
     });
 
-    it('allows owner to add a controller', async () => {
-      const res = await scheduleAndExecute(this.foodToken, 'addController', [[owner]], { from: dao });
+    it('allows owner to add a role', async () => {
+      const res = await scheduleAndExecute(this.foodToken, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), anon], { from: dao });
       await expect(res.receipt.status).to.be.true;
     });
   });
 
-  describe('controller()', () => {
-    it('returns a controller status', async () => {
-      await expect(this.foodToken.controller(owner)).to.eventually.be.true;
+  describe('hasRole()', () => {
+    it('returns a role status', async () => {
+      await expect(this.foodToken.hasRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), anon)).to.eventually.be.true;
     });
   });
 
-  describe('removeController()', () => {
-    it('denies anonymous to remove a controller', async () => {
-      await expect(this.foodToken.removeController([anon], { from: anon })).to.eventually.be.rejected;
+  describe('revokeRole()', () => {
+    it('denies anonymous to remove a role', async () => {
+      await expect(this.foodToken.revokeRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), anon, { from: anon })).to.eventually.be.rejected;
     });
 
-    it('allows owner to remove a controller', async () => {
-      const res = await scheduleAndExecute(this.foodToken, 'removeController', [[owner]], { from: dao });
+    it('allows owner to remove a role', async () => {
+      const res = await scheduleAndExecute(this.foodToken, 'revokeRole', [web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), anon], { from: dao });
       await expect(res.receipt.status).to.be.true;
-      await expect(this.foodToken.controller(owner)).to.eventually.be.false;
+      await expect(this.foodToken.hasRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), anon)).to.eventually.be.false;
     });
   });
 });

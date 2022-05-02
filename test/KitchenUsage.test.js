@@ -33,7 +33,7 @@ contract('KitchenUsage (proxy)', (accounts) => {
     this.kitchenUsage = await KitchenUsage.deployed();
     this.kitchen = await TheStakehouse.deployed();
     this.mcStake = await McStake.deployed();
-    await scheduleAndExecute(this.fastFood, 'addController', [[dao]], { from: dao });
+    await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
     await scheduleAndExecute(this.kitchenUsage, 'addController', [[dao]], { from: dao });
 
     await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, 4, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
