@@ -363,11 +363,11 @@ contract('McStake (proxy)', (accounts) => {
     });
     it('boosts efficiency if staked long enough', async () => {
       await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]], { from: dao });
-      const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
+      lists.boost = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
-      await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
-      await advanceTimeAndBlock(86400 * 2); // Wait 3 days
-      const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(boostLists.all).map(item => item.id), false, { args: { from: anon } });
+      await this.kitchen.stakeMany(anon, Object.values(lists.boost.all).map(item => item.id), { from: anon });
+      await advanceTimeAndBlock(86400 * 2); // Wait 2 days
+      const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(lists.boost.all).map(item => item.id), false, { args: { from: anon } });
       const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
       claimEvents.forEach(({ event, args }) => {
         const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
@@ -384,10 +384,10 @@ contract('McStake (proxy)', (accounts) => {
     });
     it('does not boost efficiency if not staked long enough', async () => {
       await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]], { from: dao }, 1);
-      const boostLists = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
-      await this.kitchen.stakeMany(anon, Object.values(boostLists.all).map(item => item.id), { from: anon });
-      await advanceTimeAndBlock(43200); // Wait 3 days
-      const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(boostLists.all).map(item => item.id), false, { args: { from: anon } });
+      lists.boost = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
+      await this.kitchen.stakeMany(anon, Object.values(lists.boost.all).map(item => item.id), { from: anon });
+      await advanceTimeAndBlock(43200);
+      const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(lists.boost.all).map(item => item.id), false, { args: { from: anon } });
       const claimEvents = logs.filter(item => ['ChefClaimed', 'RatClaimed'].includes(item.event));
       claimEvents.forEach(({ event, args }) => {
         const efficiency = Number((event === 'ChefClaimed' ? args.skill : args.intelligence).toString());
@@ -400,6 +400,19 @@ contract('McStake (proxy)', (accounts) => {
           expect(tolerance).to.equal(4);
         }
       });
+    });
+    it('allows unstaking after all FastFood has run out', async () => {
+      await advanceTimeAndBlock(86400); // Wait a day
+      const currentSupply = await this.foodToken.totalSupply();
+      const foodTokenMaxSupply = Math.ceil(fromWei(currentSupply.toString()));
+      await scheduleAndExecute(this.kitchen, 'configure', [foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
+      const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(lists.boost.all).map(item => item.id), true, { args: { from: anon } });
+      await Promise.all(logs.map(async ({ args, event }) => {
+        if (['ChefClaimed', 'RatClaimed'].includes(event)) {
+          expect(fromWei(args.earned)).to.be.below(1);
+          await expect(this.character.ownerOf(args.tokenId)).to.eventually.equal(anon);
+        }
+      }));
     });
   });
 });
