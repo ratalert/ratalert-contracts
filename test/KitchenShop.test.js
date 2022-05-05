@@ -2,6 +2,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
 const { toWei, mintUntilWeHave, trainUntilWeHave, scheduleAndExecute } = require('./helper');
+const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
 chai.use(chaiAsPromised);
@@ -13,11 +14,13 @@ const Mint = artifacts.require('Mint');
 const Claim = artifacts.require('Claim');
 const FastFood = artifacts.require('FastFood');
 const CasualFood = artifacts.require('CasualFood');
+const Properties = artifacts.require('Properties');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const KitchenShop = artifacts.require('KitchenShop');
 
 contract('KitchenShop (proxy)', (accounts) => {
+  const config = Config('development', accounts)
   const owner = accounts[0];
   const dao = accounts[9];
   let lists;
@@ -31,6 +34,7 @@ contract('KitchenShop (proxy)', (accounts) => {
     this.claim = await Claim.deployed();
     this.fastFood = await FastFood.deployed();
     this.casualFood = await CasualFood.deployed();
+    this.properties = await Properties.deployed();
     this.character = await Character.deployed();
     this.kitchen = await McStake.deployed();
     this.kitchenShop = await KitchenShop.deployed();
@@ -38,7 +42,7 @@ contract('KitchenShop (proxy)', (accounts) => {
     await this.kitchenShopSandbox.transferOwnership(this.timelockController.address);
     await scheduleAndExecute(this.kitchenShopSandbox, 'configure', [[5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)]], { from: dao });
     await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
-    await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), this.kitchenShopSandbox.address], { from: dao });
+    await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), this.kitchenShopSandbox.address], { from: dao });
     await scheduleAndExecute(this.casualFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 2, 2);
@@ -47,7 +51,14 @@ contract('KitchenShop (proxy)', (accounts) => {
     lists.all = lists.chefs.concat(lists.rats);
 
     await this.character.setApprovalForAll(this.kitchen.address, true, { from: owner });
+    const propertiesConfig = [[...config.properties[0]], [...config.properties[1]], [...config.properties[2]]];
+    propertiesConfig[0][0] = 100;
+    propertiesConfig[0][1] = 100;
+    propertiesConfig[1][0] = 100;
+    propertiesConfig[1][1] = 100;
+    await scheduleAndExecute(this.properties, 'configure', propertiesConfig, { from: dao });
     lists.all = await trainUntilWeHave.call(this, this.kitchen, 72, 0, [lists.all[0], lists.all[2]], 10, true, true, { verbose: true, args: { from: owner } });
+    await scheduleAndExecute(this.properties, 'configure', config.properties, { from: dao });
     fastFoodBalance = await this.fastFood.balanceOf(owner);
   });
 
