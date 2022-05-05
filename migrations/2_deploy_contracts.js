@@ -56,7 +56,7 @@ module.exports = async (deployer, network, accounts) => {
   const traits = await deployProxy(Traits, {deployer});
   const properties = await deployProxy(Properties, {deployer});
   const paywall = await deployProxy(Paywall, [fastFood.address], {deployer});
-  const character = await deployProxy(Character, [paywall.address, mint.address, traits.address, properties.address], {deployer});
+  const character = await deployProxy(Character, [paywall.address, mint.address, traits.address], {deployer});
   const kitchenShop = await deployProxy(KitchenShop, [fastFood.address, casualFood.address, character.address], {deployer});
   const kitchenUsage = await deployProxy(KitchenUsage, [kitchenShop.address], {deployer});
   const claim = await deployProxy(Claim, config.claim({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address }), {deployer});
@@ -68,7 +68,7 @@ module.exports = async (deployer, network, accounts) => {
   await configContract.set(getUIConfig(config));
   await properties.configure(...config.properties);
   await paywall.configure(...config.payWall);
-  await character.configure(...config.character);
+  await character.configure(...config.character, properties.address);
   await kitchenShop.configure(...config.kitchenShop);
   await kitchenUsage.configure(...config.kitchenUsage, [theStakehouse.address, leStake.address]);
   await mcStake.configure(config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee);

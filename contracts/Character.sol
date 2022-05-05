@@ -33,8 +33,7 @@ contract Character is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
   function initialize(
     address _paywall,
     address _mint,
-    address _traits,
-    address _properties
+    address _traits
   ) external initializer {
     __Ownable_init();
     __Pausable_init();
@@ -43,15 +42,15 @@ contract Character is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
     paywall = IPaywall(_paywall);
     theMint = IMint(_mint);
     traits = ITraits(_traits);
-    properties = IProperties(_properties);
   }
 
   /**
    * Allows DAO to update game parameters
    */
-  function configure(uint256 _maxTokens, uint256 _gen0Tokens) external onlyOwner {
+  function configure(uint256 _maxTokens, uint256 _gen0Tokens, address _properties) external onlyOwner {
     maxTokens = _maxTokens;
     gen0Tokens = _gen0Tokens;
+    properties = IProperties(_properties);
   }
 
   /**

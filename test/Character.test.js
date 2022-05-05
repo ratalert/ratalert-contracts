@@ -43,10 +43,10 @@ contract('Character (proxy)', (accounts) => {
     this.traitList = await loadTraits();
     this.character = await Character.deployed();
     this.kitchen = await McStake.deployed();
-    this.characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address, this.properties.address]);
+    this.characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address]);
     await this.characterSandbox.setDao(config.dao.address);
     await this.characterSandbox.transferOwnership(this.timelockController.address);
-    await scheduleAndExecute(this.characterSandbox, 'configure', [5, 1], { from: dao });
+    await scheduleAndExecute(this.characterSandbox, 'configure', [5, 1, this.properties.address], { from: dao });
     await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
     await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), this.paywall.address], { from: dao });
     await scheduleAndExecute(this.paywall, 'addController', [[this.characterSandbox.address, dao]], { from: dao });
