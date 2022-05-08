@@ -32,6 +32,14 @@ module.exports = {
       // confirmations: 1,
       // timeoutBlocks: 200,
     },
+    main: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mainnet.infura.io/ws/v3/${infuraId}`),
+      network_id: 137,
+      skipDryRun: true,
+      gasPrice: 62500000000,
+      // confirmations: 1,
+      // timeoutBlocks: 200,
+    },
     dao: {
       provider: () => new HDWalletProvider([daoPrivKey], `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
       network_id: 80001,
