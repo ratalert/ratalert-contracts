@@ -6,6 +6,7 @@ dotenv.config({ path: `${__dirname}/.env${network === 'develop' ? '' : '.' + net
 const mnemonic = process.env.MNEMONIC;
 const daoPrivKey = process.env.DAO_PRIVKEY;
 const infuraId = process.env.INFURA_ID;
+const gasPrice = process.env.TRUFFLE_NETWORK_GASPRICE ? Number(process.env.TRUFFLE_NETWORK_GASPRICE) : undefined;
 
 module.exports = {
   networks: {
@@ -15,13 +16,13 @@ module.exports = {
       // port: 7545,     // Ganache
       network_id: '*',   // Any network (default: none)
       websockets: process.env.LOCAL_VRF === 'true',
-      // gas: 22323,
-      // gasPrice: 10,
+      gasPrice,
     },
     test: {
       provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
       network_id: 80001,
       skipDryRun: true,
+      gasPrice: process.env.TRUFFLE_NETWORK_GASPRICE || undefined,
       // confirmations: 1,
       // timeoutBlocks: 200,
     },
@@ -29,6 +30,7 @@ module.exports = {
       provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
       network_id: 80001,
       skipDryRun: true,
+      gasPrice,
       // confirmations: 1,
       // timeoutBlocks: 200,
     },
@@ -36,7 +38,7 @@ module.exports = {
       provider: () => new HDWalletProvider(mnemonic, `wss://polygon-mainnet.infura.io/ws/v3/${infuraId}`),
       network_id: 137,
       skipDryRun: true,
-      gasPrice: 62500000000,
+      gasPrice,
       // confirmations: 1,
       // timeoutBlocks: 200,
     },
@@ -44,13 +46,15 @@ module.exports = {
       provider: () => new HDWalletProvider([daoPrivKey], `wss://polygon-mumbai.infura.io/ws/v3/${infuraId}`),
       network_id: 80001,
       skipDryRun: true,
+      gasPrice,
     },
     rinkeby: {
       provider: () => new HDWalletProvider(mnemonic, `wss://rinkeby.infura.io/ws/v3/${infuraId}`),
       network_id: 4,
       skipDryRun: true,
-      // gasPrice: 10e9,
-      // timeoutBlocks: 50,
+      gasPrice,
+      // confirmations: 1,
+      // timeoutBlocks: 200,
     },
     // Another network with more advanced options...
     // advanced: {
