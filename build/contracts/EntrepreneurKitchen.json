@@ -1,0 +1,1811 @@
+{
+  "contractName": "EntrepreneurKitchen",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "earned",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "unstaked",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "skill",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "freak",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "foodTokensPerRat",
+          "type": "uint256"
+        }
+      ],
+      "name": "ChefClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "earned",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "unstaked",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "intelligence",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "bodyMass",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "foodTokensPerRat",
+          "type": "uint256"
+        }
+      ],
+      "name": "RatClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "TokenStaked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "chefs",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint80",
+          "name": "value",
+          "type": "uint80"
+        },
+        {
+          "internalType": "uint80",
+          "name": "timestamp",
+          "type": "uint80"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "unstake",
+          "type": "bool"
+        }
+      ],
+      "name": "claimMany",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "foodTokensPerRat",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "requestId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "venue",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "internalType": "uint16[]",
+              "name": "tokenIds",
+              "type": "uint16[]"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstake",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IClaim.VRFStruct",
+          "name": "v",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint256",
+          "name": "randomness",
+          "type": "uint256"
+        }
+      ],
+      "name": "fulfillClaimMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "getChefsStaked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_character",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_claim",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_accrualPeriod",
+          "type": "uint256"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "lastClaimTimestamp",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "name": "onERC721Received",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "rats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint80",
+          "name": "value",
+          "type": "uint80"
+        },
+        {
+          "internalType": "uint80",
+          "name": "timestamp",
+          "type": "uint80"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_dao",
+          "type": "address"
+        }
+      ],
+      "name": "setDao",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        }
+      ],
+      "name": "stakeMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "stakers",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalChefsStaked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalFoodTokensEarned",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRatsStaked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unaccountedRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdrawPayments",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"skill\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"freak\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"ChefClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"intelligence\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"bodyMass\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"RatClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TokenStaked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"chefs\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokensPerRat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomness\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_character\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_claim\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_accrualPeriod\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastClaimTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"rats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_dao\",\"type\":\"address\"}],\"name\":\"setDao\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"stakers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalFoodTokensEarned\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalRatsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unaccountedRewards\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdrawPayments\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimMany(uint16[],bool)\":{\"params\":{\"tokenIds\":\"- The IDs of the tokens in question\",\"unstake\":\"- Whether or not to unstake the given tokens\"}},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"params\":{\"randomness\":\"- Random value created by VRF\",\"v\":\"- VRF struct for the corresponding request\"}},\"getChefsStaked(address)\":{\"params\":{\"account\":\"- User wallet address\"},\"returns\":{\"_0\":\"Number of chefs in staking\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"paused()\":{\"details\":\"Returns true if the contract is paused, and false otherwise.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"stakeMany(address,uint16[])\":{\"params\":{\"account\":\"- User wallet address\",\"tokenIds\":\"- The IDs of the Chefs & Rats to stake\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"claimMany(uint16[],bool)\":{\"notice\":\"ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters\"},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"notice\":\"Callback for claimMany(), called by Claim.fulfillRandomness()\"},\"getChefsStaked(address)\":{\"notice\":\"Get the amount of chefs the given account has in staking\"},\"onERC721Received(address,address,uint256,bytes)\":{\"notice\":\"IERC721ReceiverUpgradeable interface: We do not accept tokens sent directly\"},\"stakeMany(address,uint16[])\":{\"notice\":\"Adds Characters to staking\"},\"withdrawPayments()\":{\"notice\":\"Allows DAO to withdraw funds\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/EntrepreneurKitchen.sol\":\"EntrepreneurKitchen\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x652fee292f698d8dba81bf287cb71f1682f6483b67ebe601a5f7387dcfc30b34\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://98c7bba29bcab7240cdaada7dd7cbe3529fec83314801270c46239e72a9e84d7\",\"dweb:/ipfs/QmfHCc1KMygjXchXVwafWTkFjhbb2SQ3Cu5GzRTdV4CCCh\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x372b0bc04e3b4c074559bbbfb1317afddb56de5504158ca25a7f9cd403980445\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://88b812365459a042c2aab5c689ff723098e0e19cb372718d3dd028b3c406e4f6\",\"dweb:/ipfs/QmTsLrMYzPjnB85pyAy85NNcBg64RPVueJARzwNg9xMyR1\"]},\"@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol\":{\"keccak256\":\"0x041af89e5e60b74e1203d5a34614c9de379726f52ecb8cf064cab78b9fdcdf9d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a8e235e33979e564ee560e5e7c42f3d4c309698eae7b7035aaf65b0ce6253f9\",\"dweb:/ipfs/QmQKdNPLcgR6LLtS9vDRXy8jeD7gCZDTfctXiTwu6HN7M1\"]},\"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol\":{\"keccak256\":\"0x8cc03c5ac17e8a7396e487cda41fc1f1dfdb91db7d528e6da84bee3b6dd7e167\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://607818f1b44548c2d8268176f73cdb290e1faed971b1061930d92698366e2a11\",\"dweb:/ipfs/QmQibMe3r5no95b6q7isGT5R75V8xSofWEDLXzp95b7LgZ\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x805b2b34d4829b892217e5116dc1feb9c67bee2eb7d7b18dac3dbbb91b13e9c4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://29dadff7b3f217e747a0fff3a8193a6f4b544bc529c8b5931d2db6feb16828e0\",\"dweb:/ipfs/QmdAYJB7eaFGWHAQk1tpA7cAkDu9C9iZjRPgWG2LVEd1QE\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0x2f359f9d5c56394e60d74401487ab55d8ef0012907b07c9abbb8f998bf5ddfec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://47d1408f0b62a24a9c2abd7678665178916fc147b8f23153d61e21353f0205e4\",\"dweb:/ipfs/QmWis4pCq81JzNTqdCoiMqjEtcwp3NGRnCz4nYPYp2jEKd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x714a33fd66816f608f6eda908da24eb6009eee50adf4062c86639d4fe508a7b6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1222806a46ee6d877cff1f609cdb548271a0ae85228716c8d1427462a16bd59b\",\"dweb:/ipfs/QmZVjwuTFqhoFBuug3fvHFVC5Y9ompwdHMwUy5upevMfJ5\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x55cf2bd9fc76704ddcdc19834cd288b7de00fc0f298a40ea16a954ae8991db2d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://37e4df53c8d2e3c1062c1c7b2c17366db7de03bfd2559d340ca95c588aa49c2f\",\"dweb:/ipfs/QmQ9vsG3o4wED3FRogiSUhdzJvZSjjYFtydzXvFEJtgZk4\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x963ea7f0b48b032eef72fe3a7582edf78408d6f834115b9feadd673a4d5bd149\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d6520943ea55fdf5f0bafb39ed909f64de17051bc954ff3e88c9e5621412c79c\",\"dweb:/ipfs/QmWZ4rAKTQbNG2HxGs46AcTXShsVytKeLs7CUCdCSv5N7a\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0x398d3323c1932a5986bf36be7c57593e121e69d5db5b6574b4ee0d031443de37\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b268304e03daf22c349abe3c318bc6a6badd6542d62311716ab401eec745f78\",\"dweb:/ipfs/QmNYy2sc2RoTjDhyT6HAibmeDGqfhDiDpsWRbHFHoGVHLr\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0x9a3b990bd56d139df3e454a9edf1c64668530b5a77fc32eb063bc206f958274a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0895399d170daab2d69b4c43a0202e5a07f2e67a93b26e3354dcbedb062232f7\",\"dweb:/ipfs/QmUM1VH3XDk559Dsgh4QPvupr3YVKjz87HrSyYzzVFZbxw\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"project:/contracts/Character.sol\":{\"keccak256\":\"0x0232b0f99c960887116b76951d5fa58bb7da3231edec156432e470e2e4750e17\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://25238d78bbb7e6cc04e694410b43284c4912bc83436ce2a77b6a6c191e204acb\",\"dweb:/ipfs/QmTLuUYSRcgFSaYz2DRGr989dP1GEQ6apm55tFLACkUQmW\"]},\"project:/contracts/ControllableUpgradeable.sol\":{\"keccak256\":\"0xf8fbdb9b8ca9dcbf5ccee8a842c37ecaf1b61d995b53ca50e98a66d2367ea101\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://90e49c5b7fb2bbdab4519f3b1b9d5d3ed27eab7fd68ac4d96a5e77fa9ab8e2c5\",\"dweb:/ipfs/QmTwiWQVdPvVGbTJq1rATwPiKXNxn3ahzDUrFKNUCyhHmX\"]},\"project:/contracts/DOWable.sol\":{\"keccak256\":\"0x022858d5a852b14cfd3d75391ae6599debe0442f5363f0591b4dcdcb68cf431d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d5ade15f8706052d01a7f8d74af57a87c5f8d7bb7a4b8dda1a497b75e5bc6690\",\"dweb:/ipfs/QmfRnckL7Vt1eQUz4UnmV4N4WPbBX99u7sNQGh8jn2WwTW\"]},\"project:/contracts/EntrepreneurKitchen.sol\":{\"keccak256\":\"0xf50d909114c15d74f427bf3c17efebde1320bd68f853730a962f4c4649d996da\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7c77aba6ce9fb7e5da3a6e7a0b93790541fc9bbca2b859ca5c1ec4e0199b3189\",\"dweb:/ipfs/QmbGwhrrwTemVebEx2BGiuQnSqJjAK3jqsGBGB5bx4U4Xp\"]},\"project:/contracts/GenericPausable.sol\":{\"keccak256\":\"0x09908d9a711201a4496ef92e961791105f1f8b4dcd89131b733ac4b4f148d41f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://db60ff410a520c0c2347aae47c176d66569b5f648a8784aa61dbb09bb39bde8f\",\"dweb:/ipfs/QmbNSjkSabkVrA2CL7nCehj7zbVTX7FjbSGHmowQfZaz8w\"]},\"project:/contracts/ICharacter.sol\":{\"keccak256\":\"0x15dd07917267ab0731ce1d828564f3a393b1584a925715deb8926fd8fe0466d0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cf347aca1168b33dcd4f85628efd681206e04a0c17ec057905c3e9f4552584c1\",\"dweb:/ipfs/QmcJ9iAB2WgoUuHW2YKtNKgFkQif7zuJFofi8XXKikzUxg\"]},\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IKitchenUsage.sol\":{\"keccak256\":\"0xb6671f4c0f1946fce88bad7ff87df8f36c724f967ae81a1fadac83167a3a7138\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b239661a1245ac5d3d011b753a3744884f888ca32aae718ff7a3634ea2dd78b9\",\"dweb:/ipfs/QmWargy8BTKDUSPNViU2G2wfH78nv1eeZUu4r3mhxoYfo4\"]},\"project:/contracts/IMint.sol\":{\"keccak256\":\"0x79a087d2d830b62d96d3baa81f63b658df4b3f2c76ad93056c61c57bf64c29f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1e11b871873c035ffc168e107790b6f089ac97d11c373fe172a90e1a49b7151d\",\"dweb:/ipfs/QmNkz8yYzShXU3g8c4mkx5M1o7JuBssuzMZVCmDPjBeaJm\"]},\"project:/contracts/IPaywall.sol\":{\"keccak256\":\"0x24920300a3aa65b9e05aad6b84a3db07e57e991a7a74e293dccbb572a874107a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a61208f32a801ace0056dfdf09f187f6b79fc0789a865449c078714513d41b39\",\"dweb:/ipfs/Qmb6FEGigxN7jcAH9i3pKkYqrEwZqCkydyaM3zN6QWpw7Z\"]},\"project:/contracts/IProperties.sol\":{\"keccak256\":\"0xfab08287f2632d91fe7a9e4c0f818466fd123bc2077a92e8b0c4b4e8be8c41f7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b27835b493a9e0452f5088e2d3546c3daf4b22bb42823071c4ae497011414c7\",\"dweb:/ipfs/QmY7bGASKjTfnfisHSSMvgJnZLoBjVZ7NoPoJ1YF4C1wFU\"]},\"project:/contracts/ITraits.sol\":{\"keccak256\":\"0x41a56d1ca9b05e91d193e07f947a7211b925d4b0aefd489c601d4a30ae775ed6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf4b680b7f4f6069938bd01030a7956c5b5cda4156fcfad2274b39663b7355d4\",\"dweb:/ipfs/QmaxHe1gCdd1DvWfWw3sGm83i1UQuuNhP8rZVkdaH6od4m\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0x57562e83b1bb20f41ccf09776956fd2a5a773031bcf90b2bb74ba609a8fb7292\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://79653e3befd3077569b2ac4beee52c1fa77d93be2c032f12dc30614da28c1fa3\",\"dweb:/ipfs/QmX7hV1X1WjEZEnMPrZ87xdrwyEY6ebkVU8v4iUPc9GayX\"]},\"project:/contracts/Kitchen.sol\":{\"keccak256\":\"0x561f439433fad819e2b870bf630af543eaa82e2a1760c175f5f28a9771dfd2eb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://12ff29899531d41e052ca0ee3138cb1be9b4c420dc7d981dbc1fff8d6f46b533\",\"dweb:/ipfs/QmWfXJGn4XRDymTpVxQVgYNvRptnCd3AcjwRCebmhynqTN\"]},\"project:/contracts/Venue.sol\":{\"keccak256\":\"0x5c5847bded60dc4bbad556a376e426bf3d804a3bfd8f2c360bd0e3b6a2eede6c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7b27f084ce1892701575330cd205684fda798e11e9c5f1a8e9e60f64e5dc8507\",\"dweb:/ipfs/Qmc59wq3wRdULuZr3YLWcMUKbmX57fTcC2SW76i3yM2iag\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"./Kitchen.sol\";\nimport \"./IKitchenUsage.sol\";\n\nabstract contract EntrepreneurKitchen is Kitchen {\n  IKitchenUsage kitchenUsage;\n  uint8 kitchenId;\n  uint8 minEfficiency;\n\n  /**\n   * Checks if the character is eligible to work in that kitchen\n   * @param tokenId - Amount of characters to stake\n   * @return true\n   */\n  function _checkEligibility(uint256 tokenId) internal override view returns (bool) {\n    (uint8 efficiency,) = getProperties(tokenId);\n    return efficiency >= minEfficiency;\n  }\n\n  /**\n   * Checks if there is kitchen space for the given amount of chefs (rats have no limit)\n   * @param account - User wallet address\n   * @param spaceUsed - Amount of space in use by chefs\n   * @return Amount of kitchen space in staking, 0 if (all is in use but) available in wallet, -1 if out of kitchen space\n   */\n  function _checkSpace(address account, uint256 spaceUsed) internal override view returns (int256) {\n    return int256(kitchenUsage.checkSpace(account, kitchenId, spaceUsed));\n  }\n\n  /**\n   * Stakes a single kitchen, used when staked kitchen space has run out\n   * @param account - User wallet address\n   */\n  function _stakeKitchen(address account) internal override {\n    kitchenUsage.stake(account, kitchenId, 1);\n  }\n\n  /**\n   * Unstakes a kitchen, used when kitchen space is not used anymore\n   * @param account - User wallet address\n   */\n  function _claimKitchen(address account) internal override {\n    kitchenUsage.claim(account, kitchenId, 1);\n  }\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/EntrepreneurKitchen.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/EntrepreneurKitchen.sol",
+    "exportedSymbols": {
+      "AddressUpgradeable": [
+        3345
+      ],
+      "Character": [
+        6437
+      ],
+      "ContextUpgradeable": [
+        3387
+      ],
+      "ControllableUpgradeable": [
+        6864
+      ],
+      "DOWable": [
+        6905
+      ],
+      "ERC165Upgradeable": [
+        3634
+      ],
+      "ERC721Upgradeable": [
+        2941
+      ],
+      "EntrepreneurKitchen": [
+        6993
+      ],
+      "GenericPausable": [
+        7152
+      ],
+      "ICharacter": [
+        7333
+      ],
+      "IClaim": [
+        7360
+      ],
+      "IERC165Upgradeable": [
+        3646
+      ],
+      "IERC721MetadataUpgradeable": [
+        3102
+      ],
+      "IERC721ReceiverUpgradeable": [
+        2959
+      ],
+      "IERC721Upgradeable": [
+        3075
+      ],
+      "IKitchenUsage": [
+        7419
+      ],
+      "IMint": [
+        7462
+      ],
+      "IPaywall": [
+        7505
+      ],
+      "IProperties": [
+        7529
+      ],
+      "ITraits": [
+        7539
+      ],
+      "IVenue": [
+        7574
+      ],
+      "Initializable": [
+        584
+      ],
+      "Kitchen": [
+        7853
+      ],
+      "OwnableUpgradeable": [
+        510
+      ],
+      "PausableUpgradeable": [
+        695
+      ],
+      "ReentrancyGuardUpgradeable": [
+        754
+      ],
+      "StringsUpgradeable": [
+        3590
+      ],
+      "Venue": [
+        13975
+      ]
+    },
+    "id": 6994,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6907,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:40"
+      },
+      {
+        "absolutePath": "project:/contracts/Kitchen.sol",
+        "file": "./Kitchen.sol",
+        "id": 6908,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 6994,
+        "sourceUnit": 7854,
+        "src": "58:23:40",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/IKitchenUsage.sol",
+        "file": "./IKitchenUsage.sol",
+        "id": 6909,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 6994,
+        "sourceUnit": 7420,
+        "src": "82:29:40",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 6910,
+              "name": "Kitchen",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 7853,
+              "src": "154:7:40"
+            },
+            "id": 6911,
+            "nodeType": "InheritanceSpecifier",
+            "src": "154:7:40"
+          }
+        ],
+        "canonicalName": "EntrepreneurKitchen",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 6993,
+        "linearizedBaseContracts": [
+          6993,
+          7853,
+          13975,
+          2959,
+          7152,
+          6905,
+          510,
+          695,
+          3387,
+          584,
+          7574
+        ],
+        "name": "EntrepreneurKitchen",
+        "nameLocation": "131:19:40",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 6914,
+            "mutability": "mutable",
+            "name": "kitchenUsage",
+            "nameLocation": "180:12:40",
+            "nodeType": "VariableDeclaration",
+            "scope": 6993,
+            "src": "166:26:40",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IKitchenUsage_$7419",
+              "typeString": "contract IKitchenUsage"
+            },
+            "typeName": {
+              "id": 6913,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 6912,
+                "name": "IKitchenUsage",
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 7419,
+                "src": "166:13:40"
+              },
+              "referencedDeclaration": 7419,
+              "src": "166:13:40",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IKitchenUsage_$7419",
+                "typeString": "contract IKitchenUsage"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 6916,
+            "mutability": "mutable",
+            "name": "kitchenId",
+            "nameLocation": "202:9:40",
+            "nodeType": "VariableDeclaration",
+            "scope": 6993,
+            "src": "196:15:40",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 6915,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "196:5:40",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 6918,
+            "mutability": "mutable",
+            "name": "minEfficiency",
+            "nameLocation": "221:13:40",
+            "nodeType": "VariableDeclaration",
+            "scope": 6993,
+            "src": "215:19:40",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 6917,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "215:5:40",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "baseFunctions": [
+              13692
+            ],
+            "body": {
+              "id": 6937,
+              "nodeType": "Block",
+              "src": "468:95:40",
+              "statements": [
+                {
+                  "assignments": [
+                    6928,
+                    null
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 6928,
+                      "mutability": "mutable",
+                      "name": "efficiency",
+                      "nameLocation": "481:10:40",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 6937,
+                      "src": "475:16:40",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      },
+                      "typeName": {
+                        "id": 6927,
+                        "name": "uint8",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "475:5:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "visibility": "internal"
+                    },
+                    null
+                  ],
+                  "id": 6932,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 6930,
+                        "name": "tokenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6921,
+                        "src": "510:7:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 6929,
+                      "name": "getProperties",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 13910,
+                      "src": "496:13:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_uint8_$_t_uint8_$",
+                        "typeString": "function (uint256) view returns (uint8,uint8)"
+                      }
+                    },
+                    "id": 6931,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "496:22:40",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$_t_uint8_$_t_uint8_$",
+                      "typeString": "tuple(uint8,uint8)"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "474:44:40"
+                },
+                {
+                  "expression": {
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 6935,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "id": 6933,
+                      "name": "efficiency",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6928,
+                      "src": "531:10:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": ">=",
+                    "rightExpression": {
+                      "id": 6934,
+                      "name": "minEfficiency",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6918,
+                      "src": "545:13:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "src": "531:27:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 6926,
+                  "id": 6936,
+                  "nodeType": "Return",
+                  "src": "524:34:40"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 6919,
+              "nodeType": "StructuredDocumentation",
+              "src": "239:144:40",
+              "text": " Checks if the character is eligible to work in that kitchen\n @param tokenId - Amount of characters to stake\n @return true"
+            },
+            "id": 6938,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_checkEligibility",
+            "nameLocation": "395:17:40",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 6923,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "439:8:40"
+            },
+            "parameters": {
+              "id": 6922,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6921,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "421:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6938,
+                  "src": "413:15:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6920,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "413:7:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "412:17:40"
+            },
+            "returnParameters": {
+              "id": 6926,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6925,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6938,
+                  "src": "462:4:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 6924,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "462:4:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "461:6:40"
+            },
+            "scope": 6993,
+            "src": "386:177:40",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "baseFunctions": [
+              13681
+            ],
+            "body": {
+              "id": 6959,
+              "nodeType": "Block",
+              "src": "985:80:40",
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "arguments": [
+                          {
+                            "id": 6953,
+                            "name": "account",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6941,
+                            "src": "1029:7:40",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          {
+                            "id": 6954,
+                            "name": "kitchenId",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6916,
+                            "src": "1038:9:40",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint8",
+                              "typeString": "uint8"
+                            }
+                          },
+                          {
+                            "id": 6955,
+                            "name": "spaceUsed",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6943,
+                            "src": "1049:9:40",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            },
+                            {
+                              "typeIdentifier": "t_uint8",
+                              "typeString": "uint8"
+                            },
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "id": 6951,
+                            "name": "kitchenUsage",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 6914,
+                            "src": "1005:12:40",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IKitchenUsage_$7419",
+                              "typeString": "contract IKitchenUsage"
+                            }
+                          },
+                          "id": 6952,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "checkSpace",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 7418,
+                          "src": "1005:23:40",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$_t_address_$_t_uint8_$_t_uint256_$returns$_t_int256_$",
+                            "typeString": "function (address,uint8,uint256) view external returns (int256)"
+                          }
+                        },
+                        "id": 6956,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1005:54:40",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_int256",
+                          "typeString": "int256"
+                        }
+                      ],
+                      "id": 6950,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "998:6:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_int256_$",
+                        "typeString": "type(int256)"
+                      },
+                      "typeName": {
+                        "id": 6949,
+                        "name": "int256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "998:6:40",
+                        "typeDescriptions": {}
+                      }
+                    },
+                    "id": 6957,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "998:62:40",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "functionReturnParameters": 6948,
+                  "id": 6958,
+                  "nodeType": "Return",
+                  "src": "991:69:40"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 6939,
+              "nodeType": "StructuredDocumentation",
+              "src": "567:318:40",
+              "text": " Checks if there is kitchen space for the given amount of chefs (rats have no limit)\n @param account - User wallet address\n @param spaceUsed - Amount of space in use by chefs\n @return Amount of kitchen space in staking, 0 if (all is in use but) available in wallet, -1 if out of kitchen space"
+            },
+            "id": 6960,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_checkSpace",
+            "nameLocation": "897:11:40",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 6945,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "954:8:40"
+            },
+            "parameters": {
+              "id": 6944,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6941,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "917:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6960,
+                  "src": "909:15:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 6940,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "909:7:40",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6943,
+                  "mutability": "mutable",
+                  "name": "spaceUsed",
+                  "nameLocation": "934:9:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6960,
+                  "src": "926:17:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6942,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "926:7:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "908:36:40"
+            },
+            "returnParameters": {
+              "id": 6948,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6947,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6960,
+                  "src": "977:6:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 6946,
+                    "name": "int256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "977:6:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "976:8:40"
+            },
+            "scope": 6993,
+            "src": "888:177:40",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "baseFunctions": [
+              13661
+            ],
+            "body": {
+              "id": 6975,
+              "nodeType": "Block",
+              "src": "1254:52:40",
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 6970,
+                        "name": "account",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6963,
+                        "src": "1279:7:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 6971,
+                        "name": "kitchenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6916,
+                        "src": "1288:9:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      {
+                        "hexValue": "31",
+                        "id": 6972,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1299:1:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        },
+                        {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        }
+                      ],
+                      "expression": {
+                        "id": 6967,
+                        "name": "kitchenUsage",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6914,
+                        "src": "1260:12:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IKitchenUsage_$7419",
+                          "typeString": "contract IKitchenUsage"
+                        }
+                      },
+                      "id": 6969,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "stake",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7380,
+                      "src": "1260:18:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint8_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint8,uint256) external"
+                      }
+                    },
+                    "id": 6973,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1260:41:40",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 6974,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1260:41:40"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 6961,
+              "nodeType": "StructuredDocumentation",
+              "src": "1069:124:40",
+              "text": " Stakes a single kitchen, used when staked kitchen space has run out\n @param account - User wallet address"
+            },
+            "id": 6976,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_stakeKitchen",
+            "nameLocation": "1205:13:40",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 6965,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "1245:8:40"
+            },
+            "parameters": {
+              "id": 6964,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6963,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "1227:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6976,
+                  "src": "1219:15:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 6962,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1219:7:40",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1218:17:40"
+            },
+            "returnParameters": {
+              "id": 6966,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1254:0:40"
+            },
+            "scope": 6993,
+            "src": "1196:110:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "baseFunctions": [
+              13668
+            ],
+            "body": {
+              "id": 6991,
+              "nodeType": "Block",
+              "src": "1491:52:40",
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "id": 6986,
+                        "name": "account",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6979,
+                        "src": "1516:7:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 6987,
+                        "name": "kitchenId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6916,
+                        "src": "1525:9:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      {
+                        "hexValue": "31",
+                        "id": 6988,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1536:1:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        },
+                        {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        }
+                      ],
+                      "expression": {
+                        "id": 6983,
+                        "name": "kitchenUsage",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6914,
+                        "src": "1497:12:40",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IKitchenUsage_$7419",
+                          "typeString": "contract IKitchenUsage"
+                        }
+                      },
+                      "id": 6985,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claim",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7389,
+                      "src": "1497:18:40",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint8_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint8,uint256) external"
+                      }
+                    },
+                    "id": 6989,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1497:41:40",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 6990,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1497:41:40"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 6977,
+              "nodeType": "StructuredDocumentation",
+              "src": "1310:120:40",
+              "text": " Unstakes a kitchen, used when kitchen space is not used anymore\n @param account - User wallet address"
+            },
+            "id": 6992,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_claimKitchen",
+            "nameLocation": "1442:13:40",
+            "nodeType": "FunctionDefinition",
+            "overrides": {
+              "id": 6981,
+              "nodeType": "OverrideSpecifier",
+              "overrides": [],
+              "src": "1482:8:40"
+            },
+            "parameters": {
+              "id": 6980,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6979,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "1464:7:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 6992,
+                  "src": "1456:15:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 6978,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1456:7:40",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1455:17:40"
+            },
+            "returnParameters": {
+              "id": 6982,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1491:0:40"
+            },
+            "scope": 6993,
+            "src": "1433:110:40",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 6994,
+        "src": "113:1432:40",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1513:40"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-05-08T21:11:45.283Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "claimMany(uint16[],bool)": {
+        "params": {
+          "tokenIds": "- The IDs of the tokens in question",
+          "unstake": "- Whether or not to unstake the given tokens"
+        }
+      },
+      "fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)": {
+        "params": {
+          "randomness": "- Random value created by VRF",
+          "v": "- VRF struct for the corresponding request"
+        }
+      },
+      "getChefsStaked(address)": {
+        "params": {
+          "account": "- User wallet address"
+        },
+        "returns": {
+          "_0": "Number of chefs in staking"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "paused()": {
+        "details": "Returns true if the contract is paused, and false otherwise."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "stakeMany(address,uint16[])": {
+        "params": {
+          "account": "- User wallet address",
+          "tokenIds": "- The IDs of the Chefs & Rats to stake"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "claimMany(uint16[],bool)": {
+        "notice": "ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters"
+      },
+      "fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)": {
+        "notice": "Callback for claimMany(), called by Claim.fulfillRandomness()"
+      },
+      "getChefsStaked(address)": {
+        "notice": "Get the amount of chefs the given account has in staking"
+      },
+      "onERC721Received(address,address,uint256,bytes)": {
+        "notice": "IERC721ReceiverUpgradeable interface: We do not accept tokens sent directly"
+      },
+      "stakeMany(address,uint16[])": {
+        "notice": "Adds Characters to staking"
+      },
+      "withdrawPayments()": {
+        "notice": "Allows DAO to withdraw funds"
+      }
+    },
+    "version": 1
+  }
+}
