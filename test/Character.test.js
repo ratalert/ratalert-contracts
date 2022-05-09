@@ -282,25 +282,25 @@ contract('Character (proxy)', (accounts) => {
       res4b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
     });
     it('fails if not whitelisted', async () => {
-      await scheduleAndExecute(this.paywall, 'toggleWhitelist', [true], { from: dao });
+      await this.paywall.toggleWhitelist(true, { from: dao });
       await expect(mintAndFulfill.call(this, 5, true, { args: { from: anon } })).to.eventually.be.rejectedWith('Not whitelisted');
     });
     it('succeeds with free mints', async () => {
-      await scheduleAndExecute(this.paywall, 'addToFreeMints', [[anon]], { from: dao });
+      await this.paywall.addToFreeMints([anon], { from: dao });
       await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: 0 } })).to.eventually.have.nested.property('receipt.status', true); // free
       total.paid += 1;
       total.minted += 1;
       total.balance += 0;
     });
     it('succeeds if whitelisted', async () => {
-      await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon]], { from: dao });
+      await this.paywall.addToWhitelist([anon], { from: dao });
       await expect(mintAndFulfill.call(this, 1, true, { args: { from: anon, value: toWei(0.09) } })).to.eventually.have.nested.property('receipt.status', true); // discounted
       total.paid += 1;
       total.minted += 1;
       total.balance += 0.09;
     });
     it('mints boosted characters', async () => {
-      await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon]], { from: dao });
+      await this.paywall.addToWhitelist([anon, anon, anon], { from: dao });
       const { logs } = await mintAndFulfill.call(this, 3, true, { args: { from: anon, value: toWei(0.27) } });
       total.paid += 3;
       total.minted += 3;

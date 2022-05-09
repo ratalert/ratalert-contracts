@@ -5,8 +5,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./ControllableUpgradeable.sol";
 import "./FastFood.sol";
+import "./DOWable.sol";
 
-contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
+contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable, DOWable {
   uint256 public mintPrice;
   int8 public whitelistBoost;
   uint8 public maxMintsPerTx; // Maximum number of tokens that can be minted in a single tx
@@ -47,7 +48,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * Toggles the whitelist on and off
    * @param _enable - true enables it
    */
-  function toggleWhitelist(bool _enable) external onlyOwner {
+  function toggleWhitelist(bool _enable) external onlyDao {
     onlyWhitelist = _enable;
   }
 
@@ -55,7 +56,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * Adds a list of addresses to the whitelist
    * @param addresses - An array of addresses to add
    */
-  function addToWhitelist(address[] memory addresses) external onlyOwner {
+  function addToWhitelist(address[] memory addresses) external onlyDao {
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = whitelist[addresses[i]];
       whitelist[addresses[i]] = amount < 100 ? amount + 1 : 100;
@@ -67,7 +68,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * Removes a list of addresses from the whitelist
    * @param addresses - An array of addresses to remove
    */
-  function removeFromWhitelist(address[] memory addresses) external onlyOwner {
+  function removeFromWhitelist(address[] memory addresses) external onlyDao {
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = whitelist[addresses[i]];
       whitelist[addresses[i]] = amount > 1 ? amount - 1 : 0;
@@ -79,7 +80,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * Adds a list of addresses to the free mints
    * @param addresses - An array of addresses to add
    */
-  function addToFreeMints(address[] memory addresses) external onlyOwner {
+  function addToFreeMints(address[] memory addresses) external onlyDao {
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = freeMints[addresses[i]];
       freeMints[addresses[i]] = amount < 100 ? amount + 1 : 100;
@@ -91,7 +92,7 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable {
    * Removes a list of addresses from the free mints
    * @param addresses - An array of addresses to remove
    */
-  function removeFromFreeMints(address[] memory addresses) external onlyOwner {
+  function removeFromFreeMints(address[] memory addresses) external onlyDao {
     for (uint i = 0; i < addresses.length; i++) {
       uint8 amount = freeMints[addresses[i]];
       freeMints[addresses[i]] = amount > 1 ? amount - 1 : 0;

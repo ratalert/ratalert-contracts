@@ -362,7 +362,7 @@ contract('McStake (proxy)', (accounts) => {
       });
     });
     it('boosts efficiency if staked long enough', async () => {
-      await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]], { from: dao });
+      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon], { from: dao });
       lists.boost = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.character.setApprovalForAll(this.kitchen.address, true, { from: anon });
       await this.kitchen.stakeMany(anon, Object.values(lists.boost.all).map(item => item.id), { from: anon });
@@ -383,7 +383,7 @@ contract('McStake (proxy)', (accounts) => {
       });
     });
     it('does not boost efficiency if not staked long enough', async () => {
-      await scheduleAndExecute(this.paywall, 'addToWhitelist', [[anon, anon, anon, anon, anon, anon, anon, anon, anon, anon]], { from: dao }, 1);
+      await this.paywall.addToWhitelist([anon, anon, anon, anon, anon, anon, anon, anon, anon, anon], { from: dao });
       lists.boost = await mintUntilWeHave.call(this, 0, 0, { args: { from: anon, value: toWei(0.9) } });
       await this.kitchen.stakeMany(anon, Object.values(lists.boost.all).map(item => item.id), { from: anon });
       await advanceTimeAndBlock(43200);

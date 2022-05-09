@@ -77,6 +77,7 @@ module.exports = async (deployer, network, accounts) => {
   await gym.configure(...config.gym);
 
   await mint.setDao(config.dao.address);
+  await paywall.setDao(config.dao.address);
   await character.setDao(config.dao.address);
   await kitchenShop.setDao(config.dao.address);
   await claim.setDao(config.dao.address);
