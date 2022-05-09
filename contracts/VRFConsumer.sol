@@ -60,6 +60,6 @@ abstract contract VRFConsumer is Initializable, VRFRequestIDBase, DOWable {
    */
   function withdrawLink(uint amount) external returns(bool success) {
     isDao();
-    return link.transfer(tx.origin, amount);
+    return link.transfer(payable(dao), amount); // Transfer to DAO wallet
   }
 }
