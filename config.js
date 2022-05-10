@@ -72,7 +72,7 @@ module.exports = (network, accounts = []) => ({
       minEfficiency: num('KITCHEN_LESTAKE_MIN_EFFICIENCY', '72'),
     },
     chefEfficiencyMultiplier: num('CHEF_EFFICIENCY_MULTIPLIER', '175'),
-    ratEfficiencyMultiplier: num('KITCHEN_RAT_EFFICIENCY_MULTIPLIER', '90'),
+    ratEfficiencyMultiplier: num('KITCHEN_RAT_EFFICIENCY_MULTIPLIER', '290'),
     ratEfficiencyOffset: num('KITCHEN_RAT_EFFICIENCY_OFFSET', '55'),
     maxClaimsPerTx: num('KITCHEN_MAX_CLAIMS_PER_TX', '10'),
     claimFee: toWei(env('KITCHEN_CLAIM_FEE', '0.002'), 'ether'),
