@@ -1,0 +1,548 @@
+{
+  "contractName": "IVenue",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        }
+      ],
+      "name": "stakeMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16[]",
+          "name": "tokenIds",
+          "type": "uint16[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "unstake",
+          "type": "bool"
+        }
+      ],
+      "name": "claimMany",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "requestId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "venue",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "internalType": "uint16[]",
+              "name": "tokenIds",
+              "type": "uint16[]"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstake",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IClaim.VRFStruct",
+          "name": "v",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint256",
+          "name": "randomVal",
+          "type": "uint256"
+        }
+      ],
+      "name": "fulfillClaimMany",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "getChefsStaked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomVal\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IVenue.sol\":\"IVenue\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0x57562e83b1bb20f41ccf09776956fd2a5a773031bcf90b2bb74ba609a8fb7292\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://79653e3befd3077569b2ac4beee52c1fa77d93be2c032f12dc30614da28c1fa3\",\"dweb:/ipfs/QmX7hV1X1WjEZEnMPrZ87xdrwyEY6ebkVU8v4iUPc9GayX\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"./IClaim.sol\";\n\ninterface IVenue {\n  function stakeMany(address account, uint16[] calldata tokenIds) external;\n  function claimMany(uint16[] calldata tokenIds, bool unstake) external payable;\n  function fulfillClaimMany(IClaim.VRFStruct memory v, uint256 randomVal) external;\n  function getChefsStaked(address account) external view returns (uint256);\n}\n",
+  "sourcePath": "/Users/chris/workspace/ratalert/ratalert-contracts/contracts/IVenue.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IVenue.sol",
+    "exportedSymbols": {
+      "IClaim": [
+        7360
+      ],
+      "IVenue": [
+        7574
+      ]
+    },
+    "id": 7575,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7541,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:53"
+      },
+      {
+        "absolutePath": "project:/contracts/IClaim.sol",
+        "file": "./IClaim.sol",
+        "id": 7542,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 7575,
+        "sourceUnit": 7361,
+        "src": "58:22:53",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IVenue",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 7574,
+        "linearizedBaseContracts": [
+          7574
+        ],
+        "name": "IVenue",
+        "nameLocation": "92:6:53",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "dbdc1f6b",
+            "id": 7550,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stakeMany",
+            "nameLocation": "112:9:53",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 7548,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7544,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "130:7:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7550,
+                  "src": "122:15:53",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7543,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:7:53",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7547,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "157:8:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7550,
+                  "src": "139:26:53",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 7545,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "139:6:53",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 7546,
+                    "nodeType": "ArrayTypeName",
+                    "src": "139:8:53",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "121:45:53"
+            },
+            "returnParameters": {
+              "id": 7549,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "175:0:53"
+            },
+            "scope": 7574,
+            "src": "103:73:53",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "a7a10290",
+            "id": 7558,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "claimMany",
+            "nameLocation": "188:9:53",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 7556,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7553,
+                  "mutability": "mutable",
+                  "name": "tokenIds",
+                  "nameLocation": "216:8:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7558,
+                  "src": "198:26:53",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint16_$dyn_calldata_ptr",
+                    "typeString": "uint16[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 7551,
+                      "name": "uint16",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "198:6:53",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "id": 7552,
+                    "nodeType": "ArrayTypeName",
+                    "src": "198:8:53",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                      "typeString": "uint16[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7555,
+                  "mutability": "mutable",
+                  "name": "unstake",
+                  "nameLocation": "231:7:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7558,
+                  "src": "226:12:53",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 7554,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "226:4:53",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "197:42:53"
+            },
+            "returnParameters": {
+              "id": 7557,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "256:0:53"
+            },
+            "scope": 7574,
+            "src": "179:78:53",
+            "stateMutability": "payable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "922a1802",
+            "id": 7566,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fulfillClaimMany",
+            "nameLocation": "269:16:53",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 7564,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7561,
+                  "mutability": "mutable",
+                  "name": "v",
+                  "nameLocation": "310:1:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7566,
+                  "src": "286:25:53",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_VRFStruct_$7347_memory_ptr",
+                    "typeString": "struct IClaim.VRFStruct"
+                  },
+                  "typeName": {
+                    "id": 7560,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 7559,
+                      "name": "IClaim.VRFStruct",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 7347,
+                      "src": "286:16:53"
+                    },
+                    "referencedDeclaration": 7347,
+                    "src": "286:16:53",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_VRFStruct_$7347_storage_ptr",
+                      "typeString": "struct IClaim.VRFStruct"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7563,
+                  "mutability": "mutable",
+                  "name": "randomVal",
+                  "nameLocation": "321:9:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7566,
+                  "src": "313:17:53",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7562,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "313:7:53",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "285:46:53"
+            },
+            "returnParameters": {
+              "id": 7565,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "340:0:53"
+            },
+            "scope": 7574,
+            "src": "260:81:53",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "4c4913ec",
+            "id": 7573,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getChefsStaked",
+            "nameLocation": "353:14:53",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 7569,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7568,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "376:7:53",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7573,
+                  "src": "368:15:53",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7567,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "368:7:53",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "367:17:53"
+            },
+            "returnParameters": {
+              "id": 7572,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7571,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7573,
+                  "src": "408:7:53",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7570,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "408:7:53",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "407:9:53"
+            },
+            "scope": 7574,
+            "src": "344:73:53",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 7575,
+        "src": "82:337:53",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:387:53"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-05-10T07:24:35.217Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
