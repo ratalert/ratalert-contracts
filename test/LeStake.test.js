@@ -139,7 +139,7 @@ contract('LeStake (proxy)', (accounts) => {
             await expect(doesSvgTraitMatch(svg, 'chef','head', tolerance)).to.eventually.be.true;
           } else {
             // expectRatEarnings(args.earned, fromWei(args.earned) / 8 * 2, 2, token.tolerance);
-            expect(args.earned).to.be.a.bignumber.gte('100000000000000000000');
+            expect(args.earned).to.be.a.bignumber.gte('90000000000000000000'); // Improve this
             if (args.eventName === 'ratTrap') {
               newEfficiency = (10 > token.efficiency) ? 0 : token.efficiency - 10;
               newTolerance = (50 > token.tolerance) ? 0 : token.tolerance - 50;
