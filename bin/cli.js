@@ -1,28 +1,40 @@
 const mri = require('mri');
-const { scheduleAndExecute, getUIConfig } = require('../test/helper');
-const { toWei } = require('../test/helper');
+const { scheduleAndExecute, getUIConfig, encodeFunctionCall, toWei } = require('../test/helper');
 
 const commands = {
     pause: async(contract) => {
         console.log(`Pausing ${contract}...`);
-        console.log(await (await this.getInst(contract)).pause());
+        const res = await this.executeOrEncode(await getInst(contract), 'pause');
+        if (res) console.log(res);
     },
     unpause: async(contract) => {
         console.log(`Unpausing ${contract}...`);
-        console.log(await (await this.getInst(contract)).unpause());
+        const res = await this.executeOrEncode(await getInst(contract), 'unpause');
+        if (res) console.log(res);
     },
     paused: async(contract) => {
         const status = await (await this.getInst(contract)).paused();
         console.log(`${contract} is ${status ? 'paused' : 'not paused'}`);
     },
     addController: async(contract, account) => {
-        const instance = await artifacts.require(contract).deployed();
         if (account === 'dao') account = this.config.dao.address;
-        return scheduleAndExecute(instance, 'addController', [[account]], { from: account }, Date.now());
+        const res = await scheduleAndExecute(await getInst(contract), 'addController', [[account]], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
     },
     mintFoodToken: async(contract, recipient, amount) => {
         const instance = await artifacts.require(contract).deployed();
-        return instance.mint(recipient, toWei(amount), { from: this.config.dao.address });
+        const res = this.executeOrEncode(instance, 'mint', [recipient, toWei(amount)]);
+        if (res) console.log(res);
+    },
+    withdrawPayments: async(contract) => {
+        const instance = await artifacts.require(contract).deployed();
+        const res = this.executeOrEncode(instance, 'withdrawPayments');
+        if (res) console.log(res);
+    },
+    withdrawLink: async(contract, amount) => {
+        const instance = await artifacts.require(contract).deployed();
+        const res = this.executeOrEncode(instance, 'withdrawLink', [toWei(amount)]);
+        if (res) console.log(res);
     },
     configure: async(contract) => {
         const instance = await artifacts.require(contract).deployed();
@@ -39,17 +51,20 @@ const commands = {
             TheStakehouse: [config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee],
             LeStake: [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, config.kitchen.leStake.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee],
             Gym: [...config.gym],
-        }
+        };
         console.log(`Configuring ${contract} with`, args[contract]);
-        return scheduleAndExecute(instance, 'configure', args[contract], { from: this.config.dao.address }, Date.now());
+        const res = await scheduleAndExecute(instance, 'configure', args[contract], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
     },
     setConfig: async() => {
-        console.log('Updating UI config...');
-        console.log(await scheduleAndExecute(await this.getInst('Config'), 'set', [getUIConfig(this.config)], { from: this.config.dao.address }, Date.now()));
+        console.log('Updating UI config:\n', getUIConfig(this.config));
+        const res = await scheduleAndExecute(await this.getInst('Config'), 'set', [getUIConfig(this.config)], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
     },
     toggleWhitelist: async(enable) => {
         console.log(`Setting whitelist status to ${enable}...`);
-        console.log(await scheduleAndExecute(await this.getInst('Paywall'), 'toggleWhitelist', [enable === 'true'], { from: this.config.dao.address }, Date.now()));
+        const res = await this.executeOrEncode(await getInst('Paywall'), 'toggleWhitelist', [enable === true]);
+        if (res) console.log(res);
     },
     onlyWhitelist: async() => {
         const status = await (await this.getInst('Paywall')).onlyWhitelist();
@@ -65,8 +80,8 @@ const commands = {
             cumulated = cumulated.concat(addresses.split(','));
         }
         console.log(`Adding ${amount} whitelist spots for ${addresses.split(',').length} addresses...`);
-        console.log(await scheduleAndExecute(await this.getInst('Paywall'), 'addToWhitelist', [cumulated], { from: this.config.dao.address }, Date.now()));
-        console.log('Done.');
+        const res = await this.executeOrEncode(await getInst('Paywall'), 'addToWhitelist', [cumulated]);
+        if (res) console.log(res);
     },
     removeFromWhitelist: async (amount, addresses) => {
         let cumulated = [];
@@ -74,8 +89,8 @@ const commands = {
             cumulated = cumulated.concat(addresses.split(','));
         }
         console.log(`Removing ${amount} whitelist spots for ${addresses.split(',').length} addresses...`);
-        console.log(await scheduleAndExecute(await this.getInst('Paywall'), 'removeFromWhitelist', [cumulated], { from: this.config.dao.address }, Date.now()));
-        console.log('Done.');
+        const res = await this.executeOrEncode(await getInst('Paywall'), 'removeFromWhitelist', [cumulated]);
+        if (res) console.log(res);
     },
     checkFreeMints: async (address) => {
         const amount = (await (await this.getInst('Paywall')).freeMints(address)).toString();
@@ -87,8 +102,8 @@ const commands = {
             cumulated = cumulated.concat(addresses.split(','));
         }
         console.log(`Adding ${amount} free mint spots for ${addresses.split(',').length} addresses...`);
-        console.log(await scheduleAndExecute(await this.getInst('Paywall'), 'addToFreeMints', [cumulated], { from: this.config.dao.address }, Date.now()));
-        console.log('Done.');
+        const res = await this.executeOrEncode(await getInst('Paywall'), 'addToFreeMints', [cumulated]);
+        if (res) console.log(res);
     },
     removeFromFreeMints: async (amount, addresses) => {
         let cumulated = [];
@@ -96,8 +111,8 @@ const commands = {
             cumulated = cumulated.concat(addresses.split(','));
         }
         console.log(`Removing ${amount} free mint spots for ${addresses.split(',').length} addresses...`);
-        console.log(await scheduleAndExecute(await this.getInst('Paywall'), 'removeFromFreeMints', [cumulated], { from: this.config.dao.address }, Date.now()));
-        console.log('Done.');
+        const res = await this.executeOrEncode(await getInst('Paywall'), 'removeFromFreeMints', [cumulated]);
+        if (res) console.log(res);
     },
     manualFulfillRandomness: async (requestId) => {
         const randomness = Math.floor(Math.random() * 1000000000);
@@ -117,6 +132,14 @@ module.exports = async (callback) => {
     this.accounts = await web3.eth.getAccounts();
     this.config = require('../config')(this.network, this.accounts);
     this.getInst = contract => artifacts.require(contract).deployed();
+    this.executeOrEncode = (instance, method, args, options = {}) => {
+        if (this.network === 'main') {
+            const data = encodeFunctionCall(instance, method, args);
+            console.log(`Address: ${instance.address}\n\nABI:\n${JSON.stringify(instance.abi)}\n\nData: ${data}`);
+            return;
+        }
+        return instance[method](...args, { from: this.config.dao.address, ...options });
+    };
 
     global.artifacts = artifacts;
     global.web3 = web3;
