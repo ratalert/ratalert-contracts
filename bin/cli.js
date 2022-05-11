@@ -1,5 +1,5 @@
 const mri = require('mri');
-const { scheduleAndExecute, getUIConfig, encodeFunctionCall, toWei } = require('../test/helper');
+const { scheduleAndExecute, getUIConfig, encodeFunctionCall, toWei, decodeFunctionCall } = require('../test/helper');
 
 const commands = {
     pause: async(contract) => {
@@ -127,6 +127,9 @@ const commands = {
         const mint = await Mint.deployed();
         console.log(await mint.manualFulfillRandomness(requestId, randomness));
     },
+    decodeFunctionCall: async (contract, func, data) => {
+        console.log(await decodeFunctionCall(contract, func, data));
+    }
 };
 
 module.exports = async (callback) => {
