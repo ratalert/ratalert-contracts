@@ -115,10 +115,10 @@ contract('Character (proxy)', (accounts) => {
     });
     it('calculates mint price correctly', async () => {
       await scheduleAndExecute(this.mint, 'setCharacter', [this.characterSandbox.address], { from: dao }, 1);
-      const price = 1000 + 1500 + 2000 + 3000; // each character has a new price break
+      const price = 2000 + 3000 + 5000 + 8000; // each character has a new price break
       await this.fastFood.mint(owner, toWei(price), { from: dao });
       const balance = await this.fastFood.balanceOf(owner);
-      expect(balance).to.be.a.bignumber.eq(toWei(7500));
+      expect(balance).to.be.a.bignumber.eq(toWei(18000));
       const res = await mintAndFulfill.call(this, 4, false, { character: this.characterSandbox, args: { value: 0, from: owner } });
       expect(res.receipt.status).to.be.true;
       const newBalance = await this.fastFood.balanceOf(owner);

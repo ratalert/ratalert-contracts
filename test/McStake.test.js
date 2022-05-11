@@ -114,14 +114,14 @@ contract('McStake (proxy)', (accounts) => {
         expect(log.args.skill).to.be.a.bignumber.eq('1');
         expect(log.args.freak).to.be.a.bignumber.eq('2');
         expect(log.args.eventName).to.equal('');
-        expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((i + 1) * 25 / lists.rats.length)).lt(toWei((i + 1) * 25 * 1.0001 / lists.rats.length));
+        expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((i + 1) * 5 / lists.rats.length)).lt(toWei((i + 1) * 5 * 1.0001 / lists.rats.length));
       });
-      totalFoodTokensEarned += 2 * 125 * 0.8; // 2 chefs for half a day at skill 0
+      totalFoodTokensEarned += 2 * 25 * 0.8; // 2 chefs for half a day at skill 0
       await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.kitchen.address);
       await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(this.kitchen.address);
-      await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.gte(toWei(200)).lt(toWei(200.1)); // 2 chefs staked for half a day = 5000^18 each
+      await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.gte(toWei(40)).lt(toWei(40.1)); // 2 chefs staked for half a day = 5000^18 each
       await expectTotalFoodTokenEarnings.call(this);
-      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei(50 / lists.rats.length)).lt(toWei(50.01 / lists.rats.length));
+      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei(10 / lists.rats.length)).lt(toWei(10.01 / lists.rats.length));
       const ts = (await web3.eth.getBlock('latest')).timestamp;
       await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
@@ -139,7 +139,7 @@ contract('McStake (proxy)', (accounts) => {
       claimEvents.forEach((log, i) => {
         expect(log.event).to.equal('RatClaimed');
         expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
-        expectRatEarnings(log.args.earned, 50, lists.rats.length, 0);
+        expectRatEarnings(log.args.earned, 10, lists.rats.length, 0);
         expect(log.args.unstaked).to.be.false;
         expect(log.args.intelligence).to.be.a.bignumber.eq('1');
         expect(log.args.bodyMass).to.be.a.bignumber.eq('4');
@@ -147,12 +147,12 @@ contract('McStake (proxy)', (accounts) => {
         expect(log.args.foodTokensPerRat).to.be.a.bignumber.gt('0');
         ownerBalance.iadd(new BN(log.args.earned));
       });
-      totalFoodTokensEarned += 2 * 25 * 0.55; // 2 rats for half a day at bodyMass 0
+      totalFoodTokensEarned += 2 * 5 * 0.55; // 2 rats for half a day at bodyMass 0
       await expect(this.character.ownerOf(rats[0])).to.eventually.equal(this.kitchen.address);
       await expect(this.character.ownerOf(rats[1])).to.eventually.equal(this.kitchen.address);
       await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
       await expectTotalFoodTokenEarnings.call(this);
-      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei(50 / lists.rats.length)).lt(toWei(50.01 / lists.rats.length));
+      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei(10 / lists.rats.length)).lt(toWei(10.01 / lists.rats.length));
       const ts = (await web3.eth.getBlock('latest')).timestamp;
       await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
@@ -179,18 +179,18 @@ contract('McStake (proxy)', (accounts) => {
         expect(log.args.skill).to.be.a.bignumber.eq('2');
         expect(log.args.freak).to.be.a.bignumber.eq('4');
         expect(log.args.eventName).to.equal('');
-        expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((50 + (i + 1) * 25 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + (i + 1) * 25.4475) / lists.rats.length));
+        expect(log.args.foodTokensPerRat).to.be.a.bignumber.gte(toWei((10 + (i + 1) * 5 * chefBoost(1)) / lists.rats.length)).lt(toWei((10 + (i + 1) * 5.0895) / lists.rats.length));
         ownerBalance.iadd(new BN(log.args.earned));
       });
       await Promise.all(lists.chefs.map(async item => {
         await expect(this.kitchen.stakers(owner, item.stakerIndex)).to.eventually.be.rejected;
       }));
-      totalFoodTokensEarned += 2 * 125 * chefBoost(1) * 0.8; // 2 chefs for half a day at skill 1
+      totalFoodTokensEarned += 2 * 25 * chefBoost(1) * 0.8; // 2 chefs for half a day at skill 1
       await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
       await expect(this.character.ownerOf(chefs[1])).to.eventually.equal(owner);
       await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
       await expectTotalFoodTokenEarnings.call(this);
-      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length));
+      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((10 + 10 * chefBoost(1)) / lists.rats.length)).lt(toWei((10 + 10 * chefBoost(1)) * 1.0001 / lists.rats.length));
       const ts = (await web3.eth.getBlock('latest')).timestamp;
       await expect(this.kitchen.lastClaimTimestamp()).to.eventually.be.a.bignumber.that.equals(ts.toString());
 
@@ -219,7 +219,7 @@ contract('McStake (proxy)', (accounts) => {
       claimEvents.forEach((log, i) => {
         expect(log.event).to.equal('RatClaimed');
         expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
-        expectRatEarnings(log.args.earned, 50 * chefBoost(1), lists.rats.length, 4);
+        expectRatEarnings(log.args.earned, 10 * chefBoost(1), lists.rats.length, 4);
         expect(log.args.unstaked).to.be.true;
         expect(log.args.intelligence).to.be.a.bignumber.eq('2');
         expect(log.args.bodyMass).to.be.a.bignumber.eq('8');
@@ -227,12 +227,12 @@ contract('McStake (proxy)', (accounts) => {
         expect(log.args.foodTokensPerRat).to.be.a.bignumber.gt('0');
         ownerBalance.iadd(new BN(log.args.earned));
       });
-      totalFoodTokensEarned += 2 * 25 * chefBoost(1) * ratBoost(4); // food tokens from 2 skill 1 chefs for 2 rats for half a day at bodyMass 4
+      totalFoodTokensEarned += 2 * 5 * chefBoost(1) * ratBoost(4); // food tokens from 2 skill 1 chefs for 2 rats for half a day at bodyMass 4
       await expect(this.character.ownerOf(rats[0])).to.eventually.equal(owner);
       await expect(this.character.ownerOf(rats[1])).to.eventually.equal(owner);
       await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq(ownerBalance); // 2 chefs staked for half a day = 5000^18 each
       await expectTotalFoodTokenEarnings.call(this);
-      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length));
+      await expect(this.kitchen.foodTokensPerRat()).to.eventually.be.a.bignumber.gte(toWei((10 + 10 * chefBoost(1)) / lists.rats.length)).lt(toWei((10 + 10 * chefBoost(1)) * 1.0001 / lists.rats.length));
 
       const rat0 = await this.kitchen.rats(rats[0]);
       const rat1 = await this.kitchen.rats(rats[1]);
@@ -257,7 +257,7 @@ contract('McStake (proxy)', (accounts) => {
       logs.forEach((log) => {
         const tokenId = Number(log.args.tokenId.toString());
         if (tokenId === list.rat.id) {
-          expect(log.args.value).to.be.a.bignumber.gte(toWei((50 + 50 * chefBoost(1)) / lists.rats.length)).lt(toWei((50 + 50 * chefBoost(1)) * 1.0001 / lists.rats.length));
+          expect(log.args.value).to.be.a.bignumber.gte(toWei((10 + 10 * chefBoost(1)) / lists.rats.length)).lt(toWei((10 + 10 * chefBoost(1)) * 1.0001 / lists.rats.length));
         }
       });
       await Promise.all(Object.values(list).map(async item => {
@@ -405,7 +405,7 @@ contract('McStake (proxy)', (accounts) => {
       await advanceTimeAndBlock(86400); // Wait a day
       const currentSupply = await this.foodToken.totalSupply();
       const foodTokenMaxSupply = Math.ceil(fromWei(currentSupply.toString()));
-      await scheduleAndExecute(this.kitchen, 'configure', [foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
+      await scheduleAndExecute(this.kitchen, 'configure', [foodTokenMaxSupply, [config.kitchen.mcStake.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
       const { logs } = await claimManyAndFulfill.call(this, this.kitchen, Object.values(lists.boost.all).map(item => item.id), true, { args: { from: anon } });
       await Promise.all(logs.map(async ({ args, event }) => {
         if (['ChefClaimed', 'RatClaimed'].includes(event)) {

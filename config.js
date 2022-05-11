@@ -27,23 +27,23 @@ module.exports = (network, accounts = []) => ({
     whitelistBoost: num('PAYWALL_WHITELIST_BOOST', '1'),
     maxMintsPerTx: num('PAYWALL_MAX_MINTS_PER_TX', '10'),
     gen1Prices: Object.values({
-      gen1PriceTier0: toWei(env('PAYWALL_GEN1_PRICE_TIER0', '1000'), 'ether'),
-      gen1PriceTier1: toWei(env('PAYWALL_GEN1_PRICE_TIER1', '1500'), 'ether'),
-      gen1PriceTier2: toWei(env('PAYWALL_GEN1_PRICE_TIER2', '2000'), 'ether'),
-      gen1PriceTier3: toWei(env('PAYWALL_GEN1_PRICE_TIER3', '3000'), 'ether'),
+      gen1PriceTier0: toWei(env('PAYWALL_GEN1_PRICE_TIER0', '2000'), 'ether'),
+      gen1PriceTier1: toWei(env('PAYWALL_GEN1_PRICE_TIER1', '3000'), 'ether'),
+      gen1PriceTier2: toWei(env('PAYWALL_GEN1_PRICE_TIER2', '5000'), 'ether'),
+      gen1PriceTier3: toWei(env('PAYWALL_GEN1_PRICE_TIER3', '8000'), 'ether'),
     }),
   }),
   character: Object.values({
-    maxTokens: num('CHARACTER_MAX_TOKENS', '50000'),
+    maxTokens: num('CHARACTER_MAX_TOKENS', '20000'),
     gen0Tokens: num('CHARACTER_GEN0_TOKENS', '10000'),
   }),
   kitchen: {
-    dailyChefEarnings: num('KITCHEN_DAILY_CHEF_EARNINGS', '250'),
     ratTheftPercentage: num('KITCHEN_RAT_THEFT_PERCENTAGE', '20'),
     vestingPeriod: num('KITCHEN_VESTING_PERIOD', '3600'),
     accrualPeriod: num('KITCHEN_ACCRUAL_PERIOD', '86400'),
     mcStake: {
-      foodTokenMaxSupply: num('KITCHEN_MCSTAKE_FOOD_TOKEN_MAX_SUPPLY', '50000000'),
+      foodTokenMaxSupply: toWei(env('KITCHEN_MCSTAKE_FOOD_TOKEN_MAX_SUPPLY', '50000000'), 'ether'),
+      dailyChefEarnings: toWei(env('KITCHEN_MCSTAKE_DAILY_CHEF_EARNINGS', '50'), 'ether'),
       propertyIncrements: Object.values({
         dailySkillRate: num('KITCHEN_MCSTAKE_PROPERTY_INCREMENTS_DAILY_SKILL_RATE', '2'),
         dailyFreakRate: num('KITCHEN_MCSTAKE_PROPERTY_INCREMENTS_DAILY_FREAK_RATE', '4'),
@@ -52,7 +52,8 @@ module.exports = (network, accounts = []) => ({
       }),
     },
     theStakehouse: {
-      foodTokenMaxSupply: num('KITCHEN_THESTAKEHOUSE_FOOD_TOKEN_MAX_SUPPLY', '5000000'),
+      foodTokenMaxSupply: toWei(env('KITCHEN_THESTAKEHOUSE_FOOD_TOKEN_MAX_SUPPLY', '5000000'), 'ether'),
+      dailyChefEarnings: toWei(env('KITCHEN_THESTAKEHOUSE_DAILY_CHEF_EARNINGS', '25'), 'ether'),
       propertyIncrements: Object.values({
         dailySkillRate: num('KITCHEN_THESTAKEHOUSE_PROPERTY_INCREMENTS_DAILY_SKILL_RATE', '4'),
         dailyFreakRate: num('KITCHEN_THESTAKEHOUSE_PROPERTY_INCREMENTS_DAILY_FREAK_RATE', '6'),
@@ -62,7 +63,8 @@ module.exports = (network, accounts = []) => ({
       minEfficiency: num('KITCHEN_THESTAKEHOUSE_MIN_EFFICIENCY', '28'),
     },
     leStake: {
-      foodTokenMaxSupply: num('KITCHEN_LESTAKE_FOOD_TOKEN_MAX_SUPPLY', '500000'),
+      foodTokenMaxSupply: toWei(env('KITCHEN_LESTAKE_FOOD_TOKEN_MAX_SUPPLY', '500000'), 'ether'),
+      dailyChefEarnings: toWei(env('KITCHEN_LESTAKE_DAILY_CHEF_EARNINGS', '12.5'), 'ether'),
       propertyIncrements: Object.values({
         dailySkillRate: num('KITCHEN_LESTAKE_PROPERTY_INCREMENTS_DAILY_SKILL_RATE', '6'),
         dailyFreakRate: num('KITCHEN_LESTAKE_PROPERTY_INCREMENTS_DAILY_FREAK_RATE', '8'),
@@ -86,15 +88,15 @@ module.exports = (network, accounts = []) => ({
     claimFee: toWei(env('GYM_CLAIM_FEE', '0.002'), 'ether'),
   }),
   kitchenShop: Object.values({
-    maxTokens: [num('KITCHENSHOP_MAX_TOKENS_THESTAKEHOUSE', '5000'), num('KITCHENSHOP_MAX_TOKENS_LESTAKE', '500')],
+    maxTokens: [num('KITCHENSHOP_MAX_TOKENS_THESTAKEHOUSE', '1000'), num('KITCHENSHOP_MAX_TOKENS_LESTAKE', '100')],
     maxMintsPerTx: num('KITCHENSHOP_MAX_MINTS_PER_TX', '10'),
     minSkill: [num('KITCHENSHOP_MIN_SKILL_THESTAKEHOUSE', '28'), num('KITCHENSHOP_MIN_SKILL_LESTAKE', '72')],
     prices: Object.values({
-      priceTier0: toWei(env('KITCHENSHOP_PRICE_TIER0', '2000'), 'ether'),
-      priceTier1: toWei(env('KITCHENSHOP_PRICE_TIER1', '3000'), 'ether'),
+      priceTier0: toWei(env('KITCHENSHOP_PRICE_TIER0', '1000'), 'ether'),
+      priceTier1: toWei(env('KITCHENSHOP_PRICE_TIER1', '2000'), 'ether'),
       priceTier2: toWei(env('KITCHENSHOP_PRICE_TIER2', '4000'), 'ether'),
-      priceTier3: toWei(env('KITCHENSHOP_PRICE_TIER3', '5000'), 'ether'),
-      priceTier4: toWei(env('KITCHENSHOP_PRICE_TIER4', '6000'), 'ether'),
+      priceTier3: toWei(env('KITCHENSHOP_PRICE_TIER3', '7000'), 'ether'),
+      priceTier4: toWei(env('KITCHENSHOP_PRICE_TIER4', '11000'), 'ether'),
     }),
   }),
   kitchenUsage: Object.values({

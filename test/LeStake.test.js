@@ -37,8 +37,8 @@ contract('LeStake (proxy)', (accounts) => {
     this.kitchenShop = await KitchenShop.deployed();
     this.kitchenUsage = await KitchenUsage.deployed();
     this.casualFood = await CasualFood.deployed();
-    await scheduleAndExecute(this.mcStake, 'configure', [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100, config.kitchen.claimFee], { from: dao });
-    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
+    await scheduleAndExecute(this.mcStake, 'configure', [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.mcStake.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, 100, config.kitchen.claimFee], { from: dao });
+    await scheduleAndExecute(this.kitchen, 'configure', [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.leStake.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, 4, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee], { from: dao });
     await scheduleAndExecute(this.casualFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 12, 3);
@@ -119,7 +119,7 @@ contract('LeStake (proxy)', (accounts) => {
           let newEfficiency;
           let newTolerance;
           if (event === 'ChefClaimed') {
-            expectChefEarnings(args.earned, 86400, token.efficiency);
+            expectChefEarnings(args.earned, 86400, token.efficiency, 'leStake');
             token.earned = args.earned;
             if (args.eventName === 'foodInspector') {
               newEfficiency = (10 > token.efficiency) ? 0 : token.efficiency - 10;
@@ -139,7 +139,7 @@ contract('LeStake (proxy)', (accounts) => {
             await expect(doesSvgTraitMatch(svg, 'chef','head', tolerance)).to.eventually.be.true;
           } else {
             // expectRatEarnings(args.earned, fromWei(args.earned) / 8 * 2, 2, token.tolerance);
-            expect(args.earned).to.be.a.bignumber.gte('90000000000000000000'); // Improve this
+            expect(args.earned).to.be.a.bignumber.gte('4500000000000000000'); // Improve this
             if (args.eventName === 'ratTrap') {
               newEfficiency = (10 > token.efficiency) ? 0 : token.efficiency - 10;
               newTolerance = (50 > token.tolerance) ? 0 : token.tolerance - 50;

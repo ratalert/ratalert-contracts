@@ -40,7 +40,7 @@ contract('KitchenShop (proxy)', (accounts) => {
     this.kitchenShop = await KitchenShop.deployed();
     this.kitchenShopSandbox = await deployProxy(KitchenShop, [this.fastFood.address, this.fastFood.address, this.character.address]);
     await this.kitchenShopSandbox.transferOwnership(this.timelockController.address);
-    await scheduleAndExecute(this.kitchenShopSandbox, 'configure', [[5, 5], 10, [28, 72], [toWei(2000), toWei(3000), toWei(4000), toWei(5000), toWei(6000)]], { from: dao });
+    await scheduleAndExecute(this.kitchenShopSandbox, 'configure', [[5, 5], 10, [28, 72], [toWei(1000), toWei(2000), toWei(4000), toWei(7000), toWei(11000)]], { from: dao });
     await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
     await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), this.kitchenShopSandbox.address], { from: dao });
     await scheduleAndExecute(this.casualFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
@@ -59,7 +59,6 @@ contract('KitchenShop (proxy)', (accounts) => {
     await scheduleAndExecute(this.properties, 'configure', propertiesConfig, { from: dao });
     lists.all = await trainUntilWeHave.call(this, this.kitchen, 72, 0, [lists.all[0], lists.all[2]], 10, true, true, { verbose: true, args: { from: owner } });
     await scheduleAndExecute(this.properties, 'configure', config.properties, { from: dao });
-    fastFoodBalance = await this.fastFood.balanceOf(owner);
   });
 
   describe('uri()', () => {
@@ -92,7 +91,7 @@ contract('KitchenShop (proxy)', (accounts) => {
 
   describe('tokenSupply()', () => {
     it('returns the total supply', async () => {
-      await expect(this.kitchenShop.tokenSupply()).to.eventually.be.a.bignumber.eq('5500');
+      await expect(this.kitchenShop.tokenSupply()).to.eventually.be.a.bignumber.eq('1100');
     });
   });
 
@@ -117,6 +116,8 @@ contract('KitchenShop (proxy)', (accounts) => {
     });
 
     it('mints TheStakehouse with $FFOOD', async () => {
+      await this.fastFood.mint(owner, toWei(5 * 1000), { from: dao });
+      fastFoodBalance = await this.fastFood.balanceOf(owner);
       const { logs } = await this.kitchenShop.mint(1, 5);
       expect(logs).to.have.length(1);
       expect(logs[0].args.to).to.equal(owner);
@@ -124,13 +125,13 @@ contract('KitchenShop (proxy)', (accounts) => {
       expect(logs[0].args.value).to.be.a.bignumber.eq('5');
 
       const newBalance = await this.fastFood.balanceOf(owner);
-      expect(fastFoodBalance.sub(newBalance)).to.be.a.bignumber.eq(toWei(5 * 2000));
+      expect(fastFoodBalance.sub(newBalance)).to.be.a.bignumber.eq(toWei(5 * 1000));
       expect(this.kitchenShop.balanceOf(owner, 1)).to.eventually.be.a.bignumber.eq('5');
       expect(this.kitchenShop.minted(1)).to.eventually.be.a.bignumber.eq('5');
     });
 
     it('calculates mint price correctly', async () => {
-      const price = 2000 + 3000 + 4000 + 5000 + 6000; // each kitchen has a new price break
+      const price = 1000 + 2000 + 4000 + 7000 + 11000; // each kitchen has a new price break
       await this.fastFood.mint(owner, toWei(price), { from: dao });
       const balance = await this.fastFood.balanceOf(owner);
       const res = await this.kitchenShopSandbox.mint(1, 5);
@@ -150,7 +151,7 @@ contract('KitchenShop (proxy)', (accounts) => {
     });
 
     it('mints LeStake with $CFOOD', async () => {
-      const price = 5 * 2000;
+      const price = 5 * 1000;
       await this.casualFood.mint(owner, toWei(price), { from: dao });
       const balance = await this.casualFood.balanceOf(owner);
 

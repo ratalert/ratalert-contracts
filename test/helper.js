@@ -248,8 +248,8 @@ exports.expectTotalFoodTokenEarnings = () => {
 exports.chefBoost = (efficiency = 0) => {
   return (100 + (efficiency * config.kitchen.chefEfficiencyMultiplier / 100)) / 100;
 };
-exports.expectChefEarnings = (earned, period, efficiency) => {
-  const nominal = period * config.kitchen.dailyChefEarnings / config.kitchen.accrualPeriod;
+exports.expectChefEarnings = (earned, period, efficiency, kitchen = 'mcStake') => {
+  const nominal = period * exports.fromWei(config.kitchen[kitchen].dailyChefEarnings) / config.kitchen.accrualPeriod;
   const gross = nominal * exports.chefBoost(efficiency);
   const net = gross * (100 - config.kitchen.ratTheftPercentage) / 100;
   expect(earned).to.be.a.bignumber.gte(exports.toWei(net * 0.9999)).lt(exports.toWei(net * 1.0001));
@@ -341,7 +341,7 @@ exports.getUIConfig = (cfg) => {
   });
   const getKitchen = name => ({
     foodTokenMaxSupply: cfg.kitchen[name].foodTokenMaxSupply,
-    dailyChefEarnings: cfg.kitchen.dailyChefEarnings,
+    dailyChefEarnings: cfg.kitchen[name].dailyChefEarnings,
     ratTheftPercentage: cfg.kitchen.ratTheftPercentage,
     chefEfficiencyMultiplier: cfg.kitchen.chefEfficiencyMultiplier,
     ratEfficiencyMultiplier: cfg.kitchen.ratEfficiencyMultiplier,

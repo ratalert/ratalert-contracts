@@ -43,8 +43,8 @@ contract TheStakehouse is EntrepreneurKitchen {
     uint8 _maxClaimsPerTx,
     uint256 _claimFee
   ) external onlyOwner {
-    foodTokenMaxSupply = _foodTokenMaxSupply * 1 ether;
-    dailyChefEarnings = _earningSettings[0] * 1 ether;
+    foodTokenMaxSupply = _foodTokenMaxSupply;
+    dailyChefEarnings = _earningSettings[0];
     ratTheftPercentage = _earningSettings[1];
     vestingPeriod = _earningSettings[2];
     accrualPeriod = _earningSettings[3];
