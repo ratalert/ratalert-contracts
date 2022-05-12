@@ -1,5 +1,5 @@
 const mri = require('mri');
-const { scheduleAndExecute, getUIConfig, encodeFunctionCall, toWei } = require('../test/helper');
+const { scheduleAndExecute, getUIConfig, encodeFunctionCall, toWei, decodeFunctionCall } = require('../test/helper');
 
 const commands = {
     pause: async(contract) => {
@@ -59,6 +59,12 @@ const commands = {
     setConfig: async() => {
         console.log('Updating UI config:\n', getUIConfig(this.config));
         const res = await scheduleAndExecute(await this.getInst('Config'), 'set', [getUIConfig(this.config)], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
+    transferOwnership: async(contract, to) => {
+        if (to === 'dao') to = this.config.dao.address;
+        console.log(`Configuring ${contract} ownership to ${to}`);
+        const res = await scheduleAndExecute(await this.getInst(contract), 'transferOwnership', [this.config.dao.address], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
         if (res) console.log(res);
     },
     toggleWhitelist: async(enable) => {
@@ -121,6 +127,9 @@ const commands = {
         const mint = await Mint.deployed();
         console.log(await mint.manualFulfillRandomness(requestId, randomness));
     },
+    decodeFunctionCall: async (contract, func, data) => {
+        console.log(await decodeFunctionCall(contract, func, data));
+    }
 };
 
 module.exports = async (callback) => {
