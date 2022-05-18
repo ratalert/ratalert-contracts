@@ -18,6 +18,39 @@ This repository contains the Solidity smart [contracts](./contracts/) of the gam
 - [Telegram](https://t.me/ratalert_chat)
 - [Medium](https://ratalert.medium.com/)
 - [GitHub](https://github.com/ratalert)
+- [DAO Gnosis Safe](https://gnosis-safe.io/app/matic:0xbEf526C8325C47817ceb435011bf1E6bc9ec691d/home)
+
+
+## Audit
+
+All contracts have been audited by [CertiK](https://www.certik.com/projects/rat-alert), the final report has been revisioned on May 10, 2022. 
+
+## Community & DAO
+
+### DAO Gnosis Safe
+
+All funds are managed by (and can only be withdrawn to) the RatAlert [DAO Gnosis Safe](https://gnosis-safe.io/app/matic:0xbEf526C8325C47817ceb435011bf1E6bc9ec691d/home), a 4 of 6 multisig wallet owned by 3 co-founders & 3 community members.
+ 
+1. **george-prime#7574** (co-founder)
+2. **juggernod#0921** (co-founder)
+3. **cap#5523** (co-founder)
+4. **stepollo#0001** (community member)
+5. **Cerfidus(🧽,🔱)#2350** (community member)
+6. **KryptoDreamz#0921** (community member) 
+
+### Contract Ownership & Timelock
+
+All contracts are owned by an OpenZeppelin [TimelockController](https://github.com/ratalert/ratalert-dao/blob/master/contracts/TimelockController.sol), deployed at [0x32dd....0924](https://polygonscan.com/address/0x32dd207f1f16dd4ceea94833ab9fb5dd96bc0924#code).
+Only the RatAlert [DAO Gnosis Safe](https://gnosis-safe.io/app/matic:0xbEf526C8325C47817ceb435011bf1E6bc9ec691d/home) is allowed to schedule and execute changes after a 48h delay.
+
+### Governance
+
+We are currently evaluating the RatAlert governance tool and will be launching it very soon...
+
+
+## Forks
+
+We encourage projects to fork our contracts. However, we ask that the **RatAlert DAO** receives a **10% stake** in your project.
 
 
 ## Development
@@ -110,8 +143,3 @@ The idea behind this is to enable the RatAlert DAO to agree upon and change para
 - [polygon.technology](https://faucet.polygon.technology/)
 - [vercel.app](https://testmatic.vercel.app/)
 - [chain.link](https://faucets.chain.link/mumbai)
-
-
-## TODO
-
-- [Setup using Simple Multisig](https://github.com/paxosglobal/simple-multisig/)
