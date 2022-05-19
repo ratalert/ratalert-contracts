@@ -129,7 +129,27 @@ const commands = {
     },
     decodeFunctionCall: async (contract, func, data) => {
         console.log(await decodeFunctionCall(contract, func, data));
-    }
+    },
+    decodeRawLogs: async (contractName, eventName, data, topics) => {
+        const contract = (await artifacts.require(contractName).deployed());
+        const abi = contract.abi.find(item => item.name === eventName);
+        const res = {
+            logs: [],
+            receipt: {
+                rawLogs: [{ data, topics: topics.split(',') }]
+            }
+        };
+        const slice = 0;
+        const ev = res.receipt.rawLogs.filter(item => item.topics[0] === abi.signature);
+        console.log(ev.map(item => {
+            item.args = web3.eth.abi.decodeLog(abi.inputs, item.data, item.topics.slice(slice));
+            item.event = abi.name;
+            delete item.data;
+            delete item.topics;
+            res.logs.push(item);
+            return item;
+        }));
+    },
 };
 
 module.exports = async (callback) => {
