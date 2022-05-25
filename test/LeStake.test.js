@@ -13,6 +13,7 @@ const Mint = artifacts.require('Mint');
 const Claim = artifacts.require('Claim');
 const CasualFood = artifacts.require('CasualFood');
 const GourmetFood = artifacts.require('GourmetFood');
+const DAOGourmetFood = artifacts.require('DAOGourmetFood');
 const Character = artifacts.require('Character');
 const KitchenShop = artifacts.require('KitchenShop');
 const KitchenUsage = artifacts.require('KitchenUsage');
@@ -30,7 +31,8 @@ contract('LeStake (proxy)', (accounts) => {
     this.linkToken = await LinkToken.deployed();
     this.mint = await Mint.deployed();
     this.claim = await Claim.deployed();
-    this.foodToken = await GourmetFood.deployed();
+    this.foodToken = await DAOGourmetFood.deployed();
+    this.legacyFoodToken = await GourmetFood.deployed();
     this.character = await Character.deployed();
     this.kitchen = await LeStake.deployed();
     this.mcStake = await McStake.deployed();
@@ -216,6 +218,10 @@ contract('LeStake (proxy)', (accounts) => {
         expect(log.args.unstaked).to.be.false;
         await expect(this.character.ownerOf(tokenId)).to.eventually.equal(this.kitchen.address);
       }));
+    });
+    it('mints DAOGourmetFood, not legacy GourmetFood', async () => {
+      await expect(this.legacyFoodToken.balanceOf(owner)).to.eventually.be.a.bignumber.eq('0');
+      await expect(this.foodToken.balanceOf(owner)).to.eventually.be.a.bignumber.gt('1000');
     });
   });
 
