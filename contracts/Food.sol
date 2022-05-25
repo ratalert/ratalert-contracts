@@ -20,7 +20,7 @@ abstract contract Food is ERC20, ERC20Capped, Ownable, AccessControl {
    * @param to - The recipient of the food token
    * @param amount - The amount of food tokens to mint
    */
-  function _mint(address to, uint256 amount) internal override(ERC20, ERC20Capped) {
+  function _mint(address to, uint256 amount) internal virtual override(ERC20, ERC20Capped) {
     super._mint(to, amount);
   }
 
