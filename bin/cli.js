@@ -21,6 +21,21 @@ const commands = {
         const res = await scheduleAndExecute(await getInst(contract), 'addController', [[account]], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
         if (res) console.log(res);
     },
+    removeController: async(contract, account) => {
+        if (account === 'dao') account = this.config.dao.address;
+        const res = await scheduleAndExecute(await getInst(contract), 'removeController', [[account]], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
+    addVenue: async(contract, account) => {
+        if (account === 'dao') account = this.config.dao.address;
+        const res = await scheduleAndExecute(await getInst(contract), 'addVenue', [[account]], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
+    removeVenue: async(contract, account) => {
+        if (account === 'dao') account = this.config.dao.address;
+        const res = await scheduleAndExecute(await getInst(contract), 'removeVenue', [[account]], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
     mintFoodToken: async(contract, recipient, amount) => {
         const instance = await artifacts.require(contract).deployed();
         const res = this.executeOrEncode(instance, 'mint', [recipient, toWei(amount)]);
