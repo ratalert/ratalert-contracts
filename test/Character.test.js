@@ -281,6 +281,61 @@ contract('Character (proxy)', (accounts) => {
       res3b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 3));
       res4b.logs.filter(item => item.name === 'Transfer').forEach((log, i) => expect(Number(log.args.tokenId)).to.equal(minted + i + 6));
     });
+    it('reduces the total supply correctly', async () => {
+      const characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address]);
+      await characterSandbox.setDao(config.dao.address);
+      await characterSandbox.transferOwnership(this.timelockController.address);
+      await scheduleAndExecute(characterSandbox, 'configure', [9, 5, this.properties.address], { from: dao }, Date.now());
+      await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao }, Date.now());
+      await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), this.paywall.address], { from: dao }, Date.now());
+      await scheduleAndExecute(this.paywall, 'addController', [[characterSandbox.address, dao]], { from: dao }, Date.now());
+      await scheduleAndExecute(this.mint, 'addController', [[characterSandbox.address]], { from: dao }, Date.now());
+      await scheduleAndExecute(this.mint, 'setCharacter', [characterSandbox.address], { from: dao }, Date.now());
+
+      // Mint Gen 0
+      await mintAndFulfill.call(this, 1, false, { character: characterSandbox, args: { value: toWei(0.1) } });
+      await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('1');
+
+      await scheduleAndExecute(characterSandbox, 'configure', [6, 2, this.properties.address], { from: dao }, Date.now());
+      await mintAndFulfill.call(this, 1, false, { character: characterSandbox, args: { value: toWei(0.1) } });
+      await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('2');
+      await expect(characterSandbox.mint(1, false, { value: toWei(0.1) })).to.eventually.be.rejectedWith('Invalid payment type, accepting food tokens only');
+
+      const price = 2000 + 3000 + 5000 + 8000;
+      await this.fastFood.mint(owner, toWei(price), { from: dao });
+      await mintAndFulfill.call(this, 4, false, { character: characterSandbox, args: { value: 0, from: owner } });
+      await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('6');
+      await expect(characterSandbox.mint(1, false)).to.eventually.be.rejectedWith('All tokens minted');
+
+      await scheduleAndExecute(this.mint, 'setCharacter', [this.character.address], { from: dao }, Date.now());
+    });
+    it('reduces the total supply even if the number of mints has increased', async () => {
+      const characterSandbox = await deployProxy(Character, [this.paywall.address, this.mint.address, this.traits.address]);
+      await characterSandbox.setDao(config.dao.address);
+      await characterSandbox.transferOwnership(this.timelockController.address);
+      await scheduleAndExecute(characterSandbox, 'configure', [9, 5, this.properties.address], { from: dao }, Date.now());
+      await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao }, Date.now());
+      await scheduleAndExecute(this.fastFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), this.paywall.address], { from: dao }, Date.now());
+      await scheduleAndExecute(this.paywall, 'addController', [[characterSandbox.address, dao]], { from: dao }, Date.now());
+      await scheduleAndExecute(this.mint, 'addController', [[characterSandbox.address]], { from: dao }, Date.now());
+      await scheduleAndExecute(this.mint, 'setCharacter', [characterSandbox.address], { from: dao }, Date.now());
+
+      // Mint Gen 0
+      await mintAndFulfill.call(this, 3, false, { character: characterSandbox, args: { value: toWei(0.3) } });
+      await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('3');
+
+      await scheduleAndExecute(characterSandbox, 'configure', [6, 2, this.properties.address], { from: dao }, Date.now());
+      await expect(characterSandbox.mint(1, false, { value: toWei(0.1) })).to.eventually.be.rejectedWith('Invalid payment type, accepting food tokens only');
+      await expect(characterSandbox.mint(4, false)).to.eventually.be.rejectedWith('All tokens minted');
+
+      const price = 3000 + 5000 + 8000;
+      await this.fastFood.mint(owner, toWei(price), { from: dao });
+      await mintAndFulfill.call(this, 3, false, { character: characterSandbox, args: { value: 0, from: owner } });
+      await expect(characterSandbox.minted()).to.eventually.be.a.bignumber.eq('6');
+      await expect(characterSandbox.mint(1, false)).to.eventually.be.rejectedWith('All tokens minted');
+
+      await scheduleAndExecute(this.mint, 'setCharacter', [this.character.address], { from: dao }, Date.now());
+    });
     it('fails if not whitelisted', async () => {
       await this.paywall.toggleWhitelist(true, { from: dao });
       await expect(mintAndFulfill.call(this, 5, true, { args: { from: anon } })).to.eventually.be.rejectedWith('Not whitelisted');
