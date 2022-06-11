@@ -119,24 +119,29 @@ contract Paywall is Initializable, OwnableUpgradeable, ControllableUpgradeable, 
     if (onlyWhitelist) {
       require(freeMints[sender] >= amount || whitelist[sender] >= amount, "Not whitelisted");
     }
-    if (freeMints[sender] >= amount) {
-      freeMints[sender] -= amount;
-      emit UpdateFreeMints(sender, freeMints[sender]);
-      txMintPrice = 0;
-    } else if (whitelist[sender] >= amount) {
-      whitelist[sender] -= amount;
-      emit UpdateWhitelist(sender, whitelist[sender]);
-      txMintPrice = mintPrice * 90 / 100;
-      boost = whitelistBoost;
-    }
     uint256 totalCost = 0;
     if (minted < gen0Tokens) {
       require(minted + amount <= gen0Tokens, "Not enough Gen 0 tokens left, reduce amount");
+      if (freeMints[sender] >= amount) {
+        freeMints[sender] -= amount;
+        emit UpdateFreeMints(sender, freeMints[sender]);
+        txMintPrice = 0;
+      } else if (whitelist[sender] >= amount) {
+        whitelist[sender] -= amount;
+        emit UpdateWhitelist(sender, whitelist[sender]);
+        txMintPrice = mintPrice * 90 / 100;
+        boost = whitelistBoost;
+      }
       require(amount * txMintPrice == msgValue, "Invalid payment amount");
     } else {
       require(msgValue == 0, "Invalid payment type, accepting food tokens only");
-      for (uint i = 1; i <= amount; i++) {
-        totalCost += this.mintCost(minted + i, maxTokens, gen0Tokens);
+      if (freeMints[sender] >= amount) {
+        freeMints[sender] -= amount;
+        emit UpdateFreeMints(sender, freeMints[sender]);
+      } else {
+        for (uint i = 1; i <= amount; i++) {
+          totalCost += this.mintCost(minted + i, maxTokens, gen0Tokens);
+        }
       }
     }
     if (totalCost > 0) fastFood.burn(sender, totalCost);
