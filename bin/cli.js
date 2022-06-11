@@ -55,11 +55,12 @@ const commands = {
         const instance = await artifacts.require(contract).deployed();
         const config = this.config;
         const theStakehouse = await artifacts.require('TheStakehouse').deployed();
+        const properties = await artifacts.require('Properties').deployed();
         const leStake = await artifacts.require('LeStake').deployed();
         const args = {
             Properties: [...config.properties],
             Paywall: [...config.payWall],
-            Character: [...config.character],
+            Character: [...config.character, properties.address],
             KitchenShop: [...config.kitchenShop],
             KitchenUsage: [...config.kitchenUsage, [theStakehouse.address, leStake.address]],
             McStake: [config.kitchen.mcStake.foodTokenMaxSupply, [config.kitchen.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.mcStake.propertyIncrements, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee],
