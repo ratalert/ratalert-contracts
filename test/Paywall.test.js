@@ -163,5 +163,10 @@ contract('Paywall (proxy)', (accounts) => {
       await expect(this.paywall.handle(anon, 1, toWei(0.09), 0, 100, 10)).to.eventually.have.nested.property('receipt.status', true);
       await expect(this.paywall.handle(anon, 1, toWei(0.1), 0, 100, 10)).to.eventually.have.nested.property('receipt.status', true);
     });
+    it('allows Gen1 free mints', async () => {
+      await this.paywall.addToFreeMints([anon, anon, anon, anon], { from: dao });
+      await expect(this.paywall.handle(anon, 4, 0, 6, 10, 5)).to.eventually.have.nested.property('receipt.status', true);
+      await expect(this.paywall.handle(anon, 1, 0, 10, 10, 5)).to.eventually.be.rejectedWith('All tokens minted'); // Next one costs
+    });
   });
 });
