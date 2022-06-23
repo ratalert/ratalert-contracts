@@ -73,6 +73,11 @@ const commands = {
         const res = await this.executeOrEncode(await getInst('Paywall'), 'toggleWhitelist', [enable === true]);
         if (res) console.log(res);
     },
+    mintCharacter: async(numCharacters) => {
+        console.log(`Minting ${numCharacters} characters...`);
+        const res = await this.executeOrEncode(await getInst('Character'), 'mint', [numCharacters, false]);
+        if (res) console.log(res);
+    },
     onlyWhitelist: async() => {
         const status = await (await this.getInst('Paywall')).onlyWhitelist();
         console.log(`Whitelist only is ${status ? 'enabled' : 'disabled'}.`);
