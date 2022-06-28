@@ -6,6 +6,8 @@ const Config = require('../config');
 const Paywall = artifacts.require('Paywall');
 const PaywallNew = artifacts.require('PaywallV2');
 
+global.web3 = web3;
+
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
   const paywall = await Paywall.deployed();
@@ -18,5 +20,4 @@ module.exports = async (deployer, network, accounts) => {
   if (res && Array.isArray(res)) {
     console.log(res);
   }
-  // TODO Update PaywallV2.json?
 };

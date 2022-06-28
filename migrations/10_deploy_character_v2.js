@@ -6,6 +6,8 @@ const Config = require('../config');
 const Character = artifacts.require('Character');
 const CharacterNew = artifacts.require('CharacterV2');
 
+global.web3 = web3;
+
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
   const character = await Character.deployed();
@@ -18,5 +20,4 @@ module.exports = async (deployer, network, accounts) => {
   if (res && Array.isArray(res)) {
     console.log(res);
   }
-  // TODO Update CharacterV2.json?
 };
