@@ -12,6 +12,8 @@ contract TripleFiveClub is Venue {
   int8 boostLevel;
   uint256 entranceFeeGen0;
   uint256 entranceFeeGen1;
+  uint256 weekModuloStart;
+  uint256 weekModuloEnd;
   uint256 maxConcurrentGen1;
   GourmetFood gourmetFood; // Reference to the $GFOOD contract
 
@@ -37,8 +39,8 @@ contract TripleFiveClub is Venue {
     int8 _dailyFreakRate,
     int8 _dailyBodyMassRate,
     int8 _boostLevel,
-    uint256 _entranceFeeGen0,
-    uint256 _entranceFeeGen1,
+    uint256[] memory _entranceFees,
+    uint256[] memory _weekModulo,
     uint256 _maxConcurrentGen1,
     uint8 _maxClaimsPerTx,
     uint256 _claimFee
@@ -48,8 +50,10 @@ contract TripleFiveClub is Venue {
     dailyFreakRate = _dailyFreakRate;
     dailyBodyMassRate = _dailyBodyMassRate;
     boostLevel = _boostLevel;
-    entranceFeeGen0 = _entranceFeeGen0;
-    entranceFeeGen1 = _entranceFeeGen1;
+    entranceFeeGen0 = _entranceFees[0];
+    entranceFeeGen1 = _entranceFees[1];
+    weekModuloStart = _weekModulo[0];
+    weekModuloEnd = _weekModulo[1];
     maxConcurrentGen1 = _maxConcurrentGen1;
     maxClaimsPerTx = _maxClaimsPerTx;
     claimFee = _claimFee;
@@ -70,7 +74,7 @@ contract TripleFiveClub is Venue {
    */
   function _isOpenForPublic() internal view returns(bool) {
     uint256 weekModulo = block.timestamp % 604800;
-    return weekModulo >= 259200 && weekModulo < 345600; // All Sunday long (UTC)
+    return weekModulo >= weekModuloStart && weekModulo < weekModuloEnd; // All UTC period long...
   }
 
   /**
