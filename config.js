@@ -91,8 +91,14 @@ module.exports = (network, accounts = []) => ({
     dailyFreakRate: num('TRIPLEFIVECLUB_DAILY_FREAK_RATE', '-2'),
     dailyBodyMassRate: num('TRIPLEFIVECLUB_DAILY_BODYMASS_RATE', '-1'),
     boostLevel: num('TRIPLEFIVECLUB_BOOST_LEVEL', '2'),
-    entranceFeeGen0: toWei(env('TRIPLEFIVECLUB_ENTRANCE_FEE', '0.1'), 'ether'),
-    entranceFeeGen1: toWei(env('TRIPLEFIVECLUB_ENTRANCE_FEE', '1'), 'ether'),
+    entranceFees: Object.values({
+      gen0: toWei(env('TRIPLEFIVECLUB_ENTRANCEFEE_GEN0', '0.1'), 'ether'),
+      gen1: toWei(env('TRIPLEFIVECLUB_ENTRANCEFEE_GEN1', '1'), 'ether'),
+    }),
+    weekModulo: Object.values({
+      start: num('TRIPLEFIVECLUB_WEEKMODULO_START', '259200'),
+      end: num('TRIPLEFIVECLUB_WEEKMODULO_END', '345600'),
+    }),
     maxConcurrentGen1: num('TRIPLEFIVECLUB_CONCURRENT_GEN1', '10'),
     maxClaimsPerTx: num('TRIPLEFIVECLUB_MAX_CLAIMS_PER_TX', '10'),
     claimFee: toWei(env('TRIPLEFIVECLUB_CLAIM_FEE', '0.002'), 'ether'),
