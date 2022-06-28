@@ -19,6 +19,7 @@ const McStake = artifacts.require('McStake');
 const TheStakehouse = artifacts.require('TheStakehouse');
 const LeStake = artifacts.require('LeStake');
 const Gym = artifacts.require('Gym');
+const TripleFiveClub = artifacts.require('TripleFiveClub');
 
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
@@ -64,6 +65,7 @@ module.exports = async (deployer, network, accounts) => {
   const theStakehouse = await deployProxy(TheStakehouse, [character.address, claim.address, casualFood.address, kitchenUsage.address], {deployer});
   const leStake = await deployProxy(LeStake, [character.address, claim.address, gourmetFood.address, kitchenUsage.address], {deployer});
   const gym = await deployProxy(Gym, [character.address, claim.address], {deployer});
+  const tripleFiveClub = await deployProxy(TripleFiveClub, [character.address, claim.address, gourmetFood.address], {deployer});
 
   await configContract.set(getUIConfig(config));
   await properties.configure(...config.properties);
@@ -75,6 +77,7 @@ module.exports = async (deployer, network, accounts) => {
   await theStakehouse.configure(config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.theStakehouse.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee);
   await leStake.configure(config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.leStake.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, config.kitchen.leStake.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee);
   await gym.configure(...config.gym);
+  await tripleFiveClub.configure(...config.tripleFiveClub);
 
   await mint.setDao(config.dao.address);
   await paywall.setDao(config.dao.address);
@@ -85,12 +88,13 @@ module.exports = async (deployer, network, accounts) => {
   await theStakehouse.setDao(config.dao.address);
   await leStake.setDao(config.dao.address);
   await gym.setDao(config.dao.address);
+  await tripleFiveClub.setDao(config.dao.address);
 
   await traits.setCharacter(character.address);
   await mint.addController([character.address]);
   await mint.setCharacter(character.address);
-  await claim.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
-  await claim.addVenue([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
+  await claim.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address, tripleFiveClub.address]);
+  await claim.addVenue([mcStake.address, theStakehouse.address, leStake.address, gym.address, tripleFiveClub.address]);
 
   await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), config.dao.address);
   await fastFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), config.dao.address);
@@ -105,8 +109,10 @@ module.exports = async (deployer, network, accounts) => {
   await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), config.dao.address);
   await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), leStake.address);
   await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), kitchenShop.address);
+  await gourmetFood.grantRole(web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), tripleFiveClub.address);
+
   await paywall.addController([character.address]);
-  await character.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address]);
+  await character.addController([mcStake.address, theStakehouse.address, leStake.address, gym.address, tripleFiveClub.address]);
   await character.setKitchen(mcStake.address);
   await kitchenUsage.addController([theStakehouse.address, leStake.address]);
 };

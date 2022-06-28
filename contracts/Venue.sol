@@ -64,7 +64,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param account - User wallet address
    * @param tokenIds - The IDs of the Chefs & Rats to stake
    */
-  function stakeMany(address account, uint16[] calldata tokenIds) external {
+  function stakeMany(address account, uint16[] calldata tokenIds) external virtual {
     require((tx.origin == _msgSender() && account == _msgSender()) || _msgSender() == address(character), "EOA only");
     for (uint i = 0; i < tokenIds.length; i++) {
       if (tokenIds[i] == 0) {
@@ -97,7 +97,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param account - User wallet address
    * @param tokenId - The ID of the Chef
    */
-  function _stakeChef(address account, uint256 tokenId) internal whenNotPaused {
+  function _stakeChef(address account, uint256 tokenId) internal virtual whenNotPaused {
     chefs[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
@@ -113,7 +113,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param account - User wallet address
    * @param tokenId - The ID of the Rat
    */
-  function _stakeRat(address account, uint256 tokenId) internal whenNotPaused {
+  function _stakeRat(address account, uint256 tokenId) internal virtual whenNotPaused {
     rats[tokenId] = Stake({
       tokenId: uint16(tokenId),
       owner: account,
@@ -188,7 +188,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param randomVal - A ChainLink VRF random number
    * @return owed - Food tokens produced during staking
    */
-  function _claimChef(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal returns (uint256 owed) {
+  function _claimChef(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal virtual returns (uint256 owed) {
     Stake memory stake = chefs[tokenId];
     require(stake.owner == sender, "Not your token");
 
@@ -224,7 +224,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @param randomVal - A ChainLink VRF random number
    * @return owed - Food tokens stolen during staking
    */
-  function _claimRat(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal returns (uint256 owed) {
+  function _claimRat(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal virtual returns (uint256 owed) {
     Stake memory stake = rats[tokenId];
     require(stake.owner == sender, "Not your token");
 
@@ -312,7 +312,7 @@ abstract contract Venue is IVenue, Initializable, OwnableUpgradeable, GenericPau
    * @return tolerance - New value
    * @return eventName - If one occurred, empty string otherwise
    */
-  function _updateCharacter(uint256 tokenId, uint256 randomVal) internal returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
+  function _updateCharacter(uint256 tokenId, uint256 randomVal) internal virtual returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
     (bool chef, , , , , , , , , , int8 boost) = character.tokenTraits(tokenId);
     uint256 stakingPeriod = block.timestamp - (chef ? chefs[tokenId].timestamp : rats[tokenId].timestamp);
 

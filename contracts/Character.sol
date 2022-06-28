@@ -102,6 +102,15 @@ contract Character is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
   }
 
   /**
+   * Allows the venues to update the character's boost value when claiming
+   * @param tokenId - The ID of the Character
+   * @param boost - The value to set
+   */
+  function updateBoost(uint256 tokenId, int8 boost) external onlyController {
+    tokenTraits[tokenId].boost = boost;
+  }
+
+  /**
    * Returns the base64 encoded ERC721 metadata
    * @param tokenId - The ID of the Character
    * @return base64 encoded JSON string

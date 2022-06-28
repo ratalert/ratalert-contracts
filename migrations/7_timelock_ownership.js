@@ -7,7 +7,7 @@ module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
   const contracts = [
     'CasualFood', 'Character', 'Claim', 'Config', 'FastFood', 'GourmetFood', 'Gym', 'KitchenShop',
-    'KitchenUsage', 'LeStake', 'McStake', 'Mint', 'Paywall', 'Properties', 'TheStakehouse', 'Traits',
+    'KitchenUsage', 'LeStake', 'McStake', 'Mint', 'Paywall', 'Properties', 'TheStakehouse', 'Traits', 'TripleFiveClub',
   ];
 
   let timelockController = { address: config.timelock.address };
