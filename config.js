@@ -87,6 +87,18 @@ module.exports = (network, accounts = []) => ({
     maxClaimsPerTx: num('GYM_MAX_CLAIMS_PER_TX', '10'),
     claimFee: toWei(env('GYM_CLAIM_FEE', '0.002'), 'ether'),
   }),
+  tripleFiveClub: Object.values({
+    vestingPeriod: num('TRIPLEFIVECLUB_VESTING_PERIOD', '3600'),
+    accrualPeriod: num('TRIPLEFIVECLUB_ACCRUAL_PERIOD', '3600'),
+    dailyFreakRate: num('TRIPLEFIVECLUB_DAILY_FREAK_RATE', '-2'),
+    dailyBodyMassRate: num('TRIPLEFIVECLUB_DAILY_BODYMASS_RATE', '-1'),
+    boostLevel: num('TRIPLEFIVECLUB_BOOST_LEVEL', '2'),
+    entranceFeeGen0: toWei(env('TRIPLEFIVECLUB_ENTRANCE_FEE', '0.1'), 'ether'),
+    entranceFeeGen1: toWei(env('TRIPLEFIVECLUB_ENTRANCE_FEE', '1'), 'ether'),
+    maxConcurrentGen1: num('TRIPLEFIVECLUB_CONCURRENT_GEN1', '10'),
+    maxClaimsPerTx: num('TRIPLEFIVECLUB_MAX_CLAIMS_PER_TX', '10'),
+    claimFee: toWei(env('TRIPLEFIVECLUB_CLAIM_FEE', '0.002'), 'ether'),
+  }),
   kitchenShop: Object.values({
     maxTokens: [num('KITCHENSHOP_MAX_TOKENS_THESTAKEHOUSE', '1000'), num('KITCHENSHOP_MAX_TOKENS_LESTAKE', '100')],
     maxMintsPerTx: num('KITCHENSHOP_MAX_MINTS_PER_TX', '10'),
