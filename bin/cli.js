@@ -36,6 +36,16 @@ const commands = {
         const res = await scheduleAndExecute(await getInst(contract), 'removeVenue', [[account]], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
         if (res) console.log(res);
     },
+    grantRole: async(contract, role, account) => {
+        if (account === 'dao') account = this.config.dao.address;
+        const res = await scheduleAndExecute(await getInst(contract), 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii(role)), account], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
+    revokeRole: async(contract, role, account) => {
+        if (account === 'dao') account = this.config.dao.address;
+        const res = await scheduleAndExecute(await getInst(contract), 'revokeRole', [web3.utils.soliditySha3(web3.utils.fromAscii(role)), account], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
     mintFoodToken: async(contract, recipient, amount) => {
         const instance = await artifacts.require(contract).deployed();
         const res = this.executeOrEncode(instance, 'mint', [recipient, toWei(amount)]);
