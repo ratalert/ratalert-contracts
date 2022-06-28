@@ -8,6 +8,8 @@ const Character = artifacts.require('Character');
 const Claim = artifacts.require('Claim');
 const TripleFiveClub = artifacts.require('TripleFiveClub');
 
+global.web3 = web3;
+
 module.exports = async (deployer, network, accounts) => {
   const config = Config(network, accounts);
 
@@ -19,12 +21,14 @@ module.exports = async (deployer, network, accounts) => {
   await tripleFiveClub.configure(...config.tripleFiveClub);
   await tripleFiveClub.setDao(config.dao.address);
 
-  if (network === 'development') {
-    await scheduleAndExecute(claim, 'addController', [[tripleFiveClub.address]], { from: config.dao.address });
-    await scheduleAndExecute(claim, 'addVenue', [[tripleFiveClub.address]], { from: config.dao.address });
-    await scheduleAndExecute(character, 'addController', [[tripleFiveClub.address]], { from: config.dao.address });
-    await scheduleAndExecute(gourmetFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), tripleFiveClub.address], { from: config.dao.address });
-  }
+  const res1 = await scheduleAndExecute(claim, 'addController', [[tripleFiveClub.address]], { from: config.dao.address, network: network, raw: network === 'main' });
+  if (res1 && Array.isArray(res1)) console.log(res1);
+  const res2 = await scheduleAndExecute(claim, 'addVenue', [[tripleFiveClub.address]], { from: config.dao.address, network: network, raw: network === 'main' });
+  if (res2 && Array.isArray(res2)) console.log(res2);
+  const res3 = await scheduleAndExecute(character, 'addController', [[tripleFiveClub.address]], { from: config.dao.address, network: network, raw: network === 'main' });
+  if (res3 && Array.isArray(res3)) console.log(res3);
+  const res4 = await scheduleAndExecute(gourmetFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('BURNER_ROLE')), tripleFiveClub.address], { from: config.dao.address, network: network, raw: network === 'main' });
+  if (res4 && Array.isArray(res4)) console.log(res4);
 
   let timelockController = { address: config.timelock.address };
   if (!config.timelock.address) {
