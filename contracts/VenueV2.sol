@@ -336,7 +336,7 @@ abstract contract VenueV2 is IVenue, Initializable, OwnableUpgradeable, GenericP
       stakingPeriod = accrualPeriod; // cut-off
     }
     int256 increment = int256(stakingPeriod) * dailyRate / int256(accrualPeriod);
-    if (stakingPeriod >= accrualPeriod) {
+    if (stakingPeriod >= accrualPeriod && increment > 0) {
       increment += boost;
     }
 

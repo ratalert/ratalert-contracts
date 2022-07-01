@@ -361,6 +361,10 @@ exports.getUIConfig = (cfg) => {
     minEfficiency: cfg.kitchen[name].minEfficiency
   });
   const out = {
+    Character: {
+      maxTokens: cfg.character[0],
+      gen0Tokens: cfg.character[1],
+    },
     Paywall: {
       mintPrice: cfg.payWall[0],
       whitelistBoost: cfg.payWall[1],
@@ -428,6 +432,28 @@ exports.getUIConfig = (cfg) => {
     },
     Gym: {
       Venue: getVenue('gym'),
+    },
+    TripleFiveClub: {
+      Venue: {
+        dailySkillRate: 0,
+        dailyFreakRate: cfg.tripleFiveClub[2],
+        dailyIntelligenceRate: 0,
+        dailyBodyMassRate: cfg.tripleFiveClub[3],
+        vestingPeriod: cfg.tripleFiveClub[0],
+        accrualPeriod: cfg.tripleFiveClub[1],
+        maxClaimsPerTx: cfg.tripleFiveClub[8],
+        claimFee: cfg.tripleFiveClub[9],
+      },
+      boostLevel: cfg.tripleFiveClub[4],
+      entranceFees: {
+        gen0: cfg.tripleFiveClub[5][0],
+        gen1: cfg.tripleFiveClub[5][1],
+      },
+      weekModulo: {
+        start: cfg.tripleFiveClub[6][0],
+        end: cfg.tripleFiveClub[6][1],
+      },
+      maxConcurrentGen1: cfg.tripleFiveClub[7],
     },
   };
   return JSON.stringify(out);

@@ -72,7 +72,7 @@ contract TripleFiveClub is VenueV2 {
    * Checks if we are within an open door period
    * @return true during open door periods
    */
-  function _isOpenForPublic() internal view returns(bool) {
+  function isOpenForPublic() public view returns(bool) {
     uint256 weekModulo = block.timestamp % 604800;
     return weekModulo >= weekModuloStart && weekModulo < weekModuloEnd; // All UTC period long...
   }
@@ -134,7 +134,7 @@ contract TripleFiveClub is VenueV2 {
   function _handleGen1(uint256 tokenId) internal {
     _ejectIfVested(stakedGen1, false);
     if (!_isGen0(tokenId)) {
-      require(_isOpenForPublic(), "Gen0 only");
+      require(isOpenForPublic(), "Gen0 only");
       require(stakedGen1.length < maxConcurrentGen1, "Gen1 limit reached");
       stakedGen1.push(tokenId);
       emit StakedGen1(stakedGen1.length);
