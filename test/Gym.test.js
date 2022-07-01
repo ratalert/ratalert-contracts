@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { advanceTimeAndBlock, mintUntilWeHave, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave, decodeRawLogs } = require('./helper');
+const { advanceTimeAndBlock, mintUntilWeHave, mintAndFulfill, claimManyAndFulfill, trainUntilWeHave, decodeRawLogs, toWei, scheduleAndExecute } = require('./helper');
 const Config = require('../config');
 require('@openzeppelin/test-helpers');
 
@@ -8,26 +8,32 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 const VRFCoordinator = artifacts.require('VRFCoordinatorMock');
 const LinkToken = artifacts.require('LinkTokenMock');
+const GourmetFood = artifacts.require('GourmetFood');
 const Mint = artifacts.require('Mint');
 const Claim = artifacts.require('Claim');
 const Character = artifacts.require('Character');
 const McStake = artifacts.require('McStake');
 const Gym = artifacts.require('Gym');
+const TripleFiveClub = artifacts.require('TripleFiveClub');
 
 contract('Gym (proxy)', (accounts) => {
   const config = Config('development', accounts)
   const owner = accounts[0];
   const anon = accounts[1];
+  const dao = accounts[9];
   let lists;
 
   before(async () => {
     this.vrfCoordinator = await VRFCoordinator.deployed();
     this.linkToken = await LinkToken.deployed();
+    this.gourmetFood = await GourmetFood.deployed();
     this.mint = await Mint.deployed();
     this.claim = await Claim.deployed();
     this.character = await Character.deployed();
     this.kitchen = await McStake.deployed();
     this.gym = await Gym.deployed();
+    this.tripleFiveClub = await TripleFiveClub.deployed();
+    await scheduleAndExecute(this.gourmetFood, 'grantRole', [web3.utils.soliditySha3(web3.utils.fromAscii('MINTER_ROLE')), dao], { from: dao });
 
     lists = await mintUntilWeHave.call(this, 8, 3);
     lists.events = [lists.chefs[3], lists.chefs[4]];
@@ -95,6 +101,7 @@ contract('Gym (proxy)', (accounts) => {
         expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.false;
+        expect(log.args.skill).to.be.a.bignumber.eq((lists.chefs[i].efficiency).toString()); // half a day at the gym
         expect(log.args.freak).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 6).toString()); // half a day at the gym
       });
       await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(this.gym.address);
@@ -102,6 +109,7 @@ contract('Gym (proxy)', (accounts) => {
 
       await Promise.all(lists.chefs.map(async chef => {
         const traits = await this.character.getTokenTraits(chef.id);
+        expect(traits.efficiency).to.be.a.bignumber.eq((chef.efficiency).toString());
         expect(traits.tolerance).to.be.a.bignumber.eq((chef.tolerance - 6).toString());
       }));
     });
@@ -115,6 +123,7 @@ contract('Gym (proxy)', (accounts) => {
         expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.false;
+        expect(log.args.intelligence).to.be.a.bignumber.eq((lists.rats[i].efficiency).toString()); // half a day in the gym
         expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString()); // half a day in the gym
         expect(log.args.foodTokensPerRat).to.equal('0');
       });
@@ -123,6 +132,7 @@ contract('Gym (proxy)', (accounts) => {
 
       await Promise.all(lists.rats.map(async rat => {
         const traits = await this.character.getTokenTraits(rat.id);
+        expect(traits.efficiency).to.be.a.bignumber.eq((rat.efficiency).toString());
         expect(traits.tolerance).to.be.a.bignumber.eq((rat.tolerance - 4).toString());
       }));
     });
@@ -134,6 +144,7 @@ contract('Gym (proxy)', (accounts) => {
       expect(claimEvents).to.have.length(2);
       claimEvents.forEach((log, i) => {
         expect(log.args.earned).to.be.a.bignumber.eq('0');
+        expect(log.args.intelligence).to.be.a.bignumber.eq((lists.rats[i].efficiency).toString());
         expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 4).toString());
       });
     });
@@ -148,6 +159,7 @@ contract('Gym (proxy)', (accounts) => {
         expect(log.args.tokenId).to.be.a.bignumber.eq(chefs[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.true;
+        expect(log.args.skill).to.be.a.bignumber.eq((lists.chefs[i].efficiency).toString()); // full day at the gym
         expect(log.args.freak).to.be.a.bignumber.eq((lists.chefs[i].tolerance - 12).toString()); // full day at the gym
       });
       await expect(this.character.ownerOf(chefs[0])).to.eventually.equal(owner);
@@ -162,6 +174,7 @@ contract('Gym (proxy)', (accounts) => {
 
       await Promise.all(lists.chefs.map(async chef => {
         const traits = await this.character.getTokenTraits(chef.id);
+        expect(traits.efficiency).to.be.a.bignumber.eq((chef.efficiency).toString());
         expect(traits.tolerance).to.be.a.bignumber.eq((chef.tolerance - 12).toString());
       }));
     });
@@ -179,6 +192,7 @@ contract('Gym (proxy)', (accounts) => {
         expect(log.args.tokenId).to.be.a.bignumber.eq(rats[i].toString());
         expect(log.args.earned).to.be.a.bignumber.eq('0');
         expect(log.args.unstaked).to.be.true;
+        expect(log.args.intelligence).to.be.a.bignumber.eq((lists.rats[i].efficiency).toString()); // half a day in the gym
         expect(log.args.bodyMass).to.be.a.bignumber.eq((lists.rats[i].tolerance - 8).toString()); // half a day in the gym
         expect(log.args.foodTokensPerRat).to.equal('0');
       });
@@ -194,12 +208,39 @@ contract('Gym (proxy)', (accounts) => {
 
       await Promise.all(lists.rats.map(async rat => {
         const traits = await this.character.getTokenTraits(rat.id);
+        expect(traits.efficiency).to.be.a.bignumber.eq((rat.efficiency).toString());
         expect(traits.tolerance).to.be.a.bignumber.eq((rat.tolerance - 8).toString());
       }));
     });
     it('fails to unstake rats twice', async () => {
       const rats = [lists.rats[0].id, lists.rats[1].id];
       await expect(claimManyAndFulfill.call(this, this.gym, rats, true, { from: owner })).to.eventually.be.rejectedWith('Not your token');
+    });
+    it('does not increment efficiency levels for boosted characters', async () => {
+      await this.gourmetFood.mint(owner, toWei(0.2), { from: dao });
+      await this.character.setApprovalForAll(this.tripleFiveClub.address, true, { from: owner });
+      const list = [lists.chefs[0], lists.rats[0]];
+      await Promise.all(list.map(async item => {
+        const traits = await this.character.tokenTraits(item.id);
+        item.efficiency = traits.efficiency.toNumber();
+        item.tolerance = traits.tolerance.toNumber();
+      }));
+
+      await this.tripleFiveClub.stakeMany(owner, list.map(item => item.id), { from: owner });
+      await advanceTimeAndBlock(86400); // Wait an hour so we can unstake
+      let { logs } = await claimManyAndFulfill.call(this, this.tripleFiveClub, list.map(item => item.id), true);
+      expect(logs[0].args.skill).to.equal((list[0].efficiency).toString());
+      expect(logs[0].args.freak).to.equal((list[0].tolerance - 2).toString());
+      expect(logs[1].args.intelligence).to.equal((list[1].efficiency).toString());
+      expect(logs[1].args.bodyMass).to.equal((list[1].tolerance - 1).toString());
+
+      await this.gym.stakeMany(owner, list.map(item => item.id), { from: owner });
+      await advanceTimeAndBlock(86400); // Wait an hour so we can unstake
+      logs = (await claimManyAndFulfill.call(this, this.gym, list.map(item => item.id), true)).logs;
+      expect(logs[0].args.skill).to.equal((list[0].efficiency).toString());
+      expect(logs[0].args.freak).to.equal((list[0].tolerance - 14).toString());
+      expect(logs[1].args.intelligence).to.equal((list[1].efficiency).toString());
+      expect(logs[1].args.bodyMass).to.equal((list[1].tolerance - 9).toString());
     });
   });
 });

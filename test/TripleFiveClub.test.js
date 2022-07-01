@@ -114,6 +114,10 @@ contract('TripleFiveClub (proxy)', (accounts) => {
       await expect(this.character.ownerOf(lists.gen1[3])).to.eventually.equal(this.tripleFiveClub.address);
       await expect(this.character.ownerOf(lists.gen1[4])).to.eventually.equal(this.tripleFiveClub.address);
     });
+    it('leaves Gen0 characters staked', async () => {
+      await expect(this.character.ownerOf(lists.gen0[0])).to.eventually.equal(this.tripleFiveClub.address);
+      await expect(this.character.ownerOf(lists.gen0[4])).to.eventually.equal(this.tripleFiveClub.address);
+    });
   });
   describe('claimMany()', () => {
     it('cannot claim without a claim fee', async () => {
@@ -129,6 +133,7 @@ contract('TripleFiveClub (proxy)', (accounts) => {
         const traits = await this.character.tokenTraits(id);
         await expect(this.character.ownerOf(id)).to.eventually.equal(owner);
         expect(traits.boost).to.be.a.bignumber.eq('2');
+        expect(traits.efficiency).to.be.a.bignumber.eq((lists.trained.find(it => it.id === id).efficiency).toString());
         expect(traits.tolerance).to.be.a.bignumber.eq((lists.trained.find(it => it.id === id).tolerance - 2).toString());
       }));
     });
@@ -139,6 +144,7 @@ contract('TripleFiveClub (proxy)', (accounts) => {
         const traits = await this.character.tokenTraits(id);
         await expect(this.character.ownerOf(id)).to.eventually.equal(owner);
         expect(traits.boost).to.be.a.bignumber.eq('0');
+        expect(traits.efficiency).to.be.a.bignumber.eq((lists.trained.find(it => it.id === id).efficiency).toString());
         expect(traits.tolerance).to.be.a.bignumber.eq((lists.trained.find(it => it.id === id).tolerance - (traits.isChef ? 2 : 1)).toString());
       }));
     });
@@ -160,6 +166,15 @@ contract('TripleFiveClub (proxy)', (accounts) => {
       await expect(this.character.ownerOf(lists.gen1[0])).to.eventually.equal(owner);
       await expect(this.character.ownerOf(lists.gen1[1])).to.eventually.equal(owner);
       await expect(this.character.ownerOf(lists.gen1[2])).to.eventually.equal(owner);
+    });
+  });
+  describe('isOpenForPublic()', () => {
+    it('is true within the period', async () => {
+      await expect(this.tripleFiveClub.isOpenForPublic()).to.eventually.be.true;
+    });
+    it('is false outside of the period', async () => {
+      await advanceTimeAndBlock(86400); // Skip a day
+      await expect(this.tripleFiveClub.isOpenForPublic()).to.eventually.be.false;
     });
   });
 });
