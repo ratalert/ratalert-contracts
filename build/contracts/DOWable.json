@@ -81,27 +81,27 @@
     "absolutePath": "project:/contracts/DOWable.sol",
     "exportedSymbols": {
       "AddressUpgradeable": [
-        3343
+        3345
       ],
       "ContextUpgradeable": [
-        3385
+        3387
       ],
       "DOWable": [
-        9553
+        9555
       ],
       "Initializable": [
-        582
+        584
       ],
       "OwnableUpgradeable": [
-        508
+        510
       ]
     },
-    "id": 9554,
+    "id": 9556,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 9514,
+        "id": 9516,
         "literals": [
           "solidity",
           "^",
@@ -114,11 +114,11 @@
       {
         "absolutePath": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
         "file": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
-        "id": 9515,
+        "id": 9517,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 9554,
-        "sourceUnit": 509,
+        "scope": 9556,
+        "sourceUnit": 511,
         "src": "58:75:50",
         "symbolAliases": [],
         "unitAlias": ""
@@ -128,13 +128,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 9516,
+              "id": 9518,
               "name": "OwnableUpgradeable",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 508,
+              "referencedDeclaration": 510,
               "src": "164:18:50"
             },
-            "id": 9517,
+            "id": 9519,
             "nodeType": "InheritanceSpecifier",
             "src": "164:18:50"
           }
@@ -143,12 +143,12 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 9553,
+        "id": 9555,
         "linearizedBaseContracts": [
-          9553,
-          508,
-          3385,
-          582
+          9555,
+          510,
+          3387,
+          584
         ],
         "name": "DOWable",
         "nameLocation": "153:7:50",
@@ -156,12 +156,12 @@
         "nodes": [
           {
             "constant": false,
-            "id": 9519,
+            "id": 9521,
             "mutability": "mutable",
             "name": "dao",
             "nameLocation": "195:3:50",
             "nodeType": "VariableDeclaration",
-            "scope": 9553,
+            "scope": 9555,
             "src": "187:11:50",
             "stateVariable": true,
             "storageLocation": "default",
@@ -170,7 +170,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 9518,
+              "id": 9520,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "187:7:50",
@@ -184,7 +184,7 @@
           },
           {
             "body": {
-              "id": 9531,
+              "id": 9533,
               "nodeType": "Block",
               "src": "315:61:50",
               "statements": [
@@ -196,14 +196,14 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 9527,
+                        "id": 9529,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 9524,
+                            "id": 9526,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -214,7 +214,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 9525,
+                          "id": 9527,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -230,11 +230,11 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 9526,
+                          "id": 9528,
                           "name": "dao",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9519,
+                          "referencedDeclaration": 9521,
                           "src": "343:3:50",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -249,7 +249,7 @@
                       },
                       {
                         "hexValue": "4f6e6c792044414f2063616e2065786563757465",
-                        "id": 9528,
+                        "id": 9530,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -275,7 +275,7 @@
                           "typeString": "literal_string \"Only DAO can execute\""
                         }
                       ],
-                      "id": 9523,
+                      "id": 9525,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -289,7 +289,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 9529,
+                    "id": 9531,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -304,19 +304,19 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 9530,
+                  "id": 9532,
                   "nodeType": "ExpressionStatement",
                   "src": "321:50:50"
                 }
               ]
             },
             "documentation": {
-              "id": 9520,
+              "id": 9522,
               "nodeType": "StructuredDocumentation",
               "src": "203:78:50",
               "text": " @dev Throws if called by any account other than the DAO wallet."
             },
-            "id": 9532,
+            "id": 9534,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -324,18 +324,18 @@
             "nameLocation": "293:5:50",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9521,
+              "id": 9523,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "298:2:50"
             },
             "returnParameters": {
-              "id": 9522,
+              "id": 9524,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "315:0:50"
             },
-            "scope": 9553,
+            "scope": 9555,
             "src": "284:92:50",
             "stateMutability": "view",
             "virtual": false,
@@ -343,7 +343,7 @@
           },
           {
             "body": {
-              "id": 9539,
+              "id": 9541,
               "nodeType": "Block",
               "src": "480:25:50",
               "statements": [
@@ -352,18 +352,18 @@
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 9535,
+                      "id": 9537,
                       "name": "isDao",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9532,
+                      "referencedDeclaration": 9534,
                       "src": "486:5:50",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$__$",
                         "typeString": "function () view"
                       }
                     },
-                    "id": 9536,
+                    "id": 9538,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -378,29 +378,29 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 9537,
+                  "id": 9539,
                   "nodeType": "ExpressionStatement",
                   "src": "486:7:50"
                 },
                 {
-                  "id": 9538,
+                  "id": 9540,
                   "nodeType": "PlaceholderStatement",
                   "src": "499:1:50"
                 }
               ]
             },
             "documentation": {
-              "id": 9533,
+              "id": 9535,
               "nodeType": "StructuredDocumentation",
               "src": "380:78:50",
               "text": " @dev Throws if called by any account other than the DAO wallet."
             },
-            "id": 9540,
+            "id": 9542,
             "name": "onlyDao",
             "nameLocation": "470:7:50",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 9534,
+              "id": 9536,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "477:2:50"
@@ -411,23 +411,23 @@
           },
           {
             "body": {
-              "id": 9551,
+              "id": 9553,
               "nodeType": "Block",
               "src": "558:21:50",
               "statements": [
                 {
                   "expression": {
-                    "id": 9549,
+                    "id": 9551,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 9547,
+                      "id": 9549,
                       "name": "dao",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9519,
+                      "referencedDeclaration": 9521,
                       "src": "564:3:50",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -437,11 +437,11 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 9548,
+                      "id": 9550,
                       "name": "_dao",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9542,
+                      "referencedDeclaration": 9544,
                       "src": "570:4:50",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -454,25 +454,25 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 9550,
+                  "id": 9552,
                   "nodeType": "ExpressionStatement",
                   "src": "564:10:50"
                 }
               ]
             },
             "functionSelector": "6637b882",
-            "id": 9552,
+            "id": 9554,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 9545,
+                "id": 9547,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 9544,
+                  "id": 9546,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 445,
+                  "referencedDeclaration": 447,
                   "src": "548:9:50"
                 },
                 "nodeType": "ModifierInvocation",
@@ -483,17 +483,17 @@
             "nameLocation": "518:6:50",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9543,
+              "id": 9545,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9542,
+                  "id": 9544,
                   "mutability": "mutable",
                   "name": "_dao",
                   "nameLocation": "533:4:50",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9552,
+                  "scope": 9554,
                   "src": "525:12:50",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -502,7 +502,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 9541,
+                    "id": 9543,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "525:7:50",
@@ -518,19 +518,19 @@
               "src": "524:14:50"
             },
             "returnParameters": {
-              "id": 9546,
+              "id": 9548,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "558:0:50"
             },
-            "scope": 9553,
+            "scope": 9555,
             "src": "509:70:50",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 9554,
+        "scope": 9556,
         "src": "135:446:50",
         "usedErrors": []
       }
@@ -543,7 +543,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-06-28T19:37:35.553Z",
+  "updatedAt": "2022-07-01T10:11:12.285Z",
   "devdoc": {
     "kind": "dev",
     "methods": {
