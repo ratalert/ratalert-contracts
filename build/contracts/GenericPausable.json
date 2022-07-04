@@ -134,33 +134,33 @@
     "absolutePath": "project:/contracts/GenericPausable.sol",
     "exportedSymbols": {
       "AddressUpgradeable": [
-        3343
+        3345
       ],
       "ContextUpgradeable": [
-        3385
+        3387
       ],
       "DOWable": [
-        9096
+        9555
       ],
       "GenericPausable": [
-        9343
+        9802
       ],
       "Initializable": [
-        582
+        584
       ],
       "OwnableUpgradeable": [
-        508
+        510
       ],
       "PausableUpgradeable": [
-        693
+        695
       ]
     },
-    "id": 9344,
+    "id": 9803,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 9316,
+        "id": 9775,
         "literals": [
           "solidity",
           "^",
@@ -168,29 +168,29 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:53"
+        "src": "33:23:54"
       },
       {
         "absolutePath": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol",
         "file": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol",
-        "id": 9317,
+        "id": 9776,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 9344,
-        "sourceUnit": 694,
-        "src": "58:78:53",
+        "scope": 9803,
+        "sourceUnit": 696,
+        "src": "58:78:54",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "project:/contracts/DOWable.sol",
         "file": "./DOWable.sol",
-        "id": 9318,
+        "id": 9777,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 9344,
-        "sourceUnit": 9097,
-        "src": "137:23:53",
+        "scope": 9803,
+        "sourceUnit": 9556,
+        "src": "137:23:54",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -199,69 +199,69 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 9319,
+              "id": 9778,
               "name": "PausableUpgradeable",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 693,
-              "src": "199:19:53"
+              "referencedDeclaration": 695,
+              "src": "199:19:54"
             },
-            "id": 9320,
+            "id": 9779,
             "nodeType": "InheritanceSpecifier",
-            "src": "199:19:53"
+            "src": "199:19:54"
           },
           {
             "baseName": {
-              "id": 9321,
+              "id": 9780,
               "name": "DOWable",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 9096,
-              "src": "220:7:53"
+              "referencedDeclaration": 9555,
+              "src": "220:7:54"
             },
-            "id": 9322,
+            "id": 9781,
             "nodeType": "InheritanceSpecifier",
-            "src": "220:7:53"
+            "src": "220:7:54"
           }
         ],
         "canonicalName": "GenericPausable",
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 9343,
+        "id": 9802,
         "linearizedBaseContracts": [
-          9343,
-          9096,
-          508,
-          693,
-          3385,
-          582
+          9802,
+          9555,
+          510,
+          695,
+          3387,
+          584
         ],
         "name": "GenericPausable",
-        "nameLocation": "180:15:53",
+        "nameLocation": "180:15:54",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 9331,
+              "id": 9790,
               "nodeType": "Block",
-              "src": "258:32:53",
+              "src": "258:32:54",
               "statements": [
                 {
                   "expression": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 9325,
+                      "id": 9784,
                       "name": "isDao",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9075,
-                      "src": "264:5:53",
+                      "referencedDeclaration": 9534,
+                      "src": "264:5:54",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$__$",
                         "typeString": "function () view"
                       }
                     },
-                    "id": 9326,
+                    "id": 9785,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -269,34 +269,34 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "264:7:53",
+                    "src": "264:7:54",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 9327,
+                  "id": 9786,
                   "nodeType": "ExpressionStatement",
-                  "src": "264:7:53"
+                  "src": "264:7:54"
                 },
                 {
                   "expression": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 9328,
+                      "id": 9787,
                       "name": "_pause",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 671,
-                      "src": "277:6:53",
+                      "referencedDeclaration": 673,
+                      "src": "277:6:54",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$__$returns$__$",
                         "typeString": "function ()"
                       }
                     },
-                    "id": 9329,
+                    "id": 9788,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -304,68 +304,68 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "277:8:53",
+                    "src": "277:8:54",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 9330,
+                  "id": 9789,
                   "nodeType": "ExpressionStatement",
-                  "src": "277:8:53"
+                  "src": "277:8:54"
                 }
               ]
             },
             "functionSelector": "8456cb59",
-            "id": 9332,
+            "id": 9791,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "pause",
-            "nameLocation": "241:5:53",
+            "nameLocation": "241:5:54",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9323,
+              "id": 9782,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "246:2:53"
+              "src": "246:2:54"
             },
             "returnParameters": {
-              "id": 9324,
+              "id": 9783,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "258:0:53"
+              "src": "258:0:54"
             },
-            "scope": 9343,
-            "src": "232:58:53",
+            "scope": 9802,
+            "src": "232:58:54",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "body": {
-              "id": 9341,
+              "id": 9800,
               "nodeType": "Block",
-              "src": "321:34:53",
+              "src": "321:34:54",
               "statements": [
                 {
                   "expression": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 9335,
+                      "id": 9794,
                       "name": "isDao",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9075,
-                      "src": "327:5:53",
+                      "referencedDeclaration": 9534,
+                      "src": "327:5:54",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$__$",
                         "typeString": "function () view"
                       }
                     },
-                    "id": 9336,
+                    "id": 9795,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -373,34 +373,34 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "327:7:53",
+                    "src": "327:7:54",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 9337,
+                  "id": 9796,
                   "nodeType": "ExpressionStatement",
-                  "src": "327:7:53"
+                  "src": "327:7:54"
                 },
                 {
                   "expression": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 9338,
+                      "id": 9797,
                       "name": "_unpause",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 687,
-                      "src": "340:8:53",
+                      "referencedDeclaration": 689,
+                      "src": "340:8:54",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$__$returns$__$",
                         "typeString": "function ()"
                       }
                     },
-                    "id": 9339,
+                    "id": 9798,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -408,52 +408,52 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "340:10:53",
+                    "src": "340:10:54",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 9340,
+                  "id": 9799,
                   "nodeType": "ExpressionStatement",
-                  "src": "340:10:53"
+                  "src": "340:10:54"
                 }
               ]
             },
             "functionSelector": "3f4ba83a",
-            "id": 9342,
+            "id": 9801,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "unpause",
-            "nameLocation": "302:7:53",
+            "nameLocation": "302:7:54",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9333,
+              "id": 9792,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "309:2:53"
+              "src": "309:2:54"
             },
             "returnParameters": {
-              "id": 9334,
+              "id": 9793,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "321:0:53"
+              "src": "321:0:54"
             },
-            "scope": 9343,
-            "src": "293:62:53",
+            "scope": 9802,
+            "src": "293:62:54",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 9344,
-        "src": "162:195:53",
+        "scope": 9803,
+        "src": "162:195:54",
         "usedErrors": []
       }
     ],
-    "src": "33:325:53"
+    "src": "33:325:54"
   },
   "compiler": {
     "name": "solc",
@@ -461,7 +461,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-06-03T20:27:40.963Z",
+  "updatedAt": "2022-07-04T20:25:38.577Z",
   "devdoc": {
     "kind": "dev",
     "methods": {

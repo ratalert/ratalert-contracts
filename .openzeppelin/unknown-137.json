@@ -751,7 +751,7 @@
           {
             "contract": "Paywall",
             "label": "fastFood",
-            "type": "t_contract(FastFood)7015",
+            "type": "t_contract(FastFood)9665",
             "src": "../project:/contracts/Paywall.sol:22"
           }
         ],
@@ -774,7 +774,7 @@
           "t_bool": {
             "label": "bool"
           },
-          "t_contract(FastFood)7015": {
+          "t_contract(FastFood)9665": {
             "label": "contract FastFood"
           },
           "t_mapping(t_address,t_bool)": {
@@ -2845,6 +2845,154 @@
           },
           "t_bool": {
             "label": "bool"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "c1478189d7fa22186b5e411e072e1a5689f321de8b5fd5c8dac2f1feb972e790": {
+      "address": "0x78Dbc4D417E9b542ff6fbfF343982cE252a11518",
+      "txHash": "0xc59090a549da1470bcacc763e1a3e0bc3f4ef271fe48af4adfc77c07b2149770",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "contract": "ControllableUpgradeable",
+            "label": "controllers",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "../project:/contracts/ControllableUpgradeable.sol:8"
+          },
+          {
+            "contract": "DOWable",
+            "label": "dao",
+            "type": "t_address",
+            "src": "../project:/contracts/DOWable.sol:8"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "mintPrice",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PaywallV2.sol:11"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "whitelistBoost",
+            "type": "t_int8",
+            "src": "../project:/contracts/PaywallV2.sol:12"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "maxMintsPerTx",
+            "type": "t_uint8",
+            "src": "../project:/contracts/PaywallV2.sol:13"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "gen1PriceTier0",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PaywallV2.sol:14"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "gen1PriceTier1",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PaywallV2.sol:15"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "gen1PriceTier2",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PaywallV2.sol:16"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "gen1PriceTier3",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PaywallV2.sol:17"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "whitelist",
+            "type": "t_mapping(t_address,t_uint8)",
+            "src": "../project:/contracts/PaywallV2.sol:18"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "freeMints",
+            "type": "t_mapping(t_address,t_uint8)",
+            "src": "../project:/contracts/PaywallV2.sol:19"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "onlyWhitelist",
+            "type": "t_bool",
+            "src": "../project:/contracts/PaywallV2.sol:20"
+          },
+          {
+            "contract": "PaywallV2",
+            "label": "fastFood",
+            "type": "t_contract(FastFood)9665",
+            "src": "../project:/contracts/PaywallV2.sol:22"
+          }
+        ],
+        "types": {
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_int8": {
+            "label": "int8"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_address,t_uint8)": {
+            "label": "mapping(address => uint8)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_contract(FastFood)9665": {
+            "label": "contract FastFood"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
