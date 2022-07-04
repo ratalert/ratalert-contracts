@@ -77,6 +77,7 @@ const commands = {
             TheStakehouse: [config.kitchen.theStakehouse.foodTokenMaxSupply, [config.kitchen.theStakehouse.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.theStakehouse.propertyIncrements, config.kitchen.theStakehouse.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee],
             LeStake: [config.kitchen.leStake.foodTokenMaxSupply, [config.kitchen.leStake.dailyChefEarnings, config.kitchen.ratTheftPercentage, config.kitchen.vestingPeriod, config.kitchen.accrualPeriod], config.kitchen.leStake.propertyIncrements, config.kitchen.leStake.minEfficiency, config.kitchen.chefEfficiencyMultiplier, config.kitchen.ratEfficiencyMultiplier, config.kitchen.ratEfficiencyOffset, config.kitchen.maxClaimsPerTx, config.kitchen.claimFee],
             Gym: [...config.gym],
+            TripleFiveClub: [...config.tripleFiveClub],
         };
         console.log(`Configuring ${contract} with`, args[contract]);
         const res = await scheduleAndExecute(instance, 'configure', args[contract], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
