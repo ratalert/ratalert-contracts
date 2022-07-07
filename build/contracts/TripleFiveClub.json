@@ -214,7 +214,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -232,7 +233,8 @@
       "name": "claimMany",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [],
@@ -245,7 +247,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -309,7 +312,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -343,7 +347,8 @@
         }
       ],
       "stateMutability": "pure",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -356,7 +361,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -376,7 +382,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -410,7 +417,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -467,7 +475,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -491,7 +500,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -504,7 +514,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -517,7 +528,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -661,7 +673,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -687,7 +700,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"skill\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"freak\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"ChefClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"earned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"unstaked\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"intelligence\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"bodyMass\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"eventName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"foodTokensPerRat\",\"type\":\"uint256\"}],\"name\":\"RatClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"StakedGen1\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TokenStaked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"chefs\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"name\":\"claimMany\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_vestingPeriod\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_accrualPeriod\",\"type\":\"uint256\"},{\"internalType\":\"int8\",\"name\":\"_dailyFreakRate\",\"type\":\"int8\"},{\"internalType\":\"int8\",\"name\":\"_dailyBodyMassRate\",\"type\":\"int8\"},{\"internalType\":\"int8\",\"name\":\"_boostLevel\",\"type\":\"int8\"},{\"internalType\":\"uint256[]\",\"name\":\"_entranceFees\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_weekModulo\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256\",\"name\":\"_maxConcurrentGen1\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"_maxClaimsPerTx\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_claimFee\",\"type\":\"uint256\"}],\"name\":\"configure\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"foodTokensPerRat\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"venue\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"},{\"internalType\":\"bool\",\"name\":\"unstake\",\"type\":\"bool\"}],\"internalType\":\"struct IClaim.VRFStruct\",\"name\":\"v\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"randomness\",\"type\":\"uint256\"}],\"name\":\"fulfillClaimMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStakedGen1\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_character\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_claim\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_accrualPeriod\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_character\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_claim\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_gourmetFood\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"isOpenForPublic\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"}],\"name\":\"multiEject\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"rats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"uint80\",\"name\":\"value\",\"type\":\"uint80\"},{\"internalType\":\"uint80\",\"name\":\"timestamp\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_dao\",\"type\":\"address\"}],\"name\":\"setDao\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint16[]\",\"name\":\"tokenIds\",\"type\":\"uint16[]\"}],\"name\":\"stakeMany\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"stakedGen1\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"stakers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalChefsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalRatsStaked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdrawPayments\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimMany(uint16[],bool)\":{\"params\":{\"tokenIds\":\"- The IDs of the tokens in question\",\"unstake\":\"- Whether or not to unstake the given tokens\"}},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"params\":{\"randomness\":\"- Random value created by VRF\",\"v\":\"- VRF struct for the corresponding request\"}},\"getChefsStaked(address)\":{\"params\":{\"account\":\"- User wallet address\"},\"returns\":{\"_0\":\"Number of chefs in staking\"}},\"getStakedGen1()\":{\"returns\":{\"_0\":\"Number of Gen1 tokens staked\"}},\"isOpenForPublic()\":{\"returns\":{\"_0\":\"true during open door periods\"}},\"multiEject(uint256[])\":{\"params\":{\"ids\":\"- The IDs of the tokens to force-unstake\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"paused()\":{\"details\":\"Returns true if the contract is paused, and false otherwise.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"stakeMany(address,uint16[])\":{\"params\":{\"account\":\"- User wallet address\",\"tokenIds\":\"- The IDs of the Chefs & Rats to stake\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"claimMany(uint16[],bool)\":{\"notice\":\"ChainLink VRF request: Claims food token earnings, level-ups and optionally unstake characters\"},\"configure(uint256,uint256,int8,int8,int8,uint256[],uint256[],uint256,uint8,uint256)\":{\"notice\":\"Allows DAO to update game parameters\"},\"fulfillClaimMany((bytes32,address,address,uint16[],bool),uint256)\":{\"notice\":\"Callback for claimMany(), called by Claim.fulfillRandomness()\"},\"getChefsStaked(address)\":{\"notice\":\"Get the amount of chefs the given account has in staking\"},\"getStakedGen1()\":{\"notice\":\"Return the amount of Gen1 tokens in staking\"},\"isOpenForPublic()\":{\"notice\":\"Checks if we are within an open door period\"},\"multiEject(uint256[])\":{\"notice\":\"DAO function to force-unstake all tokens and send them back to their respective owners\"},\"onERC721Received(address,address,uint256,bytes)\":{\"notice\":\"IERC721ReceiverUpgradeable interface: We do not accept tokens sent directly\"},\"stakeMany(address,uint16[])\":{\"notice\":\"Adds Characters to staking\"},\"withdrawPayments()\":{\"notice\":\"Allows DAO to withdraw funds\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/TripleFiveClub.sol\":\"TripleFiveClub\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x652fee292f698d8dba81bf287cb71f1682f6483b67ebe601a5f7387dcfc30b34\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://98c7bba29bcab7240cdaada7dd7cbe3529fec83314801270c46239e72a9e84d7\",\"dweb:/ipfs/QmfHCc1KMygjXchXVwafWTkFjhbb2SQ3Cu5GzRTdV4CCCh\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x372b0bc04e3b4c074559bbbfb1317afddb56de5504158ca25a7f9cd403980445\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://88b812365459a042c2aab5c689ff723098e0e19cb372718d3dd028b3c406e4f6\",\"dweb:/ipfs/QmTsLrMYzPjnB85pyAy85NNcBg64RPVueJARzwNg9xMyR1\"]},\"@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol\":{\"keccak256\":\"0x041af89e5e60b74e1203d5a34614c9de379726f52ecb8cf064cab78b9fdcdf9d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a8e235e33979e564ee560e5e7c42f3d4c309698eae7b7035aaf65b0ce6253f9\",\"dweb:/ipfs/QmQKdNPLcgR6LLtS9vDRXy8jeD7gCZDTfctXiTwu6HN7M1\"]},\"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol\":{\"keccak256\":\"0x8cc03c5ac17e8a7396e487cda41fc1f1dfdb91db7d528e6da84bee3b6dd7e167\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://607818f1b44548c2d8268176f73cdb290e1faed971b1061930d92698366e2a11\",\"dweb:/ipfs/QmQibMe3r5no95b6q7isGT5R75V8xSofWEDLXzp95b7LgZ\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x805b2b34d4829b892217e5116dc1feb9c67bee2eb7d7b18dac3dbbb91b13e9c4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://29dadff7b3f217e747a0fff3a8193a6f4b544bc529c8b5931d2db6feb16828e0\",\"dweb:/ipfs/QmdAYJB7eaFGWHAQk1tpA7cAkDu9C9iZjRPgWG2LVEd1QE\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0x2f359f9d5c56394e60d74401487ab55d8ef0012907b07c9abbb8f998bf5ddfec\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://47d1408f0b62a24a9c2abd7678665178916fc147b8f23153d61e21353f0205e4\",\"dweb:/ipfs/QmWis4pCq81JzNTqdCoiMqjEtcwp3NGRnCz4nYPYp2jEKd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x714a33fd66816f608f6eda908da24eb6009eee50adf4062c86639d4fe508a7b6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1222806a46ee6d877cff1f609cdb548271a0ae85228716c8d1427462a16bd59b\",\"dweb:/ipfs/QmZVjwuTFqhoFBuug3fvHFVC5Y9ompwdHMwUy5upevMfJ5\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x55cf2bd9fc76704ddcdc19834cd288b7de00fc0f298a40ea16a954ae8991db2d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://37e4df53c8d2e3c1062c1c7b2c17366db7de03bfd2559d340ca95c588aa49c2f\",\"dweb:/ipfs/QmQ9vsG3o4wED3FRogiSUhdzJvZSjjYFtydzXvFEJtgZk4\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x963ea7f0b48b032eef72fe3a7582edf78408d6f834115b9feadd673a4d5bd149\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d6520943ea55fdf5f0bafb39ed909f64de17051bc954ff3e88c9e5621412c79c\",\"dweb:/ipfs/QmWZ4rAKTQbNG2HxGs46AcTXShsVytKeLs7CUCdCSv5N7a\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0x398d3323c1932a5986bf36be7c57593e121e69d5db5b6574b4ee0d031443de37\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b268304e03daf22c349abe3c318bc6a6badd6542d62311716ab401eec745f78\",\"dweb:/ipfs/QmNYy2sc2RoTjDhyT6HAibmeDGqfhDiDpsWRbHFHoGVHLr\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0x9a3b990bd56d139df3e454a9edf1c64668530b5a77fc32eb063bc206f958274a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0895399d170daab2d69b4c43a0202e5a07f2e67a93b26e3354dcbedb062232f7\",\"dweb:/ipfs/QmUM1VH3XDk559Dsgh4QPvupr3YVKjz87HrSyYzzVFZbxw\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"@openzeppelin/contracts/access/AccessControl.sol\":{\"keccak256\":\"0x4a1a0ba12bf1a33f10d9fe226278cf59675c0b929d29e4da99658a079b27fb84\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bda1319db846d6d6f92d8a57a9bdee8bde1dc39aa7546165791692c24dd6f30a\",\"dweb:/ipfs/Qma5oZ7DmbdAjd8mpiW7mx896PDtwsQtCQ2hj9Upf7b7JK\"]},\"@openzeppelin/contracts/access/IAccessControl.sol\":{\"keccak256\":\"0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a\",\"dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981\",\"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0xdadd41acb749920eccf40aeaa8d291adf9751399a7343561bad13e7a8d99be0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://12af4ac016f9fdf3be5d15824f4292272aa11f6b2e0192a0f7320f5ad49bbbf0\",\"dweb:/ipfs/QmRXMpdqCgA3TYuYxBodqs5p9jGbnMW6xa2gvjppvq4TWk\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0xbbc8ac883ac3c0078ce5ad3e288fbb3ffcc8a30c3a98c0fda0114d64fc44fca2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://87a7a5d2f6f63f84598af02b8c50ca2df2631cb8ba2453e8d95fcb17e4be9824\",\"dweb:/ipfs/QmR76hqtAcRqoFj33tmNjcWTLrgNsAaakYwnKZ8zoJtKei\"]},\"@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol\":{\"keccak256\":\"0x3fe04ed1daf0f12454333fde982a25b103860d8a010dd5d8479b83ebf1dfb788\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8322152771e94c9e28a3bd9e7c9d5dd4fdd00ae214f95915962a6638d8dfc7d6\",\"dweb:/ipfs/QmaXJvF3UjRHacx3nPgt94DwAuXCkEoz6fS7MLr2jbuJyW\"]},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0x32c202bd28995dd20c4347b7c6467a6d3241c74c8ad3edcbb610cd9205916c45\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8179c356adb19e70d6b31a1eedc8c5c7f0c00e669e2540f4099e3844c6074d30\",\"dweb:/ipfs/QmWFbivarEobbqhS1go64ootVuHfVohBseerYy9FTEd1W2\"]},\"@openzeppelin/contracts/utils/introspection/ERC165.sol\":{\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d\",\"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43\"]},\"@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"project:/contracts/CharacterV2.sol\":{\"keccak256\":\"0x61c85ba4a12acc23465ec299a9b4b8c43d6ed4a20e6cfa408dd791ae131a84b5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://04b0d20a660524932f5ffe4ff8bfc0f1c9d5c908b0c3b2b0239c378fd967607e\",\"dweb:/ipfs/QmZiGKf28pUiB9syDbPQV6haGKkRuTaQ24byPSpuTrQekw\"]},\"project:/contracts/ControllableUpgradeable.sol\":{\"keccak256\":\"0xf8fbdb9b8ca9dcbf5ccee8a842c37ecaf1b61d995b53ca50e98a66d2367ea101\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://90e49c5b7fb2bbdab4519f3b1b9d5d3ed27eab7fd68ac4d96a5e77fa9ab8e2c5\",\"dweb:/ipfs/QmTwiWQVdPvVGbTJq1rATwPiKXNxn3ahzDUrFKNUCyhHmX\"]},\"project:/contracts/DOWable.sol\":{\"keccak256\":\"0x022858d5a852b14cfd3d75391ae6599debe0442f5363f0591b4dcdcb68cf431d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d5ade15f8706052d01a7f8d74af57a87c5f8d7bb7a4b8dda1a497b75e5bc6690\",\"dweb:/ipfs/QmfRnckL7Vt1eQUz4UnmV4N4WPbBX99u7sNQGh8jn2WwTW\"]},\"project:/contracts/Food.sol\":{\"keccak256\":\"0x9a2a687ac8becbdff39666630614641b674fd6173611707923409dafd3d99710\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://94fec7a82c4adc7c2a9bc8e87b3fde033dd6f6e363001f9c0b7658c85587f06c\",\"dweb:/ipfs/QmZBSubJKWArGEvvEsQ3TuJeiurVnpYxQh9vRrdAEtTTCW\"]},\"project:/contracts/GenericPausable.sol\":{\"keccak256\":\"0x09908d9a711201a4496ef92e961791105f1f8b4dcd89131b733ac4b4f148d41f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://db60ff410a520c0c2347aae47c176d66569b5f648a8784aa61dbb09bb39bde8f\",\"dweb:/ipfs/QmbNSjkSabkVrA2CL7nCehj7zbVTX7FjbSGHmowQfZaz8w\"]},\"project:/contracts/GourmetFood.sol\":{\"keccak256\":\"0xb44f05f25abaec3aea3991f4e4d4dbe1126f2f0ef5506c1db0150a4adc6652af\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fbdd79b581a4fae91e8b545dd678fab1202ae19e1a645eabe180f89143564293\",\"dweb:/ipfs/QmSp8NCKQiyxRahXNCx72mipKU2wWEcbeY8yyFZmGkA8Jy\"]},\"project:/contracts/ICharacter.sol\":{\"keccak256\":\"0x15dd07917267ab0731ce1d828564f3a393b1584a925715deb8926fd8fe0466d0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cf347aca1168b33dcd4f85628efd681206e04a0c17ec057905c3e9f4552584c1\",\"dweb:/ipfs/QmcJ9iAB2WgoUuHW2YKtNKgFkQif7zuJFofi8XXKikzUxg\"]},\"project:/contracts/IClaim.sol\":{\"keccak256\":\"0xebc00d006fdce25a60b1706c9631407a324e3c1ba878e66921a859036a5f8eca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6cc9ddb9326a18f532b387714692d5f9ac71fa1693a4ef6912e1601f49cbc889\",\"dweb:/ipfs/QmXCe5K6CVM6Es1jFazbGcSYG7y1ZSo8n8cZBwc6Km814N\"]},\"project:/contracts/IMint.sol\":{\"keccak256\":\"0x79a087d2d830b62d96d3baa81f63b658df4b3f2c76ad93056c61c57bf64c29f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1e11b871873c035ffc168e107790b6f089ac97d11c373fe172a90e1a49b7151d\",\"dweb:/ipfs/QmNkz8yYzShXU3g8c4mkx5M1o7JuBssuzMZVCmDPjBeaJm\"]},\"project:/contracts/IPaywall.sol\":{\"keccak256\":\"0x24920300a3aa65b9e05aad6b84a3db07e57e991a7a74e293dccbb572a874107a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a61208f32a801ace0056dfdf09f187f6b79fc0789a865449c078714513d41b39\",\"dweb:/ipfs/Qmb6FEGigxN7jcAH9i3pKkYqrEwZqCkydyaM3zN6QWpw7Z\"]},\"project:/contracts/IProperties.sol\":{\"keccak256\":\"0xfab08287f2632d91fe7a9e4c0f818466fd123bc2077a92e8b0c4b4e8be8c41f7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b27835b493a9e0452f5088e2d3546c3daf4b22bb42823071c4ae497011414c7\",\"dweb:/ipfs/QmY7bGASKjTfnfisHSSMvgJnZLoBjVZ7NoPoJ1YF4C1wFU\"]},\"project:/contracts/ITraits.sol\":{\"keccak256\":\"0x41a56d1ca9b05e91d193e07f947a7211b925d4b0aefd489c601d4a30ae775ed6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf4b680b7f4f6069938bd01030a7956c5b5cda4156fcfad2274b39663b7355d4\",\"dweb:/ipfs/QmaxHe1gCdd1DvWfWw3sGm83i1UQuuNhP8rZVkdaH6od4m\"]},\"project:/contracts/IVenue.sol\":{\"keccak256\":\"0x57562e83b1bb20f41ccf09776956fd2a5a773031bcf90b2bb74ba609a8fb7292\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://79653e3befd3077569b2ac4beee52c1fa77d93be2c032f12dc30614da28c1fa3\",\"dweb:/ipfs/QmX7hV1X1WjEZEnMPrZ87xdrwyEY6ebkVU8v4iUPc9GayX\"]},\"project:/contracts/TripleFiveClub.sol\":{\"keccak256\":\"0x1f6e6fff5e8b17713c01ea36f34fb34281b91a144b5b77d730e6b938d7869810\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://121e8a2e9a8838421573b7bab87d2487ad546bf2c725e60f748e7aebc0100f67\",\"dweb:/ipfs/QmaLh1wAXY8PEehA64zVZ7G1vbrfFgamWEeWbYw2c7Pmp7\"]},\"project:/contracts/VenueV2.sol\":{\"keccak256\":\"0x472e972000abed4062b0fdaafbce7806acd9f63a3c352b0c2fb26bfebf1bf441\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://24af6fe234f958d4c78c155c5ebc98ce596b827b204d5814e439f467b946bdf2\",\"dweb:/ipfs/QmSiVajcwWEZbx5CVfdrYsZuVUHhnKaNf47LCeFnFbLeKY\"]}},\"version\":1}",
@@ -34234,9 +34248,199 @@
     "name": "solc",
     "version": "0.8.10+commit.fc410830.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "137": {
+      "events": {
+        "0x9b394c66bc4fdb2f56f5842a796076e6552d6f15eaacb6e63e3c53b474d872e9": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "earned",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "unstaked",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "skill",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "freak",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "eventName",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "foodTokensPerRat",
+              "type": "uint256"
+            }
+          ],
+          "name": "ChefClaimed",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        },
+        "0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Paused",
+          "type": "event"
+        },
+        "0x9be2cb7a62ca4aefdc81da57f848805cc67c86675da32b5a7be58bb615ba4f32": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "earned",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "unstaked",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "intelligence",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint8",
+              "name": "bodyMass",
+              "type": "uint8"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "eventName",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "foodTokensPerRat",
+              "type": "uint256"
+            }
+          ],
+          "name": "RatClaimed",
+          "type": "event"
+        },
+        "0x7d4a6d69eb84044f4d9f547722787c2359e98a01482b3eb1e016cfdeef45830c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "StakedGen1",
+          "type": "event"
+        },
+        "0x8af1bb49fb16c7835975aa59449ba4328dd54737dfb2ae9fa6c5eca71fda51f9": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenStaked",
+          "type": "event"
+        },
+        "0x5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Unpaused",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x3d06651Adb58bE764e91745f93C366748f4eB7a0",
+      "transactionHash": "0xc65958fb176da97a3d2610c5fd4d8455a29efb3c3449849b627ad40103ad5559"
+    }
+  },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-07-04T20:25:38.707Z",
+  "updatedAt": "2022-07-04T20:46:56.747Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {
