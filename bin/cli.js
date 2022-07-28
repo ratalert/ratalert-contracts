@@ -48,7 +48,7 @@ const commands = {
     },
     mintFoodToken: async(contract, recipient, amount) => {
         const instance = await artifacts.require(contract).deployed();
-        const res = this.executeOrEncode(instance, 'mint', [recipient, toWei(amount)]);
+        const res = await this.executeOrEncode(instance, 'mint', [recipient, toWei(amount)]);
         if (res) console.log(res);
     },
     withdrawPayments: async(contract) => {
