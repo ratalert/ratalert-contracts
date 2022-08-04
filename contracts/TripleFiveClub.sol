@@ -92,21 +92,36 @@ contract TripleFiveClub is Venue {
   }
 
   /**
+   * Eject a particular Gen1 token ID if it has reached its vesting period
+   * @param tokenId - The ID of the token
+   * @param unstake - If true, user intends to unstake or gets force ejected
+   * @return Updated unstake value
+   */
+  function _ejectIfVested(uint256 tokenId, bool unstake) internal returns (bool) {
+    Stake memory stake = isChef(tokenId) ? chefs[tokenId] : rats[tokenId];
+    if (!_isGen0(tokenId) && (unstake || block.timestamp - stake.timestamp >= vestingPeriod)) {
+      unstake = true;
+      _removeFromGen1(tokenId);
+    }
+    return unstake;
+  }
+
+  /**
    * Make room for other Gen1s by ejecting all Gen1 tokens that have reached their vesting period
    * @param ids - The IDs of the tokens in question
-   * @param overrideVesting - If true, the vesting period is disregarded (used by DAO)
+   * @param forceEject - If true, the vesting period is disregarded (used by DAO)
    *
    */
-  function _ejectIfVested(uint256[] memory ids, bool overrideVesting) internal {
+  function _ejectMultiIfVested(uint256[] memory ids, bool forceEject) internal {
     for (uint i = 0; i < ids.length; i++) {
-      Stake memory stake = isChef(ids[i]) ? chefs[ids[i]] : rats[ids[i]];
-      if (block.timestamp - stake.timestamp >= vestingPeriod || overrideVesting) {
+      bool unstake = _ejectIfVested(ids[i], forceEject);
+      if (unstake || forceEject) {
+        Stake memory stake = isChef(ids[i]) ? chefs[ids[i]] : rats[ids[i]];
         if (isChef(ids[i])) {
           _claimChef(ids[i], stake.owner, true, false, 0);
         } else {
           _claimRat(ids[i], stake.owner, true, false, 0);
         }
-        _removeFromGen1(ids[i]);
       }
     }
   }
@@ -116,7 +131,7 @@ contract TripleFiveClub is Venue {
    * @param ids - The IDs of the tokens to force-unstake
    */
   function multiEject(uint256[] memory ids) external onlyDao {
-    _ejectIfVested(ids, true);
+    _ejectMultiIfVested(ids, true);
   }
 
   /**
@@ -132,14 +147,15 @@ contract TripleFiveClub is Venue {
    * @param tokenId - The ID of the Character
    */
   function _handleGen1(uint256 tokenId) internal {
-    _ejectIfVested(stakedGen1, false);
-    if (!_isGen0(tokenId)) {
+    _ejectMultiIfVested(stakedGen1, false);
+    bool gen0 = _isGen0(tokenId);
+    if (!gen0) {
       require(isOpenForPublic(), "Gen0 only");
       require(stakedGen1.length < maxConcurrentGen1, "Gen1 limit reached");
       stakedGen1.push(tokenId);
       emit StakedGen1(stakedGen1.length);
     }
-    gourmetFood.burn(_msgSender(), _isGen0(tokenId) ? entranceFeeGen0 : entranceFeeGen1);
+    gourmetFood.burn(_msgSender(), gen0 ? entranceFeeGen0 : entranceFeeGen1);
   }
 
   /**
@@ -162,7 +178,7 @@ contract TripleFiveClub is Venue {
    * Override Venue._claimChef() to clean up stakedGen1[]
    */
   function _claimChef(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal override returns (uint256 owed) {
-    _removeFromGen1(tokenId);
+    unstake = _ejectIfVested(tokenId, unstake);
     return super._claimChef(tokenId, sender, unstake, noEarnings, randomVal);
   }
 
@@ -170,7 +186,7 @@ contract TripleFiveClub is Venue {
    * Override Venue._claimRat() to clean up stakedGen1[]
    */
   function _claimRat(uint256 tokenId, address sender, bool unstake, bool noEarnings, uint256 randomVal) internal override returns (uint256 owed) {
-    _removeFromGen1(tokenId);
+    unstake = _ejectIfVested(tokenId, unstake);
     return super._claimRat(tokenId, sender, unstake, noEarnings, randomVal);
   }
 
@@ -178,8 +194,7 @@ contract TripleFiveClub is Venue {
    * Override Venue._updateCharacter() to update the Character's boost level
    */
   function _updateCharacter(uint256 tokenId, uint256 randomVal) internal override returns(uint8 efficiency, uint8 tolerance, string memory eventName) {
-    (, , , , , , , , , , int8 boost) = character.tokenTraits(tokenId);
-    if (tokenId <= character.getGen0Tokens() && boost != boostLevel) {
+    if (_isGen0(tokenId)) {
       character.updateBoost(tokenId, boostLevel);
     }
     return super._updateCharacter(tokenId, randomVal);
