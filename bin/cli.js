@@ -88,6 +88,15 @@ const commands = {
         const res = await scheduleAndExecute(await this.getInst('Config'), 'set', [getUIConfig(this.config)], { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
         if (res) console.log(res);
     },
+    setVrfParams: async(contract) => {
+        const vrfCoordinator = this.network === 'development' ? await artifacts.require('VRFCoordinatorMock').deployed() : {};
+        const linkToken = this.network === 'development' ? await artifacts.require('LinkTokenMock').deployed() : {};
+        const instance = await artifacts.require(contract).deployed();
+        const opts = config.mint({ vrfCoordinator: vrfCoordinator.address, linkToken: linkToken.address });
+        console.log(`Setting ${contract} VRF params with`, this.config[contract.toLowerCase()](opts));
+        const res = await scheduleAndExecute(instance, 'setVrfParams', this.config[contract.toLowerCase()](opts), { from: this.config.dao.address, network: this.network, raw: this.network === 'main' }, Date.now());
+        if (res) console.log(res);
+    },
     transferOwnership: async(contract, to) => {
         if (to === 'dao') to = this.config.dao.address;
         console.log(`Configuring ${contract} ownership to ${to}`);
