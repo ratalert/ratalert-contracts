@@ -102,7 +102,7 @@ contract('TripleFiveClub (proxy)', (accounts) => {
       await expect(this.character.ownerOf(lists.gen1[1])).to.eventually.equal(this.tripleFiveClub.address);
       await expect(this.character.ownerOf(lists.gen1[2])).to.eventually.equal(this.tripleFiveClub.address);
     });
-    it('force-ejects Gen1 characters after the accrual period', async () => {
+    it('force-ejects Gen1 characters after the vesting period', async () => {
       await advanceTimeAndBlock(3600); // Skip an hour
       const { logs } = await this.tripleFiveClub.stakeMany(owner, lists.gen1.slice(3, 5));
       const stakedGen1 = logs.filter(item => item.event === 'StakedGen1').map(item => item.args.value.toString());
@@ -148,12 +148,46 @@ contract('TripleFiveClub (proxy)', (accounts) => {
         expect(traits.tolerance).to.be.a.bignumber.eq((lists.trained.find(it => it.id === id).tolerance - (traits.isChef ? 2 : 1)).toString());
       }));
     });
+    it('lets Gen1 claim within open door events', async () => {
+      await this.gourmetFood.mint(owner, toWei(3), {from: dao});
+      await this.tripleFiveClub.stakeMany(owner, lists.gen1.slice(0, 3));
+      await advanceTimeAndBlock(3600); // Wait an hour so we can unstake
+      await claimManyAndFulfill.call(this, this.tripleFiveClub, lists.gen1.slice(0, 3), false);
+      await expect(this.tripleFiveClub.getStakedGen1()).to.eventually.be.a.bignumber.eq('0');
+      await Promise.all(lists.gen1.slice(0, 3).map(async (id) => {
+        await expect(this.character.ownerOf(id)).to.eventually.equal(owner); // Got ejected
+      }));
+    });
+    it('lets Gen1 claim outside open door events', async () => {
+      await this.gourmetFood.mint(owner, toWei(3), {from: dao});
+      await this.tripleFiveClub.stakeMany(owner, lists.gen1.slice(0, 3));
+      await advanceTimeAndBlock(86400); // Wait an hour so we can unstake
+      await claimManyAndFulfill.call(this, this.tripleFiveClub, lists.gen1.slice(0, 1), false);
+      await expect(this.tripleFiveClub.getStakedGen1()).to.eventually.be.a.bignumber.eq('2');
+      await expect(this.character.ownerOf(lists.gen1[0])).to.eventually.equal(owner);
+      await expect(this.character.ownerOf(lists.gen1[1])).to.eventually.equal(this.tripleFiveClub.address);
+      await expect(this.character.ownerOf(lists.gen1[2])).to.eventually.equal(this.tripleFiveClub.address);
+    });
+    it('kicks out Gen1 after open door events', async () => {
+      await advanceTimeAndBlock(86400); // Wait an hour so we can unstake
+      await this.gourmetFood.mint(owner, toWei(0.5), {from: dao});
+      await this.tripleFiveClub.stakeMany(owner, lists.gen0);
+      await expect(this.tripleFiveClub.getStakedGen1()).to.eventually.be.a.bignumber.eq('0');
+      await Promise.all(lists.gen1.slice(1, 3).map(async (id) => {
+        await expect(this.character.ownerOf(id)).to.eventually.equal(owner);
+      }));
+      await Promise.all(lists.gen0.map(async (id) => {
+        await expect(this.character.ownerOf(id)).to.eventually.equal(this.tripleFiveClub.address);
+      }));
+    });
   });
   describe('multiEject()', () => {
     it('denies access to anonymous', async () => {
       await expect(this.tripleFiveClub.multiEject(lists.gen1.slice(0, 3))).to.eventually.be.rejectedWith('Only DAO can execute');
     });
     it('ejects', async () => {
+      const ts = (await web3.eth.getBlock('latest')).timestamp;
+      await advanceTimeAndBlock(skipSeconds(ts)); // Skip to the next open door event
       await this.gourmetFood.mint(owner, toWei(3), {from: dao});
       const { logs } = await this.tripleFiveClub.stakeMany(owner, lists.gen1.slice(0, 3));
       const stakedGen1 = logs.filter(item => item.event === 'StakedGen1').map(item => item.args.value.toString());
